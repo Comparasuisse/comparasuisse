@@ -82,6 +82,10 @@
   select{width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--line); font-size:13px; background:#fff; color:var(--ink);}
   input[type=range]{width:100%; accent-color:var(--red); height:24px;}
   .range-val{font-size:13px; font-weight:700; margin-top:4px; text-transform:none;}
+  .range-pair{display:flex; gap:8px;}
+  .range-pair input[type=range]{flex:1; min-width:0;}
+  .range-pair .r-lbl{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin-top:-2px; font-weight:700;}
+  .range-pair > div{flex:1; min-width:0;}
   .count{font-size:12px; color:var(--muted); max-width:1080px; margin:0 auto 10px; padding:0 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;}
   .grid{max-width:1080px; margin:0 auto; padding:0 20px; display:grid; gap:12px;}
   .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:grid; grid-template-columns:150px 1fr auto auto; gap:16px; align-items:center; min-width:0;}
@@ -164,16 +168,25 @@
     </select>
   </div>
   <div class="ctrl-group">
-    <label>🇨🇭 Data Suisse min. : <span class="range-val" id="mobile-ch-unlimited-label">Peu importe</span></label>
-    <input type="range" id="mobile-ch-unlimited" min="0" max="4" step="1" value="0">
+    <label>🇨🇭 Data Suisse : <span class="range-val" id="mobile-ch-unlimited-label">Peu importe</span> → <span class="range-val" id="mobile-ch-max-label">Peu importe</span></label>
+    <div class="range-pair">
+      <div><input type="range" id="mobile-ch-unlimited" min="0" max="4" step="1" value="0"><div class="r-lbl">min</div></div>
+      <div><input type="range" id="mobile-ch-max" min="0" max="3" step="1" value="0"><div class="r-lbl">max</div></div>
+    </div>
   </div>
   <div class="ctrl-group">
-    <label>🌍 Data à l'étranger min. : <span class="range-val" id="mobile-roaming-label">Peu importe</span></label>
-    <input type="range" id="mobile-roaming" min="0" max="4" step="1" value="0">
+    <label>🌍 Data à l'étranger : <span class="range-val" id="mobile-roaming-label">Peu importe</span> → <span class="range-val" id="mobile-roaming-max-label">Peu importe</span></label>
+    <div class="range-pair">
+      <div><input type="range" id="mobile-roaming" min="0" max="4" step="1" value="0"><div class="r-lbl">min</div></div>
+      <div><input type="range" id="mobile-roaming-max" min="0" max="3" step="1" value="0"><div class="r-lbl">max</div></div>
+    </div>
   </div>
   <div class="ctrl-group">
-    <label>📞 Appels vers l'étranger min. : <span class="range-val" id="mobile-calls-to-label">Peu importe</span></label>
-    <input type="range" id="mobile-calls-to" min="0" max="4" step="1" value="0">
+    <label>📞 Appels vers l'étranger : <span class="range-val" id="mobile-calls-to-label">Peu importe</span> → <span class="range-val" id="mobile-calls-to-max-label">Peu importe</span></label>
+    <div class="range-pair">
+      <div><input type="range" id="mobile-calls-to" min="0" max="4" step="1" value="0"><div class="r-lbl">min</div></div>
+      <div><input type="range" id="mobile-calls-to-max" min="0" max="3" step="1" value="0"><div class="r-lbl">max</div></div>
+    </div>
   </div>
   <div class="ctrl-group">
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="mobile-internet" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Offre combiné avec internet fixe</label>
@@ -457,11 +470,15 @@ function renderInternetCard(item){
 
 const DATA_THRESHOLDS = [null, 1, 4, 10, Infinity];
 const DATA_LABELS = ["Peu importe", "1 Go minimum", "4 Go minimum", "10 Go minimum", "Illimité uniquement"];
+const DATA_MAX_THRESHOLDS = [null, 1, 4, 10];
+const DATA_MAX_LABELS = ["Peu importe", "1 Go max", "4 Go max", "10 Go max"];
 const CALLS_THRESHOLDS = [null, 10, 60, 100, Infinity];
 const CALLS_LABELS = ["Peu importe", "10 min minimum", "60 min minimum", "100 min minimum", "Illimité uniquement"];
+const CALLS_MAX_THRESHOLDS = [null, 10, 60, 100];
+const CALLS_MAX_LABELS = ["Peu importe", "10 min max", "60 min max", "100 min max"];
 
 // Générique : marche pour Go de data comme pour minutes d'appel.
-// Un item sans la valeur (undefined) est filtré dès qu'un seuil est demandé.
+// Un item sans la valeur (undefined) est filtré dès qu'un seuil MIN est demandé.
 function passesThreshold(value, thresholdIndex, thresholds){
   const threshold = thresholds[thresholdIndex];
   if (threshold === null) return true;
@@ -470,27 +487,45 @@ function passesThreshold(value, thresholdIndex, thresholds){
   return value === Infinity || value >= threshold;
 }
 
+// Filtre max : Infinity échoue tout seuil fini, undefined/0 passe toujours.
+function passesMaxThreshold(value, thresholdIndex, thresholds){
+  const threshold = thresholds[thresholdIndex];
+  if (threshold === null) return true;
+  const v = (value === null || value === undefined) ? 0 : value;
+  if (v === Infinity) return false;
+  return v <= threshold;
+}
+
 function refreshMobile(){
   const network = document.getElementById("mobile-network").value;
   const chVal = parseInt(document.getElementById("mobile-ch-unlimited").value);
+  const chMaxVal = parseInt(document.getElementById("mobile-ch-max").value);
   const roamVal = parseInt(document.getElementById("mobile-roaming").value);
+  const roamMaxVal = parseInt(document.getElementById("mobile-roaming-max").value);
   const callsToVal = parseInt(document.getElementById("mobile-calls-to").value);
+  const callsToMaxVal = parseInt(document.getElementById("mobile-calls-to-max").value);
   const country = document.getElementById("mobile-country").value;
   const maxPrice = parseFloat(document.getElementById("mobile-price").value);
   document.getElementById("mobile-price-label").textContent = "CHF " + maxPrice + "/mois";
 
   document.getElementById("mobile-ch-unlimited-label").textContent = DATA_LABELS[chVal];
+  document.getElementById("mobile-ch-max-label").textContent = DATA_MAX_LABELS[chMaxVal];
   document.getElementById("mobile-roaming-label").textContent = DATA_LABELS[roamVal];
+  document.getElementById("mobile-roaming-max-label").textContent = DATA_MAX_LABELS[roamMaxVal];
   document.getElementById("mobile-calls-to-label").textContent = CALLS_LABELS[callsToVal];
+  document.getElementById("mobile-calls-to-max-label").textContent = CALLS_MAX_LABELS[callsToMaxVal];
 
-  const wantsRoaming = roamVal > 0;
+  const wantsRoaming = roamVal > 0 || roamMaxVal > 0;
   document.getElementById("mobile-country-controls").classList.toggle("hidden", !wantsRoaming);
 
   let filtered = mobileData.filter(d => {
     if (network !== "all" && d.network !== network) return false;
     if (!passesThreshold(d.chDataGB, chVal, DATA_THRESHOLDS)) return false;
+    if (!passesMaxThreshold(d.chDataGB, chMaxVal, DATA_MAX_THRESHOLDS)) return false;
     if (wantsRoaming && !passesThreshold(d.roamDataGB, roamVal, DATA_THRESHOLDS)) return false;
+    if (roamMaxVal > 0 && !passesMaxThreshold(d.roamDataGB, roamMaxVal, DATA_MAX_THRESHOLDS)) return false;
     if (!passesThreshold(d.callsToAbroad, callsToVal, CALLS_THRESHOLDS)) return false;
+    if (!passesMaxThreshold(d.callsToAbroad, callsToMaxVal, CALLS_MAX_THRESHOLDS)) return false;
     if (wantsRoaming && country !== "all" && !(d.countries || []).includes(country)) return false;
     if (d.price > maxPrice) return false;
     return true;
@@ -530,8 +565,11 @@ function refreshInternet(){
 function resetMobile(){
   document.getElementById("mobile-network").value = "all";
   document.getElementById("mobile-ch-unlimited").value = 0;
+  document.getElementById("mobile-ch-max").value = 0;
   document.getElementById("mobile-roaming").value = 0;
+  document.getElementById("mobile-roaming-max").value = 0;
   document.getElementById("mobile-calls-to").value = 0;
+  document.getElementById("mobile-calls-to-max").value = 0;
   document.getElementById("mobile-internet").checked = false;
   document.getElementById("mobile-country").value = "all";
   document.getElementById("mobile-price").value = 135;
@@ -545,7 +583,7 @@ function resetInternet(){
   refreshInternet();
 }
 
-["mobile-network","mobile-ch-unlimited","mobile-roaming","mobile-calls-to","mobile-country","mobile-price"].forEach(id=>{
+["mobile-network","mobile-ch-unlimited","mobile-ch-max","mobile-roaming","mobile-roaming-max","mobile-calls-to","mobile-calls-to-max","mobile-country","mobile-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshMobile);
 });
 document.getElementById("mobile-internet").addEventListener("change", refreshMobileInternetToggle);
