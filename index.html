@@ -82,10 +82,22 @@
   select{width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--line); font-size:13px; background:#fff; color:var(--ink);}
   input[type=range]{width:100%; accent-color:var(--red); height:24px;}
   .range-val{font-size:13px; font-weight:700; margin-top:4px; text-transform:none;}
-  .range-pair{display:flex; gap:8px;}
-  .range-pair input[type=range]{flex:1; min-width:0;}
-  .range-pair .r-lbl{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin-top:-2px; font-weight:700;}
-  .range-pair > div{flex:1; min-width:0;}
+
+  /* Range à double poignée — min + max sur le même track */
+  .dual-range{position:relative; height:26px; margin-top:8px;}
+  .dual-range .track{position:absolute; top:50%; left:0; right:0; height:4px; background:var(--line); border-radius:2px; transform:translateY(-50%);}
+  .dual-range .fill{position:absolute; top:50%; height:4px; background:var(--red); border-radius:2px; transform:translateY(-50%);}
+  .dual-range input[type=range]{position:absolute; top:0; left:0; width:100%; height:26px; background:none; margin:0; padding:0; pointer-events:none; -webkit-appearance:none; appearance:none;}
+  .dual-range input[type=range]::-webkit-slider-runnable-track{background:transparent; border:none;}
+  .dual-range input[type=range]::-moz-range-track{background:transparent; border:none;}
+  .dual-range input[type=range]::-webkit-slider-thumb{pointer-events:auto; -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:var(--red); border:2px solid #fff; box-shadow:0 0 3px rgba(0,0,0,.35); cursor:pointer; margin-top:-7px;}
+  .dual-range input[type=range]::-moz-range-thumb{pointer-events:auto; width:18px; height:18px; border-radius:50%; background:var(--red); border:2px solid #fff; box-shadow:0 0 3px rgba(0,0,0,.35); cursor:pointer;}
+
+  /* Multi-select réseaux via cases à cocher */
+  .net-checks{display:flex; flex-wrap:wrap; gap:6px; margin-top:2px;}
+  .net-chip{display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:#fff; cursor:pointer; font-size:13px; text-transform:none; color:var(--muted); font-weight:600; letter-spacing:0; margin-bottom:0;}
+  .net-chip input{accent-color:var(--red); cursor:pointer; width:14px; height:14px; margin:0;}
+  .net-chip:has(input:checked){background:var(--ink); color:#fff; border-color:var(--ink);}
   .count{font-size:12px; color:var(--muted); max-width:1080px; margin:0 auto 10px; padding:0 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;}
   .grid{max-width:1080px; margin:0 auto; padding:0 20px; display:grid; gap:12px;}
   .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:grid; grid-template-columns:150px 1fr auto auto; gap:16px; align-items:center; min-width:0;}
@@ -153,6 +165,7 @@
 <div class="tabs">
   <div class="tab active" data-tab="mobile">📱 Mobile (34 offres)</div>
   <div class="tab" data-tab="internet">🌐 Internet (15 offres)</div>
+  <div class="tab" data-tab="tv">📺 TV (6 offres)</div>
   <div class="tab" data-tab="combo">📦 Combinés</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
 </div>
@@ -160,32 +173,55 @@
 <div class="controls" id="mobile-controls">
   <div class="ctrl-group">
     <label>Réseau</label>
-    <select id="mobile-network">
-      <option value="all">Tous les réseaux</option>
-      <option value="swisscom">Swisscom</option>
-      <option value="sunrise">Sunrise</option>
-      <option value="salt">Salt</option>
-    </select>
-  </div>
-  <div class="ctrl-group">
-    <label>🇨🇭 Data Suisse : <span class="range-val" id="mobile-ch-unlimited-label">Peu importe</span> → <span class="range-val" id="mobile-ch-max-label">Peu importe</span></label>
-    <div class="range-pair">
-      <div><input type="range" id="mobile-ch-unlimited" min="0" max="4" step="1" value="0"><div class="r-lbl">min</div></div>
-      <div><input type="range" id="mobile-ch-max" min="0" max="3" step="1" value="0"><div class="r-lbl">max</div></div>
+    <div class="net-checks" id="mobile-network">
+      <label class="net-chip"><input type="checkbox" data-net="swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="salt" checked><span>Salt</span></label>
     </div>
   </div>
   <div class="ctrl-group">
-    <label>🌍 Data à l'étranger : <span class="range-val" id="mobile-roaming-label">Peu importe</span> → <span class="range-val" id="mobile-roaming-max-label">Peu importe</span></label>
-    <div class="range-pair">
-      <div><input type="range" id="mobile-roaming" min="0" max="4" step="1" value="0"><div class="r-lbl">min</div></div>
-      <div><input type="range" id="mobile-roaming-max" min="0" max="3" step="1" value="0"><div class="r-lbl">max</div></div>
+    <label>🇨🇭 Data Suisse : <span class="range-val" id="mobile-ch-unlimited-label">Peu importe</span> → <span class="range-val" id="mobile-ch-max-label">Illimité</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="mobile-ch-fill"></div>
+      <input type="range" id="mobile-ch-unlimited" min="0" max="4" step="1" value="0">
+      <input type="range" id="mobile-ch-max" min="0" max="4" step="1" value="4">
     </div>
   </div>
   <div class="ctrl-group">
-    <label>📞 Appels vers l'étranger : <span class="range-val" id="mobile-calls-to-label">Peu importe</span> → <span class="range-val" id="mobile-calls-to-max-label">Peu importe</span></label>
-    <div class="range-pair">
-      <div><input type="range" id="mobile-calls-to" min="0" max="4" step="1" value="0"><div class="r-lbl">min</div></div>
-      <div><input type="range" id="mobile-calls-to-max" min="0" max="3" step="1" value="0"><div class="r-lbl">max</div></div>
+    <label>🌍 Data à l'étranger : <span class="range-val" id="mobile-roaming-label">Peu importe</span> → <span class="range-val" id="mobile-roaming-max-label">Illimité</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="mobile-roaming-fill"></div>
+      <input type="range" id="mobile-roaming" min="0" max="4" step="1" value="0">
+      <input type="range" id="mobile-roaming-max" min="0" max="4" step="1" value="4">
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>📞 Appels 🇨🇭→🇨🇭 : <span class="range-val" id="mobile-calls-ch-label">Peu importe</span> → <span class="range-val" id="mobile-calls-ch-max-label">Illimité</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="mobile-calls-ch-fill"></div>
+      <input type="range" id="mobile-calls-ch" min="0" max="4" step="1" value="0">
+      <input type="range" id="mobile-calls-ch-max" min="0" max="4" step="1" value="4">
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>📞 Appels 🇨🇭→🌍 : <span class="range-val" id="mobile-calls-to-label">Peu importe</span> → <span class="range-val" id="mobile-calls-to-max-label">Illimité</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="mobile-calls-to-fill"></div>
+      <input type="range" id="mobile-calls-to" min="0" max="4" step="1" value="0">
+      <input type="range" id="mobile-calls-to-max" min="0" max="4" step="1" value="4">
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>📞 Appels 🌍→🌍 : <span class="range-val" id="mobile-calls-roam-label">Peu importe</span> → <span class="range-val" id="mobile-calls-roam-max-label">Illimité</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="mobile-calls-roam-fill"></div>
+      <input type="range" id="mobile-calls-roam" min="0" max="4" step="1" value="0">
+      <input type="range" id="mobile-calls-roam-max" min="0" max="4" step="1" value="4">
     </div>
   </div>
   <div class="ctrl-group">
@@ -242,6 +278,38 @@
 
 <div class="count hidden" id="internet-count"><span></span><span class="reset-link" onclick="resetInternet()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="internet-grid"></div>
+
+<div class="controls hidden" id="tv-controls">
+  <div class="ctrl-group">
+    <label>Opérateur</label>
+    <div class="net-checks" id="tv-operator">
+      <label class="net-chip"><input type="checkbox" data-op="Wingo" checked><span>Wingo</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Teleboy" checked><span>Teleboy</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="yallo" checked><span>yallo</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Zattoo" checked><span>Zattoo</span></label>
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>Chaînes minimum</label>
+    <select id="tv-channels">
+      <option value="0">Peu importe</option>
+      <option value="100">100+ chaînes</option>
+      <option value="200">200+ chaînes</option>
+      <option value="300">300+ chaînes</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Prix max : <span class="range-val" id="tv-price-label">CHF 30/mois</span></label>
+    <input type="range" id="tv-price" min="5" max="30" step="1" value="30">
+  </div>
+  <div class="ctrl-group">
+    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="tv-streaming" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Streaming pur (sans box requise)</label>
+  </div>
+</div>
+
+<div class="count hidden" id="tv-count"><span></span><span class="reset-link" onclick="resetTV()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="tv-grid"></div>
 
 <div class="notice hidden" id="combo-notice">📦 <b>Abonnements combinés</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
 <div class="count hidden" id="combo-count"><span></span><span></span></div>
@@ -393,6 +461,65 @@ function refreshPromo(){
   document.getElementById("promo-grid").innerHTML = promoData.map(renderPromoCard).join("");
 }
 
+const tvData = [
+  {operator:"Wingo", name:"Wingo TV Max", network:"swisscom", price:9.95, beforePrice:20, promo:true, channels:290, replayDays:null, recordingHours:null, streaming:false, details:"290+ chaînes HD, sur le réseau Swisscom — sans engagement, promo jusqu'au 31.12.2026 (au lieu de 20.-)", url:"https://www.wingo.ch/fr/promos"},
+  {operator:"Teleboy", name:"Teleboy TV", network:"init7", price:11.90, beforePrice:14.90, promo:true, channels:300, replayDays:7, recordingHours:2400, streaming:true, details:"300+ chaînes Full HD, replay 7 jours, 2400h d'enregistrement, 5 profils — 100% streaming, sans box requise", url:"https://www.teleboy.ch/fr/tv"},
+  {operator:"Swisscom", name:"blue TV S", network:"swisscom", price:15.80, beforePrice:null, promo:true, promoNote:"0.-/mois les 12 premiers mois", channels:150, replayDays:0, recordingHours:0, streaming:false, details:"150+ chaînes (60+ HD), replay 30h sans avancer/reculer — 5 appareils mobiles inclus, TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-s.html"},
+  {operator:"yallo", name:"yallo TV", network:"sunrise", price:20.00, beforePrice:null, promo:false, channels:300, replayDays:7, recordingHours:1000, streaming:true, details:"300+ chaînes, replay 7 jours, 1000 enregistrements — application incluse, compatible Android TV / Apple TV / Smart TV (Samsung, LG, Philips)", url:"https://www.yallo.ch/fr/tv"},
+  {operator:"Zattoo", name:"Zattoo Ultimate", network:"init7", price:22.00, beforePrice:null, promo:false, channels:376, replayDays:7, recordingHours:2000, streaming:true, details:"376 chaînes (118 Full HD + 206 HD), replay 7 jours, 2000 enregistrements, skip pubs — 100% streaming, tous appareils", url:"https://zattoo.com/fr"},
+  {operator:"Swisscom", name:"blue TV M", network:"swisscom", price:25.80, beforePrice:null, promo:true, promoNote:"0.-/mois les 12 premiers mois", channels:290, replayDays:7, recordingHours:250, streaming:false, details:"290+ chaînes, replay 7 jours, enregistrement 250h — blue Play médiathèque incluse, 5 appareils mobiles, TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-m.html"},
+];
+
+function renderTVCard(item){
+  const flame = item.promo ? '🔥 ' : '';
+  const beforeLine = item.beforePrice
+    ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
+    : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : '');
+  const streamPill = item.streaming
+    ? '<span class="roaming-pill roaming-yes">✓ Streaming pur</span>'
+    : '<span class="roaming-pill roaming-no">Requiert TV-Box</span>';
+  const replayTxt = item.replayDays ? `${item.replayDays} j de replay` : (item.replayDays === 0 ? "replay 30h" : "replay non doc");
+  const recTxt = item.recordingHours ? `${item.recordingHours}h enregistrement` : (item.recordingHours === 0 ? "sans enregistrement" : "enreg. non doc");
+  return `<div class="card">
+    <div>
+      <span class="net-tag net-${item.network}">${item.operator}</span>
+      <div class="op-name">${item.name}</div>
+    </div>
+    <div class="details">${item.details}<span class="roaming-pill roaming-yes">${item.channels}+ chaînes</span>${streamPill}<div class="std-price"><b>Fonctionnalités :</b> ${replayTxt} · ${recTxt}</div> ${affiliatePill(item)}</div>
+    <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
+    <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
+  </div>`;
+}
+
+function refreshTV(){
+  const selectedOps = [...document.querySelectorAll('#tv-operator input:checked')].map(i => i.dataset.op);
+  const minChannels = parseInt(document.getElementById("tv-channels").value);
+  const maxPrice = parseFloat(document.getElementById("tv-price").value);
+  const streamingOnly = document.getElementById("tv-streaming").checked;
+  document.getElementById("tv-price-label").textContent = "CHF " + maxPrice + "/mois";
+
+  let filtered = tvData.filter(d => {
+    if (!selectedOps.includes(d.operator)) return false;
+    if (d.channels < minChannels) return false;
+    if (d.price > maxPrice) return false;
+    if (streamingOnly && !d.streaming) return false;
+    return true;
+  });
+  filtered.sort((a, b) => a.price - b.price);
+  document.querySelector("#tv-count span").textContent = filtered.length + " / " + tvData.length + " offre(s)";
+  document.getElementById("tv-grid").innerHTML = filtered.length
+    ? filtered.map(renderTVCard).join("")
+    : '<div class="empty">Aucune offre TV ne correspond à ces critères.</div>';
+}
+
+function resetTV(){
+  document.querySelectorAll('#tv-operator input').forEach(i => i.checked = true);
+  document.getElementById("tv-channels").value = 0;
+  document.getElementById("tv-price").value = 30;
+  document.getElementById("tv-streaming").checked = false;
+  refreshTV();
+}
+
 function netLabel(n){
   return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)"}[n];
 }
@@ -469,13 +596,11 @@ function renderInternetCard(item){
 }
 
 const DATA_THRESHOLDS = [null, 1, 4, 10, Infinity];
-const DATA_LABELS = ["Peu importe", "1 Go minimum", "4 Go minimum", "10 Go minimum", "Illimité uniquement"];
-const DATA_MAX_THRESHOLDS = [null, 1, 4, 10];
-const DATA_MAX_LABELS = ["Peu importe", "1 Go max", "4 Go max", "10 Go max"];
+const DATA_LABELS = ["Peu importe", "1 Go", "4 Go", "10 Go", "Illimité"];
+const DATA_MAX_THRESHOLDS = [null, 1, 4, 10, Infinity];
 const CALLS_THRESHOLDS = [null, 10, 60, 100, Infinity];
-const CALLS_LABELS = ["Peu importe", "10 min minimum", "60 min minimum", "100 min minimum", "Illimité uniquement"];
-const CALLS_MAX_THRESHOLDS = [null, 10, 60, 100];
-const CALLS_MAX_LABELS = ["Peu importe", "10 min max", "60 min max", "100 min max"];
+const CALLS_LABELS = ["Peu importe", "10 min", "60 min", "100 min", "Illimité"];
+const CALLS_MAX_THRESHOLDS = [null, 10, 60, 100, Infinity];
 
 // Générique : marche pour Go de data comme pour minutes d'appel.
 // Un item sans la valeur (undefined) est filtré dès qu'un seuil MIN est demandé.
@@ -487,45 +612,89 @@ function passesThreshold(value, thresholdIndex, thresholds){
   return value === Infinity || value >= threshold;
 }
 
-// Filtre max : Infinity échoue tout seuil fini, undefined/0 passe toujours.
+// Filtre max : Infinity comme seuil = pas de limite (tout passe).
+// Autrement, Infinity comme valeur échoue tout seuil fini.
 function passesMaxThreshold(value, thresholdIndex, thresholds){
   const threshold = thresholds[thresholdIndex];
-  if (threshold === null) return true;
+  if (threshold === null || threshold === Infinity) return true;
   const v = (value === null || value === undefined) ? 0 : value;
   if (v === Infinity) return false;
   return v <= threshold;
 }
 
+function clampDualRange(minId, maxId){
+  const a = document.getElementById(minId);
+  const b = document.getElementById(maxId);
+  let vMin = parseInt(a.value), vMax = parseInt(b.value);
+  if (vMin > vMax){
+    if (document.activeElement === a) b.value = vMin;
+    else a.value = vMax;
+  }
+}
+function updateDualFill(fillId, minId, maxId, maxRange){
+  const fill = document.getElementById(fillId);
+  if (!fill) return;
+  const vMin = parseInt(document.getElementById(minId).value);
+  const vMax = parseInt(document.getElementById(maxId).value);
+  fill.style.left = ((vMin / maxRange) * 100) + "%";
+  fill.style.right = (100 - (vMax / maxRange) * 100) + "%";
+}
+
 function refreshMobile(){
-  const network = document.getElementById("mobile-network").value;
+  clampDualRange("mobile-ch-unlimited", "mobile-ch-max");
+  clampDualRange("mobile-roaming", "mobile-roaming-max");
+  clampDualRange("mobile-calls-ch", "mobile-calls-ch-max");
+  clampDualRange("mobile-calls-to", "mobile-calls-to-max");
+  clampDualRange("mobile-calls-roam", "mobile-calls-roam-max");
+
+  const selectedNets = [...document.querySelectorAll('#mobile-network input:checked')].map(i => i.dataset.net);
   const chVal = parseInt(document.getElementById("mobile-ch-unlimited").value);
   const chMaxVal = parseInt(document.getElementById("mobile-ch-max").value);
   const roamVal = parseInt(document.getElementById("mobile-roaming").value);
   const roamMaxVal = parseInt(document.getElementById("mobile-roaming-max").value);
+  const callsChVal = parseInt(document.getElementById("mobile-calls-ch").value);
+  const callsChMaxVal = parseInt(document.getElementById("mobile-calls-ch-max").value);
   const callsToVal = parseInt(document.getElementById("mobile-calls-to").value);
   const callsToMaxVal = parseInt(document.getElementById("mobile-calls-to-max").value);
+  const callsRoamVal = parseInt(document.getElementById("mobile-calls-roam").value);
+  const callsRoamMaxVal = parseInt(document.getElementById("mobile-calls-roam-max").value);
+
+  updateDualFill("mobile-ch-fill", "mobile-ch-unlimited", "mobile-ch-max", 4);
+  updateDualFill("mobile-roaming-fill", "mobile-roaming", "mobile-roaming-max", 4);
+  updateDualFill("mobile-calls-ch-fill", "mobile-calls-ch", "mobile-calls-ch-max", 4);
+  updateDualFill("mobile-calls-to-fill", "mobile-calls-to", "mobile-calls-to-max", 4);
+  updateDualFill("mobile-calls-roam-fill", "mobile-calls-roam", "mobile-calls-roam-max", 4);
   const country = document.getElementById("mobile-country").value;
   const maxPrice = parseFloat(document.getElementById("mobile-price").value);
   document.getElementById("mobile-price-label").textContent = "CHF " + maxPrice + "/mois";
 
   document.getElementById("mobile-ch-unlimited-label").textContent = DATA_LABELS[chVal];
-  document.getElementById("mobile-ch-max-label").textContent = DATA_MAX_LABELS[chMaxVal];
+  document.getElementById("mobile-ch-max-label").textContent = DATA_LABELS[chMaxVal];
   document.getElementById("mobile-roaming-label").textContent = DATA_LABELS[roamVal];
-  document.getElementById("mobile-roaming-max-label").textContent = DATA_MAX_LABELS[roamMaxVal];
+  document.getElementById("mobile-roaming-max-label").textContent = DATA_LABELS[roamMaxVal];
+  document.getElementById("mobile-calls-ch-label").textContent = CALLS_LABELS[callsChVal];
+  document.getElementById("mobile-calls-ch-max-label").textContent = CALLS_LABELS[callsChMaxVal];
   document.getElementById("mobile-calls-to-label").textContent = CALLS_LABELS[callsToVal];
-  document.getElementById("mobile-calls-to-max-label").textContent = CALLS_MAX_LABELS[callsToMaxVal];
+  document.getElementById("mobile-calls-to-max-label").textContent = CALLS_LABELS[callsToMaxVal];
+  document.getElementById("mobile-calls-roam-label").textContent = CALLS_LABELS[callsRoamVal];
+  document.getElementById("mobile-calls-roam-max-label").textContent = CALLS_LABELS[callsRoamMaxVal];
 
-  const wantsRoaming = roamVal > 0 || roamMaxVal > 0;
+  const wantsRoaming = roamVal > 0 || roamMaxVal < 4;
   document.getElementById("mobile-country-controls").classList.toggle("hidden", !wantsRoaming);
 
   let filtered = mobileData.filter(d => {
-    if (network !== "all" && d.network !== network) return false;
+    if (!selectedNets.includes(d.network)) return false;
     if (!passesThreshold(d.chDataGB, chVal, DATA_THRESHOLDS)) return false;
     if (!passesMaxThreshold(d.chDataGB, chMaxVal, DATA_MAX_THRESHOLDS)) return false;
     if (wantsRoaming && !passesThreshold(d.roamDataGB, roamVal, DATA_THRESHOLDS)) return false;
-    if (roamMaxVal > 0 && !passesMaxThreshold(d.roamDataGB, roamMaxVal, DATA_MAX_THRESHOLDS)) return false;
+    if (roamMaxVal < 4 && !passesMaxThreshold(d.roamDataGB, roamMaxVal, DATA_MAX_THRESHOLDS)) return false;
+    const callsChNumeric = d.callsCHUnlimited === false ? 0 : Infinity;
+    if (!passesThreshold(callsChNumeric, callsChVal, CALLS_THRESHOLDS)) return false;
+    if (!passesMaxThreshold(callsChNumeric, callsChMaxVal, CALLS_MAX_THRESHOLDS)) return false;
     if (!passesThreshold(d.callsToAbroad, callsToVal, CALLS_THRESHOLDS)) return false;
     if (!passesMaxThreshold(d.callsToAbroad, callsToMaxVal, CALLS_MAX_THRESHOLDS)) return false;
+    if (!passesThreshold(d.callsRoaming, callsRoamVal, CALLS_THRESHOLDS)) return false;
+    if (!passesMaxThreshold(d.callsRoaming, callsRoamMaxVal, CALLS_MAX_THRESHOLDS)) return false;
     if (wantsRoaming && country !== "all" && !(d.countries || []).includes(country)) return false;
     if (d.price > maxPrice) return false;
     return true;
@@ -563,13 +732,17 @@ function refreshInternet(){
 }
 
 function resetMobile(){
-  document.getElementById("mobile-network").value = "all";
+  document.querySelectorAll('#mobile-network input').forEach(i => i.checked = true);
   document.getElementById("mobile-ch-unlimited").value = 0;
-  document.getElementById("mobile-ch-max").value = 0;
+  document.getElementById("mobile-ch-max").value = 4;
   document.getElementById("mobile-roaming").value = 0;
-  document.getElementById("mobile-roaming-max").value = 0;
+  document.getElementById("mobile-roaming-max").value = 4;
+  document.getElementById("mobile-calls-ch").value = 0;
+  document.getElementById("mobile-calls-ch-max").value = 4;
   document.getElementById("mobile-calls-to").value = 0;
-  document.getElementById("mobile-calls-to-max").value = 0;
+  document.getElementById("mobile-calls-to-max").value = 4;
+  document.getElementById("mobile-calls-roam").value = 0;
+  document.getElementById("mobile-calls-roam-max").value = 4;
   document.getElementById("mobile-internet").checked = false;
   document.getElementById("mobile-country").value = "all";
   document.getElementById("mobile-price").value = 135;
@@ -583,9 +756,10 @@ function resetInternet(){
   refreshInternet();
 }
 
-["mobile-network","mobile-ch-unlimited","mobile-ch-max","mobile-roaming","mobile-roaming-max","mobile-calls-to","mobile-calls-to-max","mobile-country","mobile-price"].forEach(id=>{
+["mobile-ch-unlimited","mobile-ch-max","mobile-roaming","mobile-roaming-max","mobile-calls-ch","mobile-calls-ch-max","mobile-calls-to","mobile-calls-to-max","mobile-calls-roam","mobile-calls-roam-max","mobile-country","mobile-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshMobile);
 });
+document.querySelectorAll('#mobile-network input').forEach(i => i.addEventListener("change", refreshMobile));
 document.getElementById("mobile-internet").addEventListener("change", refreshMobileInternetToggle);
 ["internet-network","internet-speed","internet-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshInternet);
@@ -602,6 +776,9 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("internet-controls").classList.toggle("hidden", target!=="internet");
     document.getElementById("internet-count").classList.toggle("hidden", target!=="internet");
     document.getElementById("internet-grid").classList.toggle("hidden", target!=="internet");
+    document.getElementById("tv-controls").classList.toggle("hidden", target!=="tv");
+    document.getElementById("tv-count").classList.toggle("hidden", target!=="tv");
+    document.getElementById("tv-grid").classList.toggle("hidden", target!=="tv");
     document.getElementById("combo-notice").classList.toggle("hidden", target!=="combo");
     document.getElementById("combo-count").classList.toggle("hidden", target!=="combo");
     document.getElementById("combo-grid").classList.toggle("hidden", target!=="combo");
@@ -616,6 +793,9 @@ refreshMobileInternetToggle();
 refreshInternet();
 refreshCombo();
 refreshPromo();
+refreshTV();
+["tv-channels","tv-price","tv-streaming"].forEach(id => document.getElementById(id).addEventListener("input", refreshTV));
+document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 
 function brandFromName(name){
   const first = name.split(/[ (]/)[0];
