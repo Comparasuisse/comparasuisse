@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#faf8f5"/>
+
+  <rect x="80" y="120" width="240" height="80" fill="#d52b1e"/>
+  <rect x="160" y="40" width="80" height="240" fill="#d52b1e"/>
+
+  <rect x="400" y="180" width="40" height="50" fill="#1c1c1e"/>
+  <rect x="460" y="150" width="40" height="80" fill="#1c1c1e"/>
+  <rect x="520" y="120" width="40" height="110" fill="#1c1c1e"/>
+  <rect x="580" y="90"  width="40" height="140" fill="#1c1c1e"/>
+
+  <text x="80" y="400"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="96" font-weight="800" fill="#1c1c1e"
+        letter-spacing="-2">Comparasuisse</text>
+
+  <text x="80" y="470"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="40" font-weight="500" fill="#6b6660">
+    Comparateur indépendant mobile &amp; internet
+  </text>
+  <text x="80" y="518"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="40" font-weight="500" fill="#6b6660">
+    en Suisse — trié par prix, sans engagement
+  </text>
+
+  <rect x="0" y="0" width="1200" height="10" fill="#d52b1e"/>
+  <rect x="0" y="620" width="1200" height="10" fill="#d52b1e"/>
+</svg>

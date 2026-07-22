@@ -2,8 +2,58 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Comparatif Mobile & Internet Suisse</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comparateur mobile et internet Suisse 2026 — Comparasuisse</title>
+<meta name="description" content="Comparateur indépendant des abonnements mobile et internet en Suisse. Prix, data, roaming et réseau de Swisscom, Sunrise, Salt, Wingo, Yallo et 20+ autres opérateurs, triés par prix.">
+<link rel="canonical" href="https://comparasuisse.ch/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#d52b1e">
+<meta name="author" content="Comparasuisse">
+<meta name="msvalidate.01" content="0B3C4EE5BB85BB89DDA2AF742F3258EA" />
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Comparasuisse">
+<meta property="og:title" content="Comparateur mobile et internet en Suisse — Comparasuisse">
+<meta property="og:description" content="Compare tous les abonnements mobile et internet suisses en un coup d'œil. Prix, data, roaming, réseau — trié par prix, indépendant.">
+<meta property="og:url" content="https://comparasuisse.ch/">
+<meta property="og:image" content="https://comparasuisse.ch/og-image.svg">
+<meta property="og:image:type" content="image/svg+xml">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Comparasuisse — comparateur mobile et internet suisse">
+<meta property="og:locale" content="fr_CH">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Comparateur mobile et internet en Suisse — Comparasuisse">
+<meta name="twitter:description" content="Compare tous les abonnements mobile et internet suisses en un coup d'œil.">
+<meta name="twitter:image" content="https://comparasuisse.ch/og-image.svg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://comparasuisse.ch/#org",
+      "name": "Comparasuisse",
+      "url": "https://comparasuisse.ch/",
+      "logo": "https://comparasuisse.ch/og-image.svg",
+      "email": "contact@comparasuisse.ch",
+      "areaServed": "CH"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://comparasuisse.ch/#site",
+      "url": "https://comparasuisse.ch/",
+      "name": "Comparasuisse",
+      "description": "Comparateur indépendant des abonnements mobile et internet en Suisse.",
+      "publisher": {"@id": "https://comparasuisse.ch/#org"},
+      "inLanguage": "fr-CH"
+    }
+  ]
+}
+</script>
+
 <style>
   :root{
     --red:#d52b1e; --red-dark:#a81f16; --ink:#1c1c1e; --paper:#faf8f5; --card:#ffffff;
@@ -472,6 +522,54 @@ refreshMobileInternetToggle();
 refreshInternet();
 refreshCombo();
 refreshPromo();
+
+function brandFromName(name){
+  const first = name.split(/[ (]/)[0];
+  return first.charAt(0).toUpperCase() + first.slice(1);
+}
+
+function buildStructuredData(){
+  let pos = 0;
+  const listItem = (item, category) => ({
+    "@type": "ListItem",
+    "position": ++pos,
+    "item": {
+      "@type": "Product",
+      "name": item.name,
+      "category": category,
+      "brand": { "@type": "Brand", "name": brandFromName(item.name) },
+      "description": item.details.replace(/<[^>]+>/g, "").slice(0, 300),
+      "offers": {
+        "@type": "Offer",
+        "price": item.price.toFixed(2),
+        "priceCurrency": "CHF",
+        "availability": "https://schema.org/InStock",
+        "url": item.url,
+        "seller": { "@type": "Organization", "name": brandFromName(item.name) }
+      }
+    }
+  });
+
+  const items = []
+    .concat(mobileData.map(i => listItem(i, "MobilePhoneService")))
+    .concat(internetData.map(i => listItem(i, "InternetService")));
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Abonnements mobile et internet en Suisse",
+    "description": "Offres mobile et internet fixes des opérateurs suisses, triées par prix mensuel croissant.",
+    "numberOfItems": items.length,
+    "itemListOrder": "https://schema.org/ItemListOrderAscending",
+    "itemListElement": items
+  };
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify(ld);
+  document.head.appendChild(script);
+}
+buildStructuredData();
 </script>
 
 <footer>
