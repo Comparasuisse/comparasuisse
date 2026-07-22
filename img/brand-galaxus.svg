@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200">
+  <rect width="1200" height="1200" fill="#e2001a"/>
+  <g transform="translate(1050 90)">
+    <rect x="0" y="20" width="60" height="20" fill="#ffffff"/>
+    <rect x="20" y="0" width="20" height="60" fill="#ffffff"/>
+  </g>
+  <text x="600" y="620" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="130" font-weight="800" fill="#ffffff" letter-spacing="-2">Galaxus</text>
+  <text x="600" y="700" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="42" font-weight="500" fill="#ffffff" opacity="0.75">Abonnement suisse</text>
+  <text x="600" y="1140" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" font-weight="600" fill="#ffffff" opacity="0.55">Comparasuisse.ch</text>
+</svg>
