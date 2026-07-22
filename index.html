@@ -386,6 +386,21 @@ function netLabel(n){
 
 function chCallsIllim(item){ return item.callsCHUnlimited !== false; }
 
+// Étiquettes lisibles pour les 3 catégories d'appel affichées sur la carte.
+function callsCHLabel(item){ return chCallsIllim(item) ? "illim" : "limité"; }
+function callsToLabel(item){
+  const v = item.callsToAbroad;
+  if (v === Infinity) return "illim";
+  if (typeof v === "number" && v > 0) return v + " min";
+  return "aucun";
+}
+function callsRoamingLabel(item){
+  const v = item.callsRoaming;
+  if (v === Infinity) return "illim";
+  if (typeof v === "number" && v > 0) return v + " min";
+  return "aucun";
+}
+
 function renderMobileCard(item){
   const chPill = item.chUnlimited
     ? '<span class="roaming-pill roaming-yes">♾️ Data Suisse illimitée</span>'
@@ -416,7 +431,7 @@ function renderMobileCard(item){
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
-    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div></div>
+    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · en voyage ${callsRoamingLabel(item)}</div></div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
     <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
   </div>`;
