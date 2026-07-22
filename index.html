@@ -486,18 +486,20 @@ function promoStatus(p){
 function renderPromoCard(p){
   const status = promoStatus(p);
   const codeLine = p.code ? `<div class="std-price">Code promo : <b>${p.code}</b></div>` : '';
-  const priceLine = p.price
-    ? `🔥 CHF ${p.price.toFixed(2)}/mois${p.beforePrice ? ` <s>CHF ${p.beforePrice.toFixed(2)}</s>` : ''}`
-    : `🔥 ${p.discount}`;
-  return `<div class="card promo-card">
+  const beforeLine = p.beforePrice
+    ? `<div class="std-price">au lieu de <s>CHF ${p.beforePrice.toFixed(2)}</s></div>`
+    : '';
+  const priceBlock = p.price
+    ? `<div class="price"><div class="chf">🔥 CHF ${p.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>`
+    : `<div class="price"><div class="chf" style="font-size:15px; line-height:1.2;">🔥 ${p.discount}</div></div>`;
+  return `<div class="card">
     <div>
       <span class="net-tag net-${p.network}">${p.operator}</span>
       <div class="op-name">${p.name}</div>
-      <div class="std-price">${priceLine}</div>
       ${codeLine}
     </div>
-    <div class="details"><b>Ce qui est inclus :</b><br>${p.details}</div>
-    <div class="details"><span class="roaming-pill ${status.cls}">${status.label}</span> ${affiliatePill(p)}</div>
+    <div class="details"><b>Ce qui est inclus :</b><br>${p.details}<div class="std-price" style="margin-top:6px;"><span class="roaming-pill ${status.cls}">${status.label}</span> ${affiliatePill(p)}</div></div>
+    ${priceBlock}
     <a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}">Voir l'offre →</a>
   </div>`;
 }
