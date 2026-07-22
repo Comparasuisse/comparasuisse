@@ -255,7 +255,7 @@ const mobileData = [
   {name:"Wingo Europe Go", network:"swisscom", price:27.95, details:"Illimité (CH) + 8 Go et 100 min (UE/UK)", promo:true, beforePrice:75, promoNote:"rabais à vie -63%", roamData:"8 Go + 100 min d'appel (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:8, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-europe-go", callsRoaming:100},
   {name:"Wingo Europe Max", network:"swisscom", price:36.95, details:"Illimité (CH) + illimité (UE/UK), 100 min d'appel CH→UE/UK", promo:true, beforePrice:89, promoNote:"rabais à vie -59%", roamData:"Illimité (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-europe-max", callsToAbroad:100, callsRoaming:Infinity},
   {name:"Wingo International Pro", network:"swisscom", price:49.95, details:"Illimité (CH + UE/UK/USA/Canada/Turquie), appels illimités + 2ème carte SIM incluse", promo:true, beforePrice:132, promoNote:"rabais à vie -62%", roamData:"Illimité (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-international-pro", callsToAbroad:Infinity, callsRoaming:Infinity},
-  {name:"Wingo Red Swiss", network:"swisscom", price:68.00, details:"Illimité (CH) + 60 min d'appels CH→UE/UK — aucune data à l'étranger", roamData:"Aucune data étrangère — 60 min d'appel vers UE/UK", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.wingo.ch/fr/mobile/wingo-red-swiss", callsToAbroad:60},
+  {name:"Wingo Red Swiss", network:"swisscom", price:68.00, details:"Illimité (CH) + 60 min d'appels CH→UE/UK — aucune data à l'étranger", roamData:"Aucune data étrangère — 60 min d'appel vers UE/UK", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-red-swiss", callsToAbroad:60},
   {name:"Wingo Red", network:"swisscom", price:78.00, details:"Illimité (CH) + 3 Go (UE/UK/USA/Canada/Turquie)", roamData:"3 Go (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:3, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-red"},
   {name:"Wingo Red Pro", network:"swisscom", price:88.00, details:"Illimité (CH) + 20 Go (UE/UK/USA/Canada/Turquie)", roamData:"20 Go (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-red-pro"},
   {name:"Migros Mobile Swiss Start", network:"swisscom", price:13.95, details:"5 Go + illimité (CH) — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:5, roamDataGB:0, countries:["CH"], url:"https://mobile.migros.ch/fr"},
@@ -388,16 +388,21 @@ function chCallsIllim(item){ return item.callsCHUnlimited !== false; }
 
 // Étiquettes lisibles pour les 3 catégories d'appel affichées sur la carte.
 function callsCHLabel(item){ return chCallsIllim(item) ? "illim" : "limité"; }
+function countriesLabel(item){
+  if (!item.countries || !item.countries.length) return "";
+  const relevant = item.countries.filter(c => c !== "CH");
+  return relevant.length ? " (" + relevant.join("/") + ")" : "";
+}
 function callsToLabel(item){
   const v = item.callsToAbroad;
-  if (v === Infinity) return "illim";
-  if (typeof v === "number" && v > 0) return v + " min";
+  if (v === Infinity) return "illim" + countriesLabel(item);
+  if (typeof v === "number" && v > 0) return v + " min" + countriesLabel(item);
   return "aucun";
 }
 function callsRoamingLabel(item){
   const v = item.callsRoaming;
-  if (v === Infinity) return "illim";
-  if (typeof v === "number" && v > 0) return v + " min";
+  if (v === Infinity) return "illim" + countriesLabel(item);
+  if (typeof v === "number" && v > 0) return v + " min" + countriesLabel(item);
   return "aucun";
 }
 
@@ -415,10 +420,10 @@ function renderMobileCard(item){
   const rc = item.callsRoaming;
   const roamCallsPill = (country !== "all" && item.roaming)
     ? (rc === Infinity
-        ? '<span class="roaming-pill roaming-yes">📞 Appels en voyage illimités</span>'
+        ? '<span class="roaming-pill roaming-yes">📞 Appels 🌍→🌍 illimités</span>'
         : (typeof rc === "number" && rc > 0)
-          ? `<span class="roaming-pill roaming-yes">📞 Appels en voyage : ${rc} min</span>`
-          : '<span class="roaming-pill roaming-no">📞 Appels en voyage non inclus</span>')
+          ? `<span class="roaming-pill roaming-yes">📞 Appels 🌍→🌍 : ${rc} min</span>`
+          : '<span class="roaming-pill roaming-no">📞 Appels 🌍→🌍 non inclus</span>')
     : '';
   const flame = item.promo ? '🔥 ' : '';
   const beforeLine = item.promo
@@ -431,7 +436,7 @@ function renderMobileCard(item){
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
-    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · en voyage ${callsRoamingLabel(item)}</div></div>
+    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · 🌍→🌍 ${callsRoamingLabel(item)}</div></div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
     <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
   </div>`;
