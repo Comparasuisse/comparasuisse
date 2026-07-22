@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Netlify
+.netlify/
+
+# Node (au cas où on ajoute des outils plus tard)
+node_modules/

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Comparatif Mobile & Internet Suisse</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --red:#d52b1e; --red-dark:#a81f16; --ink:#1c1c1e; --paper:#faf8f5; --card:#ffffff;
+    --line:#e7e2da; --muted:#6b6660;
+    --swisscom:#0d4ea3; --sunrise:#e2001a; --salt:#1c1c1e; --init7:#0f8a5f;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{margin:0; font-family:"Helvetica Neue",Arial,sans-serif; background:var(--paper); color:var(--ink); padding-bottom:60px; overflow-x:hidden;}
+  header{background:var(--ink); color:#fff; padding:36px 24px 28px; position:relative; overflow:hidden;}
+  header::after{content:"+"; position:absolute; right:24px; top:-30px; font-size:220px; color:var(--red); opacity:.15; font-weight:700;}
+  header h1{margin:0 0 6px; font-size:28px; letter-spacing:-0.5px;}
+  .logo-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+  .logo{width:40px; height:40px; flex-shrink:0; border-radius:10px;}
+  .logo-row h1{margin:0;}
+  header p{margin:0; color:#cfcac2; font-size:14px; max-width:640px;}
+  .badge{display:inline-block; background:var(--red); color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 20px;}
+  .notice{background:#fff7ed; border:1px solid #f0d9b5; color:#7a5a1e; font-size:13px; padding:12px 16px; border-radius:10px; margin:-16px auto 28px; width:min(calc(100% - 40px), 1080px);}
+  .roaming-pill.affiliate{background:#efe6f7; color:#5a2b7a; cursor:help;}
+  .tabs{display:flex; flex-wrap:wrap; gap:8px; margin:28px auto 18px; max-width:1080px; padding:0 20px;}
+  .tab{padding:10px 18px; border-radius:10px; background:#fff; border:1px solid var(--line); cursor:pointer; font-weight:600; font-size:14px; color:var(--muted); white-space:nowrap;}
+  .tab.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .controls{background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px; width:min(calc(100% - 40px), 1080px); margin:0 auto 18px; display:grid; gap:14px; grid-template-columns:1fr 1fr 1fr;}
+  .ctrl-group label{display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin-bottom:6px;}
+  select{width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--line); font-size:13px; background:#fff; color:var(--ink);}
+  input[type=range]{width:100%; accent-color:var(--red); height:24px;}
+  .range-val{font-size:13px; font-weight:700; margin-top:4px; text-transform:none;}
+  .count{font-size:12px; color:var(--muted); max-width:1080px; margin:0 auto 10px; padding:0 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;}
+  .grid{max-width:1080px; margin:0 auto; padding:0 20px; display:grid; gap:12px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:grid; grid-template-columns:150px 1fr auto auto; gap:16px; align-items:center; min-width:0;}
+  .net-tag{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; padding:3px 8px; border-radius:20px; width:fit-content; color:#fff;}
+  .net-swisscom{background:var(--swisscom);} .net-sunrise{background:var(--sunrise);} .net-salt{background:var(--salt);} .net-init7{background:var(--init7);}
+  .op-name{font-weight:700; font-size:15px; margin-top:6px; word-break:break-word;}
+  .details{font-size:13px; color:var(--muted); line-height:1.5; min-width:0;}
+  .std-price{font-size:11px; color:#a89a80; margin-top:2px; word-break:break-word;}
+  .roaming-pill{font-size:10px; padding:2px 8px; border-radius:20px; width:fit-content; margin-top:6px;}
+  .roaming-yes{background:#e6f4ea; color:#1e7a3d;}
+  .roaming-no{background:#f1efe9; color:var(--muted);}
+  .price{text-align:right;}
+  .price .chf{font-size:20px; font-weight:800; color:var(--ink);}
+  .price .per{font-size:11px; color:var(--muted);}
+  .offer-btn{display:inline-block; background:var(--red); color:#fff; text-decoration:none; font-size:12px; font-weight:700; padding:10px 14px; border-radius:8px; white-space:nowrap; text-align:center;}
+  .offer-btn:hover{background:var(--red-dark);}
+  footer{max-width:1080px; margin:40px auto 0; padding:20px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);}
+  footer a{color:var(--red-dark);}
+  .hidden{display:none !important;}
+  .empty{padding:30px; text-align:center; color:var(--muted); font-size:14px;}
+  .reset-link{font-size:12px; color:var(--red-dark); cursor:pointer; text-decoration:underline; white-space:nowrap;}
+  .promo-card{grid-template-columns:150px 1.4fr 1fr auto;}
+  @media(max-width:720px){
+    header{padding:28px 20px 22px;}
+    header::after{font-size:130px; right:0; top:-10px;}
+    header h1{font-size:22px;}
+    header p{font-size:13px;}
+    .tabs{gap:6px;}
+    .tab{padding:8px 12px; font-size:13px;}
+    .controls{grid-template-columns:1fr; padding:14px;}
+    .card{grid-template-columns:1fr; text-align:left; padding:14px;}
+    .promo-card{grid-template-columns:1fr;}
+    .price{text-align:left; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+    .price .per{margin-top:0;}
+    .offer-btn{width:100%; padding:12px 14px;}
+    .net-tag{margin-bottom:2px;}
+  }
+  @media(max-width:400px){
+    header h1{font-size:20px;}
+    .tab{font-size:12px; padding:7px 10px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="badge">Suisse · Consulté le <span id="today-date">aujourd'hui</span></span>
+    <div class="logo-row">
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="16" fill="#ffffff"/>
+        <rect x="25" y="12" width="14" height="40" fill="#d52b1e"/>
+        <rect x="12" y="25" width="40" height="14" fill="#d52b1e"/>
+        <rect x="40" y="40" width="6" height="10" fill="#1c1c1e"/>
+        <rect x="48" y="34" width="6" height="16" fill="#1c1c1e"/>
+        <rect x="56" y="26" width="6" height="24" fill="#1c1c1e"/>
+      </svg>
+      <h1>Comparatif Mobile & Internet</h1>
+    </div>
+    <p>Le comparatif indépendant des abonnements mobile et internet en Suisse.</p>
+  </div>
+</header>
+
+
+<div class="tabs">
+  <div class="tab active" data-tab="mobile">📱 Mobile (18 offres)</div>
+  <div class="tab" data-tab="internet">🌐 Internet (11 offres)</div>
+  <div class="tab" data-tab="combo">📦 Combinés</div>
+  <div class="tab" data-tab="promo">🔥 Promotions</div>
+</div>
+
+<div class="controls" id="mobile-controls">
+  <div class="ctrl-group">
+    <label>Réseau</label>
+    <select id="mobile-network">
+      <option value="all">Tous les réseaux</option>
+      <option value="swisscom">Swisscom</option>
+      <option value="sunrise">Sunrise</option>
+      <option value="salt">Salt</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>🇨🇭 Data Suisse min. : <span class="range-val" id="mobile-ch-unlimited-label">Peu importe</span></label>
+    <input type="range" id="mobile-ch-unlimited" min="0" max="4" step="1" value="0">
+  </div>
+  <div class="ctrl-group">
+    <label>🌍 Data à l'étranger min. : <span class="range-val" id="mobile-roaming-label">Peu importe</span></label>
+    <input type="range" id="mobile-roaming" min="0" max="4" step="1" value="0">
+  </div>
+  <div class="ctrl-group">
+    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="mobile-internet" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Offre combiné avec internet fixe</label>
+  </div>
+  <div class="ctrl-group">
+    <label>Prix max : <span class="range-val" id="mobile-price-label">CHF 135/mois</span></label>
+    <input type="range" id="mobile-price" min="10" max="135" step="5" value="135">
+  </div>
+</div>
+
+<div class="controls hidden" id="mobile-country-controls">
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>Pays prioritaire</label>
+    <select id="mobile-country">
+      <option value="all">Peu importe, juste un peu partout en Europe</option>
+      <option value="UE">Union Européenne (France, Espagne, Italie, Allemagne...)</option>
+      <option value="UK">Royaume-Uni</option>
+      <option value="USA">États-Unis</option>
+      <option value="CAN">Canada</option>
+      <option value="TUR">Turquie</option>
+      <option value="MONDE">Monde entier</option>
+    </select>
+  </div>
+</div>
+
+<div class="count" id="mobile-count"><span></span><span class="reset-link" onclick="resetMobile()">Réinitialiser les filtres</span></div>
+<div class="grid" id="mobile-grid"></div>
+
+<div class="controls hidden" id="internet-controls">
+  <div class="ctrl-group">
+    <label>Réseau</label>
+    <select id="internet-network">
+      <option value="all">Tous les réseaux</option>
+      <option value="swisscom">Swisscom</option>
+      <option value="sunrise">Sunrise / câble</option>
+      <option value="salt">Salt</option>
+      <option value="init7">Init7 (indépendant)</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Débit minimum</label>
+    <select id="internet-speed">
+      <option value="0">Peu importe</option>
+      <option value="200">200 Mbit/s min</option>
+      <option value="1000">1 Gbit/s min</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Prix max : <span class="range-val" id="internet-price-label">CHF 90/mois</span></label>
+    <input type="range" id="internet-price" min="25" max="90" step="5" value="90">
+  </div>
+</div>
+
+<div class="count hidden" id="internet-count"><span></span><span class="reset-link" onclick="resetInternet()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="internet-grid"></div>
+
+<div class="notice hidden" id="combo-notice">📦 <b>Abonnements combinés</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
+<div class="count hidden" id="combo-count"><span></span><span></span></div>
+<div class="grid hidden" id="combo-grid" style="margin-top:0;"></div>
+
+<div class="notice hidden" id="promo-notice">🗓️ <b>Les promotions sont limitées dans le temps</b> — certaines expirent dans les prochains jours (voir statut sur chaque carte). Vérifie toujours la date sur le site de l'opérateur avant de souscrire, ces fenêtres promo bougent souvent.</div>
+<div class="count hidden" id="promo-count"><span></span><span></span></div>
+<div class="grid hidden" id="promo-grid" style="margin-top:0;"></div>
+
+
+<script>
+const mobileData = [
+  {name:"Coop Mobile Start", network:"swisscom", price:11.95, details:"3 Go + appels/SMS illimités (CH) — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:3, roamDataGB:0, countries:["CH"], url:"https://www.coopmobile.ch/fr/abonnement-mobile"},
+  {name:"Quickline Mobile M", network:"sunrise", price:12.00, details:"5 Go (CH) + 1 Go (UE, USA, Canada)", roamData:"1 Go (UE, USA, Canada)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:5, roamDataGB:1, countries:["UE","USA","CAN"], url:"https://www.moneyland.ch/fr/quickline/abonnement-mobile"},
+  {name:"Lebara Relax S", network:"sunrise", price:12.95, details:"Illimité (CH) + 20 Go (UE, USA, Canada, Turquie)", roamData:"20 Go (UE, USA, Canada, Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","USA","CAN","TUR"], url:"https://fr.comparis.ch/telecom/mobile/angebote/anbieter/lebara"},
+  {name:"Digital Republic Flat Mobile Swiss", network:"sunrise", price:13.00, details:"Illimité (CH) + 2 Go (UE, USA, Canada)", roamData:"2 Go (UE, USA, Canada)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:2, countries:["UE","USA","CAN"], url:"https://fr.comparis.ch/telecom/mobile/angebote/anbieter/digitalrepublic"},
+  {name:"Wingo Swiss Mini", network:"swisscom", price:13.95, details:"5 Go + illimité (CH) — Suisse et Liechtenstein uniquement", promo:true, beforePrice:null, promoNote:"Promo code SWMINI1395, valable jusqu'au 31.12.2026", roamData:"Aucune — Suisse/Liechtenstein uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:5, roamDataGB:0, countries:["CH"], url:"https://www.wingo.ch/fr/mobile/wingo-swiss-mini"},
+  {name:"Wingo Swiss Go", network:"swisscom", price:17.95, details:"10 Go (CH) + 1 Go (UE/UK) — Suisse et Liechtenstein", promo:true, beforePrice:null, promoNote:"Promo code SWSTA1795, valable jusqu'au 31.12.2026", roamData:"1 Go (UE/UK)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:1, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-swiss-go"},
+  {name:"Wingo Swiss Max", network:"swisscom", price:24.95, details:"Illimité (CH) + data UE/UK incluse", promo:true, beforePrice:null, promoNote:"Promo code SWMAX2495, valable jusqu'au 31.12.2026", roamData:"Data incluse en UE/UK (quantité non précisée par Wingo)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:null, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-swiss-max"},
+  {name:"Migros Mobile Swiss Start", network:"swisscom", price:13.95, details:"6 Go + illimité (CH) — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:6, roamDataGB:0, countries:["CH"], url:"https://mobile.migros.ch/fr"},
+  {name:"yallo Swiss Max", network:"sunrise", price:19.90, details:"Illimité (CH) + 5 Go (UE, USA, Canada)", roamData:"5 Go (UE, USA, Canada)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","USA","CAN"], url:"https://www.yallo.ch/fr/mobile-products/yallo_swiss_max"},
+  {name:"Swype Swiss", network:"sunrise", price:19.95, details:"Illimité (CH) — Suisse uniquement, résiliable au quotidien", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.swype.ch/fr"},
+  {name:"Sunrise Fresh Mobile S (-30 ans)", network:"sunrise", price:29.00, details:"Illimité 5G jusqu'à 50 Mbit/s (CH), 3 numéros — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile"},
+  {name:"Sunrise Swiss Travel", network:"sunrise", price:29.90, details:"Illimité (CH) + illimité data/appels (Top 8 pays UE)", roamData:"Illimité (Top 8 pays UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile"},
+  {name:"Sunrise Swiss Connect Lite", network:"sunrise", price:34.90, details:"6 Go 5G (CH) + 100 Mo et 10 min d'appel (44 pays)", roamData:"100 Mo + 10 min d'appel (44 pays)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:6, roamDataGB:0.1, countries:["UE","MONDE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile"},
+  {name:"Salt Swiss Max (rabais à vie)", network:"salt", price:24.95, details:"Illimité 5G (CH) uniquement — Suisse uniquement", promo:true, beforePrice:73.95, promoNote:"", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
+  {name:"Swisscom Basic Mobile S/M", network:"swisscom", price:29.90, details:"1.5–5 Go (CH) — pas de data à l'étranger incluse", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:5, roamDataGB:0, countries:["CH"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html"},
+  {name:"Sunrise Fresh Mobile M (-30 ans)", network:"sunrise", price:55.00, details:"Illimité 5G (CH) — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile"},
+  {name:"Salt Europe XL (rabais à vie)", network:"salt", price:31.95, details:"Illimité (CH + UE), 10 Go itinérance zone Europe", promo:true, beforePrice:94.95, promoNote:"", roamData:"10 Go haut débit (zone Europe Salt), puis 128 kbit/s", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:10, countries:["UE"], url:"https://www.salt.ch/fr/mobile/plans/europe-xl"},
+  {name:"Swisscom blue Mobile S", network:"swisscom", price:59.90, details:"Illimité 5G (CH, UE, UK)", promo:true, beforePrice:71.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-s.html"},
+  {name:"Swisscom blue Mobile M (best-seller)", network:"swisscom", price:59.90, details:"Illimité 5G haut débit (CH, UE, UK)", promo:true, beforePrice:81.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-m.html"},
+  {name:"Salt Swiss XXL (rabais à vie)", network:"salt", price:22.95, details:"Illimité 5G (CH) + 4 Go et 100 min (UE)", promo:true, beforePrice:83.95, promoNote:"", roamData:"4 Go + 100 min d'appel (UE)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:4, countries:["UE"], url:"https://www.salt.ch/fr/mobile/plans/swiss-xxl"},
+  {name:"Sunrise Up Mobile XL", network:"sunrise", price:54.95, details:"Illimité jusqu'à 2 Gbit/s (CH + UE), appels/SMS illimités CH+UE", roamData:"Illimité jusqu'à 2 Gbit/s (UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.mobilezone.ch/fr/abonnements/sunrise/up-mobile-xl"},
+  {name:"Swisscom blue Mobile L", network:"swisscom", price:59.90, details:"Illimité 5G (CH, UE, UK), 4 appareils multi-device inclus", promo:true, beforePrice:101.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-l.html"},
+  {name:"Salt Travel Max (rabais à vie)", network:"salt", price:59.95, details:"Illimité (CH + UE) + internet illimité vers 30 destinations monde", promo:true, beforePrice:104.95, promoNote:"l'abonnement mobile le plus cher du comparatif", roamData:"Illimité (CH+UE) + 5 Go dans 30 destinations monde", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","MONDE"], url:"https://www.salt.ch/fr/mobile/plans/travel-max"},
+  {name:"Swisscom blue Mobile XL", network:"swisscom", price:99.90, details:"Illimité 5G haut débit (CH, UE, UK), le plus complet de la gamme Swisscom", promo:true, beforePrice:131.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html"},
+];
+
+const internetData = [
+  {name:"Galaxus Internet", network:"sunrise", price:27, speed:200, details:"200 Mbit/s câble, sans engagement (zone câble requise)", url:"https://therichswiss.com/en/best-internet"},
+  {name:"yallo Home + TV", network:"sunrise", price:34.90, speed:1000, details:"Internet via FTTH/câble/FWA selon adresse + TV", url:"https://www.yallo.ch/fr"},
+  {name:"Wingo Internet Light", network:"swisscom", price:34.95, speed:100, details:"100 Mbit/s (fibre/DSL) — engagement 24 mois", url:"https://www.wingo.ch/fr"},
+  {name:"Migros Internet Start", network:"swisscom", price:34.95, speed:100, details:"100 Mbit/s (fibre/DSL) — engagement 12 mois", url:"https://mobile.migros.ch/fr"},
+  {name:"Sunrise Easy Internet", network:"sunrise", price:39.90, speed:1000, details:"1 Gbit/s fibre — engagement 12 mois, activation gratuite", url:"https://www.sunrise.ch/fr"},
+  {name:"Swisscom blue Internet S", network:"swisscom", price:39.90, speed:100, details:"100 Mbit/s fibre/DSL — engagement 24 mois", url:"https://www.swisscom.ch/fr"},
+  {name:"Quickline Internet M", network:"sunrise", price:44.00, speed:200, details:"200 Mbit/s fibre/câble — engagement 24 mois, TV incluse", url:"https://www.internet-offer.ch/fr/quickline"},
+  {name:"Salt Home", network:"salt", price:49.95, speed:10000, details:"Jusqu'à 10 Gbit/s fibre, à vie — engagement 24 mois", url:"https://www.salt.ch/fr/home/internet-fibre"},
+  {name:"Zattoo Home Premium (Init7)", network:"init7", price:52.95, speed:1000, details:"1 Gbit/s fibre + Zattoo Premium TV incluse — sans engagement", url:"https://www.init7.net/fr/internet/fiber7/"},
+  {name:"Init7 Fiber7", network:"init7", price:64.75, speed:1000, details:"1, 10 ou 25 Gbit/s symétrique — sans engagement, sans throttling", url:"https://www.init7.net/fr/internet/fiber7/"},
+  {name:"Swisscom blue Internet M + TV M", network:"swisscom", price:89.90, speed:1000, details:"1 Gbit/s fibre + 300+ chaînes TV dont sport — le forfait combiné le plus complet", url:"https://www.swisscom.ch/fr"},
+];
+
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+document.getElementById("today-date").textContent =
+  TODAY.toLocaleDateString("fr-CH", {day:"numeric", month:"long", year:"numeric"});
+
+// Ajouter un champ optionnel `affiliateUrl` à un item pour activer le tracking Awin.
+// Si absent, on retombe sur `url` (lien direct opérateur, non rémunéré).
+function offerUrl(item){ return item.affiliateUrl || item.url; }
+function offerRel(item){ return item.affiliateUrl ? "sponsored noopener" : "noopener"; }
+function affiliatePill(item){
+  return item.affiliateUrl ? '<span class="roaming-pill affiliate" title="Lien affilié : nous touchons une commission si tu souscris via ce lien, sans impact sur ton prix.">🤝 Partenaire</span>' : '';
+}
+
+const comboData = [
+  {operator:"yallo", name:"Home + TV", price:37.90, details:"Internet (FTTH/câble/FWA selon adresse) + TV incluse — le combiné le moins cher du marché", network:"sunrise", url:"https://www.yallo.ch/fr"},
+  {operator:"Wingo", name:"Internet + TV Max", price:44.90, details:"Internet fibre/DSL + bouquet TV Max — économie d'environ CHF 10/mois vs séparé", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
+  {operator:"Sunrise", name:"Up Home (Internet + TV + Téléphonie fixe)", price:44.90, details:"Internet + TV + ligne fixe Up Phone S incluse — économie d'environ CHF 5/mois vs séparé", network:"sunrise", url:"https://www.sunrise.ch/fr/internet-tv/abonnement-combine"},
+  {operator:"Salt", name:"Salt Home (Internet + TV + Fixe)", price:49.95, details:"Jusqu'à 10 Gbit/s fibre + TV avec Apple TV 4K inclus + téléphonie fixe illimitée (CH) — à vie", network:"salt", url:"https://www.salt.ch/fr/internet-tv"},
+  {operator:"Swisscom", name:"blue Internet + TV", price:69.90, details:"Internet fibre + bouquet TV blue (Netflix intégré au décodeur) — économie d'environ CHF 9.90/mois vs séparé", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html"},
+  {operator:"Swisscom", name:"Rabais Multi-Mobile (combo Internet + Mobile)", price:null, details:"CHF 20.–/mois de rabais sur chaque ligne mobile supplémentaire quand elle est combinée à un abo Internet Swisscom (jusqu'à 5 lignes)", network:"swisscom", url:"https://monforfait.ch/box-internet/offre-combine-internet-mobile-suisse/"},
+  {operator:"Sunrise", name:"Rabais Multi-Mobile / Home Benefit", price:null, details:"-50% sur le prix catalogue des abonnements mobiles additionnels quand combinés avec un abo Internet ou un autre mobile Sunrise", network:"sunrise", url:"https://www.sunrise.ch/fr/support/nouveaux-prix"},
+];
+
+function renderComboCard(c){
+  const priceBlock = c.price
+    ? `<div class="price"><div class="chf">CHF ${c.price.toFixed(2)}</div><div class="per">/mois</div></div>`
+    : `<div class="price"><div class="chf" style="font-size:14px;">Rabais combiné</div></div>`;
+  return `<div class="card">
+    <div>
+      <span class="net-tag net-${c.network}">${c.operator}</span>
+      <div class="op-name">${c.name}</div>
+    </div>
+    <div class="details">${c.details} ${affiliatePill(c)}</div>
+    ${priceBlock}
+    <a class="offer-btn" href="${offerUrl(c)}" target="_blank" rel="${offerRel(c)}">Voir l'offre →</a>
+  </div>`;
+}
+
+function refreshCombo(){
+  document.querySelector("#combo-count span").textContent = comboData.length + " offre(s) combinée(s)";
+  document.getElementById("combo-grid").innerHTML = comboData.map(renderComboCard).join("");
+}
+
+const promoData = [
+  {operator:"Wingo", name:"Swiss Mini — rabais à vie", price:13.95, beforePrice:null, details:"5 Go + appels/SMS illimités (CH) — Suisse et Liechtenstein uniquement, sans engagement", code:"SWMINI1395", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-mini"},
+  {operator:"Wingo", name:"Swiss Go — rabais à vie", price:17.95, beforePrice:null, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH) — sans engagement", code:"SWSTA1795", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-go"},
+  {operator:"Wingo", name:"Swiss Max — rabais à vie", price:24.95, beforePrice:null, details:"Data illimitée 5G (CH) + data incluse en UE/UK, appels/SMS illimités (CH) — sans engagement", code:"SWMAX2495", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-max"},
+  {operator:"Wingo", name:"Internet Light / Start / Max", discount:"Promo en cours sur les 3 abos internet", details:"De 100 Mbit/s (Light) à très haut débit (Max) sur le réseau fibre/DSL Swisscom, sans engagement", code:null, from:"2026-01-23", to:"2026-07-21", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
+  {operator:"Wingo", name:"Wingo TV Max", discount:"Promo en cours sur l'abonnement TV", details:"Bouquet TV complet avec chaînes HD, sur le réseau Swisscom", code:null, from:"2025-06-02", to:"2026-07-21", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
+  {operator:"Salt", name:"Swiss Max — rabais à vie -66%", price:24.95, beforePrice:73.95, details:"Data illimitée 5G (CH) uniquement — pas de data incluse en Europe, engagement 24 mois", code:null, from:"2026-01-01", to:"2026-07-13", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
+  {operator:"Salt", name:"Europe XL — rabais à vie", price:31.95, beforePrice:94.95, details:"Illimité (CH + UE), 10 Go d'itinérance zone Europe à haut débit, puis 128 kbit/s", code:null, from:"2026-01-01", to:"2026-07-20", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/europe-xl"},
+  {operator:"Salt", name:"Swiss XXL — rabais à vie", price:22.95, beforePrice:83.95, details:"Illimité 5G (CH) + 4 Go et 100 min d'appels/SMS en Europe", code:null, from:"2026-01-01", to:"2026-05-18", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-xxl"},
+  {operator:"Salt", name:"Travel Max — rabais à vie", price:59.95, beforePrice:104.95, details:"Illimité (CH + UE) + internet illimité vers 30 destinations dans le monde, engagement 24 mois", code:null, from:"2026-01-01", to:"2026-05-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/travel-max"},
+  {operator:"Swisscom", name:"blue Mobile S/M/L/XL — 12 mois réduits", discount:"dès 39.90/mois la 1ère année (combiné avec Internet)", details:"Data illimitée 5G (CH, UE, UK) selon le palier choisi — puis prix standard dès la 13e mois (jusqu'à 131.80/mois pour le XL)", code:null, from:"2026-05-11", to:"2026-05-31", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-m.html"},
+];
+
+function promoStatus(p){
+  const from = new Date(p.from), to = new Date(p.to);
+  if (TODAY > to) return {label:"⏱ Probablement expirée — vérifie sur le site", cls:"roaming-no"};
+  if (TODAY < from) return {label:"À venir dès le " + from.toLocaleDateString("fr-CH"), cls:"roaming-no"};
+  const daysLeft = Math.round((to - TODAY)/(1000*60*60*24));
+  if (daysLeft <= 3) return {label:"⚠ Expire dans " + daysLeft + " jour(s) !", cls:"roaming-yes"};
+  return {label:"✓ Active jusqu'au " + to.toLocaleDateString("fr-CH"), cls:"roaming-yes"};
+}
+
+function renderPromoCard(p){
+  const status = promoStatus(p);
+  const codeLine = p.code ? `<div class="std-price">Code promo : <b>${p.code}</b></div>` : '';
+  const priceLine = p.price
+    ? `🔥 CHF ${p.price.toFixed(2)}/mois${p.beforePrice ? ` <s>CHF ${p.beforePrice.toFixed(2)}</s>` : ''}`
+    : `🔥 ${p.discount}`;
+  return `<div class="card promo-card">
+    <div>
+      <span class="net-tag net-${p.network}">${p.operator}</span>
+      <div class="op-name">${p.name}</div>
+      <div class="std-price">${priceLine}</div>
+      ${codeLine}
+    </div>
+    <div class="details"><b>Ce qui est inclus :</b><br>${p.details}</div>
+    <div class="details"><span class="roaming-pill ${status.cls}">${status.label}</span> ${affiliatePill(p)}</div>
+    <a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}">Voir l'offre →</a>
+  </div>`;
+}
+
+function refreshPromo(){
+  document.querySelector("#promo-count span").textContent = promoData.length + " promotion(s) recensée(s)";
+  document.getElementById("promo-grid").innerHTML = promoData.map(renderPromoCard).join("");
+}
+
+function netLabel(n){
+  return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)"}[n];
+}
+
+function renderMobileCard(item){
+  const chPill = item.chUnlimited
+    ? '<span class="roaming-pill roaming-yes">♾️ Data Suisse illimitée</span>'
+    : '<span class="roaming-pill roaming-no">Data Suisse limitée</span>';
+  const pill = item.roaming
+    ? '<span class="roaming-pill roaming-yes">✓ Data à l\'étranger incluse</span>'
+    : '<span class="roaming-pill roaming-no">Suisse uniquement</span>';
+  const flame = item.promo ? '🔥 ' : '';
+  const beforeLine = item.promo
+    ? (item.beforePrice
+        ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
+        : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : ''))
+    : '';
+  return `<div class="card">
+    <div>
+      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
+      <div class="op-name">${item.name}</div>
+    </div>
+    <div class="details">${item.details}${chPill}${pill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div></div>
+    <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
+    <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
+  </div>`;
+}
+
+function renderInternetCard(item){
+  const speedLabel = item.speed >= 1000 ? (item.speed/1000)+" Gbit/s" : item.speed+" Mbit/s";
+  return `<div class="card">
+    <div>
+      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
+      <div class="op-name">${item.name}</div>
+    </div>
+    <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span> ${affiliatePill(item)}</div>
+    <div class="price"><div class="chf">CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div></div>
+    <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
+  </div>`;
+}
+
+const DATA_THRESHOLDS = [null, 1, 4, 10, Infinity];
+const DATA_LABELS = ["Peu importe", "1 Go minimum", "4 Go minimum", "10 Go minimum", "Illimité uniquement"];
+
+function passesDataThreshold(valueGB, thresholdIndex){
+  const threshold = DATA_THRESHOLDS[thresholdIndex];
+  if (threshold === null) return true;
+  if (valueGB === null || valueGB === undefined) return false;
+  if (threshold === Infinity) return valueGB === Infinity;
+  return valueGB === Infinity || valueGB >= threshold;
+}
+
+function refreshMobile(){
+  const network = document.getElementById("mobile-network").value;
+  const chVal = parseInt(document.getElementById("mobile-ch-unlimited").value);
+  const roamVal = parseInt(document.getElementById("mobile-roaming").value);
+  const country = document.getElementById("mobile-country").value;
+  const maxPrice = parseFloat(document.getElementById("mobile-price").value);
+  document.getElementById("mobile-price-label").textContent = "CHF " + maxPrice + "/mois";
+
+  document.getElementById("mobile-ch-unlimited-label").textContent = DATA_LABELS[chVal];
+  document.getElementById("mobile-roaming-label").textContent = DATA_LABELS[roamVal];
+
+  const wantsRoaming = roamVal > 0;
+  document.getElementById("mobile-country-controls").classList.toggle("hidden", !wantsRoaming);
+
+  let filtered = mobileData.filter(d => {
+    if (network !== "all" && d.network !== network) return false;
+    if (!passesDataThreshold(d.chDataGB, chVal)) return false;
+    if (wantsRoaming && !passesDataThreshold(d.roamDataGB, roamVal)) return false;
+    if (wantsRoaming && country !== "all" && !(d.countries || []).includes(country)) return false;
+    if (d.price > maxPrice) return false;
+    return true;
+  });
+  filtered.sort((a,b)=> a.price - b.price);
+  document.querySelector("#mobile-count span").textContent = filtered.length + " / " + mobileData.length + " offre(s)";
+  document.getElementById("mobile-grid").innerHTML = filtered.length
+    ? filtered.map(renderMobileCard).join("")
+    : '<div class="empty">Aucune offre ne correspond à ces critères. Élargis le budget ou change de filtre.</div>';
+}
+
+function refreshMobileInternetToggle(){
+  if (document.getElementById("mobile-internet").checked){
+    document.querySelector('.tab[data-tab="combo"]').click();
+  }
+}
+
+function refreshInternet(){
+  const network = document.getElementById("internet-network").value;
+  const minSpeed = parseFloat(document.getElementById("internet-speed").value);
+  const maxPrice = parseFloat(document.getElementById("internet-price").value);
+  document.getElementById("internet-price-label").textContent = "CHF " + maxPrice + "/mois";
+
+  let filtered = internetData.filter(d => {
+    if (network !== "all" && d.network !== network) return false;
+    if (d.speed < minSpeed) return false;
+    if (d.price > maxPrice) return false;
+    return true;
+  });
+  filtered.sort((a,b)=> a.price - b.price);
+  document.querySelector("#internet-count span").textContent = filtered.length + " / " + internetData.length + " offre(s)";
+  document.getElementById("internet-grid").innerHTML = filtered.length
+    ? filtered.map(renderInternetCard).join("")
+    : '<div class="empty">Aucune offre ne correspond à ces critères. Élargis le budget ou change de filtre.</div>';
+}
+
+function resetMobile(){
+  document.getElementById("mobile-network").value = "all";
+  document.getElementById("mobile-ch-unlimited").value = 0;
+  document.getElementById("mobile-roaming").value = 0;
+  document.getElementById("mobile-internet").checked = false;
+  document.getElementById("mobile-country").value = "all";
+  document.getElementById("mobile-price").value = 135;
+  refreshMobile();
+  refreshMobileInternetToggle();
+}
+function resetInternet(){
+  document.getElementById("internet-network").value = "all";
+  document.getElementById("internet-speed").value = 0;
+  document.getElementById("internet-price").value = 90;
+  refreshInternet();
+}
+
+["mobile-network","mobile-ch-unlimited","mobile-roaming","mobile-country","mobile-price"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", refreshMobile);
+});
+document.getElementById("mobile-internet").addEventListener("change", refreshMobileInternetToggle);
+["internet-network","internet-speed","internet-price"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", refreshInternet);
+});
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    const target = tab.dataset.tab;
+    document.getElementById("mobile-controls").classList.toggle("hidden", target!=="mobile");
+    document.getElementById("mobile-count").classList.toggle("hidden", target!=="mobile");
+    document.getElementById("mobile-grid").classList.toggle("hidden", target!=="mobile");
+    document.getElementById("internet-controls").classList.toggle("hidden", target!=="internet");
+    document.getElementById("internet-count").classList.toggle("hidden", target!=="internet");
+    document.getElementById("internet-grid").classList.toggle("hidden", target!=="internet");
+    document.getElementById("combo-notice").classList.toggle("hidden", target!=="combo");
+    document.getElementById("combo-count").classList.toggle("hidden", target!=="combo");
+    document.getElementById("combo-grid").classList.toggle("hidden", target!=="combo");
+    document.getElementById("promo-notice").classList.toggle("hidden", target!=="promo");
+    document.getElementById("promo-count").classList.toggle("hidden", target!=="promo");
+    document.getElementById("promo-grid").classList.toggle("hidden", target!=="promo");
+  });
+});
+
+refreshMobile();
+refreshMobileInternetToggle();
+refreshInternet();
+refreshCombo();
+refreshPromo();
+</script>
+
+<footer>
+  Comparateur indépendant, financé par des commissions d'affiliation sur les offres marquées 🤝 Partenaire — sans impact sur ton prix ni sur le classement (toujours par prix croissant). <a href="mentions-legales.html">Mentions légales →</a><br>
+  <!-- ↓ À MODIFIER À LA MAIN lors de chaque revérification manuelle des offres ↓ -->
+  <span style="opacity:.7;">Prix vérifiés le 21 juillet 2026</span>
+</footer>
+
+</body>
+</html>
