@@ -186,9 +186,6 @@
     <label>Prix max : <span class="range-val" id="mobile-price-label">CHF 135/mois</span></label>
     <input type="range" id="mobile-price" min="10" max="135" step="5" value="135">
   </div>
-  <div class="ctrl-group">
-    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="mobile-internet" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Offre combiné avec internet fixe</label>
-  </div>
 
   <div class="section-title">📞 Téléphonie</div>
   <div class="ctrl-group">
@@ -280,6 +277,9 @@
   <div class="ctrl-group">
     <label>Prix max : <span class="range-val" id="internet-price-label">CHF 100/mois</span></label>
     <input type="range" id="internet-price" min="25" max="100" step="5" value="100">
+  </div>
+  <div class="ctrl-group">
+    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="internet-combo" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Combiné avec TV (voir onglet Internet + TV)</label>
   </div>
 </div>
 
@@ -763,8 +763,8 @@ function refreshMobile(){
     : '<div class="empty">Aucune offre ne correspond à ces critères. Élargis le budget ou change de filtre.</div>';
 }
 
-function refreshMobileInternetToggle(){
-  if (document.getElementById("mobile-internet").checked){
+function refreshInternetComboToggle(){
+  if (document.getElementById("internet-combo").checked){
     document.querySelector('.tab[data-tab="combo"]').click();
   }
 }
@@ -811,11 +811,9 @@ function resetMobile(){
   document.getElementById("mobile-calls-to-max").value = 4;
   document.getElementById("mobile-calls-roam").value = 0;
   document.getElementById("mobile-calls-roam-max").value = 4;
-  document.getElementById("mobile-internet").checked = false;
   document.getElementById("mobile-country").value = "all";
   document.getElementById("mobile-price").value = 135;
   refreshMobile();
-  refreshMobileInternetToggle();
 }
 function resetInternet(){
   document.querySelectorAll('#internet-network input').forEach(i => i.checked = true);
@@ -829,7 +827,7 @@ function resetInternet(){
   document.getElementById(id).addEventListener("input", refreshMobile);
 });
 document.querySelectorAll('#mobile-network input').forEach(i => i.addEventListener("change", refreshMobile));
-document.getElementById("mobile-internet").addEventListener("change", refreshMobileInternetToggle);
+document.getElementById("internet-combo").addEventListener("change", refreshInternetComboToggle);
 ["internet-speed","internet-speed-max","internet-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshInternet);
 });
@@ -861,7 +859,6 @@ document.querySelectorAll(".tab").forEach(tab=>{
 });
 
 refreshMobile();
-refreshMobileInternetToggle();
 refreshInternet();
 refreshCombo();
 refreshPromo();
