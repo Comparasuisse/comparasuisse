@@ -29,13 +29,17 @@ for (const p of paths) {
     `(<url>[\\s\\S]*?<loc>[^<]*${escaped}</loc>[\\s\\S]*?<lastmod>)[^<]*(</lastmod>)`,
     "g"
   );
-  const before = xml;
-  xml = xml.replace(regex, `$1${today}$2`);
-  if (xml !== before) {
+  if (!xml.match(regex)) {
+    console.log(`update-sitemap: ${suffix} non trouvé dans sitemap.xml`);
+    continue;
+  }
+  const updated = xml.replace(regex, `$1${today}$2`);
+  if (updated !== xml) {
+    xml = updated;
     console.log(`update-sitemap: ${suffix} → lastmod ${today}`);
     anyChange = true;
   } else {
-    console.log(`update-sitemap: ${suffix} non trouvé dans sitemap.xml`);
+    console.log(`update-sitemap: ${suffix} déjà à jour (${today})`);
   }
 }
 
