@@ -147,7 +147,7 @@
 
 
 <div class="tabs">
-  <div class="tab active" data-tab="mobile">📱 Mobile (18 offres)</div>
+  <div class="tab active" data-tab="mobile">📱 Mobile (27 offres)</div>
   <div class="tab" data-tab="internet">🌐 Internet (11 offres)</div>
   <div class="tab" data-tab="combo">📦 Combinés</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
@@ -237,7 +237,10 @@
 
 <script>
 const mobileData = [
-  {name:"Coop Mobile Start", network:"swisscom", price:11.95, details:"3 Go + appels/SMS illimités (CH) — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:3, roamDataGB:0, countries:["CH"], url:"https://www.coopmobile.ch/fr/abonnement-mobile"},
+  {name:"Coop Mobile Swiss S", network:"swisscom", price:11.95, details:"6 Go + appels/SMS illimités (CH) — Suisse uniquement", promo:true, beforePrice:29.90, promoNote:"rabais à vie -60%", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:6, roamDataGB:0, countries:["CH"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/swiss-s"},
+  {name:"Coop Mobile Swiss M", network:"swisscom", price:17.95, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH)", promo:true, beforePrice:44.90, promoNote:"rabais à vie -60%", roamData:"1 Go (UE/UK)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:1, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/swiss-m"},
+  {name:"Coop Mobile Swiss L", network:"swisscom", price:25.95, details:"Illimité (CH) + 2 Go (UE/UK), appels/SMS illimités (CH)", promo:true, beforePrice:65.90, promoNote:"rabais à vie -60%", roamData:"2 Go (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:2, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/swiss-l"},
+  {name:"Coop Mobile Europe M", network:"swisscom", price:29.95, details:"Illimité (CH) + 20 Go et 100 min (UE/UK)", promo:true, beforePrice:74.90, promoNote:"rabais à vie -60%", roamData:"20 Go + 100 min d'appel (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/europe-m"},
   {name:"Quickline Mobile M", network:"sunrise", price:12.00, details:"5 Go (CH) + 1 Go (UE, USA, Canada)", roamData:"1 Go (UE, USA, Canada)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:5, roamDataGB:1, countries:["UE","USA","CAN"], url:"https://www.moneyland.ch/fr/quickline/abonnement-mobile"},
   {name:"Lebara Relax S", network:"sunrise", price:12.95, details:"Illimité (CH) + 20 Go (UE, USA, Canada, Turquie)", roamData:"20 Go (UE, USA, Canada, Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","USA","CAN","TUR"], url:"https://fr.comparis.ch/telecom/mobile/angebote/anbieter/lebara"},
   {name:"Digital Republic Flat Mobile Swiss", network:"sunrise", price:13.00, details:"Illimité (CH) + 2 Go (UE, USA, Canada)", roamData:"2 Go (UE, USA, Canada)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:2, countries:["UE","USA","CAN"], url:"https://fr.comparis.ch/telecom/mobile/angebote/anbieter/digitalrepublic"},
