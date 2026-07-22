@@ -1,0 +1,31 @@
+#!/bin/sh
+# Bump automatiquement <lastmod> dans sitemap.xml quand les fichiers pertinents
+# sont modifiés. Activé via `git config core.hooksPath .githooks` — configuré
+# automatiquement par `npm install` (script postinstall dans package.json).
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+update_paths=""
+
+# index.html : ne bumper la home QUE si les tableaux d'offres sont touchés.
+# Un changement stylistique (CSS, JS non-data) ne doit pas fausser le sitemap.
+if echo "$staged" | grep -q "^index\.html$"; then
+  diff=$(git diff --cached index.html)
+  if echo "$diff" | grep -qE '^[+-].*(mobileData|internetData|comboData|promoData|\{name:|\{operator:|price:|beforePrice:|chDataGB:|roamDataGB:|countries:)'; then
+    update_paths="$update_paths index.html"
+  fi
+fi
+
+# mentions-legales.html : n'importe quel changement bumpe son lastmod.
+if echo "$staged" | grep -q "^mentions-legales\.html$"; then
+  update_paths="$update_paths mentions-legales.html"
+fi
+
+if [ -n "$update_paths" ]; then
+  if command -v node >/dev/null 2>&1; then
+    node scripts/update-sitemap.mjs $update_paths && git add sitemap.xml
+  else
+    echo "pre-commit: node introuvable, mise à jour du sitemap ignorée" >&2
+  fi
+fi
+
+exit 0

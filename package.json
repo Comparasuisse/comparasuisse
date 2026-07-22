@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify": "node scripts/verify-page.mjs"
+    "verify": "node scripts/verify-page.mjs",
+    "postinstall": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "devDependencies": {
     "playwright-core": "^1.49.0"
