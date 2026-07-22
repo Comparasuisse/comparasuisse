@@ -14,5 +14,6 @@ desktop.ini
 # Claude Code (config locale de l'agent, ne concerne pas le site)
 .claude/
 
-# Node (au cas où on ajoute des outils plus tard)
+# Node (outils de dev uniquement — le site est statique en prod)
 node_modules/
+package-lock.json

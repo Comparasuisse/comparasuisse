@@ -1,0 +1,13 @@
+{
+  "name": "comparasuisse-tools",
+  "version": "0.0.0",
+  "description": "Outils de développement pour comparasuisse.ch (site statique — pas de build en prod)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify": "node scripts/verify-page.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.49.0"
+  }
+}
