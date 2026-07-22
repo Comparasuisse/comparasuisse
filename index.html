@@ -166,7 +166,7 @@
   <div class="tab active" data-tab="mobile">📱 Mobile (34 offres)</div>
   <div class="tab" data-tab="internet">🌐 Internet (15 offres)</div>
   <div class="tab" data-tab="tv">📺 TV (6 offres)</div>
-  <div class="tab" data-tab="combo">📦 Combinés</div>
+  <div class="tab" data-tab="combo">📦 Internet + TV</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
 </div>
 
@@ -254,25 +254,25 @@
 <div class="controls hidden" id="internet-controls">
   <div class="ctrl-group">
     <label>Réseau</label>
-    <select id="internet-network">
-      <option value="all">Tous les réseaux</option>
-      <option value="swisscom">Swisscom</option>
-      <option value="sunrise">Sunrise / câble</option>
-      <option value="salt">Salt</option>
-      <option value="init7">Init7 (indépendant)</option>
-    </select>
+    <div class="net-checks" id="internet-network">
+      <label class="net-chip"><input type="checkbox" data-net="swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise / câble</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="salt" checked><span>Salt</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="init7" checked><span>Init7 (indépendant)</span></label>
+    </div>
   </div>
   <div class="ctrl-group">
-    <label>Débit minimum</label>
-    <select id="internet-speed">
-      <option value="0">Peu importe</option>
-      <option value="200">200 Mbit/s min</option>
-      <option value="1000">1 Gbit/s min</option>
-    </select>
+    <label>🔌 Débit : <span class="range-val" id="internet-speed-label">Peu importe</span> → <span class="range-val" id="internet-speed-max-label">10 Gbit/s</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="internet-speed-fill"></div>
+      <input type="range" id="internet-speed" min="0" max="4" step="1" value="0">
+      <input type="range" id="internet-speed-max" min="0" max="4" step="1" value="4">
+    </div>
   </div>
   <div class="ctrl-group">
-    <label>Prix max : <span class="range-val" id="internet-price-label">CHF 90/mois</span></label>
-    <input type="range" id="internet-price" min="25" max="90" step="5" value="90">
+    <label>Prix max : <span class="range-val" id="internet-price-label">CHF 100/mois</span></label>
+    <input type="range" id="internet-price" min="25" max="100" step="5" value="100">
   </div>
 </div>
 
@@ -311,12 +311,37 @@
 <div class="count hidden" id="tv-count"><span></span><span class="reset-link" onclick="resetTV()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="tv-grid"></div>
 
-<div class="notice hidden" id="combo-notice">📦 <b>Abonnements combinés</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
-<div class="count hidden" id="combo-count"><span></span><span></span></div>
+<div class="notice hidden" id="combo-notice">📦 <b>Abonnements Internet + TV</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
+<div class="controls hidden" id="combo-controls">
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>Opérateur</label>
+    <div class="net-checks" id="combo-operator">
+      <label class="net-chip"><input type="checkbox" data-op="yallo" checked><span>yallo</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Wingo" checked><span>Wingo</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Salt" checked><span>Salt</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Sunrise" checked><span>Sunrise</span></label>
+    </div>
+  </div>
+</div>
+<div class="count hidden" id="combo-count"><span></span><span class="reset-link" onclick="resetCombo()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="combo-grid" style="margin-top:0;"></div>
 
 <div class="notice hidden" id="promo-notice">🗓️ <b>Les promotions sont limitées dans le temps</b> — certaines expirent dans les prochains jours (voir statut sur chaque carte). Vérifie toujours la date sur le site de l'opérateur avant de souscrire, ces fenêtres promo bougent souvent.</div>
-<div class="count hidden" id="promo-count"><span></span><span></span></div>
+<div class="controls hidden" id="promo-controls">
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>Opérateur</label>
+    <div class="net-checks" id="promo-operator">
+      <label class="net-chip"><input type="checkbox" data-op="Wingo" checked><span>Wingo</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Salt" checked><span>Salt</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Quickline" checked><span>Quickline</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="yallo" checked><span>yallo</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Teleboy" checked><span>Teleboy</span></label>
+    </div>
+  </div>
+</div>
+<div class="count hidden" id="promo-count"><span></span><span class="reset-link" onclick="resetPromo()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="promo-grid" style="margin-top:0;"></div>
 
 
@@ -414,8 +439,17 @@ function renderComboCard(c){
 }
 
 function refreshCombo(){
-  document.querySelector("#combo-count span").textContent = comboData.length + " offre(s) combinée(s)";
-  document.getElementById("combo-grid").innerHTML = comboData.map(renderComboCard).join("");
+  const selectedOps = [...document.querySelectorAll('#combo-operator input:checked')].map(i => i.dataset.op);
+  const filtered = comboData.filter(c => selectedOps.includes(c.operator));
+  document.querySelector("#combo-count span").textContent = filtered.length + " / " + comboData.length + " offre(s) Internet + TV";
+  document.getElementById("combo-grid").innerHTML = filtered.length
+    ? filtered.map(renderComboCard).join("")
+    : '<div class="empty">Aucune offre ne correspond à ces opérateurs.</div>';
+}
+
+function resetCombo(){
+  document.querySelectorAll('#combo-operator input').forEach(i => i.checked = true);
+  refreshCombo();
 }
 
 const promoData = [
@@ -426,6 +460,11 @@ const promoData = [
   {operator:"Wingo", name:"Wingo TV Max", price:9.95, beforePrice:20, details:"Bouquet TV 290 chaînes HD sur le réseau Swisscom, sans engagement", code:null, from:"2025-06-02", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
   {operator:"Salt", name:"Swiss Max — rabais à vie -68%", price:23.95, beforePrice:73.95, details:"Data illimitée 5G (CH) + 1 Go zone Europe Salt (37 pays)", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
   {operator:"Salt", name:"Europe XL — rabais à vie", price:29.95, beforePrice:96.95, details:"Illimité (CH + UE), 10 Go d'itinérance zone Europe à haut débit, puis 128 kbit/s — sans engagement", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/europe-xl"},
+  {operator:"Quickline", name:"Internet M / L / XL — promo 24 mois", discount:"3 abos internet à 44.-/mois pendant 24 mois", details:"M 200 Mbit/s (was 59) · L 1 Gbit/s (was 69) · XL 10 Gbit/s (was 79) — Modem WLAN inclus, sur le réseau fibre/câble", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.quickline.ch/fr/"},
+  {operator:"Salt", name:"Home Internet fibre — à vie", price:39.95, beforePrice:null, details:"Jusqu'à 10 Gbit/s fibre — activation gratuite (normalement 99.90) + 250 CHF de cashback — prix à vie, sans engagement à durée limitée", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/home/internet-fibre"},
+  {operator:"yallo", name:"Home Supermax + TV — rabais à vie", price:37.90, beforePrice:100, details:"Internet fibre jusqu'à 2,5 Gbit/s + TV 300+ chaînes, replay 7 jours — engagement 24 mois, activation offerte", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.yallo.ch/fr"},
+  {operator:"Swisscom", name:"blue TV S / M — 12 mois offerts", discount:"0.-/mois pendant 12 mois, puis prix standard", details:"S 15.80/mois puis 150+ chaînes replay 30h · M 25.80/mois puis 290+ chaînes replay 7j enregistrement 250h — TV-Box 5 offerte (valeur 99.-)", code:null, from:"2026-01-01", to:"2026-12-31", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv.html"},
+  {operator:"Teleboy", name:"Teleboy TV", price:11.90, beforePrice:14.90, details:"300+ chaînes Full HD, replay 7 jours, 2400h d'enregistrement — 5 profils, streaming pur sans box requise", code:null, from:"2026-01-01", to:"2026-12-31", network:"init7", url:"https://www.teleboy.ch/fr/tv"},
 ];
 
 function promoStatus(p){
@@ -457,8 +496,17 @@ function renderPromoCard(p){
 }
 
 function refreshPromo(){
-  document.querySelector("#promo-count span").textContent = promoData.length + " promotion(s) recensée(s)";
-  document.getElementById("promo-grid").innerHTML = promoData.map(renderPromoCard).join("");
+  const selectedOps = [...document.querySelectorAll('#promo-operator input:checked')].map(i => i.dataset.op);
+  const filtered = promoData.filter(p => selectedOps.includes(p.operator));
+  document.querySelector("#promo-count span").textContent = filtered.length + " / " + promoData.length + " promotion(s)";
+  document.getElementById("promo-grid").innerHTML = filtered.length
+    ? filtered.map(renderPromoCard).join("")
+    : '<div class="empty">Aucune promotion ne correspond à ces opérateurs.</div>';
+}
+
+function resetPromo(){
+  document.querySelectorAll('#promo-operator input').forEach(i => i.checked = true);
+  refreshPromo();
 }
 
 const tvData = [
@@ -712,15 +760,26 @@ function refreshMobileInternetToggle(){
   }
 }
 
+const SPEED_THRESHOLDS = [null, 100, 500, 1000, 10000];
+const SPEED_LABELS = ["Peu importe", "100 Mbit/s", "500 Mbit/s", "1 Gbit/s", "10 Gbit/s"];
+
 function refreshInternet(){
-  const network = document.getElementById("internet-network").value;
-  const minSpeed = parseFloat(document.getElementById("internet-speed").value);
+  clampDualRange("internet-speed", "internet-speed-max");
+
+  const selectedNets = [...document.querySelectorAll('#internet-network input:checked')].map(i => i.dataset.net);
+  const speedMinVal = parseInt(document.getElementById("internet-speed").value);
+  const speedMaxVal = parseInt(document.getElementById("internet-speed-max").value);
   const maxPrice = parseFloat(document.getElementById("internet-price").value);
+
+  document.getElementById("internet-speed-label").textContent = SPEED_LABELS[speedMinVal];
+  document.getElementById("internet-speed-max-label").textContent = SPEED_LABELS[speedMaxVal];
   document.getElementById("internet-price-label").textContent = "CHF " + maxPrice + "/mois";
+  updateDualFill("internet-speed-fill", "internet-speed", "internet-speed-max", 4);
 
   let filtered = internetData.filter(d => {
-    if (network !== "all" && d.network !== network) return false;
-    if (d.speed < minSpeed) return false;
+    if (!selectedNets.includes(d.network)) return false;
+    if (!passesThreshold(d.speed, speedMinVal, SPEED_THRESHOLDS)) return false;
+    if (!passesMaxThreshold(d.speed, speedMaxVal, SPEED_THRESHOLDS)) return false;
     if (d.price > maxPrice) return false;
     return true;
   });
@@ -750,9 +809,10 @@ function resetMobile(){
   refreshMobileInternetToggle();
 }
 function resetInternet(){
-  document.getElementById("internet-network").value = "all";
+  document.querySelectorAll('#internet-network input').forEach(i => i.checked = true);
   document.getElementById("internet-speed").value = 0;
-  document.getElementById("internet-price").value = 90;
+  document.getElementById("internet-speed-max").value = 4;
+  document.getElementById("internet-price").value = 100;
   refreshInternet();
 }
 
@@ -761,9 +821,10 @@ function resetInternet(){
 });
 document.querySelectorAll('#mobile-network input').forEach(i => i.addEventListener("change", refreshMobile));
 document.getElementById("mobile-internet").addEventListener("change", refreshMobileInternetToggle);
-["internet-network","internet-speed","internet-price"].forEach(id=>{
+["internet-speed","internet-speed-max","internet-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshInternet);
 });
+document.querySelectorAll('#internet-network input').forEach(i => i.addEventListener("change", refreshInternet));
 
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click", ()=>{
@@ -780,9 +841,11 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("tv-count").classList.toggle("hidden", target!=="tv");
     document.getElementById("tv-grid").classList.toggle("hidden", target!=="tv");
     document.getElementById("combo-notice").classList.toggle("hidden", target!=="combo");
+    document.getElementById("combo-controls").classList.toggle("hidden", target!=="combo");
     document.getElementById("combo-count").classList.toggle("hidden", target!=="combo");
     document.getElementById("combo-grid").classList.toggle("hidden", target!=="combo");
     document.getElementById("promo-notice").classList.toggle("hidden", target!=="promo");
+    document.getElementById("promo-controls").classList.toggle("hidden", target!=="promo");
     document.getElementById("promo-count").classList.toggle("hidden", target!=="promo");
     document.getElementById("promo-grid").classList.toggle("hidden", target!=="promo");
   });
@@ -796,6 +859,8 @@ refreshPromo();
 refreshTV();
 ["tv-channels","tv-price","tv-streaming"].forEach(id => document.getElementById(id).addEventListener("input", refreshTV));
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
+document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
+document.querySelectorAll('#promo-operator input').forEach(i => i.addEventListener("change", refreshPromo));
 
 function brandFromName(name){
   const first = name.split(/[ (]/)[0];
