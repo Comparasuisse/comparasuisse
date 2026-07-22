@@ -11,5 +11,8 @@ desktop.ini
 # Netlify
 .netlify/
 
+# Claude Code (config locale de l'agent, ne concerne pas le site)
+.claude/
+
 # Node (au cas où on ajoute des outils plus tard)
 node_modules/
