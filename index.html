@@ -172,16 +172,8 @@
     <input type="range" id="mobile-roaming" min="0" max="4" step="1" value="0">
   </div>
   <div class="ctrl-group">
-    <label>📞 Appels vers l'étranger (depuis CH)</label>
+    <label>📞 Appels vers l'étranger</label>
     <select id="mobile-calls-to">
-      <option value="all">Peu importe</option>
-      <option value="illimité">Illimité uniquement</option>
-      <option value="limité">Limité uniquement</option>
-    </select>
-  </div>
-  <div class="ctrl-group">
-    <label>📞 Appels reçus/passés en voyage</label>
-    <select id="mobile-calls-from">
       <option value="all">Peu importe</option>
       <option value="illimité">Illimité uniquement</option>
       <option value="limité">Limité uniquement</option>
@@ -256,37 +248,37 @@ const mobileData = [
   {name:"Coop Mobile Swiss S", network:"swisscom", price:11.95, details:"6 Go + appels/SMS illimités (CH) — Suisse uniquement", promo:true, beforePrice:29.90, promoNote:"rabais à vie -60%", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:6, roamDataGB:0, countries:["CH"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/swiss-s"},
   {name:"Coop Mobile Swiss M", network:"swisscom", price:17.95, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH)", promo:true, beforePrice:44.90, promoNote:"rabais à vie -60%", roamData:"1 Go (UE/UK)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:1, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/swiss-m"},
   {name:"Coop Mobile Swiss L", network:"swisscom", price:25.95, details:"Illimité (CH) + 2 Go (UE/UK), appels/SMS illimités (CH)", promo:true, beforePrice:65.90, promoNote:"rabais à vie -60%", roamData:"2 Go (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:2, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/swiss-l"},
-  {name:"Coop Mobile Europe M", network:"swisscom", price:29.95, details:"Illimité (CH) + 20 Go et 100 min (UE/UK)", promo:true, beforePrice:74.90, promoNote:"rabais à vie -60%", roamData:"20 Go + 100 min d'appel (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/europe-m", callsFromAbroad:"limité"},
+  {name:"Coop Mobile Europe M", network:"swisscom", price:29.95, details:"Illimité (CH) + 20 Go et 100 min (UE/UK)", promo:true, beforePrice:74.90, promoNote:"rabais à vie -60%", roamData:"20 Go + 100 min d'appel (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","UK"], url:"https://www.coopmobile.ch/fr/abonnement-mobile/europe-m", callsRoaming:"limité"},
   {name:"Quickline Mobile L", network:"sunrise", price:9.00, details:"Illimité 5G (CH) + 5 Go roaming — promo 24 mois", promo:true, beforePrice:29, promoNote:"promo 24 mois -69%", roamData:"5 Go roaming", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE"], url:"https://www.quickline.ch/fr/"},
   {name:"Quickline Mobile M", network:"sunrise", price:12.00, details:"5 Go (CH) + 1 Go roaming — promo 24 mois", promo:true, beforePrice:24, promoNote:"promo 24 mois -50%", roamData:"1 Go roaming", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:5, roamDataGB:1, countries:["UE"], url:"https://www.quickline.ch/fr/"},
-  {name:"Quickline Mobile S", network:"sunrise", price:14.00, details:"3 Go 5G (CH) + 500 Mo roaming", roamData:"500 Mo roaming", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:3, roamDataGB:0.5, countries:["UE"], url:"https://www.quickline.ch/fr/"},
+  {name:"Quickline Mobile S", network:"sunrise", price:14.00, details:"3 Go 5G (CH) + 500 Mo roaming — appels gratuits sur le réseau Quickline uniquement, hors-réseau facturés à la minute", roamData:"500 Mo roaming", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:3, roamDataGB:0.5, countries:["UE"], url:"https://www.quickline.ch/fr/", callsCHUnlimited:false},
   {name:"Digital Republic Flat Mobile Swiss", network:"sunrise", price:13.00, details:"Illimité (CH) + 2 Go (UE, USA, UK)", roamData:"2 Go (UE, USA, UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:2, countries:["UE","USA","UK"], url:"https://fr.comparis.ch/telecom/mobile/angebote/anbieter/digitalrepublic"},
   {name:"Wingo Swiss Mini", network:"swisscom", price:13.95, details:"5 Go + illimité (CH) — Suisse et Liechtenstein uniquement", promo:true, beforePrice:39, promoNote:"Promo code SWMINI1395, valable jusqu'au 31.12.2026", roamData:"Aucune — Suisse/Liechtenstein uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:5, roamDataGB:0, countries:["CH"], url:"https://www.wingo.ch/fr/mobile/wingo-swiss-mini"},
   {name:"Wingo Swiss Go", network:"swisscom", price:17.95, details:"10 Go (CH) + 1 Go (UE/UK) — Suisse et Liechtenstein", promo:true, beforePrice:50, promoNote:"Promo code SWSTA1795, valable jusqu'au 31.12.2026", roamData:"1 Go (UE/UK)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:1, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-swiss-go"},
   {name:"Wingo Swiss Max", network:"swisscom", price:24.95, details:"Illimité (CH) + 2 Go (UE/UK)", promo:true, beforePrice:65, promoNote:"Promo code SWMAX2495, valable jusqu'au 31.12.2026", roamData:"2 Go (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:2, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-swiss-max"},
-  {name:"Wingo Europe Go", network:"swisscom", price:27.95, details:"Illimité (CH) + 8 Go et 100 min (UE/UK)", promo:true, beforePrice:75, promoNote:"rabais à vie -63%", roamData:"8 Go + 100 min d'appel (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:8, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-europe-go", callsFromAbroad:"limité"},
+  {name:"Wingo Europe Go", network:"swisscom", price:27.95, details:"Illimité (CH) + 8 Go et 100 min (UE/UK)", promo:true, beforePrice:75, promoNote:"rabais à vie -63%", roamData:"8 Go + 100 min d'appel (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:8, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-europe-go", callsRoaming:"limité"},
   {name:"Wingo Europe Max", network:"swisscom", price:36.95, details:"Illimité (CH) + illimité (UE/UK), 100 min d'appel CH→UE/UK", promo:true, beforePrice:89, promoNote:"rabais à vie -59%", roamData:"Illimité (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.wingo.ch/fr/mobile/wingo-europe-max", callsToAbroad:"limité"},
-  {name:"Wingo International Pro", network:"swisscom", price:49.95, details:"Illimité (CH + UE/UK/USA/Canada/Turquie), appels illimités + 2ème carte SIM incluse", promo:true, beforePrice:132, promoNote:"rabais à vie -62%", roamData:"Illimité (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-international-pro", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
+  {name:"Wingo International Pro", network:"swisscom", price:49.95, details:"Illimité (CH + UE/UK/USA/Canada/Turquie), appels illimités + 2ème carte SIM incluse", promo:true, beforePrice:132, promoNote:"rabais à vie -62%", roamData:"Illimité (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-international-pro", callsToAbroad:"illimité", callsRoaming:"illimité"},
   {name:"Wingo Red Swiss", network:"swisscom", price:68.00, details:"Illimité (CH) + 60 min d'appels CH→UE/UK — aucune data à l'étranger", roamData:"Aucune data étrangère — 60 min d'appel vers UE/UK", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.wingo.ch/fr/mobile/wingo-red-swiss", callsToAbroad:"limité"},
-  {name:"Wingo Red", network:"swisscom", price:78.00, details:"Illimité (CH) + 3 Go (UE/UK/USA/Canada/Turquie)", roamData:"3 Go (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:3, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-red", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
-  {name:"Wingo Red Pro", network:"swisscom", price:88.00, details:"Illimité (CH) + 20 Go (UE/UK/USA/Canada/Turquie)", roamData:"20 Go (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-red-pro", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
+  {name:"Wingo Red", network:"swisscom", price:78.00, details:"Illimité (CH) + 3 Go (UE/UK/USA/Canada/Turquie)", roamData:"3 Go (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:3, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-red", callsToAbroad:"illimité", callsRoaming:"illimité"},
+  {name:"Wingo Red Pro", network:"swisscom", price:88.00, details:"Illimité (CH) + 20 Go (UE/UK/USA/Canada/Turquie)", roamData:"20 Go (UE/UK/USA/Canada/Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:20, countries:["UE","UK","USA","CAN","TUR"], url:"https://www.wingo.ch/fr/mobile/wingo-red-pro", callsToAbroad:"illimité", callsRoaming:"illimité"},
   {name:"Migros Mobile Swiss Start", network:"swisscom", price:13.95, details:"5 Go + illimité (CH) — Suisse uniquement", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:5, roamDataGB:0, countries:["CH"], url:"https://mobile.migros.ch/fr"},
   {name:"Migros Mobile Swiss Classic", network:"swisscom", price:17.95, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH)", roamData:"1 Go (UE/UK)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:1, countries:["UE","UK"], url:"https://mobile.migros.ch/fr"},
   {name:"Migros Mobile Swiss Max", network:"swisscom", price:25.95, details:"Illimité (CH) + 1 Go (UE/UK)", roamData:"1 Go (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:1, countries:["UE","UK"], url:"https://mobile.migros.ch/fr"},
-  {name:"Migros Mobile Swiss Travel", network:"swisscom", price:29.95, details:"Illimité (CH) + 10 Go (UE/UK)", roamData:"10 Go (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:10, countries:["UE","UK"], url:"https://mobile.migros.ch/fr"},
-  {name:"yallo Swiss Max", network:"sunrise", price:60.00, details:"Illimité (CH) + 5 Go (Europe, USA, Canada, Turquie)", roamData:"5 Go (Europe, USA, Canada, Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","USA","CAN","TUR"], url:"https://www.yallo.ch/fr/mobile-products/yallo_swiss_max"},
-  {name:"Swype Surf", network:"sunrise", price:14.95, details:"Data illimitée 5G (CH) — plan data uniquement, pas d'appels/SMS", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.swype.ch/fr", callsCH:"limité"},
+  {name:"Migros Mobile Swiss Travel", network:"swisscom", price:29.95, details:"Illimité (CH) + 10 Go (UE/UK)", roamData:"10 Go (UE/UK)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:10, countries:["UE","UK"], url:"https://mobile.migros.ch/fr", callsRoaming:"limité"},
+  {name:"yallo Swiss Max", network:"sunrise", price:60.00, details:"Illimité (CH) + 5 Go (Europe, USA, Canada, Turquie)", roamData:"5 Go (Europe, USA, Canada, Turquie)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","USA","CAN","TUR"], url:"https://www.yallo.ch/fr/mobile-products/yallo_swiss_max", callsRoaming:"illimité"},
+  {name:"Swype Surf", network:"sunrise", price:14.95, details:"Data illimitée 5G (CH) — plan data uniquement, pas d'appels/SMS", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.swype.ch/fr", callsCHUnlimited:false},
   {name:"Swype Swiss", network:"sunrise", price:19.95, details:"Illimité (CH) — Suisse uniquement, résiliable au quotidien", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.swype.ch/fr"},
-  {name:"Swype Surf Europe", network:"sunrise", price:24.95, details:"Illimité 5G (CH) + data roaming illimitée + appels/SMS illimités CH", roamData:"Illimité (roaming data)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.swype.ch/fr"},
-  {name:"Sunrise Swiss Travel", network:"sunrise", price:29.90, details:"Illimité (CH) + illimité data/appels (Top 8 pays UE)", roamData:"Illimité (Top 8 pays UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
-  {name:"Sunrise Swiss Connect Lite", network:"sunrise", price:34.90, details:"6 Go 5G (CH) + 100 Mo et 10 min d'appel (44 pays)", roamData:"100 Mo + 10 min d'appel (44 pays)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:6, roamDataGB:0.1, countries:["UE","MONDE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile", callsFromAbroad:"limité"},
+  {name:"Swype Surf Europe", network:"sunrise", price:24.95, details:"Illimité 5G (CH) + data roaming illimitée + appels/SMS illimités CH + appels illimités en roaming (41 pays)", roamData:"Illimité (roaming data + appels 41 pays)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.swype.ch/fr", callsRoaming:"illimité"},
+  {name:"Sunrise Swiss Travel", network:"sunrise", price:29.90, details:"Illimité (CH) + illimité data/appels (Top 8 pays UE)", roamData:"Illimité (Top 8 pays UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile", callsToAbroad:"illimité", callsRoaming:"illimité"},
+  {name:"Sunrise Swiss Connect Lite", network:"sunrise", price:34.90, details:"6 Go 5G (CH) + 100 Mo et 10 min d'appel (44 pays)", roamData:"100 Mo + 10 min d'appel (44 pays)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:6, roamDataGB:0.1, countries:["UE","MONDE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile", callsRoaming:"limité"},
   {name:"Salt Swiss Max (rabais à vie)", network:"salt", price:23.95, details:"Illimité 5G (CH) + 1 Go (zone Europe Salt, 37 pays)", promo:true, beforePrice:73.95, promoNote:"", roamData:"1 Go (zone Europe Salt, 37 pays)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:1, countries:["UE"], url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
-  {name:"Salt Europe XL (rabais à vie)", network:"salt", price:29.95, details:"Illimité (CH + UE), 10 Go itinérance zone Europe", promo:true, beforePrice:96.95, promoNote:"sans engagement", roamData:"10 Go haut débit (zone Europe Salt), puis 128 kbit/s", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:10, countries:["UE"], url:"https://www.salt.ch/fr/mobile/plans/europe-xl", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
+  {name:"Salt Europe XL (rabais à vie)", network:"salt", price:29.95, details:"Illimité (CH + UE), 10 Go itinérance zone Europe", promo:true, beforePrice:96.95, promoNote:"sans engagement", roamData:"10 Go haut débit (zone Europe Salt), puis 128 kbit/s", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:10, countries:["UE"], url:"https://www.salt.ch/fr/mobile/plans/europe-xl", callsToAbroad:"illimité", callsRoaming:"illimité"},
   {name:"Swisscom blue Mobile S", network:"swisscom", price:59.90, details:"Illimité 5G (CH) + 100 Mo (UE/UK) — 1 Go DE/FR/IT/AT", promo:true, beforePrice:71.8, promoNote:"après 12 mois de promo", roamData:"100 Mo/mois (UE/UK) — 1 Go DE/FR/IT/AT", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:0.1, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-s.html"},
-  {name:"Swisscom blue Mobile M (best-seller)", network:"swisscom", price:59.90, details:"Illimité 5G haut débit (CH, UE, UK)", promo:true, beforePrice:81.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-m.html", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
-  {name:"Sunrise Up Mobile XL", network:"sunrise", price:44.50, details:"Illimité jusqu'à 2 Gbit/s (CH + UE), appels/SMS illimités CH+UE", roamData:"Illimité jusqu'à 2 Gbit/s (UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.mobilezone.ch/fr/abonnements/sunrise/up-mobile-xl", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
-  {name:"Swisscom blue Mobile L", network:"swisscom", price:59.90, details:"Illimité 5G (CH, UE, UK), 4 appareils multi-device inclus", promo:true, beforePrice:101.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-l.html", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
-  {name:"Swisscom blue Mobile XL", network:"swisscom", price:99.90, details:"Illimité 5G haut débit (CH, UE, UK), le plus complet de la gamme Swisscom", promo:true, beforePrice:131.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html", callsToAbroad:"illimité", callsFromAbroad:"illimité"},
+  {name:"Swisscom blue Mobile M (best-seller)", network:"swisscom", price:59.90, details:"Illimité 5G haut débit (CH, UE, UK)", promo:true, beforePrice:81.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-m.html", callsToAbroad:"illimité", callsRoaming:"illimité"},
+  {name:"Sunrise Up Mobile XL", network:"sunrise", price:44.50, details:"Illimité jusqu'à 2 Gbit/s (CH + UE), appels/SMS illimités CH+UE", roamData:"Illimité jusqu'à 2 Gbit/s (UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.mobilezone.ch/fr/abonnements/sunrise/up-mobile-xl", callsToAbroad:"illimité", callsRoaming:"illimité"},
+  {name:"Swisscom blue Mobile L", network:"swisscom", price:59.90, details:"Illimité 5G (CH, UE, UK), 4 appareils multi-device inclus", promo:true, beforePrice:101.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-l.html", callsToAbroad:"illimité", callsRoaming:"illimité"},
+  {name:"Swisscom blue Mobile XL", network:"swisscom", price:99.90, details:"Illimité 5G haut débit (CH, UE, UK), le plus complet de la gamme Swisscom", promo:true, beforePrice:131.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html", callsToAbroad:"illimité", callsRoaming:"illimité"},
 ];
 
 const internetData = [
@@ -396,9 +388,9 @@ function netLabel(n){
   return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)"}[n];
 }
 
-function callsCH(item){ return item.callsCH || "illimité"; }
+function chCallsIllim(item){ return item.callsCHUnlimited !== false; }
 function callsTo(item){ return item.callsToAbroad || "aucun"; }
-function callsFrom(item){ return item.callsFromAbroad || "aucun"; }
+function roamingCalls(item){ return item.callsRoaming || "aucun"; }
 
 function renderMobileCard(item){
   const chPill = item.chUnlimited
@@ -407,8 +399,17 @@ function renderMobileCard(item){
   const pill = item.roaming
     ? '<span class="roaming-pill roaming-yes">✓ Data à l\'étranger incluse</span>'
     : '<span class="roaming-pill roaming-no">Suisse uniquement</span>';
-  const callsChPill = callsCH(item) !== "illimité"
-    ? '<span class="roaming-pill roaming-no" title="Cette offre n\'inclut pas d\'appels illimités en Suisse — seulement les données.">⚠ Pas d\'appels CH illimités</span>'
+  const callsChPill = !chCallsIllim(item)
+    ? '<span class="roaming-pill roaming-no" title="Cette offre n\'inclut pas d\'appels illimités en Suisse — voir les détails de l\'offre.">⚠ Appels CH non illimités</span>'
+    : '';
+  const country = document.getElementById("mobile-country").value;
+  const rc = roamingCalls(item);
+  const roamCallsPill = (country !== "all" && item.roaming)
+    ? (rc === "illimité"
+        ? '<span class="roaming-pill roaming-yes">📞 Appels en voyage illimités</span>'
+        : rc === "limité"
+          ? '<span class="roaming-pill roaming-no">📞 Appels en voyage limités</span>'
+          : '<span class="roaming-pill roaming-no">📞 Appels en voyage non inclus</span>')
     : '';
   const flame = item.promo ? '🔥 ' : '';
   const beforeLine = item.promo
@@ -421,7 +422,7 @@ function renderMobileCard(item){
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
-    <div class="details">${item.details}${chPill}${pill}${callsChPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div></div>
+    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div></div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
     <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
   </div>`;
@@ -456,7 +457,6 @@ function refreshMobile(){
   const chVal = parseInt(document.getElementById("mobile-ch-unlimited").value);
   const roamVal = parseInt(document.getElementById("mobile-roaming").value);
   const callsToFilter = document.getElementById("mobile-calls-to").value;
-  const callsFromFilter = document.getElementById("mobile-calls-from").value;
   const country = document.getElementById("mobile-country").value;
   const maxPrice = parseFloat(document.getElementById("mobile-price").value);
   document.getElementById("mobile-price-label").textContent = "CHF " + maxPrice + "/mois";
@@ -472,7 +472,6 @@ function refreshMobile(){
     if (!passesDataThreshold(d.chDataGB, chVal)) return false;
     if (wantsRoaming && !passesDataThreshold(d.roamDataGB, roamVal)) return false;
     if (callsToFilter !== "all" && callsTo(d) !== callsToFilter) return false;
-    if (callsFromFilter !== "all" && callsFrom(d) !== callsFromFilter) return false;
     if (wantsRoaming && country !== "all" && !(d.countries || []).includes(country)) return false;
     if (d.price > maxPrice) return false;
     return true;
@@ -514,7 +513,6 @@ function resetMobile(){
   document.getElementById("mobile-ch-unlimited").value = 0;
   document.getElementById("mobile-roaming").value = 0;
   document.getElementById("mobile-calls-to").value = "all";
-  document.getElementById("mobile-calls-from").value = "all";
   document.getElementById("mobile-internet").checked = false;
   document.getElementById("mobile-country").value = "all";
   document.getElementById("mobile-price").value = 135;
@@ -528,7 +526,7 @@ function resetInternet(){
   refreshInternet();
 }
 
-["mobile-network","mobile-ch-unlimited","mobile-roaming","mobile-calls-to","mobile-calls-from","mobile-country","mobile-price"].forEach(id=>{
+["mobile-network","mobile-ch-unlimited","mobile-roaming","mobile-calls-to","mobile-country","mobile-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshMobile);
 });
 document.getElementById("mobile-internet").addEventListener("change", refreshMobileInternetToggle);
