@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Comparasuisse</title>
+  <rect width="64" height="64" rx="16" fill="#1c1c1e"/>
+  <rect x="25" y="12" width="14" height="40" fill="#d52b1e"/>
+  <rect x="12" y="25" width="40" height="14" fill="#d52b1e"/>
+</svg>
