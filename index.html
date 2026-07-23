@@ -337,6 +337,15 @@
 <div class="notice hidden" id="promo-notice">🗓️ <b>Les promotions sont limitées dans le temps</b> — certaines expirent dans les prochains jours (voir statut sur chaque carte). Vérifie toujours la date sur le site de l'opérateur avant de souscrire, ces fenêtres promo bougent souvent.</div>
 <div class="controls hidden" id="promo-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>Catégorie</label>
+    <div class="net-checks" id="promo-category">
+      <label class="net-chip"><input type="checkbox" data-cat="mobile" checked><span>📱 Mobile</span></label>
+      <label class="net-chip"><input type="checkbox" data-cat="internet" checked><span>🌐 Internet</span></label>
+      <label class="net-chip"><input type="checkbox" data-cat="tv" checked><span>📺 TV</span></label>
+      <label class="net-chip"><input type="checkbox" data-cat="combo" checked><span>📦 Internet + TV</span></label>
+    </div>
+  </div>
+  <div class="ctrl-group" style="grid-column:1 / -1;">
     <label>Opérateur</label>
     <div class="net-checks" id="promo-operator">
       <label class="net-chip"><input type="checkbox" data-op="Wingo" checked><span>Wingo</span></label>
@@ -403,7 +412,7 @@ const internetData = [
   {name:"Quickline Internet XL", network:"sunrise", price:44.00, speed:10000, details:"10 Gbit/s (fibre) — promo 24 mois (au lieu de 79)", url:"https://www.quickline.ch/fr/"},
   {name:"Migros Internet Max", network:"swisscom", price:49.95, speed:1000, details:"1 Gbit/s (fibre/DSL) — engagement 12 mois", url:"https://mobile.migros.ch/fr"},
   {name:"Salt Home", network:"salt", price:39.95, speed:10000, details:"Jusqu'à 10 Gbit/s fibre, à vie — activation gratuite (normalement 99.90)", url:"https://www.salt.ch/fr/home/internet-fibre"},
-  {name:"Swisscom blue Internet L", network:"swisscom", price:91.80, speed:10000, details:"10 Gbit/s fibre + Internet Box 5 Pro Wi-Fi 7 — engagement 24 mois", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-l.html"},
+  {name:"Swisscom blue Internet L", network:"swisscom", price:49.90, beforePrice:91.80, promo:true, promoNote:"après 12 mois de promo", speed:10000, details:"10 Gbit/s fibre + Internet Box 5 Pro Wi-Fi 7 — engagement 24 mois", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-l.html"},
   {name:"Init7 Fiber7", network:"init7", price:64.75, speed:1000, details:"1, 10 ou 25 Gbit/s symétrique — sans engagement, sans throttling", url:"https://www.init7.net/fr/internet/fiber7/"},
   {name:"Swisscom blue Internet M + TV M", network:"swisscom", price:89.90, speed:1000, details:"1 Gbit/s fibre + 300+ chaînes TV dont sport — le forfait combiné le plus complet", url:"https://www.swisscom.ch/fr"},
 ];
@@ -460,18 +469,18 @@ function resetCombo(){
 }
 
 const promoData = [
-  {operator:"Wingo", name:"Swiss Mini — rabais à vie", price:13.95, beforePrice:null, details:"5 Go + appels/SMS illimités (CH) — Suisse et Liechtenstein uniquement, sans engagement", code:"SWMINI1395", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-mini"},
-  {operator:"Wingo", name:"Swiss Go — rabais à vie", price:17.95, beforePrice:null, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH) — sans engagement", code:"SWSTA1795", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-go"},
-  {operator:"Wingo", name:"Swiss Max — rabais à vie", price:24.95, beforePrice:null, details:"Data illimitée 5G (CH) + data incluse en UE/UK, appels/SMS illimités (CH) — sans engagement", code:"SWMAX2495", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-max"},
-  {operator:"Wingo", name:"Internet Go / Smart / Ultra", discount:"Promo -36% à -45% sur les 3 abos internet", details:"Go 35.95 (100 Mbit/s, was 66) · Smart 40.95 (500 Mbit/s, was 70) · Ultra 50.95 (10 Gbit/s, was 80) — sur le réseau fibre/DSL Swisscom, engagement 24 mois", code:null, from:"2026-01-23", to:"2026-10-31", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
-  {operator:"Wingo", name:"Wingo TV Max", price:9.95, beforePrice:20, details:"Bouquet TV 290 chaînes HD sur le réseau Swisscom, sans engagement", code:null, from:"2025-06-02", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
-  {operator:"Salt", name:"Swiss Max — rabais à vie -68%", price:23.95, beforePrice:73.95, details:"Data illimitée 5G (CH) + 1 Go zone Europe Salt (37 pays)", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
-  {operator:"Salt", name:"Europe XL — rabais à vie", price:29.95, beforePrice:96.95, details:"Illimité (CH + UE), 10 Go d'itinérance zone Europe à haut débit, puis 128 kbit/s — sans engagement", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/europe-xl"},
-  {operator:"Quickline", name:"Internet M / L / XL — promo 24 mois", discount:"3 abos internet à 44.-/mois pendant 24 mois", details:"M 200 Mbit/s (was 59) · L 1 Gbit/s (was 69) · XL 10 Gbit/s (was 79) — Modem WLAN inclus, sur le réseau fibre/câble", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.quickline.ch/fr/"},
-  {operator:"Salt", name:"Home Internet fibre — à vie", price:39.95, beforePrice:null, details:"Jusqu'à 10 Gbit/s fibre — activation gratuite (normalement 99.90) + 250 CHF de cashback — prix à vie, sans engagement à durée limitée", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/home/internet-fibre"},
-  {operator:"yallo", name:"Home Supermax + TV — rabais à vie", price:37.90, beforePrice:100, details:"Internet fibre jusqu'à 2,5 Gbit/s + TV 300+ chaînes, replay 7 jours — engagement 24 mois, activation offerte", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.yallo.ch/fr"},
-  {operator:"Swisscom", name:"blue TV S / M — 12 mois offerts", discount:"0.-/mois pendant 12 mois, puis prix standard", details:"S 15.80/mois puis 150+ chaînes replay 30h · M 25.80/mois puis 290+ chaînes replay 7j enregistrement 250h — TV-Box 5 offerte (valeur 99.-)", code:null, from:"2026-01-01", to:"2026-12-31", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv.html"},
-  {operator:"Teleboy", name:"Teleboy TV", price:11.90, beforePrice:14.90, details:"300+ chaînes Full HD, replay 7 jours, 2400h d'enregistrement — 5 profils, streaming pur sans box requise", code:null, from:"2026-01-01", to:"2026-12-31", network:"init7", url:"https://www.teleboy.ch/fr/tv"},
+  {operator:"Wingo", name:"Swiss Mini — rabais à vie", price:13.95, beforePrice:null, details:"5 Go + appels/SMS illimités (CH) — Suisse et Liechtenstein uniquement, sans engagement", code:"SWMINI1395", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-mini", category:"mobile"},
+  {operator:"Wingo", name:"Swiss Go — rabais à vie", price:17.95, beforePrice:null, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH) — sans engagement", code:"SWSTA1795", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-go", category:"mobile"},
+  {operator:"Wingo", name:"Swiss Max — rabais à vie", price:24.95, beforePrice:null, details:"Data illimitée 5G (CH) + data incluse en UE/UK, appels/SMS illimités (CH) — sans engagement", code:"SWMAX2495", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-max", category:"mobile"},
+  {operator:"Wingo", name:"Internet Go / Smart / Ultra", discount:"Promo -36% à -45% sur les 3 abos internet", details:"Go 35.95 (100 Mbit/s, was 66) · Smart 40.95 (500 Mbit/s, was 70) · Ultra 50.95 (10 Gbit/s, was 80) — sur le réseau fibre/DSL Swisscom, engagement 24 mois", code:null, from:"2026-01-23", to:"2026-10-31", network:"swisscom", url:"https://www.wingo.ch/fr/promos", category:"internet"},
+  {operator:"Wingo", name:"Wingo TV Max", price:9.95, beforePrice:20, details:"Bouquet TV 290 chaînes HD sur le réseau Swisscom, sans engagement", code:null, from:"2025-06-02", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/promos", category:"tv"},
+  {operator:"Salt", name:"Swiss Max — rabais à vie -68%", price:23.95, beforePrice:73.95, details:"Data illimitée 5G (CH) + 1 Go zone Europe Salt (37 pays)", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-max", category:"mobile"},
+  {operator:"Salt", name:"Europe XL — rabais à vie", price:29.95, beforePrice:96.95, details:"Illimité (CH + UE), 10 Go d'itinérance zone Europe à haut débit, puis 128 kbit/s — sans engagement", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/europe-xl", category:"mobile"},
+  {operator:"Quickline", name:"Internet M / L / XL — promo 24 mois", discount:"3 abos internet à 44.-/mois pendant 24 mois", details:"M 200 Mbit/s (was 59) · L 1 Gbit/s (was 69) · XL 10 Gbit/s (was 79) — Modem WLAN inclus, sur le réseau fibre/câble", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.quickline.ch/fr/", category:"internet"},
+  {operator:"Salt", name:"Home Internet fibre — à vie", price:39.95, beforePrice:null, details:"Jusqu'à 10 Gbit/s fibre — activation gratuite (normalement 99.90) + 250 CHF de cashback — prix à vie, sans engagement à durée limitée", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/home/internet-fibre", category:"internet"},
+  {operator:"yallo", name:"Home Supermax + TV — rabais à vie", price:37.90, beforePrice:100, details:"Internet fibre jusqu'à 2,5 Gbit/s + TV 300+ chaînes, replay 7 jours — engagement 24 mois, activation offerte", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.yallo.ch/fr", category:"combo"},
+  {operator:"Swisscom", name:"blue TV S / M — 12 mois offerts", discount:"0.-/mois pendant 12 mois, puis prix standard", details:"S 15.80/mois puis 150+ chaînes replay 30h · M 25.80/mois puis 290+ chaînes replay 7j enregistrement 250h — TV-Box 5 offerte (valeur 99.-)", code:null, from:"2026-01-01", to:"2026-12-31", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv.html", category:"tv"},
+  {operator:"Teleboy", name:"Teleboy TV", price:11.90, beforePrice:14.90, details:"300+ chaînes Full HD, replay 7 jours, 2400h d'enregistrement — 5 profils, streaming pur sans box requise", code:null, from:"2026-01-01", to:"2026-12-31", network:"init7", url:"https://www.teleboy.ch/fr/tv", category:"tv"},
 ];
 
 function promoStatus(p){
@@ -506,15 +515,16 @@ function renderPromoCard(p){
 
 function refreshPromo(){
   const selectedOps = [...document.querySelectorAll('#promo-operator input:checked')].map(i => i.dataset.op);
-  const filtered = promoData.filter(p => selectedOps.includes(p.operator));
+  const selectedCats = [...document.querySelectorAll('#promo-category input:checked')].map(i => i.dataset.cat);
+  const filtered = promoData.filter(p => selectedOps.includes(p.operator) && selectedCats.includes(p.category));
   document.querySelector("#promo-count span").textContent = filtered.length + " / " + promoData.length + " promotion(s)";
   document.getElementById("promo-grid").innerHTML = filtered.length
     ? filtered.map(renderPromoCard).join("")
-    : '<div class="empty">Aucune promotion ne correspond à ces opérateurs.</div>';
+    : '<div class="empty">Aucune promotion ne correspond à ces critères.</div>';
 }
 
 function resetPromo(){
-  document.querySelectorAll('#promo-operator input').forEach(i => i.checked = true);
+  document.querySelectorAll('#promo-operator input, #promo-category input').forEach(i => i.checked = true);
   refreshPromo();
 }
 
@@ -641,13 +651,19 @@ function renderMobileCard(item){
 
 function renderInternetCard(item){
   const speedLabel = item.speed >= 1000 ? (item.speed/1000)+" Gbit/s" : item.speed+" Mbit/s";
+  const flame = item.promo ? '🔥 ' : '';
+  const beforeLine = item.promo
+    ? (item.beforePrice
+        ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
+        : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : ''))
+    : '';
   return `<div class="card">
     <div>
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
     <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span> ${affiliatePill(item)}</div>
-    <div class="price"><div class="chf">CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div></div>
+    <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
     <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
   </div>`;
 }
@@ -866,7 +882,7 @@ refreshTV();
 ["tv-channels","tv-price","tv-streaming"].forEach(id => document.getElementById(id).addEventListener("input", refreshTV));
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
-document.querySelectorAll('#promo-operator input').forEach(i => i.addEventListener("change", refreshPromo));
+document.querySelectorAll('#promo-operator input, #promo-category input').forEach(i => i.addEventListener("change", refreshPromo));
 
 function brandFromName(name){
   const first = name.split(/[ (]/)[0];
@@ -925,7 +941,7 @@ buildStructuredData();
 <footer>
   Comparateur indépendant, financé par des commissions d'affiliation sur les offres marquées 🤝 Partenaire — sans impact sur ton prix ni sur le classement (toujours par prix croissant). <a href="mentions-legales.html">Mentions légales →</a>.<br>
   <!-- ↓ À MODIFIER À LA MAIN lors de chaque revérification manuelle des offres ↓ -->
-  <span style="opacity:.7;">Prix vérifiés le 22 juillet 2026</span>
+  <span style="opacity:.7;">Prix vérifiés le 23 juillet 2026</span>
 </footer>
 
 </body>
