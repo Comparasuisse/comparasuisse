@@ -168,7 +168,7 @@
 <div class="tabs">
   <div class="tab active" data-tab="mobile">📱 Mobile (34 offres)</div>
   <div class="tab" data-tab="internet">🌐 Internet (15 offres)</div>
-  <div class="tab" data-tab="tv">📺 TV (6 offres)</div>
+  <div class="tab" data-tab="tv">📺 TV (10 offres)</div>
   <div class="tab" data-tab="combo">📦 Internet + TV</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
 </div>
@@ -307,8 +307,25 @@
     </select>
   </div>
   <div class="ctrl-group">
-    <label>Prix max : <span class="range-val" id="tv-price-label">CHF 30/mois</span></label>
-    <input type="range" id="tv-price" min="5" max="30" step="1" value="30">
+    <label>Replay minimum</label>
+    <select id="tv-replay">
+      <option value="0">Peu importe</option>
+      <option value="1">1 jour min</option>
+      <option value="7">7 jours min</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Enregistrement minimum</label>
+    <select id="tv-recording">
+      <option value="0">Peu importe</option>
+      <option value="250">250h min</option>
+      <option value="1000">1000h min</option>
+      <option value="2000">2000h min</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Prix max : <span class="range-val" id="tv-price-label">CHF 80/mois</span></label>
+    <input type="range" id="tv-price" min="5" max="80" step="1" value="80">
   </div>
   <div class="ctrl-group">
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="tv-streaming" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Streaming pur (sans box requise)</label>
@@ -328,7 +345,34 @@
       <label class="net-chip"><input type="checkbox" data-op="Salt" checked><span>Salt</span></label>
       <label class="net-chip"><input type="checkbox" data-op="Swisscom" checked><span>Swisscom</span></label>
       <label class="net-chip"><input type="checkbox" data-op="Sunrise" checked><span>Sunrise</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Zattoo" checked><span>Zattoo</span></label>
     </div>
+  </div>
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>🔌 Débit : <span class="range-val" id="combo-speed-label">Peu importe</span> → <span class="range-val" id="combo-speed-max-label">10 Gbit/s</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="combo-speed-fill"></div>
+      <input type="range" id="combo-speed" min="0" max="4" step="1" value="0">
+      <input type="range" id="combo-speed-max" min="0" max="4" step="1" value="4">
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>Replay minimum</label>
+    <select id="combo-replay">
+      <option value="0">Peu importe</option>
+      <option value="1">1 jour min</option>
+      <option value="7">7 jours min</option>
+    </select>
+  </div>
+  <div class="ctrl-group">
+    <label>Enregistrement minimum</label>
+    <select id="combo-recording">
+      <option value="0">Peu importe</option>
+      <option value="250">250h min</option>
+      <option value="1000">1000h min</option>
+      <option value="2000">2000h min</option>
+    </select>
   </div>
 </div>
 <div class="count hidden" id="combo-count"><span></span><span class="reset-link" onclick="resetCombo()">Réinitialiser les filtres</span></div>
@@ -431,12 +475,13 @@ function affiliatePill(item){
 }
 
 const comboData = [
-  {operator:"yallo", name:"Home Supermax + TV", price:37.90, details:"Internet fibre jusqu'à 2,5 Gbit/s + TV 300+ chaînes, replay 7 jours — engagement 24 mois", network:"sunrise", url:"https://www.yallo.ch/fr"},
-  {operator:"Wingo", name:"Internet + TV Max", price:55.90, details:"Internet fibre/DSL + bouquet TV Max (290 chaînes HD) — engagement 24 mois, promo jusqu'au 31.10.2026", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
-  {operator:"Salt", name:"Salt Home (Internet + TV + Fixe)", price:49.95, details:"Jusqu'à 10 Gbit/s fibre + TV 300+ chaînes + téléphonie fixe illimitée (CH) — prix combiné avec un mobile Salt (CHF 69.95 sans mobile)", network:"salt", url:"https://www.salt.ch/fr/internet-tv"},
-  {operator:"Swisscom", name:"blue Internet + TV", price:69.90, details:"Internet fibre + bouquet TV blue (Netflix intégré au décodeur) — économie d'environ CHF 9.90/mois vs séparé", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html"},
+  {operator:"yallo", name:"Home Supermax + TV", price:37.90, speed:2500, replayDays:7, recordingHours:1000, details:"Internet fibre jusqu'à 2,5 Gbit/s + TV 300+ chaînes, replay 7 jours, 1000 enregistrements — engagement 24 mois", network:"sunrise", url:"https://www.yallo.ch/fr"},
+  {operator:"Wingo", name:"Internet + TV Max", price:55.90, speed:500, replayDays:7, recordingHours:600, details:"Internet Smart (500 Mbit/s fibre) + bouquet TV Max (290 chaînes HD, replay 7j, 600h enregistrement) — engagement 24 mois, promo jusqu'au 31.10.2026", network:"swisscom", url:"https://www.wingo.ch/fr/promos"},
+  {operator:"Salt", name:"Salt Home (Internet + TV + Fixe)", price:49.95, speed:10000, replayDays:7, recordingHours:null, details:"Jusqu'à 10 Gbit/s fibre + TV 300+ chaînes (replay 7j option 3.95/mois) + téléphonie fixe illimitée (CH) — prix combiné avec un mobile Salt (CHF 69.95 sans mobile)", network:"salt", url:"https://www.salt.ch/fr/internet-tv"},
+  {operator:"Swisscom", name:"blue Internet + TV", price:69.90, speed:1000, replayDays:7, recordingHours:250, details:"Internet fibre 1 Gbit/s + bouquet blue TV M (290+ chaînes, replay 7j, 250h enregistrement, Netflix intégré au décodeur) — économie d'environ CHF 9.90/mois vs séparé", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html"},
   {operator:"Swisscom", name:"Rabais Multi-Mobile (combo Internet + Mobile)", price:null, details:"CHF 20.–/mois de rabais sur chaque ligne mobile supplémentaire quand elle est combinée à un abo Internet Swisscom (jusqu'à 5 lignes)", network:"swisscom", url:"https://monforfait.ch/box-internet/offre-combine-internet-mobile-suisse/"},
   {operator:"Sunrise", name:"Rabais Multi-Mobile / Home Benefit", price:null, details:"-50% sur le prix catalogue des abonnements mobiles additionnels quand combinés avec un abo Internet ou un autre mobile Sunrise", network:"sunrise", url:"https://www.sunrise.ch/fr/support/nouveaux-prix"},
+  {operator:"Zattoo", name:"Zattoo HOME (Premium ou Ultimate)", price:52.95, speed:1000, replayDays:7, recordingHours:1000, details:"Bundle Internet Init7 jusqu'à 1 Gbit/s (fibre ou cuivre) + Zattoo Premium : 378 chaînes (326 HD), 1000 enregistrements, replay 7 jours, 2 flux — dès 52.95/mois avec facturation annuelle. Variante avec Zattoo ULTIMATE à 59.90/mois (2000 enreg, 4 flux, skip pub). Setup 77.- · engagement 12 mois", network:"init7", url:"https://zattoo.com/ch/fr/offers/home"},
 ];
 
 function renderComboCard(c){
@@ -455,16 +500,36 @@ function renderComboCard(c){
 }
 
 function refreshCombo(){
+  clampDualRange("combo-speed", "combo-speed-max");
   const selectedOps = [...document.querySelectorAll('#combo-operator input:checked')].map(i => i.dataset.op);
-  const filtered = comboData.filter(c => selectedOps.includes(c.operator));
+  const minReplay = parseInt(document.getElementById("combo-replay").value);
+  const minRecording = parseInt(document.getElementById("combo-recording").value);
+  const speedMinVal = parseInt(document.getElementById("combo-speed").value);
+  const speedMaxVal = parseInt(document.getElementById("combo-speed-max").value);
+  document.getElementById("combo-speed-label").textContent = SPEED_LABELS[speedMinVal];
+  document.getElementById("combo-speed-max-label").textContent = SPEED_LABELS[speedMaxVal];
+  updateDualFill("combo-speed-fill", "combo-speed", "combo-speed-max", 4);
+
+  const filtered = comboData.filter(c => {
+    if (!selectedOps.includes(c.operator)) return false;
+    if (minReplay > 0 && (c.replayDays ?? 0) < minReplay) return false;
+    if (minRecording > 0 && (c.recordingHours ?? 0) < minRecording) return false;
+    if (speedMinVal > 0 && !passesThreshold(c.speed, speedMinVal, SPEED_THRESHOLDS)) return false;
+    if (speedMaxVal < 4 && !passesMaxThreshold(c.speed, speedMaxVal, SPEED_THRESHOLDS)) return false;
+    return true;
+  });
   document.querySelector("#combo-count span").textContent = filtered.length + " / " + comboData.length + " offre(s) Internet + TV";
   document.getElementById("combo-grid").innerHTML = filtered.length
     ? filtered.map(renderComboCard).join("")
-    : '<div class="empty">Aucune offre ne correspond à ces opérateurs.</div>';
+    : '<div class="empty">Aucune offre ne correspond à ces critères.</div>';
 }
 
 function resetCombo(){
   document.querySelectorAll('#combo-operator input').forEach(i => i.checked = true);
+  document.getElementById("combo-replay").value = 0;
+  document.getElementById("combo-recording").value = 0;
+  document.getElementById("combo-speed").value = 0;
+  document.getElementById("combo-speed-max").value = 4;
   refreshCombo();
 }
 
@@ -529,12 +594,16 @@ function resetPromo(){
 }
 
 const tvData = [
-  {operator:"Wingo", name:"Wingo TV Max", network:"swisscom", price:9.95, beforePrice:20, promo:true, channels:290, replayDays:null, recordingHours:null, streaming:false, details:"290+ chaînes HD, sur le réseau Swisscom — sans engagement, promo jusqu'au 31.12.2026 (au lieu de 20.-)", url:"https://www.wingo.ch/fr/promos"},
+  {operator:"Wingo", name:"Wingo TV Max", network:"swisscom", price:9.95, beforePrice:20, promo:true, channels:290, replayDays:7, recordingHours:600, streaming:false, details:"290+ chaînes HD, replay 7 jours, 600h d'enregistrement, sur le réseau Swisscom — sans engagement, promo jusqu'au 31.12.2026 (au lieu de 20.-)", url:"https://www.wingo.ch/fr/internet/wingo-tv"},
   {operator:"Teleboy", name:"Teleboy TV", network:"init7", price:11.90, beforePrice:14.90, promo:true, channels:300, replayDays:7, recordingHours:2400, streaming:true, details:"300+ chaînes Full HD, replay 7 jours, 2400h d'enregistrement, 5 profils — 100% streaming, sans box requise", url:"https://www.teleboy.ch/fr/tv"},
-  {operator:"Swisscom", name:"blue TV S", network:"swisscom", price:15.80, beforePrice:null, promo:true, promoNote:"0.-/mois les 12 premiers mois", channels:150, replayDays:0, recordingHours:0, streaming:false, details:"150+ chaînes (60+ HD), replay 30h sans avancer/reculer — 5 appareils mobiles inclus, TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-s.html"},
-  {operator:"yallo", name:"yallo TV", network:"sunrise", price:20.00, beforePrice:null, promo:false, channels:300, replayDays:7, recordingHours:1000, streaming:true, details:"300+ chaînes, replay 7 jours, 1000 enregistrements — application incluse, compatible Android TV / Apple TV / Smart TV (Samsung, LG, Philips)", url:"https://www.yallo.ch/fr/tv"},
-  {operator:"Zattoo", name:"Zattoo Ultimate", network:"init7", price:22.00, beforePrice:null, promo:false, channels:376, replayDays:7, recordingHours:2000, streaming:true, details:"376 chaînes (118 Full HD + 206 HD), replay 7 jours, 2000 enregistrements, skip pubs — 100% streaming, tous appareils", url:"https://zattoo.com/fr"},
+  {operator:"yallo", name:"yallo TV", network:"sunrise", price:12.90, beforePrice:20, promo:true, promoNote:"35% de rabais à vie", channels:300, replayDays:7, recordingHours:1000, streaming:true, details:"300+ chaînes, replay 7 jours, 1000 enregistrements — application incluse, compatible Android TV / Apple TV / Smart TV (Samsung, LG, Philips)", url:"https://www.yallo.ch/fr/tv"},
+  {operator:"Zattoo", name:"Zattoo Premium", network:"init7", price:14.00, beforePrice:null, promo:false, channels:376, replayDays:7, recordingHours:1000, streaming:true, details:"376 chaînes (324 HD), replay 7 jours, 1000 enregistrements, 2 flux simultanés — 100% streaming, résiliation mensuelle, premier mois gratuit", url:"https://zattoo.com/ch/fr"},
+  {operator:"Swisscom", name:"blue TV S", network:"swisscom", price:15.80, beforePrice:null, promo:true, promoNote:"0.-/mois les 12 premiers mois", channels:150, replayDays:1, recordingHours:0, streaming:false, details:"150+ chaînes (60+ HD), replay 30h sans avancer/reculer — 5 appareils mobiles inclus, TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-s.html"},
   {operator:"Swisscom", name:"blue TV M", network:"swisscom", price:25.80, beforePrice:null, promo:true, promoNote:"0.-/mois les 12 premiers mois", channels:290, replayDays:7, recordingHours:250, streaming:false, details:"290+ chaînes, replay 7 jours, enregistrement 250h — blue Play médiathèque incluse, 5 appareils mobiles, TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-m.html"},
+  {operator:"Swisscom", name:"blue TV L", network:"swisscom", price:35.80, beforePrice:null, promo:true, promoNote:"0.-/mois les 12 premiers mois", channels:330, replayDays:7, recordingHours:2000, streaming:false, details:"330+ chaînes incl. UHD, replay 7 jours, enregistrement 2000h HD, blue Play inclus — TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-l.html"},
+  {operator:"Zattoo", name:"Zattoo Ultimate", network:"init7", price:22.00, beforePrice:null, promo:false, channels:376, replayDays:7, recordingHours:2000, streaming:true, details:"376 chaînes (118 Full HD + 206 HD), replay 7 jours, 2000 enregistrements, skip pubs, 4 flux simultanés — 100% streaming, tous appareils, résiliation mensuelle", url:"https://zattoo.com/ch/fr"},
+  {operator:"Swisscom", name:"blue TV XL Sport", network:"swisscom", price:70.70, beforePrice:null, promo:true, promoNote:"9.90/mois les 12 premiers mois", channels:330, replayDays:7, recordingHours:2000, streaming:false, details:"330+ chaînes UHD, replay 7 jours, 2000h HD, blue Play + blue Sport annuel inclus — TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-xl-sport.html"},
+  {operator:"Swisscom", name:"blue TV XL Streaming", network:"swisscom", price:75.70, beforePrice:null, promo:true, promoNote:"9.90/mois les 12 premiers mois", channels:330, replayDays:7, recordingHours:2000, streaming:false, details:"330+ chaînes UHD, replay 7 jours, 2000h HD, blue Binge (Netflix + Disney+) + blue Play + blue Premium CANAL+ inclus — TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-xl-streaming.html"},
 ];
 
 function renderTVCard(item){
@@ -561,6 +630,8 @@ function renderTVCard(item){
 function refreshTV(){
   const selectedOps = [...document.querySelectorAll('#tv-operator input:checked')].map(i => i.dataset.op);
   const minChannels = parseInt(document.getElementById("tv-channels").value);
+  const minReplay = parseInt(document.getElementById("tv-replay").value);
+  const minRecording = parseInt(document.getElementById("tv-recording").value);
   const maxPrice = parseFloat(document.getElementById("tv-price").value);
   const streamingOnly = document.getElementById("tv-streaming").checked;
   document.getElementById("tv-price-label").textContent = "CHF " + maxPrice + "/mois";
@@ -568,6 +639,8 @@ function refreshTV(){
   let filtered = tvData.filter(d => {
     if (!selectedOps.includes(d.operator)) return false;
     if (d.channels < minChannels) return false;
+    if (minReplay > 0 && (d.replayDays ?? 0) < minReplay) return false;
+    if (minRecording > 0 && (d.recordingHours ?? 0) < minRecording) return false;
     if (d.price > maxPrice) return false;
     if (streamingOnly && !d.streaming) return false;
     return true;
@@ -582,7 +655,9 @@ function refreshTV(){
 function resetTV(){
   document.querySelectorAll('#tv-operator input').forEach(i => i.checked = true);
   document.getElementById("tv-channels").value = 0;
-  document.getElementById("tv-price").value = 30;
+  document.getElementById("tv-replay").value = 0;
+  document.getElementById("tv-recording").value = 0;
+  document.getElementById("tv-price").value = 80;
   document.getElementById("tv-streaming").checked = false;
   refreshTV();
 }
@@ -879,9 +954,10 @@ refreshInternet();
 refreshCombo();
 refreshPromo();
 refreshTV();
-["tv-channels","tv-price","tv-streaming"].forEach(id => document.getElementById(id).addEventListener("input", refreshTV));
+["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => document.getElementById(id).addEventListener("input", refreshTV));
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
+["combo-replay","combo-recording","combo-speed","combo-speed-max"].forEach(id => document.getElementById(id).addEventListener("input", refreshCombo));
 document.querySelectorAll('#promo-operator input, #promo-category input').forEach(i => i.addEventListener("change", refreshPromo));
 
 function brandFromName(name){
