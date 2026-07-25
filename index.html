@@ -218,6 +218,31 @@
   .chan-selected{background:#e6f4ea; color:#1e7a3d; font-weight:700;}
   .chan-selected::before{content:"✓ ";}
   .chan-selected:hover{background:#cfe9d5;}
+  .tab-badge{display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 5px; margin-left:4px; background:var(--red); color:#fff; border-radius:20px; font-size:11px; font-weight:800;}
+  .card-actions{display:flex; flex-direction:column; gap:6px;}
+  .cmp-btn{padding:7px 10px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; text-align:center; white-space:nowrap; font-family:inherit;}
+  .cmp-btn:hover:not(:disabled){border-color:var(--ink); background:var(--paper);}
+  .cmp-btn.cmp-btn-added{background:#e6f4ea; color:#1e7a3d; border-color:#b3dcc0;}
+  .cmp-btn.cmp-btn-added:hover{background:#cfe9d5;}
+  .cmp-btn:disabled{opacity:.35; cursor:not-allowed; background:#f4f0ea;}
+  .cmp-table{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:16px;}
+  .cmp-table th, .cmp-table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--line); font-size:13px; vertical-align:top;}
+  .cmp-table thead th{background:var(--ink); color:#fff; font-size:12px; text-transform:uppercase; letter-spacing:.4px;}
+  .cmp-table tbody th{background:var(--paper); color:var(--muted); font-weight:600; font-size:12px; width:180px;}
+  .cmp-table tbody tr:last-child td, .cmp-table tbody tr:last-child th{border-bottom:none;}
+  .cmp-table td.cmp-best{background:#e6f4ea; font-weight:700; color:#1e7a3d;}
+  .cmp-col-remove{background:none; border:none; color:#fff; opacity:.7; font-size:16px; cursor:pointer; margin-left:6px; padding:0;}
+  .cmp-col-remove:hover{opacity:1; color:#ffb3ac;}
+  .cmp-empty{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:32px 24px; text-align:center; color:var(--muted); font-size:14px;}
+  .cmp-header-bar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin:16px 0 4px; font-size:13px; color:var(--muted);}
+  .cmp-clear-btn{background:var(--card); border:1px solid var(--line); color:var(--red-dark); padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .cmp-clear-btn:hover{background:var(--paper); border-color:var(--red);}
+  .cmp-table td .offer-btn{padding:6px 10px; font-size:11px;}
+  @media(max-width:720px){
+    .cmp-table{font-size:12px;}
+    .cmp-table th, .cmp-table td{padding:7px 8px;}
+    .cmp-table tbody th{width:110px; font-size:11px;}
+  }
   .chan-nomatch{margin-top:8px; padding:8px 10px; background:#fff7ed; border-left:3px solid #d59a2b; color:#7a5a1e; font-size:12px; border-radius:0 4px 4px 0;}
   .chan-tag{display:inline-flex; align-items:center; gap:6px; padding:4px 4px 4px 10px; background:var(--ink); color:#fff; border-radius:20px; font-size:12px; font-weight:600;}
   .chan-tag button{background:rgba(255,255,255,.2); color:#fff; border:none; width:18px; height:18px; border-radius:50%; font-size:14px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
@@ -287,6 +312,7 @@
   <div class="tab" data-tab="tv">📺 TV (24 offres)</div>
   <div class="tab" data-tab="combo">📦 Internet + TV</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
+  <div class="tab" data-tab="compare">⚖️ Comparaison <span id="compare-count-badge" class="tab-badge" hidden>0</span></div>
 </div>
 
 <div class="controls" id="mobile-controls">
@@ -536,6 +562,9 @@
 <div class="count hidden" id="promo-count"><span></span><span class="reset-link" onclick="resetPromo()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="promo-grid" style="margin-top:0;"></div>
 
+<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie via le bouton « + Comparer » sur chaque carte, puis reviens ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
+<div class="hidden" id="compare-container" style="max-width:1080px; margin:0 auto; padding:0 20px;"></div>
+
 
 <script>
 const mobileData = [
@@ -633,6 +662,175 @@ const comboData = [
   {operator:"Zattoo", name:"Zattoo HOME (Premium ou Ultimate)", price:52.95, speed:1000, replayDays:7, recordingHours:1000, details:"Bundle Internet Init7 jusqu'à 1 Gbit/s (fibre ou cuivre) + Zattoo Premium : 378 chaînes (326 HD), 1000 enregistrements, replay 7 jours, 2 flux — dès 52.95/mois avec facturation annuelle. Variante avec Zattoo ULTIMATE à 59.90/mois (2000 enreg, 4 flux, skip pub). Setup 77.- · engagement 12 mois", network:"init7", url:"https://zattoo.com/ch/fr/offers/home"},
 ];
 
+// === COMPARAISON CÔTE À CÔTE ===
+const CMP = { items: [] };
+const CMP_MAX = 4;
+const CMP_CAT_LABELS = { mobile: "Mobile", internet: "Internet", tv: "TV", combo: "Internet + TV" };
+function cmpId(item, category){ return category + "::" + (item.operator ? item.operator + "/" : "") + item.name; }
+function cmpCurrentCategory(){ return CMP.items.length ? CMP.items[0].category : null; }
+function cmpIsAdded(item, category){ return CMP.items.some(x => x.id === cmpId(item, category)); }
+function cmpCanAdd(item, category){
+  if (CMP.items.length >= CMP_MAX) return { ok:false, reason: `Maximum ${CMP_MAX} offres à comparer` };
+  const cur = cmpCurrentCategory();
+  if (cur && cur !== category) return { ok:false, reason: `Vide ta sélection actuelle pour comparer des offres ${CMP_CAT_LABELS[category] || category}` };
+  return { ok:true };
+}
+function compareBtn(item, defaultCat){
+  const category = item.category || defaultCat;
+  const added = cmpIsAdded(item, category);
+  const check = cmpCanAdd(item, category);
+  const disabled = !added && !check.ok;
+  const label = added ? "✓ Ajouté" : "+ Comparer";
+  const cls = "cmp-btn" + (added ? " cmp-btn-added" : "");
+  const title = disabled ? check.reason : (added ? "Retirer de la comparaison" : "Ajouter à la comparaison côte à côte");
+  const id = cmpId(item, category).replace(/"/g, "&quot;");
+  return `<button type="button" class="${cls}" ${disabled ? "disabled" : ""} title="${title}" onclick='cmpToggle(this)' data-cmp-id="${id}" data-cmp-cat="${category}" data-cmp-name="${(item.name||"").replace(/"/g, "&quot;")}" data-cmp-op="${(item.operator||"").replace(/"/g, "&quot;")}">${label}</button>`;
+}
+function cmpFindItem(id){
+  // Cherche dans toutes les datasets par id (reconstruction depuis dataset)
+  for (const [source, cat] of [[mobileData,"mobile"], [internetData,"internet"], [comboData,"combo"], [tvData,"tv"], [promoData,null]]) {
+    for (const item of source) {
+      const c = cat || item.category;
+      if (cmpId(item, c) === id) return { item, category: c };
+    }
+  }
+  return null;
+}
+function cmpToggle(btn){
+  const id = btn.dataset.cmpId;
+  const idx = CMP.items.findIndex(x => x.id === id);
+  if (idx >= 0) {
+    CMP.items.splice(idx, 1);
+  } else {
+    const found = cmpFindItem(id);
+    if (!found) return;
+    const check = cmpCanAdd(found.item, found.category);
+    if (!check.ok) return;
+    CMP.items.push({ id, item: found.item, category: found.category });
+  }
+  cmpRefreshAll();
+}
+function cmpClear(){ CMP.items = []; cmpRefreshAll(); }
+function cmpRemove(id){
+  const idx = CMP.items.findIndex(x => x.id === id);
+  if (idx >= 0) { CMP.items.splice(idx, 1); cmpRefreshAll(); }
+}
+function cmpUpdateBadge(){
+  const b = document.getElementById("compare-count-badge");
+  if (CMP.items.length > 0) { b.hidden = false; b.textContent = CMP.items.length; }
+  else { b.hidden = true; }
+}
+function cmpRefreshAll(){
+  cmpUpdateBadge();
+  refreshMobile(); refreshInternet(); refreshCombo(); refreshTV(); refreshPromo();
+  renderCompareView();
+}
+
+// Rows de comparaison définies par catégorie.
+// best = "min" pour la valeur la plus basse à valoriser, "max" pour la plus haute, null = pas de meilleur.
+const CMP_ROWS = {
+  mobile: [
+    { label: "Prix mensuel", best: "min", get: i => i.price, format: v => v==null ? "—" : `CHF ${v.toFixed(2)}` },
+    { label: "Réseau", get: i => netLabel(i.network) },
+    { label: "Choix réseau", get: i => i.networkChoice ? "🔀 Salt ou Swisscom" : "Fixe" },
+    { label: "Data Suisse", best: "max", get: i => i.chDataGB ?? 0, format: v => v===Infinity ? "Illimité" : `${v} Go` },
+    { label: "Data roaming", best: "max", get: i => i.roamDataGB ?? 0, format: v => v===Infinity ? "Illimité" : (v>0 ? `${v} Go` : "—") },
+    { label: "Pays roaming", get: i => (i.countries||[]).join(", ") || "—" },
+    { label: "Appels CH", get: i => i.callsCHUnlimited === false ? "Facturés/min" : "Illimités" },
+    { label: "Appels internationaux", best: "max", get: i => i.callsToAbroad ?? 0, format: v => v===Infinity ? "Illimités" : (v>0 ? `${v} min` : "Non inclus") },
+    { label: "Appels en roaming", best: "max", get: i => i.callsRoaming ?? 0, format: v => v===Infinity ? "Illimités" : (v>0 ? `${v} min` : "Facturés/min") },
+    { label: "Promo", get: i => i.promo ? "🔥 " + (i.promoNote || "En promo") : "Non" },
+  ],
+  internet: [
+    { label: "Prix mensuel", best: "min", get: i => i.price, format: v => v==null ? "—" : `CHF ${v.toFixed(2)}` },
+    { label: "Réseau", get: i => netLabel(i.network) },
+    { label: "Débit max", best: "max", get: i => i.speed ?? 0, format: v => v>=1000 ? `${v/1000} Gbit/s` : `${v} Mbit/s` },
+    { label: "Routeur perso autorisé", get: i => i.ownRouterAllowed ? "✓ Oui" : "✗ Non" },
+    { label: "Promo", get: i => i.promo ? "🔥 " + (i.promoNote || "En promo") : "Non" },
+    { label: "Prix standard (avant promo)", get: i => i.beforePrice ? `CHF ${i.beforePrice.toFixed(2)}` : "—" },
+  ],
+  tv: [
+    { label: "Prix mensuel", best: "min", get: i => i.price, format: v => v===0 ? "Inclus" : `CHF ${v.toFixed(2)}` },
+    { label: "Opérateur", get: i => i.operator },
+    { label: "Chaînes", best: "max", get: i => i.channels ?? 0, format: v => `${v}+` },
+    { label: "Replay", best: "max", get: i => i.replayDays ?? 0, format: v => v>0 ? `${v} jours` : "Non" },
+    { label: "Enregistrement", best: "max", get: i => i.recordingHours ?? 0, format: v => v>0 ? `${v} h` : "Non" },
+    { label: "Streaming pur", get: i => i.streaming ? "✓ Sans box" : "TV-Box requise" },
+    { label: "Promo", get: i => i.promo ? "🔥 " + (i.promoNote || "En promo") : "Non" },
+    { label: "Liste chaînes vérifiée", get: i => i.channelsList ? "✓ Oui" : "Non" },
+  ],
+  combo: [
+    { label: "Prix mensuel", best: "min", get: i => i.price, format: v => v==null ? "Rabais combo" : `CHF ${v.toFixed(2)}` },
+    { label: "Opérateur", get: i => i.operator },
+    { label: "Réseau", get: i => netLabel(i.network) },
+    { label: "Débit Internet", best: "max", get: i => i.speed ?? 0, format: v => v ? (v>=1000 ? `${v/1000} Gbit/s` : `${v} Mbit/s`) : "—" },
+    { label: "Replay TV", best: "max", get: i => i.replayDays ?? 0, format: v => v>0 ? `${v} jours` : "—" },
+    { label: "Enregistrement TV", best: "max", get: i => i.recordingHours ?? 0, format: v => v>0 ? `${v} h` : "—" },
+  ],
+};
+
+function renderCompareView(){
+  const container = document.getElementById("compare-container");
+  const notice = document.getElementById("compare-notice");
+  if (CMP.items.length === 0) {
+    container.innerHTML = `<div class="cmp-empty">Aucune offre sélectionnée pour l'instant. Reviens sur les onglets 📱 Mobile / 🌐 Internet / 📺 TV / 📦 Internet + TV / 🔥 Promotions et clique <b>« + Comparer »</b> sur les cartes des offres que tu veux mettre côte à côte (jusqu'à 4, dans la même catégorie).</div>`;
+    return;
+  }
+  const category = CMP.items[0].category;
+  const rows = CMP_ROWS[category] || [];
+  const items = CMP.items;
+
+  // Header
+  const headers = items.map(x =>
+    `<th>${(x.item.operator ? `<span style="font-weight:400; opacity:.7; font-size:11px;">${x.item.operator}</span><br>` : "")}${x.item.name} <button class="cmp-col-remove" title="Retirer de la comparaison" onclick='cmpRemove("${x.id.replace(/"/g,"&quot;")}")'>×</button></th>`
+  ).join("");
+
+  // Data rows
+  const dataRows = rows.map(row => {
+    const values = items.map(x => row.get(x.item));
+    let bestIdx = -1;
+    if (row.best === "min" || row.best === "max") {
+      const nums = values.map(v => typeof v === "number" ? v : (v === Infinity ? Infinity : null));
+      const valid = nums.map((v,i) => v!==null && !(typeof v === "number" && isNaN(v)) ? {v,i} : null).filter(Boolean);
+      if (valid.length > 1) {
+        const cmp = (a,b) => row.best === "min" ? a.v - b.v : b.v - a.v;
+        valid.sort(cmp);
+        const bestVal = valid[0].v;
+        // Toutes celles avec bestVal deviennent "best"
+        // (multiple offres peuvent partager la best value)
+      }
+    }
+    const cells = values.map((v, i) => {
+      const disp = row.format ? row.format(v) : String(v ?? "—");
+      let isBest = false;
+      if (row.best === "min" || row.best === "max") {
+        const nums = values.filter(x => typeof x === "number" || x === Infinity);
+        if (nums.length > 1 && (typeof v === "number" || v === Infinity)) {
+          const best = row.best === "min" ? Math.min(...nums) : Math.max(...nums);
+          if (v === best && new Set(nums).size > 1) isBest = true;
+        }
+      }
+      return `<td class="${isBest ? 'cmp-best' : ''}">${disp}</td>`;
+    }).join("");
+    return `<tr><th>${row.label}</th>${cells}</tr>`;
+  }).join("");
+
+  // Voir l'offre row
+  const offerLinksRow = `<tr><th>Lien officiel</th>${items.map(x => `<td><a class="offer-btn" href="${offerUrl(x.item)}" target="_blank" rel="${offerRel(x.item)}">Voir l'offre →</a></td>`).join("")}</tr>`;
+
+  container.innerHTML = `
+    <div class="cmp-header-bar">
+      <span>${items.length} offre${items.length>1?"s":""} sélectionnée${items.length>1?"s":""} · catégorie <b>${CMP_CAT_LABELS[category] || category}</b> · limite ${CMP_MAX}</span>
+      <button class="cmp-clear-btn" onclick="cmpClear()">🗑 Vider la comparaison</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="cmp-table">
+        <thead><tr><th></th>${headers}</tr></thead>
+        <tbody>${dataRows}${offerLinksRow}</tbody>
+      </table>
+    </div>`;
+}
+
 function renderComboCard(c){
   const priceBlock = c.price
     ? `<div class="price"><div class="chf">CHF ${c.price.toFixed(2)}</div><div class="per">/mois</div></div>`
@@ -645,7 +843,7 @@ function renderComboCard(c){
     </div>
     <div class="details">${c.details} ${affiliatePill(c)}</div>
     ${priceBlock}
-    <a class="offer-btn" href="${offerUrl(c)}" target="_blank" rel="${offerRel(c)}">Voir l'offre →</a>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(c)}" target="_blank" rel="${offerRel(c)}">Voir l'offre →</a>${compareBtn(c, "combo")}</div>
     ${hasTV ? renderChannels(c) : ""}
   </div>`;
 }
@@ -725,7 +923,7 @@ function renderPromoCard(p){
     </div>
     <div class="details"><b>Ce qui est inclus :</b><br>${p.details}<div class="std-price" style="margin-top:6px;"><span class="roaming-pill ${status.cls}">${status.label}</span> ${affiliatePill(p)}</div></div>
     ${priceBlock}
-    <a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}">Voir l'offre →</a>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}">Voir l'offre →</a>${compareBtn(p, p.category)}</div>
   </div>`;
 }
 
@@ -958,7 +1156,7 @@ function renderTVCard(item){
     </div>
     <div class="details">${item.details}<span class="roaming-pill roaming-yes">${item.channels}+ chaînes</span>${streamPill}<div class="std-price"><b>Fonctionnalités :</b> ${replayTxt} · ${recTxt}</div> ${affiliatePill(item)}</div>
     <div class="price">${priceBlock}${beforeLine}</div>
-    <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "tv")}</div>
     ${renderChannels(item)}
   </div>`;
 }
@@ -1135,7 +1333,7 @@ function renderMobileCard(item){
     </div>
     <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${choicePill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · 🌍→🌍 ${callsRoamingLabel(item)}</div></div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
-    <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "mobile")}</div>
   </div>`;
 }
 
@@ -1154,7 +1352,7 @@ function renderInternetCard(item){
     </div>
     <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span>${item.ownRouterAllowed ? '<span class="roaming-pill roaming-yes" title="Ce fournisseur autorise l\'utilisation de votre propre routeur/matériel, pas obligé de prendre le sien.">🔧 Routeur perso autorisé</span>' : ''} ${affiliatePill(item)}</div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
-    <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "internet")}</div>
   </div>`;
 }
 
@@ -1362,6 +1560,9 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("promo-controls").classList.toggle("hidden", target!=="promo");
     document.getElementById("promo-count").classList.toggle("hidden", target!=="promo");
     document.getElementById("promo-grid").classList.toggle("hidden", target!=="promo");
+    document.getElementById("compare-notice").classList.toggle("hidden", target!=="compare");
+    document.getElementById("compare-container").classList.toggle("hidden", target!=="compare");
+    if (target === "compare") renderCompareView();
   });
 });
 
@@ -1375,6 +1576,8 @@ refreshInternet();
 refreshCombo();
 refreshPromo();
 refreshTV();
+cmpUpdateBadge();
+renderCompareView();
 ["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => {
   const el = document.getElementById(id);
   el.addEventListener("input", refreshTV);
