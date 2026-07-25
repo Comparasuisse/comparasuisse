@@ -215,6 +215,10 @@
   .chan:not(:last-child)::after{content:" · "; color:var(--muted);}
   .chan[hidden]{display:none;}
   .chan-nomatch{margin-top:8px; padding:8px 10px; background:#fff7ed; border-left:3px solid #d59a2b; color:#7a5a1e; font-size:12px; border-radius:0 4px 4px 0;}
+  .chan-tag{display:inline-flex; align-items:center; gap:6px; padding:4px 4px 4px 10px; background:var(--ink); color:#fff; border-radius:20px; font-size:12px; font-weight:600;}
+  .chan-tag button{background:rgba(255,255,255,.2); color:#fff; border:none; width:18px; height:18px; border-radius:50%; font-size:14px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
+  .chan-tag button:hover{background:var(--red);}
+  #tv-channel-add:hover{background:var(--red-dark) !important; border-color:var(--red-dark) !important;}
   .offer-btn:hover{background:var(--red-dark);}
   footer{max-width:1080px; margin:40px auto 0; padding:20px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);}
   footer a{color:var(--red-dark);}
@@ -440,8 +444,12 @@
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="tv-streaming" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Streaming pur (sans box requise)</label>
   </div>
   <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label>Chaîne spécifique <span style="font-weight:400; color:var(--muted); font-size:12px;">— cherche parmi les listes de chaînes vérifiées (ex. RTS, TF1, beIN Sport)</span></label>
-    <input type="search" id="tv-channel-search" placeholder="Filtrer les offres par présence d'une chaîne…" style="width:100%; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+    <label>Chaînes spécifiques <span style="font-weight:400; color:var(--muted); font-size:12px;">— tape une chaîne puis Entrée pour l'ajouter (logique ET : toutes les chaînes ajoutées doivent être présentes). Insensible casse/accents.</span></label>
+    <div id="tv-channel-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
+    <div style="display:flex; gap:6px;">
+      <input type="search" id="tv-channel-search" placeholder="Ex : RTS Un puis Entrée, ou beIN Sport…" style="flex:1; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+      <button type="button" id="tv-channel-add" style="padding:8px 14px; border:1px solid var(--line); border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
+    </div>
   </div>
 </div>
 
@@ -841,6 +849,42 @@ function tvMatchesChannel(d, q){
   const flat = Array.isArray(cl) ? cl : Object.values(cl).flat();
   return flat.some(name => normChannelSearch(name).includes(q));
 }
+// Logique ET sur plusieurs chaînes recherchées.
+function tvMatchesAllChannels(d, queries){
+  const cl = d.channelsList;
+  if (!cl) return null;
+  const flat = Array.isArray(cl) ? cl : Object.values(cl).flat();
+  const normalized = flat.map(n => normChannelSearch(n));
+  return queries.every(q => normalized.some(n => n.includes(q)));
+}
+// Lit les tags actuellement dans le DOM et renvoie leurs queries normalisées.
+function getChannelSearchTags(){
+  return [...document.querySelectorAll("#tv-channel-tags .chan-tag")]
+    .map(t => ({label: t.dataset.label, q: t.dataset.q}));
+}
+function addChannelSearchTag(){
+  const input = document.getElementById("tv-channel-search");
+  const raw = input.value.trim();
+  if (!raw) return;
+  const q = normChannelSearch(raw);
+  if (!q) return;
+  // Éviter les doublons
+  const existing = getChannelSearchTags().some(t => t.q === q);
+  if (existing) { input.value = ""; input.focus(); return; }
+  const tag = document.createElement("span");
+  tag.className = "chan-tag";
+  tag.dataset.q = q;
+  tag.dataset.label = raw;
+  tag.innerHTML = `<span>${raw.replace(/[<>&]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]))}</span><button type="button" aria-label="Retirer" onclick="removeChannelSearchTag(this)">×</button>`;
+  document.getElementById("tv-channel-tags").appendChild(tag);
+  input.value = "";
+  input.focus();
+  refreshTV();
+}
+function removeChannelSearchTag(btn){
+  btn.closest(".chan-tag").remove();
+  refreshTV();
+}
 
 function refreshTV(){
   const selectedOps = [...document.querySelectorAll('#tv-operator input:checked')].map(i => i.dataset.op);
@@ -849,8 +893,7 @@ function refreshTV(){
   const minRecording = parseInt(document.getElementById("tv-recording").value);
   const maxPrice = parseFloat(document.getElementById("tv-price").value);
   const streamingOnly = document.getElementById("tv-streaming").checked;
-  const chanSearchRaw = document.getElementById("tv-channel-search").value.trim();
-  const chanSearchQ = normChannelSearch(chanSearchRaw);
+  const chanTags = getChannelSearchTags();
   document.getElementById("tv-price-label").textContent = "CHF " + maxPrice + "/mois";
 
   // Base filter : critères "classiques" (opérateur, prix, streaming, min channels/replay/rec)
@@ -868,12 +911,13 @@ function refreshTV(){
   const basePool = tvData.filter(passesBase);
 
   let filtered, unverifiedCount = 0;
-  if (chanSearchQ.length > 0) {
-    // Filtre recherche chaîne : ne garde que celles qui MATCHENT (channelsList non nul + inclut la chaîne)
+  if (chanTags.length > 0) {
+    // Filtre par chaînes (logique ET) : ne garde que les offres qui incluent TOUTES les chaînes taguées.
     // Les offres à channelsList inconnu sont comptées comme "sans liste vérifiable" et exclues.
+    const queries = chanTags.map(t => t.q);
     filtered = [];
     for (const d of basePool) {
-      const m = tvMatchesChannel(d, chanSearchQ);
+      const m = tvMatchesAllChannels(d, queries);
       if (m === true) filtered.push(d);
       else if (m === null) unverifiedCount++;
     }
@@ -885,7 +929,7 @@ function refreshTV(){
   document.querySelector("#tv-count span").textContent = filtered.length + " / " + tvData.length + " offre(s)";
 
   const note = document.getElementById("tv-unverified-note");
-  if (chanSearchQ.length > 0 && unverifiedCount > 0) {
+  if (chanTags.length > 0 && unverifiedCount > 0) {
     note.textContent = `ℹ️ ${unverifiedCount} offre${unverifiedCount>1?"s":""} sans liste de chaînes vérifiable, non incluse${unverifiedCount>1?"s":""} dans cette recherche.`;
     note.classList.remove("hidden");
   } else {
@@ -894,7 +938,7 @@ function refreshTV(){
 
   document.getElementById("tv-grid").innerHTML = filtered.length
     ? filtered.map(renderTVCard).join("")
-    : `<div class="empty">Aucune offre TV ne correspond à ces critères${chanSearchQ ? ` (recherche : "${chanSearchRaw}")` : ""}.</div>`;
+    : `<div class="empty">Aucune offre TV ne correspond à ces critères${chanTags.length ? ` (chaînes recherchées : ${chanTags.map(t => `"${t.label}"`).join(" ET ")})` : ""}.</div>`;
 }
 
 function resetTV(){
@@ -905,6 +949,7 @@ function resetTV(){
   document.getElementById("tv-price").value = 80;
   document.getElementById("tv-streaming").checked = false;
   document.getElementById("tv-channel-search").value = "";
+  document.getElementById("tv-channel-tags").innerHTML = "";
   refreshTV();
 }
 
@@ -1209,11 +1254,16 @@ refreshInternet();
 refreshCombo();
 refreshPromo();
 refreshTV();
-["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming","tv-channel-search"].forEach(id => {
+["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => {
   const el = document.getElementById(id);
   el.addEventListener("input", refreshTV);
   el.addEventListener("change", refreshTV); // Certains SELECT/checkbox ne firent pas "input" via dispatchEvent
 });
+// Tags "Chaînes spécifiques" : Entrée dans le champ = ajouter, bouton + = pareil
+document.getElementById("tv-channel-search").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { e.preventDefault(); addChannelSearchTag(); }
+});
+document.getElementById("tv-channel-add").addEventListener("click", addChannelSearchTag);
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
 ["combo-replay","combo-recording","combo-speed","combo-speed-max"].forEach(id => document.getElementById(id).addEventListener("input", refreshCombo));
