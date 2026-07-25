@@ -1,0 +1,90 @@
+# Listes de chaînes TV — extraction automatique
+
+Généré le 25.07.2026 19:05:52 par `scripts/fetch-channels.mjs`.
+
+## Wingo TV Max (`wingo-tv-max`)
+
+- **Source** : https://www.wingo.ch/sites/default/files/downloads/WINGO-Sendertabelle-TV-Max-A4h-fr-v3.pdf
+- **Note** : Liste extraite du PDF officiel Wingo TV Max (Sendertabelle) — 290+ chaînes ordonnées alphabétiquement (le PDF présente les chaînes en colonnes visuelles sans catégories textuelles).
+
+### 287 chaînes
+20 Mediaset · 2M Monde · 3sat · 6ter CH · AB 3 CH · AB1 · Adria Music Television · Ajoie TV · Al Arabiya · Al Jazeera · Al Jazeera E · ALMA TV · Alpenland TV · Animaux · Anixe Serie · ARCADIA world TV · ARD-alpha · Arte D · Arte FR · ATV Avrupa · Auftanken TV · BBC Four · BBC News · BBC One · BBC Three / CBBC · BBC Two · BBC World News · BFM Business · BFM TV · Bibel TV · Bloomberg TV · blue Zoom D · blue Zoom F · BN Music · BVN TV · C+ en clair · C8 CH · Canal 24 Horas · Canal 9 · Canal Alpha JU · Canal Alpha NE · Canal Sur Andalucía · Canale 5 · Canale IT · CARAC 1 · CARAC 2 · CARAC 3 · CARAC 4 · CBeebies · CBS Reality · CCTV4 · CGTN · Channel 4 · Channel 5 · Chérie 25 · cielo · Class TV Moda · Clubland TV · CNBC UK · CNEWS · CNN Türk · Comedy Central · CSTAR · ČT24 · Cubavisión Int. · Das Erste · Dave · Davos Klosters · Deejay TV · Deluxe Music · Deutsches Musik TV · Diaspora TV Switzerland · Digi 24 · Disney Channel D · DM Sat · DMAX · DMAX Italia · DMAX UK · Drama · Dubai TV · Duna TV · Duna World · DW Englisch · E4 · ERT World · Espreso TV · EU Parlament+ · Euro D · Euro Star · Euronews D · Euronews E · Euronews F · Euronews I · Eurosport 1 F · Fashion TV · Film4 · France 2 · France 24 · France 24 E · France 3 · France 4 · France 5 · franceinfo · FreeDOM · Frisbee · Game TV · GB News · Giallo · Grand Genève TV · GRTV/TéléVersoix · Gulli · HGTV · Hip Trip · HRT 1 · HRT 4 · i24 News · i24 News F · Italia 1 · Italia 2 · ITV1 · ITV2 · ITV3 · ITV4 · K-TV · K::CN 3 · K2 · Kabel eins CH · kabel eins Doku · Kanal 9 · KBS World · KiKa · Kurdistan TV · L‘Equipe · La 7 · La 7d · La Chaine Info · La Télé · La5 · Léman Bleu · Loly TV · M1 · M2 · M5 · M6 CH · Max TV · Mediaset Extra · MelodieTV · More Than Sports TV · More4 · n-tv CH · Nitro CH · Nova BH · NOVE · Now Rock · NRJ 12 · NRTV · One Music Television · ORF 1 · ORF 2 · ORF 3 · ORTB · Phoenix Info News · Phoenix TV · Pixel · Pro TV International · ProSieben CH · ProSieben MAXX CH · Quest · Radio Italia TV · Radio Pilatus TV · Radio Ticino Channel · Rai 1 · Rai 2 · Rai 3 · Rai 4 · Rai 5 · Rai Gulp · Rai Movie · Rai News 24 · Rai Premium · Rai Scuola · Rai Sport + · Rai Storia · Rai Yoyo · Real Time · Record TV · regioTVplus · Rete 4 · Rheinwelten TV · Rhône TV · RIC TV · RIK Sat · RMC Découverte · RMC Story · RSI LA 1 · RSI LA 2 · RTK 1 · RTL CH · RTL ZWEI CH · RTL9 CH · RTLup · RTP Int. · RTR Planeta · RTS 1 · RTS 2 · RTS Svet · S1 · SAT.1 CH · SAT.1 GOLD CH · Schlagerparadies TV · Senato TV · Servus TV · Session Nationalrat · Session Ständerat · Show Türk · Showmax · sixx CH · Sky News Int. · sky TG 24 · Sport1 · SR Fernsehen · SRF 1 · SRF info · SRF zwei · Star TV · Super RTL CH · Super! · Swiss Sport TV · SWISS1 · Tagesschau24 · Tele 1 · Tele 5 · Tele Bärn · Tele Bielingue · Tele D · Tele M1 · Tele Ticino · Tele Top · Tele Z · Tele Zentralschweiz · Telebasel · Telelombardia · Telenova · Telenuovo · teleSUR · Teleswizz · TeleZüri · TF1 CH · TF1 Séries Films · TFX CH · TGRT EU · TMC CH · Toggo Plus · Top Calcio 24 · Top Crime · TRT Belgesel · TRT Kurdi · TRT Spor · TRT Türk · Tunisie Nationale · TV Duga+ · TV Galicia · TV Romania Int. · TV2000 · TV24 · TV25 · TV5 Monde EU · TV5 Monde FBS · TV8 · TV8 Mont Blanc · TVCG MNE · TVE Int. · TVM3 · TVP Polonia · Vernier Visions · Voice of America · VOX CH · VOXup · W9 CH · Welt der Wunder CH TV · Wetter.TV · Xplore · Yesterday · Z1 Televizija · ZDFinfo · ZDFneo · Zwei Music Television
+
+## Zattoo (Premium & Ultimate) (`zattoo`)
+
+- **Source** : https://zattoo.com/ch/fr/channels
+- **Note** : Structure DOM Zattoo non parseable — page dynamique lourde.
+
+_Liste non extraite._
+
+## Teleboy TV (`teleboy`)
+
+- **Source** : https://www.teleboy.ch/sender
+- **Note** : Extrait de teleboy.ch/sender — chaînes disponibles sur toutes les formules Teleboy.
+
+### 299 chaînes
+1 FL TV · 1+1 · 20 Mediaset · 24H · 27 Twentyseven · 3sat · 4Seven · 5ACTION · 5SELECT · 5STAR · 5USA · 6ter · 7+ / Nick CH · Al Jazeera en · Alma TV · Anixe · Anixe+ · ARD ONE · ARD-alpha · Arirang TV · Arte de · Arte fr · auftanken.tv · BBC Arabic · BBC Four · BBC News · BBC One · BBC Parliament · BBC Three · BBC Two · BBC World News · beCuriousTV · BFM TV · Bibel TV · Bloomberg · Bloomberg Quicktake · blue Zoom de · blue Zoom fr · Boing · Boing Plus · BR Fernsehen Süd · Canal Alpha Jura · Canal Alpha Neuchâtel · Canal9 · Canale 5 · Canale Italia · CARAC 1 · CARAC 2 CH · CARAC 3 · Cartoonito · CBBC · CBeebies · CBS Reality · Challenge · Channel 4 · Channel 5 · Cielo · Cine34 · Class TV Moda · Clubland TV · CNBC Europe · CNEWS · CNN Türk · Comedy Central · CSTAR · Curiosity Now · Das Erste · Dave · Deluxe Music · Deutsche Welle ar · Deutsche Welle en · Deutsche Welle es · Deutsches Musik Fernsehen · DF1 · Disney Channel · DMAX · DMAX Italia · DMAX UK · Drama · Dream Türk · E4 · E4 Extra · Enquetes De Choc · Espreso TV · Euro D · Euro Star · euronews de · euronews en · euronews fr · euronews it · Eurosport 1 de · Fashion TV · Film 4 · Filmgold · Focus · Folx TV · Food Network · Food Network Italia · France 2 · France 24 en · France 24 fr · France 3 · France 4 · France 5 · franceinfo · Frisbee · FUNKTIONEN · Giallo · GOD Channel · Gulli · Haber Turk · Halk TV · Helvetia One TV · HGTV Italy · Home & Garden · Homicide · hr-fernsehen · HSE24 · HSE24 Extra · HSE24 Trend · INFOS ZUR TV-BOX · Iris · Italia 1 · Italia 2 · ITV 2 · ITV 3 · ITV 4 · ITVBe · K-TV · K2 · Kabel Eins · Kabel Eins Doku · Kanal 7 Avrupa · Kanal9 · KBS World · KiKa · L'Équipe 21 · La Télé · La5 · La7 · La7d · Léman Bleu · M6 Suisse · MDR Sachsen · Mediaset Extra 2 · Melodie TV · More 4 · Motor Trend · Motorvision+ · Motorvision+ F · MySports 2 · MySports 3 · MySports 4 · MySports 5 · MySports 6 · MySports 7 · MySports 8 · MySports 9 · MySports EDGE · MySports Eins · MySports Un · MySports Uno · n-tv · N24 Doku · Naruto · NDR Fernsehen · NHK World · NITRO · NOVE · Now 90s · Now70s · Now80s · ORF 1 · ORF 2 · ORF 3 · PASSENDE GESCHWINDIGKEIT · PBS America · Phoenix · ProSieben Maxx · ProSieben Schweiz · Puls 8 · QS24 · Quest · Quest Red · R9 Österreich · Radio Bremen TV · RADIO TICINO CHANNEL · Rai 1 · Rai 2 · Rai 3 · Rai 4 · Rai 5 · Rai Gulp · Rai Movie · Rai News 24 · Rai Premium · Rai Scuola · Rai Sport 1 · Rai Storia · Rai Yoyo · rbb Berlin · Real Time · Record News · RecordTV · Red Bull TV (engl.) · Rete 4 · RMC Découverte · RMC Life · RMC Story · ROAMING INFO · Rocket Beans TV · RSI LA 1 · RSI LA 2 · RTL 102.5 · RTLup · RTLZWEI · RTP 3 · RTPi · RTS Deux · RTS Un · S1 · S4C · Sat.1 · Sat.1 Gold · Schaffhauser Fernsehen · Schlager Deluxe · ServusTV · Show Turk · sixx · Sky Mix · Sky News · Sky TG24 · SONLife · SPIEGEL TV Konflikt · Sport 1+ · Sport1 · Sportitalia · SR Fernsehen · SRF 1 · SRF info · SRF zwei · Star TV · Super RTL · Super! · SuperTennis · Swiss Sport TV · SWISS1 · SWR Fernsehen BW · tagesschau24 · Tele 1 · Tele 5 · Tele D · Tele M1 · Tele Südostschweiz · Tele Top · Tele Z · TeleBärn · Telebasel · TeleBielingue · Teleboy Logo · TeleTicino · TeleZüri · Terra Mater Wild · TF1 · TF1 Séries Films · TGcom24 · TLC Deutschland · TOGGO plus · Top Filme · Top Serien · Top True Crime · TOPcrime · TV Oberwallis · TV Suisse Plus · TV2000 · TV24 · TV25 · TV5 · TV5 Monde FBS · TV8 · TV8 Int · TV8 Mont Blanc · TVEi · TVM3 · TVO - das Ostschweizer Fernsehen · UATV · UniNettuno University TV · VOXup · W9 · WDR Fernsehen · Wedo Big Stories · wedo movies · WELT · Welt der Wunder TV · wetter.tv · World of Freesports · Yesterday · ZDFinfo · ZDFneo
+
+## Swisscom blue TV (S/M/L) (`swisscom-blue-tv`)
+
+- **Source** : https://www.swisscom.ch/fr/clients-prives/abonnement-tv/liste-des-chaines.html
+- **Note** : Extraction Swisscom blue TV : seulement 0 chaînes détectées, sélecteur DOM à revoir.
+
+_Liste non extraite._
+
+## Teleking KingTV (Silber/Gold/Platin) (`teleking`)
+
+- **Source** : https://www.teleking.ch/tv/senderliste/
+- **Note** : Table Teleking non détectée (0 candidats après filtrage) — page probablement générée par JS.
+
+_Liste non extraite._
+
+## yallo TV (`yallo-tv`)
+
+- **Source** : https://www.yallo.ch/fr/tv
+- **Note** : Yallo TV : page marketing sans liste détaillée directement extractible.
+
+_Liste non extraite._
+
+## Netplus TV (`netplus-tv`)
+
+- **Source** : https://www.netplus.ch/api/channels/pdf?locale=fr
+- **Note** : Extrait du PDF officiel Netplus (api/channels/pdf) — liste globale câble/fibre Netplus, valide pour Netplus TV App et Netplus TV Box (les 2 offres partagent le même catalogue de base). Certaines chaînes marquées ** dans le PDF original sont des options premium.
+
+### 259 chaînes
+2M Maroc · 3Sat · 6Ter CH · 8 Mont-Blanc · A Bola TV · AB1 · AB3 · Action · Al Arabiya · Al Jazeera · Al Maghribia · Animaux · Anixe · Apple TV · Aragon TV · Arta · Arte · ATV2 · AUTOMOTO · BBC 1 · BBC 2 · BBC 4 - Cbeebies · BBC World · BFM Business · BFM TV · Bloomberg · blue Zoom · blue Zoom D · BNT 4 · BR Alpha · BR Sud · Canal 24 Horas · Canal 9 · Canal Algérie · Canal Alpha JU · Canal Alpha NE · Canal J · Canal Q · Canal Sur Andalucia · CANAL+ · CANAL+ (plages en clair) · CANAL+ BOX OFFICE · CANAL+ CINÉMA(S) · CANAL+ DOCS · CANAL+ FOOT · CANAL+ GRAND ÉCRAN · CANAL+ KIDS · CANAL+ LIVE · CANAL+ PREMIER LEAGUE · CANAL+ SPORT · CANAL+ SPORT 360 · Canale 5 · Canale Italia · CARAC 1 · CARAC 2 · CARAC 3 · CARAC 4 · CARAC 5 · Cartoon Network CH · CBBC · CCTV 4 · CGTN · Chaîne disponible sur l'application Net+TV Mobile · Chaîne en haute définition · Channel 4 · Channel 5 · Chasse et Pêche · CINÉ+ CLASSIC · CINÉ+ ÉMOTION · CINÉ+ FAMILY · CINÉ+ FESTIVAL · CINÉ+ FRISSON · CNBC · CNEWS · CNN International · COMÉDIE+ · Comedy Central · Comedy Central DE · CSTAR CH · Das Erste · Deluxe Music · Deutsche Grammophon · Disney Channel DE · DM Sat · DMAX · DMAX Italia · Dorcel TV · Dorcel XXL · Dorcel XXX · Duna TV · Enregistrement centralisé · Equidia · ERT World · ESC Al Masriya · Euro D · Euronews · Eurosport 1 · Eurosport 2 · Eurosport DE · explore · Film 4 · Fonctionnalités seulement disponibles avec une box TV. · Food Network · France 2 · France 24 · France 3 · France 4 · France 5 · France Info · GOLF+ · Gulli · Gulli Max · HBO Max · HRT Int. · INFOSPORT+ · Italia 1 · ITV 2 · ITV 3 · ITV 4 · Kabel Eins · Kabel eins Doku · Kanal 9 · KiKa · Klan Kosova · Kohavision · L'équipe · LA 7 · La chaine météo · La Télé · La7Cinema · Léman Bleu · Liste des chai · M6 CH · Mangas · MaxTV · Melody · Mezzo · Mezzo Live · More 4 · Motorvision TV · Motorvision TV D · MTV France · Museum TV · MySports 2 · MySports 3 · MySports 4 · MySports 5 · MySports 6 · MySports 7 · MySports 8 · MySports 9 · MySports EDGE · MySports EINS · MySports UN · MySports UNO · n-TV · NHK World · Nickelodeon · Nickelodeon D · Nickelodeon Junior · Nickelodeon Teen · Nove · NovelasTV · NOVO19 · NRTV · ORF 1 · ORF 2 · Paramount+ · Phoenix · PIWI+ · Planète+ · PLANÈTE+ AVENTURE · PLANÈTE+ CRIME · POLAR+ · Pro Sieben · ProSieben MAXX · PTC CBET · PULS 8 · Quest · Rai 1 · Rai 2 · Rai 3 · Rai Gulp · Rai News · Rai Scuola · Rai Sport+ · Rai Storia · Record news · Rede Record Internacional · Replay TV sur 7 jours · Rete 4 · RFM TV · Rhône TV · RMC Découverte · RMC Life · RMC Story · RSI LA 1 · RSI LA 2 · RTCG · RTK 1 · RTL 2 · RTL Nitro · RTL9 CH · RTPi · RTS 1 · RTS 2 · RTV 21 · SAT.1 · SAT.1 Gold · SEASONS · Servus TV · Show Turk · SIC Int · Sixx · Sky News · Sport 1 CH · Sportdigital1+ · SRF 1 · SRF 2 · SRF Info · Star TV · Star TVE · Super RTL · SWR BW · T18 · TCM Cinéma · Tele 5 · TeleBärn · Telebielingue · TÉLÉTOON+ · TF1 CH · TF1 Séries Films CH · TFX CH · Tiji · TMC CH · Toute l'Histoire · Trace Latina · Trace Urban · Trek · TRT Turk · Tunisie Nationale · TV Monaco · TV Polonia · TV24 · TV5 Monde FBS · TVC News · TVE Internacional · TVI Ficção · TVI Internacional · TVM3 · TVR International · TVSH Sat · Val TV · Video Italia · W9 CH · Warner TV · WELT · ZDF Info · ZDF neo
+
+## Init7 TV7 (`init7-tv7`)
+
+- **Source** : manuel
+- **Note** : Init7 ne publie pas de liste plate consolidée des ~200 chaînes TV7. Le contenu se découvre via l'app TV7 Apple TV / Android TV ou les playlists M3U/HLS. Selon retours utilisateurs (2222.ch), l'offre francophone est plus limitée que l'allemande, et la chaîne régionale valaisanne Canal9 n'est pas incluse (contrairement à la suisse-alémanique Kanal9). Voir page officielle pour l'offre complète.
+
+_Liste non extraite._
+
+## MaxiTV (`maxi-tv`)
+
+- **Source** : manuel
+- **Note** : MaxiConnect ne publie pas de liste extractible des 250 chaînes MaxiTV sur son site public (Cortaillod). Consulter la page officielle ou contacter le support 7j/7.
+
+_Liste non extraite._
+
+## iWay TV (base Wilmaa) (`iway-tv`)
+
+- **Source** : https://www.wilmaa.com/de/paket/wilmaa-plus
+- **Note** : Wilmaa page structure non parseable.
+
+_Liste non extraite._
+
+## CANAL+ Suisse (Ciné Séries / Sport / La Totale) (`canalplus`)
+
+- **Source** : manuel
+- **Note** : Liste construite à partir de la fiche tarifaire CANAL+ Suisse (fichesTarifaires-Canal.pdf) et de la fiche produit CANAL+ Suisse — les 3 packs Sport, Ciné Séries et La Totale combinent ces chaînes (La Totale = Sport ∪ Ciné Séries ∪ 150+ chaînes complémentaires). Vérifier canalplus.ch pour la grille exhaustive.
+
+### CANAL+ Sport (18 chaînes sport) (18)
+Ligue des Champions · Ligue Europa · Premier League · Ligue 1 · Formule 1 · MotoGP · Rallye WRC · Rugby Top 14 · Golf · Multiplex Football · CANAL+ Sport · CANAL+ Sport 360 · beIN Sports 1 · beIN Sports 2 · beIN Sports 3 · Eurosport 1 · Eurosport 2 · Golf Channel
+
+### CANAL+ Ciné Séries (22 chaînes + Paramount+ / Apple TV+) (22)
+CANAL+ · CANAL+ Cinéma · CANAL+ Séries · CANAL+ Grand Écran · CANAL+ Docs · CANAL+ Kids · OCS Max · OCS City · OCS Choc · OCS Géants · Ciné+ Premier · Ciné+ Frisson · Ciné+ Emotion · Ciné+ Famiz · Ciné+ Classic · Ciné+ Club · Paramount Network · Comedy Central · Warner TV · TCM Cinéma · Ciné+ Star · Polar+
+
+### Streaming inclus (Ciné Séries & La Totale) (3)
+Paramount+ · Apple TV+ · myCANAL (replay + programmation à la demande)

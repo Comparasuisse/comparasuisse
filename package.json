@@ -9,6 +9,7 @@
     "postinstall": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "devDependencies": {
+    "pdfjs-dist": "^6.1.200",
     "playwright-core": "^1.49.0"
   }
 }
