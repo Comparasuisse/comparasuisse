@@ -230,9 +230,9 @@
 
 
 <div class="tabs">
-  <div class="tab active" data-tab="mobile">📱 Mobile (44 offres)</div>
+  <div class="tab active" data-tab="mobile">📱 Mobile (49 offres)</div>
   <div class="tab" data-tab="internet">🌐 Internet (22 offres)</div>
-  <div class="tab" data-tab="tv">📺 TV (15 offres)</div>
+  <div class="tab" data-tab="tv">📺 TV (16 offres)</div>
   <div class="tab" data-tab="combo">📦 Internet + TV</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
 </div>
@@ -507,12 +507,17 @@ const mobileData = [
   {name:"GoMo Europe", network:"salt", price:19.95, details:"Tout illimité (CH) + Internet illimité en UE — sans engagement, prix garanti à vie", promo:true, beforePrice:null, promoNote:"prix à vie · 3 mois gratuits + activation offerte", roamData:"Illimité (UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.go-mo.ch/fr/"},
   {name:"Spusu Small", network:"salt", price:9.90, details:"10 Go 5G (CH) dont 3 Go de data roaming UE + appels/SMS illimités — sans engagement", roamData:"3 Go (UE, inclus dans les 10 Go)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:3, countries:["UE"], url:"https://www.spusu.ch/fr"},
   {name:"Spusu Big", network:"salt", price:19.90, details:"30 Go 5G (CH) + data roaming illimitée UE/UK + 100 min UE/UK + appels/SMS illimités CH", roamData:"Illimité UE/UK + 100 min", roaming:true, chUnlimited:false, roamUnlimited:true, chDataGB:30, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.spusu.ch/fr", callsToAbroad:100},
-  {name:"iWay Mobile Basic", network:"sunrise", price:19.00, details:"30 Go 5G (CH/FL) + appels/SMS illimités — sans engagement, 1 mois de test gratuit", roamData:"Aucune — Suisse/Liechtenstein", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:30, roamDataGB:0, countries:["CH"], url:"https://www.iway.ch/mobile/mobile-abos/"},
-  {name:"iWay Mobile Classic", network:"sunrise", price:29.00, details:"Data illimitée 5G (CH/FL) + 5 Go de roaming + appels/SMS illimités — 1 mois de test gratuit", roamData:"5 Go roaming", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE"], url:"https://www.iway.ch/mobile/mobile-abos/"},
-  {name:"iWay Mobile Premium", network:"sunrise", price:39.00, details:"Data illimitée 5G (CH/FL) + roaming étendu + appels/SMS illimités — 1 mois de test gratuit", roamData:"Roaming étendu (voir zones iWay)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.iway.ch/mobile/mobile-abos/"},
-  {name:"Netplus MobiGo", network:"sunrise", price:28.00, details:"4 Go (CH) + 2 Go (Europe/USA/Canada) + appels CH illimités — abo mobile de l'opérateur câble romand Netplus. Rabais de 10.- pour les moins de 30 ans ou clients Netplus Internet", roamData:"2 Go (Europe/USA/Canada)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:4, roamDataGB:2, countries:["UE","USA","CAN"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/"},
-  {name:"Netplus MobiSwiss", network:"sunrise", price:38.00, details:"Illimité (CH) + 5 Go (Europe/USA/Canada) + 60 min d'appels vers l'Europe. Rabais de 10.- si vous avez déjà un abo Internet Netplus", roamData:"5 Go (Europe/USA/Canada) + 60 min", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","USA","CAN"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/", callsToAbroad:60},
-  {name:"Netplus MobiEuro", network:"sunrise", price:58.00, details:"Illimité (CH + Europe) + 120 min d'appels internationaux vers l'Europe. Abo top-de-gamme Netplus", roamData:"Illimité (Europe) + 120 min", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/", callsToAbroad:120},
+  {name:"iWay Mobile Basic", network:"salt", price:19.00, details:"30 Go 5G (CH/FL) + appels/SMS illimités — sans engagement, 1 mois de test gratuit. Réseau Salt (confirmé sur iway.ch)", roamData:"Aucune — Suisse/Liechtenstein", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:30, roamDataGB:0, countries:["CH"], url:"https://www.iway.ch/mobile/mobile-abos/"},
+  {name:"iWay Mobile Classic", network:"salt", price:29.00, details:"Data illimitée 5G (CH/FL) + 5 Go de roaming + appels/SMS illimités — 1 mois de test gratuit. Réseau Salt (confirmé sur iway.ch)", roamData:"5 Go roaming", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE"], url:"https://www.iway.ch/mobile/mobile-abos/"},
+  {name:"iWay Mobile Premium", network:"salt", price:39.00, details:"Data illimitée 5G (CH/FL) + roaming étendu + appels/SMS illimités — 1 mois de test gratuit. Réseau Salt (confirmé sur iway.ch)", roamData:"Roaming étendu (voir zones iWay)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.iway.ch/mobile/mobile-abos/"},
+  {name:"Netplus MobiGo", network:"sunrise", price:28.00, details:"4 Go (CH) + 2 Go (Europe/USA/Canada) + appels CH illimités — abo mobile de l'opérateur câble romand Netplus. Rabais de 10.- pour les moins de 30 ans ou clients Netplus Internet. ⚠️ Migration vers le réseau Swisscom annoncée en juin 2026 (Transatel au cœur), effective prochainement", roamData:"2 Go (Europe/USA/Canada)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:4, roamDataGB:2, countries:["UE","USA","CAN"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/"},
+  {name:"Netplus MobiSwiss", network:"sunrise", price:38.00, details:"Illimité (CH) + 5 Go (Europe/USA/Canada) + 60 min d'appels vers l'Europe. Rabais de 10.- si vous avez déjà un abo Internet Netplus. ⚠️ Migration vers le réseau Swisscom annoncée en juin 2026 (Transatel au cœur), effective prochainement", roamData:"5 Go (Europe/USA/Canada) + 60 min", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","USA","CAN"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/", callsToAbroad:60},
+  {name:"Netplus MobiEuro", network:"sunrise", price:58.00, details:"Illimité (CH + Europe) + 120 min d'appels internationaux vers l'Europe. Abo top-de-gamme Netplus. ⚠️ Migration vers le réseau Swisscom annoncée en juin 2026 (Transatel au cœur), effective prochainement", roamData:"Illimité (Europe) + 120 min", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/", callsToAbroad:120},
+  {name:"MaxiMobile Small", network:"swisscom", price:9.90, details:"5 Go (CH) + appels/SMS illimités (CH) — Suisse uniquement, sans engagement. Frais de mise en service CHF 19.90. Réseau Swisscom uniquement", roamData:"Aucune — pack roaming à la carte", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:5, roamDataGB:0, countries:["CH"], url:"https://www.maxiconnect.ch/fr/"},
+  {name:"MaxiMobile Start", network:"swisscom", price:21.90, details:"40 Go (CH) + appels/SMS illimités (CH) + 1 Go dans 23 pays Zone 1 — sans engagement, frais d'activation CHF 49.- offerts. Réseau Swisscom uniquement", roamData:"1 Go (Zone 1)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:40, roamDataGB:1, countries:["UE","UK"], url:"https://www.maxiconnect.ch/fr/"},
+  {name:"MaxiMobile Classic", network:"swisscom", networkChoice:["swisscom","salt"], price:29.90, details:"Data illimitée (CH) + 5 Go roaming + appels/SMS illimités dans 23 pays Zone 1 — sans engagement, activation CHF 49.- offerte. Choix du réseau porteur à la souscription (Salt ou Swisscom, même prix) — unique en Suisse", roamData:"5 Go dans 23 pays Zone 1", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","UK"], url:"https://www.maxiconnect.ch/fr/", callsRoaming:Infinity},
+  {name:"MaxiMobile Plus", network:"swisscom", networkChoice:["swisscom","salt"], price:44.90, details:"Data illimitée (CH) + 30 Go roaming + appels/SMS illimités dans 23 pays Zone 1 — sans engagement, activation CHF 49.- offerte. Choix du réseau porteur à la souscription (Salt ou Swisscom, même prix) — unique en Suisse", roamData:"30 Go dans 23 pays Zone 1", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:30, countries:["UE","UK"], url:"https://www.maxiconnect.ch/fr/", callsRoaming:Infinity},
+  {name:"MaxiMobile Ultra", network:"salt", price:59.90, details:"Data illimitée (CH) + 50 Go roaming + appels/SMS illimités dans 23 pays Zone 1 — sans engagement, activation CHF 49.- offerte. Réseau Salt uniquement", roamData:"50 Go dans 23 pays Zone 1", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:50, countries:["UE","UK"], url:"https://www.maxiconnect.ch/fr/", callsRoaming:Infinity},
 ];
 
 const internetData = [
@@ -531,7 +536,7 @@ const internetData = [
   {name:"Swisscom blue Internet L", network:"swisscom", price:49.90, beforePrice:91.80, promo:true, promoNote:"après 12 mois de promo", speed:10000, details:"10 Gbit/s fibre + Internet Box 5 Pro Wi-Fi 7 — engagement 24 mois", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-l.html"},
   {name:"Init7 Fiber7", network:"init7", price:64.75, speed:1000, details:"1, 10 ou 25 Gbit/s symétrique — sans engagement, sans throttling, libre choix du routeur", ownRouterAllowed:true, url:"https://www.init7.net/fr/internet/fiber7/"},
   {name:"Swisscom blue Internet M + TV M", network:"swisscom", price:89.90, speed:1000, details:"1 Gbit/s fibre + 300+ chaînes TV dont sport — le forfait combiné le plus complet", url:"https://www.swisscom.ch/fr"},
-  {name:"Green Internet", network:"swisscom", price:25.00, beforePrice:69.90, promo:true, promoNote:"prix promo entrée de gamme", speed:100, details:"Internet fibre/DSL sur le meilleur réseau — hébergeur suisse historique (Winterthur), spécialisé data centers et connectivité. Vérifiez la grille complète sur green.ch", url:"https://www.green.ch/fr"},
+  {name:"Green Internet Home", network:"swisscom", price:25.00, beforePrice:69.90, promo:true, promoNote:"promo à durée limitée", speed:2500, details:"2.5 Gbit/s fibre/DSL selon la région, sur les réseaux Swisscom et Salt — routeur WiFi 7 inclus. Green.ch, hébergeur suisse historique (Winterthur). Unique palier grand public de Green (le reste de la gamme est BtoB)", url:"https://www.green.ch/fr/clients-prives/abonnement-internet"},
   {name:"iWay Internet 20", network:"swisscom", price:29.00, speed:20, details:"20 Mbit/s symétrique — 1 mois de test gratuit, WLAN Router prêté (routeur perso possible), TestSieger Comparis. Frais d'activation CHF 50.- une fois.", ownRouterAllowed:true, url:"https://www.iway.ch/internet/abos/"},
   {name:"iWay Internet 100", network:"swisscom", price:39.00, speed:100, details:"100 Mbit/s symétrique — 1 mois de test gratuit, WLAN Router prêté (routeur perso possible). Frais d'activation CHF 50.- une fois.", ownRouterAllowed:true, url:"https://www.iway.ch/internet/abos/"},
   {name:"iWay Internet 1000", network:"swisscom", price:49.00, speed:1000, details:"1 Gbit/s symétrique — 1 mois de test gratuit, WLAN Router prêté (routeur perso possible). Frais d'activation CHF 50.- une fois.", ownRouterAllowed:true, url:"https://www.iway.ch/internet/abos/"},
@@ -688,6 +693,7 @@ const tvData = [
   {operator:"iWay", name:"iWay TV Classic", network:"swisscom", price:15.00, beforePrice:null, promo:false, channels:200, replayDays:7, recordingHours:100, streaming:true, details:"200+ chaînes via appli Wilmaa incluse — replay 7 jours, 100h d'enregistrement, sans box requise (streaming pur)", url:"https://www.iway.ch/tv/"},
   {operator:"iWay", name:"iWay TV Premium", network:"swisscom", price:20.00, beforePrice:null, promo:false, channels:250, replayDays:7, recordingHours:500, streaming:true, details:"250+ chaînes Wilmaa Premium — replay 7 jours, 500h d'enregistrement, tous appareils (smart TV / mobile), sans box", url:"https://www.iway.ch/tv/"},
   {operator:"iWay", name:"iWay TV Top", network:"swisscom", price:25.50, beforePrice:null, promo:false, channels:300, replayDays:7, recordingHours:2000, streaming:true, details:"300+ chaînes Wilmaa Top — replay 7 jours, 2000h d'enregistrement, tous appareils, sans box", url:"https://www.iway.ch/tv/"},
+  {operator:"Maxiconnect", name:"MaxiTV", network:"swisscom", price:13.90, beforePrice:null, promo:false, channels:250, replayDays:7, recordingHours:500, streaming:true, details:"250 chaînes, replay 7 jours, 500h d'enregistrement — sans engagement, support suisse 7j/7. Opérateur MaxiConnect (Cortaillod)", url:"https://www.maxiconnect.ch/fr/"},
 ];
 
 function renderTVCard(item){
@@ -797,12 +803,15 @@ function renderMobileCard(item){
         ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
         : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : ''))
     : '';
+  const choicePill = item.networkChoice
+    ? '<span class="roaming-pill roaming-yes" title="Cet abonnement te laisse choisir sur quel réseau il tourne, à la souscription, sans surcoût — une particularité rare sur le marché suisse.">🔀 Choix Salt ou Swisscom</span>'
+    : '';
   return `<div class="card">
     <div>
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
-    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · 🌍→🌍 ${callsRoamingLabel(item)}</div></div>
+    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${choicePill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · 🌍→🌍 ${callsRoamingLabel(item)}</div></div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
     <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
   </div>`;
@@ -915,7 +924,8 @@ function refreshMobile(){
   document.getElementById("mobile-country-controls").classList.toggle("hidden", !wantsRoaming);
 
   let filtered = mobileData.filter(d => {
-    if (!selectedNets.includes(d.network)) return false;
+    const nets = d.networkChoice || [d.network];
+    if (!nets.some(n => selectedNets.includes(n))) return false;
     if (!passesThreshold(d.chDataGB, chVal, DATA_THRESHOLDS)) return false;
     if (!passesMaxThreshold(d.chDataGB, chMaxVal, DATA_MAX_THRESHOLDS)) return false;
     if (wantsRoaming && !passesThreshold(d.roamDataGB, roamVal, DATA_THRESHOLDS)) return false;
