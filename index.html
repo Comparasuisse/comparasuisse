@@ -439,9 +439,14 @@
   <div class="ctrl-group">
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="tv-streaming" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Streaming pur (sans box requise)</label>
   </div>
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>Chaîne spécifique <span style="font-weight:400; color:var(--muted); font-size:12px;">— cherche parmi les listes de chaînes vérifiées (ex. RTS, TF1, beIN Sport)</span></label>
+    <input type="search" id="tv-channel-search" placeholder="Filtrer les offres par présence d'une chaîne…" style="width:100%; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+  </div>
 </div>
 
 <div class="count hidden" id="tv-count"><span></span><span class="reset-link" onclick="resetTV()">Réinitialiser les filtres</span></div>
+<div class="count hidden" id="tv-unverified-note" style="margin-top:-4px; font-style:italic;"></div>
 <div class="grid hidden" id="tv-grid"></div>
 
 <div class="notice hidden" id="combo-notice">📦 <b>Abonnements Internet + TV</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
@@ -829,6 +834,14 @@ function renderTVCard(item){
   </div>`;
 }
 
+// Renvoie true si l'offre `d` contient au moins une chaîne matchant `q` (déjà normalisé)
+function tvMatchesChannel(d, q){
+  const cl = d.channelsList;
+  if (!cl) return null; // liste inconnue → indéterminé (traité par l'appelant)
+  const flat = Array.isArray(cl) ? cl : Object.values(cl).flat();
+  return flat.some(name => normChannelSearch(name).includes(q));
+}
+
 function refreshTV(){
   const selectedOps = [...document.querySelectorAll('#tv-operator input:checked')].map(i => i.dataset.op);
   const minChannels = parseInt(document.getElementById("tv-channels").value);
@@ -836,9 +849,12 @@ function refreshTV(){
   const minRecording = parseInt(document.getElementById("tv-recording").value);
   const maxPrice = parseFloat(document.getElementById("tv-price").value);
   const streamingOnly = document.getElementById("tv-streaming").checked;
+  const chanSearchRaw = document.getElementById("tv-channel-search").value.trim();
+  const chanSearchQ = normChannelSearch(chanSearchRaw);
   document.getElementById("tv-price-label").textContent = "CHF " + maxPrice + "/mois";
 
-  let filtered = tvData.filter(d => {
+  // Base filter : critères "classiques" (opérateur, prix, streaming, min channels/replay/rec)
+  const passesBase = (d) => {
     if (!selectedOps.includes(d.operator)) return false;
     if (d.channels < minChannels) return false;
     if (minReplay > 0 && (d.replayDays ?? 0) < minReplay) return false;
@@ -846,12 +862,39 @@ function refreshTV(){
     if (d.price > maxPrice) return false;
     if (streamingOnly && !d.streaming) return false;
     return true;
-  });
+  };
+
+  // Base pool (avant filtre recherche chaîne)
+  const basePool = tvData.filter(passesBase);
+
+  let filtered, unverifiedCount = 0;
+  if (chanSearchQ.length > 0) {
+    // Filtre recherche chaîne : ne garde que celles qui MATCHENT (channelsList non nul + inclut la chaîne)
+    // Les offres à channelsList inconnu sont comptées comme "sans liste vérifiable" et exclues.
+    filtered = [];
+    for (const d of basePool) {
+      const m = tvMatchesChannel(d, chanSearchQ);
+      if (m === true) filtered.push(d);
+      else if (m === null) unverifiedCount++;
+    }
+  } else {
+    filtered = basePool;
+  }
+
   filtered.sort((a, b) => a.price - b.price);
   document.querySelector("#tv-count span").textContent = filtered.length + " / " + tvData.length + " offre(s)";
+
+  const note = document.getElementById("tv-unverified-note");
+  if (chanSearchQ.length > 0 && unverifiedCount > 0) {
+    note.textContent = `ℹ️ ${unverifiedCount} offre${unverifiedCount>1?"s":""} sans liste de chaînes vérifiable, non incluse${unverifiedCount>1?"s":""} dans cette recherche.`;
+    note.classList.remove("hidden");
+  } else {
+    note.classList.add("hidden");
+  }
+
   document.getElementById("tv-grid").innerHTML = filtered.length
     ? filtered.map(renderTVCard).join("")
-    : '<div class="empty">Aucune offre TV ne correspond à ces critères.</div>';
+    : `<div class="empty">Aucune offre TV ne correspond à ces critères${chanSearchQ ? ` (recherche : "${chanSearchRaw}")` : ""}.</div>`;
 }
 
 function resetTV(){
@@ -861,6 +904,7 @@ function resetTV(){
   document.getElementById("tv-recording").value = 0;
   document.getElementById("tv-price").value = 80;
   document.getElementById("tv-streaming").checked = false;
+  document.getElementById("tv-channel-search").value = "";
   refreshTV();
 }
 
@@ -1165,7 +1209,7 @@ refreshInternet();
 refreshCombo();
 refreshPromo();
 refreshTV();
-["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => {
+["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming","tv-channel-search"].forEach(id => {
   const el = document.getElementById(id);
   el.addEventListener("input", refreshTV);
   el.addEventListener("change", refreshTV); // Certains SELECT/checkbox ne firent pas "input" via dispatchEvent
