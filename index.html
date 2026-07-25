@@ -211,9 +211,13 @@
   .chan-search{width:100%; box-sizing:border-box; padding:6px 10px; margin-bottom:8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; background:#fff;}
   .chan-search:focus{outline:none; border-color:var(--red); box-shadow:0 0 0 2px rgba(213,43,30,.15);}
   .chan-content{max-height:280px; overflow-y:auto; padding-right:8px;}
-  .chan{display:inline; color:var(--ink);}
+  .chan{display:inline; color:var(--ink); cursor:pointer; padding:0 2px; border-radius:3px;}
+  .chan:hover{background:rgba(0,0,0,.06); color:var(--red-dark);}
   .chan:not(:last-child)::after{content:" · "; color:var(--muted);}
   .chan[hidden]{display:none;}
+  .chan-selected{background:#e6f4ea; color:#1e7a3d; font-weight:700;}
+  .chan-selected::before{content:"✓ ";}
+  .chan-selected:hover{background:#cfe9d5;}
   .chan-nomatch{margin-top:8px; padding:8px 10px; background:#fff7ed; border-left:3px solid #d59a2b; color:#7a5a1e; font-size:12px; border-radius:0 4px 4px 0;}
   .chan-tag{display:inline-flex; align-items:center; gap:6px; padding:4px 4px 4px 10px; background:var(--ink); color:#fff; border-radius:20px; font-size:12px; font-weight:600;}
   .chan-tag button{background:rgba(255,255,255,.2); color:#fff; border:none; width:18px; height:18px; border-radius:50%; font-size:14px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
@@ -771,10 +775,27 @@ const tvData = [
 function normChannelSearch(s){
   return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 }
-// Rendu d'une chaîne en span filtrable
+// Rendu d'une chaîne en span filtrable + cliquable (toggle tag)
 function chanSpan(name){
   const n = normChannelSearch(name);
-  return `<span class="chan" data-n="${n}">${name}</span>`;
+  const safe = name.replace(/[<>&"]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
+  return `<span class="chan" data-n="${n}" onclick="toggleChanByClick(this)" title="Cliquer pour ajouter comme étiquette de recherche">${safe}</span>`;
+}
+// Toggle : ajoute la chaîne comme tag, ou la retire si déjà taguée.
+function toggleChanByClick(span){
+  const container = span.closest(".channels-list");
+  const tagsBox = container.querySelector(".chan-filter-tags");
+  const name = span.textContent;
+  const q = normChannelSearch(name);
+  const existing = [...tagsBox.querySelectorAll(".chan-tag")].find(t => t.dataset.q === q);
+  if (existing) {
+    existing.remove();
+    filterChannelsIn(container);
+    return;
+  }
+  const input = container.querySelector(".chan-search");
+  input.value = name;
+  addChanFilterTag(input);
 }
 function renderChannels(item){
   const cl = item.channelsList;
@@ -901,30 +922,20 @@ function removeChanFilterTag(btn){
   btn.closest(".chan-tag").remove();
   filterChannelsIn(container);
 }
-// Applique la logique OU : une chaîne est visible si elle matche AU MOINS un des tags.
-// Champ tags vide = pas de filtre, tout visible.
+// La liste complète reste TOUJOURS visible. Les chaînes correspondant à un
+// tag actif sont surlignées (classe .chan-selected). Aucune chaîne n'est cachée.
 function filterChannelsIn(container){
   const queries = [...container.querySelectorAll(".chan-filter-tags .chan-tag")].map(t => t.dataset.q);
-  let visible = 0;
   for (const s of container.querySelectorAll(".chan")) {
-    const match = queries.length === 0 || queries.some(q => s.dataset.n.includes(q));
-    s.hidden = !match;
-    if (match) visible++;
+    const isSelected = queries.some(q => s.dataset.n.includes(q));
+    s.classList.toggle("chan-selected", isSelected);
+    s.hidden = false;
   }
-  for (const g of container.querySelectorAll(".chan-group")) {
-    const hasVisible = !!g.querySelector(".chan:not([hidden])");
-    g.hidden = !hasVisible;
-    const h5 = g.previousElementSibling;
-    if (h5 && h5.tagName === "H5") h5.hidden = !hasVisible;
-  }
+  // Tous les groupes et titres restent visibles
+  for (const g of container.querySelectorAll(".chan-group")) g.hidden = false;
+  for (const h5 of container.querySelectorAll("h5")) h5.hidden = false;
   const nm = container.querySelector(".chan-nomatch");
-  if (queries.length > 0 && visible === 0) {
-    const labels = [...container.querySelectorAll(".chan-filter-tags .chan-tag")].map(t => `"${t.dataset.label}"`).join(", ");
-    nm.textContent = `Aucune chaîne ne correspond à ${labels}.`;
-    nm.hidden = false;
-  } else {
-    nm.hidden = true;
-  }
+  if (nm) nm.hidden = true;
 }
 
 function renderTVCard(item){
