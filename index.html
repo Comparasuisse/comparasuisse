@@ -129,7 +129,6 @@
   .logo{width:40px; height:40px; flex-shrink:0; border-radius:10px;}
   .logo-row h1{margin:0;}
   header p{margin:0; color:#cfcac2; font-size:14px; max-width:640px;}
-  .badge{display:inline-block; background:var(--red); color:#fff; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; margin-bottom:10px; text-transform:uppercase; letter-spacing:.5px;}
   .wrap{max-width:1080px; margin:0 auto; padding:0 20px;}
   .notice{background:#fff7ed; border:1px solid #f0d9b5; color:#7a5a1e; font-size:13px; padding:12px 16px; border-radius:10px; margin:-16px auto 28px; width:min(calc(100% - 40px), 1080px);}
   .roaming-pill.affiliate{background:#efe6f7; color:#5a2b7a; cursor:help;}
@@ -226,7 +225,6 @@
 
 <header>
   <div class="wrap">
-    <span class="badge">Suisse · Consulté le <span id="today-date">aujourd'hui</span></span>
     <div class="logo-row">
       <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logo-title">
         <title id="logo-title">Logo Comparasuisse</title>
@@ -566,11 +564,6 @@ const internetData = [
   {name:"Netplus Internet 400", network:"sunrise", price:69.00, speed:400, details:"400 Mbit/s sur le réseau câble Netplus (Valais / Romandie via consortium bli bla blo)", url:"https://www.netplus.ch/"},
   {name:"Netplus Internet 10 Gbit/s", network:"sunrise", price:79.00, speed:10000, details:"10 Gbit/s sur le réseau câble Netplus — le top de leur gamme (Valais / Romandie via consortium bli bla blo)", url:"https://www.netplus.ch/"},
 ];
-
-const TODAY = new Date();
-TODAY.setHours(0, 0, 0, 0);
-document.getElementById("today-date").textContent =
-  TODAY.toLocaleDateString("fr-CH", {day:"numeric", month:"long", year:"numeric"});
 
 // Ajouter un champ optionnel `affiliateUrl` à un item pour activer le tracking Awin.
 // Si absent, on retombe sur `url` (lien direct opérateur, non rémunéré).
