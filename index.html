@@ -202,6 +202,9 @@
     .tab{font-size:12px; padding:7px 10px;}
   }
 </style>
+
+<!-- Analytics : Umami Cloud (UE — Francfort), sans cookies, sans IP stockée — cf. mentions-legales.html §5 -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="e448c846-2d3a-48f7-8218-34e6b665c382"></script>
 </head>
 <body>
 
@@ -227,9 +230,9 @@
 
 
 <div class="tabs">
-  <div class="tab active" data-tab="mobile">📱 Mobile (34 offres)</div>
-  <div class="tab" data-tab="internet">🌐 Internet (15 offres)</div>
-  <div class="tab" data-tab="tv">📺 TV (10 offres)</div>
+  <div class="tab active" data-tab="mobile">📱 Mobile (44 offres)</div>
+  <div class="tab" data-tab="internet">🌐 Internet (22 offres)</div>
+  <div class="tab" data-tab="tv">📺 TV (15 offres)</div>
   <div class="tab" data-tab="combo">📦 Internet + TV</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
 </div>
@@ -451,14 +454,12 @@
     </div>
   </div>
   <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label>Opérateur</label>
-    <div class="net-checks" id="promo-operator">
-      <label class="net-chip"><input type="checkbox" data-op="Wingo" checked><span>Wingo</span></label>
-      <label class="net-chip"><input type="checkbox" data-op="Salt" checked><span>Salt</span></label>
-      <label class="net-chip"><input type="checkbox" data-op="Quickline" checked><span>Quickline</span></label>
-      <label class="net-chip"><input type="checkbox" data-op="yallo" checked><span>yallo</span></label>
-      <label class="net-chip"><input type="checkbox" data-op="Swisscom" checked><span>Swisscom</span></label>
-      <label class="net-chip"><input type="checkbox" data-op="Teleboy" checked><span>Teleboy</span></label>
+    <label>Réseau <span style="font-weight:400; color:var(--muted); font-size:12px;">(Wingo, Coop Mobile et Migros Mobile utilisent le réseau Swisscom · yallo et Quickline sont sur Sunrise)</span></label>
+    <div class="net-checks" id="promo-network">
+      <label class="net-chip"><input type="checkbox" data-net="swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="salt" checked><span>Salt</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="init7" checked><span>Init7</span></label>
     </div>
   </div>
 </div>
@@ -502,6 +503,16 @@ const mobileData = [
   {name:"Sunrise Up Mobile XL", network:"sunrise", price:44.50, details:"Illimité jusqu'à 2 Gbit/s (CH + UE), appels/SMS illimités CH+UE", roamData:"Illimité jusqu'à 2 Gbit/s (UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.mobilezone.ch/fr/abonnements/sunrise/up-mobile-xl", callsToAbroad:Infinity, callsRoaming:Infinity},
   {name:"Swisscom blue Mobile L", network:"swisscom", price:59.90, details:"Illimité 5G (CH, UE, UK), 4 appareils multi-device inclus", promo:true, beforePrice:101.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-l.html", callsToAbroad:Infinity, callsRoaming:Infinity},
   {name:"Swisscom blue Mobile XL", network:"swisscom", price:99.90, details:"Illimité 5G haut débit (CH, UE, UK), le plus complet de la gamme Swisscom", promo:true, beforePrice:131.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile.html", callsToAbroad:Infinity, callsRoaming:Infinity},
+  {name:"GoMo Suisse", network:"salt", price:12.95, details:"Internet haut débit illimité + appels/SMS illimités (CH) — sans engagement, prix garanti à vie, 3 mois offerts au démarrage", promo:true, beforePrice:null, promoNote:"prix à vie · 3 mois gratuits + activation offerte", roamData:"Aucune — Suisse uniquement", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], url:"https://www.go-mo.ch/fr/"},
+  {name:"GoMo Europe", network:"salt", price:19.95, details:"Tout illimité (CH) + Internet illimité en UE — sans engagement, prix garanti à vie", promo:true, beforePrice:null, promoNote:"prix à vie · 3 mois gratuits + activation offerte", roamData:"Illimité (UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.go-mo.ch/fr/"},
+  {name:"Spusu Small", network:"salt", price:9.90, details:"10 Go 5G (CH) dont 3 Go de data roaming UE + appels/SMS illimités — sans engagement", roamData:"3 Go (UE, inclus dans les 10 Go)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:10, roamDataGB:3, countries:["UE"], url:"https://www.spusu.ch/fr"},
+  {name:"Spusu Big", network:"salt", price:19.90, details:"30 Go 5G (CH) + data roaming illimitée UE/UK + 100 min UE/UK + appels/SMS illimités CH", roamData:"Illimité UE/UK + 100 min", roaming:true, chUnlimited:false, roamUnlimited:true, chDataGB:30, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.spusu.ch/fr", callsToAbroad:100},
+  {name:"iWay Mobile Basic", network:"sunrise", price:19.00, details:"30 Go 5G (CH/FL) + appels/SMS illimités — sans engagement, 1 mois de test gratuit", roamData:"Aucune — Suisse/Liechtenstein", roaming:false, chUnlimited:false, roamUnlimited:null, chDataGB:30, roamDataGB:0, countries:["CH"], url:"https://www.iway.ch/mobile/mobile-abos/"},
+  {name:"iWay Mobile Classic", network:"sunrise", price:29.00, details:"Data illimitée 5G (CH/FL) + 5 Go de roaming + appels/SMS illimités — 1 mois de test gratuit", roamData:"5 Go roaming", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE"], url:"https://www.iway.ch/mobile/mobile-abos/"},
+  {name:"iWay Mobile Premium", network:"sunrise", price:39.00, details:"Data illimitée 5G (CH/FL) + roaming étendu + appels/SMS illimités — 1 mois de test gratuit", roamData:"Roaming étendu (voir zones iWay)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.iway.ch/mobile/mobile-abos/"},
+  {name:"Netplus MobiGo", network:"sunrise", price:28.00, details:"4 Go (CH) + 2 Go (Europe/USA/Canada) + appels CH illimités — abo mobile de l'opérateur câble romand Netplus. Rabais de 10.- pour les moins de 30 ans ou clients Netplus Internet", roamData:"2 Go (Europe/USA/Canada)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:4, roamDataGB:2, countries:["UE","USA","CAN"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/"},
+  {name:"Netplus MobiSwiss", network:"sunrise", price:38.00, details:"Illimité (CH) + 5 Go (Europe/USA/Canada) + 60 min d'appels vers l'Europe. Rabais de 10.- si vous avez déjà un abo Internet Netplus", roamData:"5 Go (Europe/USA/Canada) + 60 min", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:5, countries:["UE","USA","CAN"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/", callsToAbroad:60},
+  {name:"Netplus MobiEuro", network:"sunrise", price:58.00, details:"Illimité (CH + Europe) + 120 min d'appels internationaux vers l'Europe. Abo top-de-gamme Netplus", roamData:"Illimité (Europe) + 120 min", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.netplus.ch/fr/offres-mobiles-irresistibles/", callsToAbroad:120},
 ];
 
 const internetData = [
@@ -518,8 +529,15 @@ const internetData = [
   {name:"Migros Internet Max", network:"swisscom", price:49.95, speed:1000, details:"1 Gbit/s (fibre/DSL) — engagement 12 mois", url:"https://mobile.migros.ch/fr"},
   {name:"Salt Home", network:"salt", price:39.95, speed:10000, details:"Jusqu'à 10 Gbit/s fibre, à vie — activation gratuite (normalement 99.90)", url:"https://www.salt.ch/fr/home/internet-fibre"},
   {name:"Swisscom blue Internet L", network:"swisscom", price:49.90, beforePrice:91.80, promo:true, promoNote:"après 12 mois de promo", speed:10000, details:"10 Gbit/s fibre + Internet Box 5 Pro Wi-Fi 7 — engagement 24 mois", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-l.html"},
-  {name:"Init7 Fiber7", network:"init7", price:64.75, speed:1000, details:"1, 10 ou 25 Gbit/s symétrique — sans engagement, sans throttling", url:"https://www.init7.net/fr/internet/fiber7/"},
+  {name:"Init7 Fiber7", network:"init7", price:64.75, speed:1000, details:"1, 10 ou 25 Gbit/s symétrique — sans engagement, sans throttling, libre choix du routeur", ownRouterAllowed:true, url:"https://www.init7.net/fr/internet/fiber7/"},
   {name:"Swisscom blue Internet M + TV M", network:"swisscom", price:89.90, speed:1000, details:"1 Gbit/s fibre + 300+ chaînes TV dont sport — le forfait combiné le plus complet", url:"https://www.swisscom.ch/fr"},
+  {name:"Green Internet", network:"swisscom", price:25.00, beforePrice:69.90, promo:true, promoNote:"prix promo entrée de gamme", speed:100, details:"Internet fibre/DSL sur le meilleur réseau — hébergeur suisse historique (Winterthur), spécialisé data centers et connectivité. Vérifiez la grille complète sur green.ch", url:"https://www.green.ch/fr"},
+  {name:"iWay Internet 20", network:"swisscom", price:29.00, speed:20, details:"20 Mbit/s symétrique — 1 mois de test gratuit, WLAN Router prêté (routeur perso possible), TestSieger Comparis. Frais d'activation CHF 50.- une fois.", ownRouterAllowed:true, url:"https://www.iway.ch/internet/abos/"},
+  {name:"iWay Internet 100", network:"swisscom", price:39.00, speed:100, details:"100 Mbit/s symétrique — 1 mois de test gratuit, WLAN Router prêté (routeur perso possible). Frais d'activation CHF 50.- une fois.", ownRouterAllowed:true, url:"https://www.iway.ch/internet/abos/"},
+  {name:"iWay Internet 1000", network:"swisscom", price:49.00, speed:1000, details:"1 Gbit/s symétrique — 1 mois de test gratuit, WLAN Router prêté (routeur perso possible). Frais d'activation CHF 50.- une fois.", ownRouterAllowed:true, url:"https://www.iway.ch/internet/abos/"},
+  {name:"Netplus Internet 200", network:"sunrise", price:49.00, speed:200, details:"200 Mbit/s sur le réseau câble Netplus (Valais / Romandie via consortium bli bla blo)", url:"https://www.netplus.ch/"},
+  {name:"Netplus Internet 400", network:"sunrise", price:69.00, speed:400, details:"400 Mbit/s sur le réseau câble Netplus (Valais / Romandie via consortium bli bla blo)", url:"https://www.netplus.ch/"},
+  {name:"Netplus Internet 10 Gbit/s", network:"sunrise", price:79.00, speed:10000, details:"10 Gbit/s sur le réseau câble Netplus — le top de leur gamme (Valais / Romandie via consortium bli bla blo)", url:"https://www.netplus.ch/"},
 ];
 
 const TODAY = new Date();
@@ -640,9 +658,9 @@ function renderPromoCard(p){
 }
 
 function refreshPromo(){
-  const selectedOps = [...document.querySelectorAll('#promo-operator input:checked')].map(i => i.dataset.op);
+  const selectedNets = [...document.querySelectorAll('#promo-network input:checked')].map(i => i.dataset.net);
   const selectedCats = [...document.querySelectorAll('#promo-category input:checked')].map(i => i.dataset.cat);
-  const filtered = promoData.filter(p => selectedOps.includes(p.operator) && selectedCats.includes(p.category));
+  const filtered = promoData.filter(p => selectedNets.includes(p.network) && selectedCats.includes(p.category));
   document.querySelector("#promo-count span").textContent = filtered.length + " / " + promoData.length + " promotion(s)";
   document.getElementById("promo-grid").innerHTML = filtered.length
     ? filtered.map(renderPromoCard).join("")
@@ -650,7 +668,7 @@ function refreshPromo(){
 }
 
 function resetPromo(){
-  document.querySelectorAll('#promo-operator input, #promo-category input').forEach(i => i.checked = true);
+  document.querySelectorAll('#promo-network input, #promo-category input').forEach(i => i.checked = true);
   refreshPromo();
 }
 
@@ -665,6 +683,11 @@ const tvData = [
   {operator:"Zattoo", name:"Zattoo Ultimate", network:"init7", price:22.00, beforePrice:null, promo:false, channels:376, replayDays:7, recordingHours:2000, streaming:true, details:"376 chaînes (118 Full HD + 206 HD), replay 7 jours, 2000 enregistrements, skip pubs, 4 flux simultanés — 100% streaming, tous appareils, résiliation mensuelle", url:"https://zattoo.com/ch/fr"},
   {operator:"Swisscom", name:"blue TV XL Sport", network:"swisscom", price:70.70, beforePrice:null, promo:true, promoNote:"9.90/mois les 12 premiers mois", channels:330, replayDays:7, recordingHours:2000, streaming:false, details:"330+ chaînes UHD, replay 7 jours, 2000h HD, blue Play + blue Sport annuel inclus — TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-xl-sport.html"},
   {operator:"Swisscom", name:"blue TV XL Streaming", network:"swisscom", price:75.70, beforePrice:null, promo:true, promoNote:"9.90/mois les 12 premiers mois", channels:330, replayDays:7, recordingHours:2000, streaming:false, details:"330+ chaînes UHD, replay 7 jours, 2000h HD, blue Binge (Netflix + Disney+) + blue Play + blue Premium CANAL+ inclus — TV-Box requise", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-xl-streaming.html"},
+  {operator:"Netplus", name:"Netplus TV App", network:"sunrise", price:10.00, beforePrice:null, promo:false, channels:200, replayDays:7, recordingHours:200, streaming:true, details:"200+ chaînes via appli Netplus TV — sans box, streaming pur, compatible smart TV / mobile / tablette (câble Netplus Valais-Romandie)", url:"https://www.netplus.ch/"},
+  {operator:"Netplus", name:"Netplus TV Box", network:"sunrise", price:18.00, beforePrice:null, promo:false, channels:230, replayDays:7, recordingHours:500, streaming:false, details:"230+ chaînes avec box, replay 7 jours, 500h d'enregistrement — offre TV complète du câblo-opérateur Netplus (Valais / Romandie)", url:"https://www.netplus.ch/"},
+  {operator:"iWay", name:"iWay TV Classic", network:"swisscom", price:15.00, beforePrice:null, promo:false, channels:200, replayDays:7, recordingHours:100, streaming:true, details:"200+ chaînes via appli Wilmaa incluse — replay 7 jours, 100h d'enregistrement, sans box requise (streaming pur)", url:"https://www.iway.ch/tv/"},
+  {operator:"iWay", name:"iWay TV Premium", network:"swisscom", price:20.00, beforePrice:null, promo:false, channels:250, replayDays:7, recordingHours:500, streaming:true, details:"250+ chaînes Wilmaa Premium — replay 7 jours, 500h d'enregistrement, tous appareils (smart TV / mobile), sans box", url:"https://www.iway.ch/tv/"},
+  {operator:"iWay", name:"iWay TV Top", network:"swisscom", price:25.50, beforePrice:null, promo:false, channels:300, replayDays:7, recordingHours:2000, streaming:true, details:"300+ chaînes Wilmaa Top — replay 7 jours, 2000h d'enregistrement, tous appareils, sans box", url:"https://www.iway.ch/tv/"},
 ];
 
 function renderTVCard(item){
@@ -798,7 +821,7 @@ function renderInternetCard(item){
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
-    <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span> ${affiliatePill(item)}</div>
+    <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span>${item.ownRouterAllowed ? '<span class="roaming-pill roaming-yes" title="Ce fournisseur autorise l\'utilisation de votre propre routeur/matériel, pas obligé de prendre le sien.">🔧 Routeur perso autorisé</span>' : ''} ${affiliatePill(item)}</div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>
     <a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>
   </div>`;
@@ -1019,7 +1042,7 @@ refreshTV();
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
 ["combo-replay","combo-recording","combo-speed","combo-speed-max"].forEach(id => document.getElementById(id).addEventListener("input", refreshCombo));
-document.querySelectorAll('#promo-operator input, #promo-category input').forEach(i => i.addEventListener("change", refreshPromo));
+document.querySelectorAll('#promo-network input, #promo-category input').forEach(i => i.addEventListener("change", refreshPromo));
 
 function brandFromName(name){
   const first = name.split(/[ (]/)[0];
@@ -1132,7 +1155,7 @@ buildStructuredData();
 <footer>
   Comparateur indépendant, financé par des commissions d'affiliation sur les offres marquées 🤝 Partenaire — sans impact sur ton prix ni sur le classement (toujours par prix croissant). <a href="mentions-legales.html">Mentions légales →</a> · <a href="#faq">Questions fréquentes</a> · <a href="mailto:contact@comparasuisse.ch">Contact</a>.<br>
   <!-- ↓ À MODIFIER À LA MAIN lors de chaque revérification manuelle des offres ↓ -->
-  <span style="opacity:.7;">Prix vérifiés le 23 juillet 2026</span>
+  <span style="opacity:.7;">Prix vérifiés le 25 juillet 2026</span>
 </footer>
 
 </body>
