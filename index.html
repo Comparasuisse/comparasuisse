@@ -219,6 +219,11 @@
   .chan-tag button{background:rgba(255,255,255,.2); color:#fff; border:none; width:18px; height:18px; border-radius:50%; font-size:14px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
   .chan-tag button:hover{background:var(--red);}
   #tv-channel-add:hover{background:var(--red-dark) !important; border-color:var(--red-dark) !important;}
+  .chan-suggestions{position:absolute; top:100%; left:0; right:0; margin-top:2px; background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.08); max-height:220px; overflow-y:auto; z-index:20;}
+  .chan-suggestion{padding:6px 12px; font-size:13px; cursor:pointer; border-bottom:1px solid #f4f0ea;}
+  .chan-suggestion:last-child{border-bottom:none;}
+  .chan-suggestion:hover, .chan-suggestion.active{background:var(--paper); color:var(--red-dark);}
+  .chan-suggestion mark{background:#ffe89a; color:inherit; padding:0 1px; border-radius:2px;}
   .offer-btn:hover{background:var(--red-dark);}
   footer{max-width:1080px; margin:40px auto 0; padding:20px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);}
   footer a{color:var(--red-dark);}
@@ -444,11 +449,14 @@
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="tv-streaming" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Streaming pur (sans box requise)</label>
   </div>
   <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label>Chaînes spécifiques <span style="font-weight:400; color:var(--muted); font-size:12px;">— tape une chaîne puis Entrée pour l'ajouter (logique ET : toutes les chaînes ajoutées doivent être présentes). Insensible casse/accents.</span></label>
+    <label>Chaînes spécifiques <span style="font-weight:400; color:var(--muted); font-size:12px;">— tape une chaîne, clique une suggestion ou appuie sur Entrée pour l'ajouter. Logique ET : toutes les chaînes ajoutées doivent être présentes. Insensible casse/accents.</span></label>
     <div id="tv-channel-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
-    <div style="display:flex; gap:6px;">
-      <input type="search" id="tv-channel-search" placeholder="Ex : RTS Un puis Entrée, ou beIN Sport…" style="flex:1; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
-      <button type="button" id="tv-channel-add" style="padding:8px 14px; border:1px solid var(--line); border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
+    <div style="position:relative;">
+      <div style="display:flex; gap:6px;">
+        <input type="search" id="tv-channel-search" autocomplete="off" placeholder="Ex : RTS, TF1, beIN Sport…" style="flex:1; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+        <button type="button" id="tv-channel-add" style="padding:8px 14px; border:1px solid var(--line); border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
+      </div>
+      <div id="tv-channel-suggestions" class="chan-suggestions" hidden></div>
     </div>
   </div>
 </div>
@@ -787,21 +795,122 @@ function renderChannels(item){
     ? cl.length
     : Object.values(cl).reduce((a, b) => a + (Array.isArray(b) ? b.length : 1), 0);
   return `<details class="channels-toggle"><summary>Voir les chaînes</summary><div class="channels-list">
-    <input class="chan-search" type="search" placeholder="Rechercher parmi ${totalChannels} chaînes… (ex. RTS, TF1, Sport)" oninput="filterChannels(this)" onclick="event.stopPropagation()">
+    <div class="chan-filter-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
+    <div style="position:relative; margin-bottom:8px;" onclick="event.stopPropagation()">
+      <div style="display:flex; gap:6px;">
+        <input class="chan-search" type="search" autocomplete="off" placeholder="Chercher parmi ${totalChannels} chaînes (clique une suggestion ou Entrée)" onkeydown="onChanCardKey(event, this)" oninput="updateChanCardSuggestions(this)" onfocus="updateChanCardSuggestions(this)" onblur="setTimeout(()=>{const d=this.closest('div').querySelector('.chan-suggestions'); if(d) d.hidden=true;}, 180)" style="flex:1;">
+        <button type="button" class="chan-add" onclick="addChanFilterTag(this)" style="padding:6px 12px; border:1px solid var(--line); border-radius:6px; background:var(--ink); color:#fff; font-size:12px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
+      </div>
+      <div class="chan-suggestions" hidden></div>
+    </div>
     <div class="chan-content">${inner}</div>
     <div class="chan-nomatch" hidden></div>
   </div></details>`;
 }
-function filterChannels(input){
+// Renvoie la liste des chaînes d'une carte (extrait depuis les spans .chan)
+function getCardCatalog(container){
+  return [...container.querySelectorAll(".chan-content .chan")].map(s => s.textContent);
+}
+// Highlight le fragment matché dans un nom de chaîne
+function highlightMatch(name, q){
+  if (!q) return name;
+  const norm = normChannelSearch(name);
+  const i = norm.indexOf(q);
+  if (i < 0) return name;
+  return name.slice(0, i) + "<mark>" + name.slice(i, i + q.length) + "</mark>" + name.slice(i + q.length);
+}
+function renderSuggestions(dropdown, matches, qNorm){
+  if (!matches.length) { dropdown.hidden = true; return; }
+  dropdown.innerHTML = matches
+    .map(name => `<div class="chan-suggestion" data-name="${name.replace(/"/g,"&quot;")}" onmousedown="event.preventDefault()">${highlightMatch(name, qNorm)}</div>`)
+    .join("");
+  dropdown.hidden = false;
+}
+function updateChanCardSuggestions(input){
+  const container = input.closest(".channels-list");
+  const dropdown = container.querySelector(":scope > div > .chan-suggestions") || input.closest("div").parentElement.querySelector(".chan-suggestions");
   const q = normChannelSearch(input.value.trim());
-  const container = input.parentElement;
+  if (!q) { dropdown.hidden = true; return; }
+  const catalog = getCardCatalog(container);
+  // Exclure déjà taguées
+  const alreadyTagged = new Set([...container.querySelectorAll(".chan-filter-tags .chan-tag")].map(t => t.dataset.q));
+  const matches = catalog
+    .filter(name => normChannelSearch(name).includes(q) && !alreadyTagged.has(normChannelSearch(name)))
+    .slice(0, 12);
+  renderSuggestions(dropdown, matches, q);
+  // Attacher click handlers
+  dropdown.querySelectorAll(".chan-suggestion").forEach(s => {
+    s.onclick = () => {
+      input.value = s.dataset.name;
+      addChanFilterTag(input);
+      dropdown.hidden = true;
+    };
+  });
+}
+function onChanCardKey(e, input){
+  if (e.key === "Enter") {
+    e.preventDefault();
+    // Si une suggestion est en surbrillance, l'ajouter, sinon ajouter le texte du champ
+    const container = input.closest(".channels-list");
+    const dropdown = container.querySelector(".chan-suggestions");
+    const active = dropdown && !dropdown.hidden ? dropdown.querySelector(".chan-suggestion.active") : null;
+    if (active) { input.value = active.dataset.name; }
+    addChanFilterTag(input);
+    if (dropdown) dropdown.hidden = true;
+  } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    const container = input.closest(".channels-list");
+    const dropdown = container.querySelector(".chan-suggestions");
+    if (!dropdown || dropdown.hidden) return;
+    const items = [...dropdown.querySelectorAll(".chan-suggestion")];
+    if (!items.length) return;
+    e.preventDefault();
+    let idx = items.findIndex(i => i.classList.contains("active"));
+    idx = e.key === "ArrowDown" ? (idx + 1) % items.length : (idx <= 0 ? items.length - 1 : idx - 1);
+    items.forEach(i => i.classList.remove("active"));
+    items[idx].classList.add("active");
+    items[idx].scrollIntoView({block: "nearest"});
+  } else if (e.key === "Escape") {
+    const dropdown = input.closest(".channels-list").querySelector(".chan-suggestions");
+    if (dropdown) dropdown.hidden = true;
+  }
+}
+// Ajoute un tag dans le champ de recherche de chaînes DANS UNE CARTE spécifique.
+// Reçoit l'input OU le bouton — remonte à .channels-list.
+function addChanFilterTag(elem){
+  const container = elem.closest(".channels-list");
+  const input = container.querySelector(".chan-search");
+  const raw = input.value.trim();
+  if (!raw) return;
+  const q = normChannelSearch(raw);
+  if (!q) return;
+  const tagsBox = container.querySelector(".chan-filter-tags");
+  const already = [...tagsBox.querySelectorAll(".chan-tag")].some(t => t.dataset.q === q);
+  if (already) { input.value = ""; input.focus(); return; }
+  const tag = document.createElement("span");
+  tag.className = "chan-tag";
+  tag.dataset.q = q;
+  tag.dataset.label = raw;
+  tag.innerHTML = `<span>${raw.replace(/[<>&]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]))}</span><button type="button" aria-label="Retirer" onclick="removeChanFilterTag(this)">×</button>`;
+  tagsBox.appendChild(tag);
+  input.value = "";
+  input.focus();
+  filterChannelsIn(container);
+}
+function removeChanFilterTag(btn){
+  const container = btn.closest(".channels-list");
+  btn.closest(".chan-tag").remove();
+  filterChannelsIn(container);
+}
+// Applique la logique OU : une chaîne est visible si elle matche AU MOINS un des tags.
+// Champ tags vide = pas de filtre, tout visible.
+function filterChannelsIn(container){
+  const queries = [...container.querySelectorAll(".chan-filter-tags .chan-tag")].map(t => t.dataset.q);
   let visible = 0;
   for (const s of container.querySelectorAll(".chan")) {
-    const match = !q || s.dataset.n.includes(q);
+    const match = queries.length === 0 || queries.some(q => s.dataset.n.includes(q));
     s.hidden = !match;
     if (match) visible++;
   }
-  // Cacher les groupes/titres qui n'ont plus de chaîne visible
   for (const g of container.querySelectorAll(".chan-group")) {
     const hasVisible = !!g.querySelector(".chan:not([hidden])");
     g.hidden = !hasVisible;
@@ -809,8 +918,9 @@ function filterChannels(input){
     if (h5 && h5.tagName === "H5") h5.hidden = !hasVisible;
   }
   const nm = container.querySelector(".chan-nomatch");
-  if (q && visible === 0) {
-    nm.textContent = `Aucune chaîne trouvée pour "${input.value.trim()}".`;
+  if (queries.length > 0 && visible === 0) {
+    const labels = [...container.querySelectorAll(".chan-filter-tags .chan-tag")].map(t => `"${t.dataset.label}"`).join(", ");
+    nm.textContent = `Aucune chaîne ne correspond à ${labels}.`;
     nm.hidden = false;
   } else {
     nm.hidden = true;
@@ -1259,9 +1369,70 @@ refreshTV();
   el.addEventListener("input", refreshTV);
   el.addEventListener("change", refreshTV); // Certains SELECT/checkbox ne firent pas "input" via dispatchEvent
 });
-// Tags "Chaînes spécifiques" : Entrée dans le champ = ajouter, bouton + = pareil
+// Catalogue global : union unique de toutes les chaînes réellement extraites
+// (utilisé pour l'autocomplétion du filtre haut).
+const ALL_CHANNELS_CATALOG = (() => {
+  const seen = new Map();
+  for (const item of tvData) {
+    if (!item.channelsList) continue;
+    const list = Array.isArray(item.channelsList)
+      ? item.channelsList
+      : Object.values(item.channelsList).flat();
+    for (const name of list) {
+      const n = normChannelSearch(name);
+      if (!seen.has(n)) seen.set(n, name);
+    }
+  }
+  return [...seen.values()].sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
+})();
+
+function updateTopSuggestions() {
+  const input = document.getElementById("tv-channel-search");
+  const dropdown = document.getElementById("tv-channel-suggestions");
+  const q = normChannelSearch(input.value.trim());
+  if (!q) { dropdown.hidden = true; return; }
+  const already = new Set([...document.querySelectorAll("#tv-channel-tags .chan-tag")].map(t => t.dataset.q));
+  const matches = ALL_CHANNELS_CATALOG
+    .filter(name => normChannelSearch(name).includes(q) && !already.has(normChannelSearch(name)))
+    .slice(0, 12);
+  renderSuggestions(dropdown, matches, q);
+  dropdown.querySelectorAll(".chan-suggestion").forEach(s => {
+    s.onclick = () => {
+      input.value = s.dataset.name;
+      addChannelSearchTag();
+      dropdown.hidden = true;
+    };
+  });
+}
+
+// Tags "Chaînes spécifiques" (filtre haut) : Entrée = ajouter, bouton + = pareil,
+// clic sur suggestion = ajouter directement.
+document.getElementById("tv-channel-search").addEventListener("input", updateTopSuggestions);
+document.getElementById("tv-channel-search").addEventListener("focus", updateTopSuggestions);
+document.getElementById("tv-channel-search").addEventListener("blur", () => {
+  // Délai pour laisser le clic sur suggestion se déclencher avant que le blur cache le dropdown
+  setTimeout(() => { document.getElementById("tv-channel-suggestions").hidden = true; }, 180);
+});
 document.getElementById("tv-channel-search").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") { e.preventDefault(); addChannelSearchTag(); }
+  const dropdown = document.getElementById("tv-channel-suggestions");
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const active = !dropdown.hidden ? dropdown.querySelector(".chan-suggestion.active") : null;
+    if (active) e.currentTarget.value = active.dataset.name;
+    addChannelSearchTag();
+    dropdown.hidden = true;
+  } else if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !dropdown.hidden) {
+    const items = [...dropdown.querySelectorAll(".chan-suggestion")];
+    if (!items.length) return;
+    e.preventDefault();
+    let idx = items.findIndex(i => i.classList.contains("active"));
+    idx = e.key === "ArrowDown" ? (idx + 1) % items.length : (idx <= 0 ? items.length - 1 : idx - 1);
+    items.forEach(i => i.classList.remove("active"));
+    items[idx].classList.add("active");
+    items[idx].scrollIntoView({ block: "nearest" });
+  } else if (e.key === "Escape") {
+    dropdown.hidden = true;
+  }
 });
 document.getElementById("tv-channel-add").addEventListener("click", addChannelSearchTag);
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
