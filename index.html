@@ -106,6 +106,31 @@
           "@type": "Question",
           "name": "Comparasuisse est-il vraiment un comparateur indépendant ?",
           "acceptedAnswer": {"@type": "Answer", "text": "Oui. Comparasuisse n'est affilié à aucun opérateur télécom suisse. Le site est financé par des commissions d'affiliation qui ne modifient ni le prix payé par le client, ni le classement des offres, toujours trié par prix mensuel croissant. La méthodologie de vérification des prix est documentée dans les mentions légales."}
+        },
+        {
+          "@type": "Question",
+          "name": "Quel réseau utilisent GoMo et Spusu en Suisse ?",
+          "acceptedAnswer": {"@type": "Answer", "text": "GoMo et Spusu utilisent tous les deux le réseau Salt. GoMo est la marque low-cost lancée par Salt (leur propre page d'aide renvoie vers salt.ch pour les questions d'interruption réseau). Spusu est un opérateur virtuel d'origine autrichienne présent en Suisse depuis peu, opérant lui aussi sur l'infrastructure Salt. Les deux exploitent donc la même couverture 5G qu'un abonnement Salt direct."}
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que MaxiConnect et pourquoi peut-on choisir son réseau ?",
+          "acceptedAnswer": {"@type": "Answer", "text": "MaxiConnect est un opérateur 100% suisse (basé à Cortaillod, Neuchâtel) qui propose une particularité rare sur le marché suisse : sur ses forfaits MaxiMobile Classic et Plus, le client peut choisir à la souscription entre le réseau Salt ou le réseau Swisscom, au même prix. Les forfaits Small et Start sont uniquement sur Swisscom, l'Ultra est uniquement sur Salt. Cette flexibilité permet de choisir la meilleure couverture selon sa zone géographique. Support suisse 7j/7 de 7h à 21h."}
+        },
+        {
+          "@type": "Question",
+          "name": "Netplus va-t-il changer de réseau mobile ?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Oui. Historiquement, Netplus (câblo-opérateur romand basé à Sierre, actif surtout en Valais, Vaud et Fribourg) utilise le réseau mobile Sunrise pour ses abonnements MobiGo, MobiSwiss et MobiEuro. En juin 2026, ICTjournal a annoncé la bascule prochaine de Netplus vers le réseau Swisscom, dans une architecture full MVNO où Transatel opérera le cœur de réseau. La migration effective est prévue prochainement — les clients existants seront basculés sans intervention. En attendant, les offres Netplus mobile restent sur Sunrise."}
+        },
+        {
+          "@type": "Question",
+          "name": "Quels fournisseurs internet suisses autorisent l'utilisation de son propre routeur ?",
+          "acceptedAnswer": {"@type": "Answer", "text": "iWay et Init7 sont les deux fournisseurs internet suisses qui autorisent explicitement l'utilisation de votre propre routeur (Fritz!Box, MikroTik, UniFi, pfSense, etc.) au lieu d'imposer le leur. Les deux prêtent un routeur WLAN si vous n'avez pas de préférence, mais n'obligent pas son usage. La majorité des autres FAI suisses (Swisscom, Sunrise, Salt, yallo, Wingo) livrent leur propre box configurée et n'autorisent pas de matériel tiers en accès direct. Cette liberté est particulièrement recherchée par les utilisateurs techniques."}
+        },
+        {
+          "@type": "Question",
+          "name": "Parmi les nouveaux opérateurs ajoutés, quel est le mobile le moins cher ?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Parmi les opérateurs récemment ajoutés (Netplus, iWay, GoMo, Spusu, MaxiConnect), le moins cher est Spusu Small à 9.90 CHF/mois avec 10 Go de data 5G en Suisse dont 3 Go de roaming UE inclus, appels/SMS illimités, sur le réseau Salt, sans engagement. MaxiMobile Small est également à 9.90 CHF mais avec seulement 5 Go et sans roaming, uniquement sur Swisscom. Vient ensuite GoMo Suisse à 12.95 CHF/mois avec data illimitée en Suisse. Le classement global du marché suisse reste toutefois dominé par Quickline Mobile L à 9.— CHF/mois (promo 24 mois)."}
         }
       ]
     }
@@ -1130,12 +1155,21 @@ document.querySelectorAll(".tab").forEach(tab=>{
   });
 });
 
+// Date de référence pour l'affichage du statut des promos (utilisée par refreshPromo).
+// Fixée à minuit pour éviter des sauts d'heure en heure.
+const TODAY = new Date();
+TODAY.setHours(0, 0, 0, 0);
+
 refreshMobile();
 refreshInternet();
 refreshCombo();
 refreshPromo();
 refreshTV();
-["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => document.getElementById(id).addEventListener("input", refreshTV));
+["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("input", refreshTV);
+  el.addEventListener("change", refreshTV); // Certains SELECT/checkbox ne firent pas "input" via dispatchEvent
+});
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
 ["combo-replay","combo-recording","combo-speed","combo-speed-max"].forEach(id => document.getElementById(id).addEventListener("input", refreshCombo));
@@ -1196,7 +1230,9 @@ buildStructuredData();
 </script>
 
 <section id="faq" class="wrap" style="margin-top:48px;">
-  <h2 style="font-size:22px; letter-spacing:-0.3px; margin:0 0 18px; color:var(--ink);">Questions fréquentes</h2>
+  <details class="faq-toplevel" style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 22px;">
+    <summary style="cursor:pointer; list-style:none; user-select:none;"><h2 style="display:inline-flex; align-items:center; gap:10px; font-size:22px; letter-spacing:-0.3px; margin:0; color:var(--ink);"><span class="faq-caret" style="display:inline-block; font-size:14px; color:var(--red-dark); transition:transform .15s;">▶</span>Questions fréquentes</h2></summary>
+    <div style="margin-top:14px;">
 
   <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
     <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Quel est l'abonnement mobile le moins cher en Suisse en 2026 ?</h3></summary>
@@ -1246,6 +1282,34 @@ buildStructuredData();
   <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
     <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Comparasuisse est-il vraiment un comparateur indépendant ?</h3></summary>
     <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;">Oui. Comparasuisse n'est affilié à aucun opérateur télécom suisse. Le site est financé par des commissions d'affiliation (les liens marqués 🤝 Partenaire) qui <b>ne modifient ni le prix payé par le client, ni le classement des offres</b>, toujours trié par prix mensuel croissant. La méthodologie de vérification des prix (via Playwright sur les pages produit officielles des opérateurs) est documentée dans les <a href="mentions-legales.html">mentions légales</a>.</p>
+  </details>
+
+  <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Quel réseau utilisent GoMo et Spusu en Suisse ?</h3></summary>
+    <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;">GoMo et Spusu utilisent tous les deux le <b>réseau Salt</b>. GoMo est la marque low-cost lancée par Salt (leur propre page d'aide renvoie vers <a href="https://www.salt.ch/fr/mobile/network-and-service-interruptions" target="_blank" rel="noopener">salt.ch</a> pour les questions d'interruption réseau). Spusu est un opérateur virtuel d'origine autrichienne présent en Suisse depuis peu, opérant lui aussi sur l'infrastructure Salt. Les deux exploitent donc la même couverture 5G qu'un abonnement Salt direct, à un prix nettement inférieur.</p>
+  </details>
+
+  <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Qu'est-ce que MaxiConnect et pourquoi peut-on choisir son réseau ?</h3></summary>
+    <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;"><b>MaxiConnect</b> est un opérateur 100% suisse (basé à Cortaillod, Neuchâtel) qui propose une particularité rare sur le marché : sur ses forfaits <b>MaxiMobile Classic et Plus</b>, le client choisit à la souscription entre le <b>réseau Salt ou Swisscom, au même prix</b> — ce qui permet de sélectionner la meilleure couverture selon sa zone géographique. Les forfaits Small et Start sont uniquement sur Swisscom, tandis que l'Ultra est uniquement sur Salt. Cette flexibilité est unique sur le marché suisse et le support client 7j/7 est basé en Suisse.</p>
+  </details>
+
+  <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Netplus va-t-il changer de réseau mobile ?</h3></summary>
+    <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;">Oui. Historiquement, <b>Netplus</b> (câblo-opérateur romand basé à Sierre, actif surtout en Valais, Vaud et Fribourg) utilise le <b>réseau mobile Sunrise</b> pour ses abonnements MobiGo, MobiSwiss et MobiEuro. En <b>juin 2026</b>, <a href="https://www.ictjournal.ch/news/2026-06-09/net-bascule-son-offre-mobile-sur-linfrastructure-de-swisscom" target="_blank" rel="noopener">ICTjournal</a> a annoncé la bascule prochaine de Netplus vers le <b>réseau Swisscom</b>, dans une architecture full MVNO avec Transatel opérant le cœur de réseau. Migration effective annoncée « prochainement » — les clients existants seront basculés sans intervention. En attendant, les offres Netplus mobile restent sur Sunrise.</p>
+  </details>
+
+  <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Quels fournisseurs internet suisses autorisent l'utilisation de son propre routeur ?</h3></summary>
+    <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;"><b>iWay et Init7</b> sont les deux fournisseurs internet suisses qui autorisent explicitement l'utilisation de votre propre routeur (Fritz!Box, MikroTik, UniFi, pfSense, etc.) au lieu d'imposer le leur en location. Les deux prêtent un routeur WLAN si vous n'avez pas de préférence, mais n'obligent pas son usage. La majorité des autres FAI suisses (Swisscom, Sunrise, Salt, yallo, Wingo) livrent leur propre box configurée et n'autorisent pas facilement de matériel tiers. Cette liberté est particulièrement recherchée par les utilisateurs techniques — elle est signalée par le badge 🔧 « Routeur perso autorisé » sur les offres concernées de ce comparateur.</p>
+  </details>
+
+  <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Parmi les nouveaux opérateurs ajoutés, quel est le mobile le moins cher ?</h3></summary>
+    <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;">Parmi les opérateurs récemment ajoutés au comparateur (Netplus, iWay, GoMo, Spusu, MaxiConnect), le moins cher est <b>Spusu Small à 9.90 CHF/mois</b> avec 10 Go de data 5G en Suisse dont 3 Go de roaming UE inclus, appels et SMS illimités, sur le réseau Salt, sans engagement. <b>MaxiMobile Small</b> est également à 9.90 CHF/mois mais avec seulement 5 Go et sans roaming, uniquement sur Swisscom. Vient ensuite <b>GoMo Suisse à 12.95 CHF/mois</b> avec data illimitée en Suisse. Le classement global du marché suisse reste toutefois dominé par <b>Quickline Mobile L à 9.— CHF/mois</b> (promo 24 mois, data illimitée + 5 Go roaming).</p>
+  </details>
+
+    </div>
   </details>
 </section>
 
