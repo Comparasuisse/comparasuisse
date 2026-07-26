@@ -76,15 +76,67 @@ function makeRng(seed) {
 // "39.-/mois", "Fr. 12.90", etc. Les 2 décimales sont OPTIONNELLES.
 const PRICE_RE =
   /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*mois|\/mois)/gi;
+
+// Normalise le texte AVANT extraction pour rejoindre les prix coupés par des
+// sauts de ligne. Ex. sur salt.ch/swiss-max le prix est rendu :
+//   "23\n.95\n/mois" (chaque token dans un <span>, innerText insère \n).
+// Sans cette étape, le regex ci-dessus rate ces prix → faux "ÉCART" dans l'audit.
+// Cas couverts :
+//   "23\n.95"     → "23.95"
+//   "4 . 50"      → "4.50"
+//   "12\n,\n95"   → "12,95"  (comma preserved, regex accepte ['.,])
+//   "23.-"        → "23.-"   (dash decimals inchangé)
+function normalizePriceFragments(text) {
+  return text
+    // Fusionne "chiffre \s* [.,] \s* deux chiffres" quand le séparateur ou l'un des
+    // deux membres est séparé par des whitespace (dont newline).
+    .replace(/(\d{1,3})\s+([.,])\s*(\d{2})\b/g, "$1$2$3")
+    .replace(/(\d{1,3})([.,])\s+(\d{2})\b/g, "$1$2$3")
+    // Fusionne "chiffre \n .- /mois" (rare mais vu chez Wingo)
+    .replace(/(\d{1,3})\s*\n\s*\.[-–]/g, "$1.-");
+}
+
 function extractPrices(text) {
+  const normalized = normalizePriceFragments(text);
   const out = new Set();
   let m;
-  while ((m = PRICE_RE.exec(text)) !== null) {
+  while ((m = PRICE_RE.exec(normalized)) !== null) {
     const raw = (m[1] || m[2]).replace(",", ".");
     const n = parseFloat(raw);
     if (!isNaN(n) && n >= 1 && n < 1000) out.add(n.toFixed(2));
   }
   return [...out].sort((a, b) => parseFloat(a) - parseFloat(b));
+}
+
+// Tests inline (self-check au démarrage) — signalent tout de suite si un
+// changement de regex/normalisation casse un des cas connus.
+// Note : ce regex ne capture QUE les prix explicitement marqués (CHF, Fr.,
+// "/mois", ".-"). Les prix nus type "au lieu de 73.95" ne sont pas capturés
+// délibérément — trop de faux positifs sur des durées, dates, codes postaux.
+// Conséquence acceptée : le prix "au lieu de X" peut manquer dans pricesOnPage.
+// Ce n'est pas grave pour l'audit puisqu'on cherche à confirmer notre item.price
+// principal, pas les catalogues barrés.
+const _tests = [
+  { in: "CHF 23.95/mois", expect: ["23.95"] },
+  { in: "23\n.95\n/mois", expect: ["23.95"] },
+  { in: "CHF\n4\n.\n50", expect: ["4.50"] },
+  { in: "CHF 39", expect: ["39.00"] },
+  { in: "Fr. 12.90/mois", expect: ["12.90"] },
+  { in: "CHF 39.-", expect: ["39.00"] },
+  { in: "22,90 CHF", expect: ["22.90"] },
+];
+let _passed = 0, _failed = [];
+for (const t of _tests) {
+  const got = extractPrices(t.in);
+  const missing = t.expect.filter(e => !got.includes(e));
+  if (missing.length) _failed.push({ in: t.in.replace(/\n/g, "\\n"), got, missing });
+  else _passed++;
+}
+if (_failed.length) {
+  console.error(`⚠️ regex self-check : ${_passed}/${_tests.length} OK, ${_failed.length} FAIL`);
+  for (const f of _failed) console.error(`   "${f.in}" → [${f.got.join(",")}] (manque ${f.missing.join(",")})`);
+} else if (process.env.DEBUG_REGEX) {
+  console.log(`✓ regex self-check : ${_passed}/${_tests.length} tests OK`);
 }
 
 // === Vérification d'une offre ===
