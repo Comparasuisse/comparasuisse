@@ -63,6 +63,29 @@ au fur et à mesure des audits ou modifications.
 
 ---
 
+## ⚠️ Rappel critique : checkbox de filtre à mettre à jour
+
+Après avoir ajouté une entrée à `tvData` ou `comboData` avec un `operator` qui
+n'existe pas encore dans les checkboxes de filtre correspondantes, il FAUT
+**impérativement** ajouter la checkbox `<input data-op="OperatorName">` dans le
+HTML :
+
+- `tvData` avec nouveau operator → ajouter dans `#tv-operator`
+- `comboData` avec nouveau operator → ajouter dans `#combo-operator`
+
+Sinon l'offre est **invisible silencieusement** : `selectedOps.includes(operator)`
+retourne `false` par défaut → l'offre est filtrée out sans erreur console.
+Le compteur affichera "N-1 / N offre(s)" et la grille manquera une carte.
+
+Bug déjà survenu 2 fois : sur TV (Init7/Netplus/iWay/MaxiConnect/Teleking/
+CanalPlus) et sur combo (Talk Talk).
+
+Les onglets Mobile et Internet utilisent des checkboxes de RÉSEAU (pas
+d'opérateur), donc ce bug ne peut pas y survenir pour un nouvel opérateur
+sur un réseau existant. Il ne peut survenir que si on introduit un nouveau
+type de réseau (comme "regional" pour Netplus/Quickline internet — checkbox
+"Câble régional" ajoutée à ce moment-là).
+
 ## Workflow standard à chaque ajout
 
 1. **Fetch live** de la page produit officielle (WebFetch, puis Playwright si JS lourd)
