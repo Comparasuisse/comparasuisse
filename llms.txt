@@ -1,0 +1,44 @@
+# Comparasuisse
+
+> Comparateur indépendant des abonnements mobile, internet et TV en Suisse. Prix vérifiés manuellement sur les sites officiels des opérateurs, classement neutre par prix croissant, financé par affiliation sans impact sur le prix payé par le client.
+
+Le site compare 92 offres mobile, 32 offres internet fixe, 24 offres TV, 8 offres combinées Internet + TV et 12 promotions actives, couvrant tous les opérateurs suisses : les trois opérateurs de réseau (Swisscom, Sunrise, Salt), leurs marques secondaires (Wingo, Yallo, GoMo, M-Budget, Migros Mobile, Coop Mobile, Post Mobile, etc.), les câblo-opérateurs régionaux (Netplus, Quickline), et les MVNO indépendants (Digital Republic, Talk Talk, Aldi Mobile, Lidl Connect, Mucho Mobile, Spusu, Mtel, VTX, etc.).
+
+## Pages principales
+
+- [Comparateur mobile / internet / TV](https://comparasuisse.ch/): interface interactive avec filtres par réseau, prix max, quotas data Suisse et roaming, appels illimités, restriction d'âge, débit internet, nombre de chaînes TV, replay et enregistrement TV, recherche par chaîne spécifique
+- [Mentions légales et transparence](https://comparasuisse.ch/mentions-legales.html): éditeur du site, modèle économique par affiliation, garantie de neutralité du classement, mention des offres privées SMS/email, données personnelles (conforme nLPD suisse)
+- [FAQ](https://comparasuisse.ch/#faq): 18 questions et réponses détaillées sur les opérateurs suisses, les MVNO, le roaming, la portabilité du numéro, les rabais à vie, les offres jeunes, et le fonctionnement du comparateur
+
+## Contenu comparé
+
+- **Mobile** : 92 offres réparties sur les 3 réseaux suisses (Swisscom, Sunrise, Salt) — abonnements traditionnels, MVNO low-cost (Mucho Nano 4.50, Spusu 1 4.80, Quickline Mobile L 9.-), offres jeunes avec restriction d'âge (Sunrise Young < 27 ans), offres à rabais à vie
+- **Internet fixe** : 32 offres — fibre jusqu'à 10 Gbit/s, DSL, câble régional (Netplus/Quickline), internet mobile 4G/5G résidentiel (Digital Republic, Talk Talk Home)
+- **TV** : 24 offres — streaming pur (Zattoo, Teleboy, Sky), TV via box (blue TV, Wingo TV, Sunrise TV), offres régionales (Netplus TV, iWay TV via Wilmaa, Init7 TV7 gratuit avec Fiber7), plateformes internationales (CANAL+ Suisse)
+- **Internet + TV combiné** : 8 offres — bundles économiques (yallo Home Supermax + TV dès 37.90)
+- **Promotions actives** : 12 offres à durée limitée mises à jour à chaque revérification manuelle
+
+## Méthodologie de vérification
+
+- Prix vérifiés directement sur les sites officiels des opérateurs via fetch web et navigation Playwright
+- Chaque entrée porte deux champs de traçabilité : `sourceType` (factsheet-pdf, product-page, third-party ou assumption) et `verifiedAt` (date ISO de dernière vérification)
+- Audit périodique manuel sur échantillon aléatoire via un script Node dédié (`scripts/audit-random.mjs`) qui compare les prix affichés avec les prix sur les pages officielles
+- Extraction automatisée des listes de chaînes TV depuis les PDFs officiels des opérateurs (Wingo, Netplus) et pages HTML (Teleboy, Zattoo, Init7)
+- Aucun rabais spécial pour les partenaires affiliés — classement strictement par prix mensuel croissant, quelle que soit la source de revenu
+
+## Modèle économique
+
+Le site est financé par les commissions d'affiliation sur les liens marqués « 🤝 Partenaire » (Awin, alao.ch, Migros Mobile, Coop Mobile, distributeurs directs). Ces commissions sont payées par le distributeur sur sa propre marge — le client ne paie pas un centime de plus qu'en allant directement chez l'opérateur. Les offres sans programme d'affiliation accessible sont malgré tout affichées avec les mêmes règles de classement. La neutralité du classement est une obligation légale en Suisse (LCD Art. 3 al. 1 lit. b et e).
+
+## Sujets couverts par la FAQ
+
+- Prix : quel est l'abonnement mobile le moins cher en Suisse en 2026, quels forfaits ont un rabais à vie, peut-on avoir Internet + TV à moins de 40 CHF
+- Réseaux : quel réseau utilise Wingo, Yallo, Coop Mobile, Migros Mobile, GoMo, Spusu, iWay, Netplus, Sky Mobile, Post Mobile, Talk Talk, MaxiConnect
+- Concepts techniques : qu'est-ce qu'un MVNO en Suisse, différence entre roaming inclus et roaming illimité, comment garder son numéro en changeant d'opérateur
+- Marques : GoMo est-il fiable, différence entre Zattoo Premium et Ultimate, Sunrise TV existe-t-il en standalone, MaxiConnect et son choix de réseau, Netplus va-t-il changer de réseau mobile
+- Fournisseurs internet : quels FAI suisses autorisent l'utilisation de son propre routeur
+
+## Contact
+
+- Email : contact@comparasuisse.ch
+- Éditeur : Cyril Cicero, Escaliers Jean Daetwyler 7, 3960 Sierre (Suisse)
