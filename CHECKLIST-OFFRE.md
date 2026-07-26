@@ -63,6 +63,37 @@ au fur et à mesure des audits ou modifications.
 
 ---
 
+## 📅 Bump automatique de la date « Prix vérifiés le »
+
+Le footer d'index.html contient une ligne :
+```html
+<span style="opacity:.7;">Prix vérifiés le [date]</span>
+```
+
+**Règle** : bumper cette date à la date du jour dans **chaque commit qui
+contient au moins une vraie vérification de prix**, sans attendre que
+l'utilisateur le demande.
+
+**Qui compte comme « vraie vérification » — bumper :**
+- Ajout d'une offre avec `sourceType: "product-page"` ou `"factsheet-pdf"`
+  (fetch direct site officiel)
+- Correction de prix confirmée par vérif live (Playwright / WebFetch)
+- Passage de `audit-random.mjs` qui confirme un prix, même si aucun
+  changement au final — le fait d'avoir revérifié compte
+- Mise à jour de `verifiedAt` sur une entrée existante
+
+**Qui ne compte PAS — laisser la date telle quelle :**
+- Corrections de bugs UI/JS (filtres, badges, checkboxes)
+- Ajout de fonctionnalités interface (comparaison, filtres, tri)
+- Refactor CSS/design/textes descriptifs sans changement de prix
+- Ajout de scripts sans vérif concrète
+- Documentation (checklist, mentions légales, README)
+
+**Why** : la date doit rester honnête pour le visiteur. « Prix vérifiés
+aujourd'hui » ne doit pas signifier « j'ai poussé un commit UI » mais
+bien « j'ai revérifié au moins un prix directement sur un site
+officiel aujourd'hui ».
+
 ## ⚠️ Rappel critique : checkbox de filtre à mettre à jour
 
 Après avoir ajouté une entrée à `tvData` ou `comboData` avec un `operator` qui
