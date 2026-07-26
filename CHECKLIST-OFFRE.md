@@ -63,6 +63,32 @@ au fur et à mesure des audits ou modifications.
 
 ---
 
+## 📈 Historique de prix (`priceHistory`) — ajout automatique
+
+Chaque offre peut porter un tableau `priceHistory: [{date:"YYYY-MM-DD", price:X.XX}, …]`
+qui sert à générer un sparkline visible sur la carte quand ≥ 2 points existent.
+
+**Règle transparence** : jamais de graphique avec un seul point (rien affiché
+tant qu'on n'a pas au moins 2 vérifications à des dates différentes). La
+mention « Suivi depuis DD MMM YYYY » apparaît sous le graphique.
+
+**Quand ajouter un point** :
+- **Ajout d'offre** avec `verifiedAt` + `sourceType` → 1 point initial
+  (le script backfill `data:{date:verifiedAt, price:currentPrice}`).
+- **Correction de prix** confirmée par vérif live → utiliser
+  `node scripts/append-price-point.mjs "<name>" <price>` qui bumpe aussi verifiedAt.
+- **Audit automatique** (`node scripts/audit-random.mjs N --history`) → ajoute
+  un point uniquement si verdict OK et si dernier point > 30 jours (évite le
+  bruit d'audits successifs sur des prix inchangés, tout en gardant une trace
+  de vie du suivi dans le graphique sur la durée).
+
+**Quand NE PAS ajouter** :
+- Prix inchangé et dernier point < 30 jours → skip (bruit inutile).
+- Verdict ÉCART, PAGE_VIDE, URL_MORTE ou ERREUR d'audit → aucune conclusion
+  fiable, revue humaine nécessaire avant tout ajout.
+- Offres sans `verifiedAt` → le helper refuse, il faut d'abord documenter
+  la source (règle du workflow).
+
 ## 📅 Bump automatique de la date « Prix vérifiés le »
 
 Le footer d'index.html contient une ligne :
@@ -147,6 +173,20 @@ Le rapport liste les écarts détectés (prix non trouvé sur la page, page 404,
 pour revue humaine — pas d'auto-correction.
 
 ---
+
+## 🗓 Rappels temporels à revérifier manuellement
+
+Certaines évolutions annoncées à l'avance méritent une revérif ciblée à la
+date effective pour capter le changement dans `priceHistory`. Cocher/mettre
+à jour au fur et à mesure.
+
+- **Semaine du 18-20 septembre 2026** : revérifier manuellement TOUTES les
+  offres Wingo (mobile + internet + TV + combo + promo, ~19 entrées) pour
+  capter la hausse annoncée +1 CHF/mois et la migration vers de nouveaux
+  plans (période officielle 1-18 septembre 2026, source
+  wingo.ch/fr/adaptation-2026). Ce sera le **premier vrai test grandeur
+  nature** du système priceHistory — le premier changement de prix visible
+  sur les sparklines depuis leur lancement le 26 juillet 2026.
 
 ## Ce que cette méthode ne peut PAS attraper
 

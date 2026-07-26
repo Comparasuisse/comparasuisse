@@ -185,8 +185,14 @@ async function checkOffer(ctx, item, category) {
 }
 
 // === Pipeline principal ===
-const N = parseInt(process.argv[2]) || 10;
-const CATEGORY = process.argv[3] || null; // "mobile" | "internet" | "tv" | "combo" | "promo"
+// Flags optionnels : --history pour ajouter automatiquement des points priceHistory
+// dans index.html après un verdict OK confirmé.
+const args = process.argv.slice(2).filter(a => !a.startsWith("--"));
+const APPLY_HISTORY = process.argv.includes("--history");
+const N = parseInt(args[0]) || 10;
+const CATEGORY = args[1] || null; // "mobile" | "internet" | "tv" | "combo" | "promo"
+
+const DAYS_BEFORE_CONFIRM_POINT = 30; // ne pas polluer priceHistory avec des points inchangés < 30j
 
 const data = loadData();
 const pool = [];
@@ -275,3 +281,50 @@ const outPath = `data/audit-${today}.md`;
 fs.writeFileSync(outPath, md.join("\n"));
 console.log(`\n✅ Rapport écrit dans ${outPath}`);
 console.log(`   Résumé : ${Object.entries(counts).map(([k, v]) => `${k}=${v}`).join(", ")}`);
+
+// === Append automatique dans priceHistory si flag --history ===
+// Règle : verdict OK (prix confirmé sur la page) → ajouter un point uniquement
+// si dernier point priceHistory > 30 jours (évite le bruit d'audits successifs
+// mais garantit une "trace de vie" du suivi dans le graphique sur la durée).
+if (APPLY_HISTORY) {
+  const daysBetween = (d1, d2) =>
+    Math.abs((new Date(d1) - new Date(d2)) / (1000 * 60 * 60 * 24));
+  let html = fs.readFileSync("index.html", "utf8");
+  let appended = 0, skipped = 0;
+  for (const { item, result } of results) {
+    if (result.status !== "OK") continue; // seuls les verdicts OK confirment un prix
+    if (typeof item.price !== "number") continue;
+    const existing = Array.isArray(item.priceHistory) ? item.priceHistory : [];
+    const last = existing[existing.length - 1];
+    if (last && last.date === today) { skipped++; continue; }
+    if (last && daysBetween(last.date, today) < DAYS_BEFORE_CONFIRM_POINT) {
+      skipped++;
+      continue;
+    }
+    // Injection : mettre à jour priceHistory de l'entrée dans index.html.
+    // Cible via name + operator (comme apply-channels.mjs).
+    const nameEsc = item.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const entryRe = new RegExp(
+      `(name:"${nameEsc}"[^}]*?priceHistory:\\[)([^\\]]*)(\\])`,
+      ""
+    );
+    const m = html.match(entryRe);
+    if (!m) {
+      // Pas encore de priceHistory, on l'ajoute juste après verifiedAt
+      const verifRe = new RegExp(
+        `(name:"${nameEsc}"[^}]*?verifiedAt:"[^"]+")`,
+        ""
+      );
+      if (verifRe.test(html)) {
+        html = html.replace(verifRe, `$1, priceHistory:[{date:"${today}",price:${item.price}}]`);
+        appended++;
+      }
+      continue;
+    }
+    const newPoint = `,{date:"${today}",price:${item.price}}`;
+    html = html.replace(entryRe, `$1$2${newPoint}$3`);
+    appended++;
+  }
+  fs.writeFileSync("index.html", html);
+  console.log(`   priceHistory : ${appended} point(s) ajouté(s), ${skipped} skip(s) (< ${DAYS_BEFORE_CONFIRM_POINT}j depuis dernier point)`);
+}
