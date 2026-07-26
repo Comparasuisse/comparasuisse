@@ -309,7 +309,7 @@
 
 
 <div class="tabs">
-  <div class="tab active" data-tab="mobile">📱 Mobile (78 offres)</div>
+  <div class="tab active" data-tab="mobile">📱 Mobile (80 offres)</div>
   <div class="tab" data-tab="internet">🌐 Internet (23 offres)</div>
   <div class="tab" data-tab="tv">📺 TV (24 offres)</div>
   <div class="tab" data-tab="combo">📦 Internet + TV</div>
@@ -656,8 +656,11 @@ const mobileData = [
   {name:"Mtel Sweazy Extreme", network:"salt", price:14.95, details:"20 Go (CH) + 100 Go roaming Europe/UK/Norvège + illim voix/SMS (CH) — engagement 24 mois. Réseau Salt", roamData:"100 Go (UE/UK/NOR)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:20, roamDataGB:100, countries:["UE","UK"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://www.mtel.ch/fr/"},
   {name:"Mtel My World L", network:"salt", price:19.95, details:"50 Go (CH) + 50 Go roaming Balkans/UE + 5000 min/SMS Europe+Balkans — offre orientée diaspora, engagement 24 mois. Réseau Salt", roamData:"50 Go (Balkans, UE) + 5000 min voix", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:50, roamDataGB:50, countries:["UE","BALKANS"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://www.mtel.ch/fr/", callsToAbroad:5000},
   {name:"Mtel My World Extreme", network:"salt", price:22.95, details:"30 Go dans 70+ pays + 200 Go roaming Europe/Balkans + illim voix/SMS — offre premium diaspora, engagement 24 mois. Réseau Salt", roamData:"30 Go (70+ pays) + 200 Go (UE/Balkans)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:200, countries:["UE","BALKANS","WORLD"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://www.mtel.ch/fr/"},
-  // Sunrise Fresh — offre <30 ans (démo du système ageRestriction)
-  {name:"Sunrise Fresh Swiss Unlimited", network:"sunrise", price:29.90, promo:true, beforePrice:51.90, promoNote:"réservé aux moins de 30 ans", ageRestriction:"30 ans", details:"Illim voix/SMS/data 5G (CH) — 5G limitée à 50 Mbit/s. Rabais 50% sur l'abonnement demi-tarif CFF jusqu'à 30 ans. ⚠️ Bascule automatique vers plan adulte plus cher à 28 ans", roamData:"Aucune", roaming:false, chUnlimited:true, roamUnlimited:null, chDataGB:Infinity, roamDataGB:0, countries:["CH"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://sunrise.ch/fr/clients-prives/mobil/freedom-young/young-swiss-unlimited.html"},
+  // Sunrise Young — 3 plans réservés aux moins de 27 ans (marque "Fresh" retirée en 2024, remplacée par "Young")
+  // Prix affichés = nouveaux prix valables dès 01.08.2026 (page sunrise.ch officielle les affiche déjà)
+  {name:"Sunrise Swiss Connect Neighbors Young", network:"sunrise", price:34.95, ageRestriction:"27 ans", details:"Illim voix/data (CH) + illim voix/data dans les pays voisins (FR/IT/DE/AT/LI) + 100 Mo + 10 min reste Europe. Engagement 12 mois. Activation offerte (au lieu de 59.90). Réduction 50% CFF demi-tarif + jusqu'à 25% festivals & events", roamData:"Illim (pays voisins) + 100 Mo (reste UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://www.sunrise.ch/fr/mobile/young"},
+  {name:"Sunrise Swiss Connect Europe+ Young", network:"sunrise", price:39.95, ageRestriction:"27 ans", details:"Illim voix/data (CH + Europe) + 5 Go data USA/Canada. Bestseller de la gamme Sunrise Young. Engagement 12 mois. Activation offerte. Réduction 50% CFF demi-tarif", roamData:"Illim (Europe) + 5 Go (USA/CAN)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","USA","CAN"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://www.sunrise.ch/fr/mobile/young"},
+  {name:"Sunrise Swiss Connect Global Young", network:"sunrise", price:49.95, ageRestriction:"27 ans", details:"Illim voix/data (CH + Europe dont Turquie + USA + Canada) + illim appels depuis la Suisse vers ces destinations + 100 Mo reste monde. Engagement 12 mois. Activation offerte. Réduction 50% CFF demi-tarif", roamData:"Illim (UE+Turquie+USA+CAN) + 100 Mo (monde)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","USA","CAN","WORLD"], sourceType:"product-page", verifiedAt:"2026-07-26", url:"https://www.sunrise.ch/fr/mobile/young", callsToAbroad:Infinity},
 ];
 
 const internetData = [
