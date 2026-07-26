@@ -380,7 +380,8 @@
     </div>
   </div>
   <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="mobile-hide-age" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Cacher les offres avec restriction d'âge (Sunrise Fresh, plans « young », etc.)</label>
+    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer; margin-bottom:6px;"><input type="checkbox" id="mobile-only-young" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Afficher uniquement les offres pour les jeunes (avec restriction d'âge)</label>
+    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="mobile-hide-age" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Masquer les offres avec restriction d'âge</label>
   </div>
 </div>
 
@@ -1463,6 +1464,7 @@ function refreshMobile(){
 
   const selectedNets = [...document.querySelectorAll('#mobile-network input:checked')].map(i => i.dataset.net);
   const hideAgeRestricted = document.getElementById("mobile-hide-age").checked;
+  const onlyYoung = document.getElementById("mobile-only-young").checked;
   const chVal = parseInt(document.getElementById("mobile-ch-unlimited").value);
   const chMaxVal = parseInt(document.getElementById("mobile-ch-max").value);
   const roamVal = parseInt(document.getElementById("mobile-roaming").value);
@@ -1501,6 +1503,7 @@ function refreshMobile(){
     const nets = d.networkChoice || [d.network];
     if (!nets.some(n => selectedNets.includes(n))) return false;
     if (hideAgeRestricted && d.ageRestriction) return false;
+    if (onlyYoung && !d.ageRestriction) return false;
     if (!passesThreshold(d.chDataGB, chVal, DATA_THRESHOLDS)) return false;
     if (!passesMaxThreshold(d.chDataGB, chMaxVal, DATA_MAX_THRESHOLDS)) return false;
     if (wantsRoaming && !passesThreshold(d.roamDataGB, roamVal, DATA_THRESHOLDS)) return false;
@@ -1574,6 +1577,7 @@ function resetMobile(){
   document.getElementById("mobile-country").value = "all";
   document.getElementById("mobile-price").value = 135;
   document.getElementById("mobile-hide-age").checked = false;
+  document.getElementById("mobile-only-young").checked = false;
   refreshMobile();
 }
 function resetInternet(){
@@ -1588,7 +1592,15 @@ function resetInternet(){
   document.getElementById(id).addEventListener("input", refreshMobile);
 });
 document.querySelectorAll('#mobile-network input').forEach(i => i.addEventListener("change", refreshMobile));
-document.getElementById("mobile-hide-age").addEventListener("change", refreshMobile);
+// Les 2 checkboxes âge sont mutuellement exclusives : cocher l'une décoche l'autre
+document.getElementById("mobile-hide-age").addEventListener("change", (e) => {
+  if (e.target.checked) document.getElementById("mobile-only-young").checked = false;
+  refreshMobile();
+});
+document.getElementById("mobile-only-young").addEventListener("change", (e) => {
+  if (e.target.checked) document.getElementById("mobile-hide-age").checked = false;
+  refreshMobile();
+});
 document.getElementById("internet-combo").addEventListener("change", refreshInternetComboToggle);
 ["internet-speed","internet-speed-max","internet-price"].forEach(id=>{
   document.getElementById(id).addEventListener("input", refreshInternet);
