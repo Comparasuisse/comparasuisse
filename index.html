@@ -244,6 +244,9 @@
   .price-history{display:flex; flex-direction:column; align-items:flex-end; margin-top:4px;}
   .price-history svg{display:block; opacity:0.9;}
   .price-history .ph-note{margin-top:1px; font-size:9px; color:var(--muted); letter-spacing:0.1px; text-align:right;}
+  .price-history .ph-point{cursor:pointer;}
+  #ph-tooltip{position:fixed; z-index:1000; background:var(--ink); color:#fff; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; pointer-events:none; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.2); font-family:inherit;}
+  #ph-tooltip[hidden]{display:none;}
   .cmp-btn:disabled{opacity:.35; cursor:not-allowed; background:#f4f0ea;}
   .cmp-table{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:16px;}
   .cmp-table th, .cmp-table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--line); font-size:13px; vertical-align:top;}
@@ -1375,6 +1378,7 @@ function netLabel(n){
 // Sparkline SVG pour historique de prix.
 // N'affiche RIEN si moins de 2 points (règle transparence : pas de graphique avec 1 seul point).
 // Mention honnête "Suivi depuis DD MMM YYYY" pour ne jamais suggérer plus de données qu'on n'en a.
+// Chaque point est interactif : hover desktop / tap mobile affiche un tooltip HTML global.
 function renderPriceHistory(item){
   const h = item.priceHistory;
   if (!Array.isArray(h) || h.length < 2) return "";
@@ -1383,24 +1387,72 @@ function renderPriceHistory(item){
   const prices = sorted.map(p => p.price);
   const min = Math.min(...prices), max = Math.max(...prices);
   const range = max - min || 1;
-  const pts = sorted.map((p, i) => {
+  const coords = sorted.map((p, i) => {
     const x = pad + (i / (sorted.length - 1)) * (w - 2*pad);
     const y = pad + (1 - (p.price - min) / range) * (hh - 2*pad);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
+    return {x, y, ...p};
   });
-  const last = pts[pts.length - 1].split(",");
+  const polyline = coords.map(c => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ");
+  // Circles : 1 hit-area transparente r=7 (touch/hover) + 1 cercle visible plus petit dessous.
+  // Le <title> SVG natif sert de fallback accessibilité.
+  const circlesHtml = coords.map((c, i) => {
+    const isLast = i === coords.length - 1;
+    const visR = isLast ? 2.5 : 1.6;
+    const visColor = isLast ? "var(--red)" : "var(--red-dark)";
+    const dateLong = (() => { const [y,m,d] = c.date.split("-"); return new Date(`${y}-${m}-${d}`).toLocaleDateString("fr-CH", {day:"numeric", month:"long", year:"numeric"}); })();
+    return `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${visR}" fill="${visColor}" pointer-events="none"/><circle class="ph-point" cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="7" fill="transparent" data-date="${c.date}" data-price="${c.price}"><title>${dateLong} — CHF ${c.price.toFixed(2)}</title></circle>`;
+  }).join("");
   const firstDateFmt = (() => {
     const [y,m,d] = sorted[0].date.split("-");
     return new Date(`${y}-${m}-${d}`).toLocaleDateString("fr-CH", {day:"numeric", month:"short", year:"numeric"});
   })();
   const trend = prices[prices.length - 1] > prices[0] ? "↑" : (prices[prices.length - 1] < prices[0] ? "↓" : "→");
   const trendColor = trend === "↑" ? "#a81f16" : (trend === "↓" ? "#1e7a3d" : "var(--muted)");
-  const title = `Historique du prix mensuel · ${sorted.length} point${sorted.length>1?"s":""} · min CHF ${min.toFixed(2)} → max CHF ${max.toFixed(2)}`;
-  return `<div class="price-history" title="${title}">
-    <svg viewBox="0 0 ${w} ${hh}" width="${w}" height="${hh}" aria-label="Évolution du prix"><polyline points="${pts.join(" ")}" fill="none" stroke="var(--red-dark)" stroke-width="1.3"/><circle cx="${last[0]}" cy="${last[1]}" r="2.2" fill="var(--red)"/></svg>
+  return `<div class="price-history">
+    <svg viewBox="0 0 ${w} ${hh}" width="${w}" height="${hh}" aria-label="Évolution du prix (${sorted.length} points, min CHF ${min.toFixed(2)}, max CHF ${max.toFixed(2)})"><polyline points="${polyline}" fill="none" stroke="var(--red-dark)" stroke-width="1.3"/>${circlesHtml}</svg>
     <span class="ph-note"><span style="color:${trendColor}; font-weight:700;">${trend}</span> Suivi depuis ${firstDateFmt}${sorted.length > 2 ? ` (${sorted.length} points)` : ""}</span>
   </div>`;
 }
+// Tooltip global partagé par tous les sparklines (créé lazily au premier survol/tap).
+function _phTooltip(){
+  let tt = document.getElementById("ph-tooltip");
+  if (!tt) {
+    tt = document.createElement("div");
+    tt.id = "ph-tooltip";
+    tt.hidden = true;
+    document.body.appendChild(tt);
+  }
+  return tt;
+}
+function _phShowTooltip(x, y, dateISO, price){
+  const tt = _phTooltip();
+  const [Y,M,D] = dateISO.split("-");
+  const dateLong = new Date(`${Y}-${M}-${D}`).toLocaleDateString("fr-CH", {day:"numeric", month:"long", year:"numeric"});
+  tt.textContent = `${dateLong} — CHF ${parseFloat(price).toFixed(2)}`;
+  tt.style.left = Math.max(4, x - tt.offsetWidth/2) + "px";
+  tt.style.top = Math.max(4, y - 34) + "px";
+  tt.hidden = false;
+  // Repositionne après affichage (offsetWidth n'est mesurable que visible)
+  tt.style.left = Math.max(4, Math.min(window.innerWidth - tt.offsetWidth - 4, x - tt.offsetWidth/2)) + "px";
+}
+function _phHideTooltip(){ const tt = document.getElementById("ph-tooltip"); if (tt) tt.hidden = true; }
+// Délégation d'événements : un seul jeu de listeners pour tous les sparklines de la page.
+document.addEventListener("mouseover", e => {
+  const t = e.target;
+  if (t?.classList?.contains("ph-point")) _phShowTooltip(e.clientX, e.clientY, t.dataset.date, t.dataset.price);
+});
+document.addEventListener("mouseout", e => {
+  if (e.target?.classList?.contains("ph-point")) _phHideTooltip();
+});
+document.addEventListener("touchstart", e => {
+  const t = e.target;
+  if (t?.classList?.contains("ph-point")) {
+    const touch = e.touches[0];
+    _phShowTooltip(touch.clientX, touch.clientY, t.dataset.date, t.dataset.price);
+    clearTimeout(window._phTapTimer);
+    window._phTapTimer = setTimeout(_phHideTooltip, 3000); // auto-hide 3s sur mobile
+  }
+}, {passive: true});
 
 function chCallsIllim(item){ return item.callsCHUnlimited !== false; }
 
