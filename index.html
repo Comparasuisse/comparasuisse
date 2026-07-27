@@ -345,13 +345,13 @@
 
 
 <div class="tabs">
-  <div class="tab active" data-tab="mobile">📱 Mobile (92 offres)</div>
-  <div class="tab" data-tab="prepaid">📶 Mobile prépayé</div>
-  <div class="tab" data-tab="internet">🌐 Internet (37 offres)</div>
-  <div class="tab" data-tab="dataonly">📶 SIM Data only</div>
-  <div class="tab" data-tab="tv">📺 TV (24 offres)</div>
-  <div class="tab" data-tab="combo">📦 Internet + TV</div>
-  <div class="tab" data-tab="promo">🔥 Promotions</div>
+  <div class="tab active" data-tab="mobile">📱 Mobile <span class="tab-total" id="tab-total-mobile"></span></div>
+  <div class="tab" data-tab="prepaid">📶 Mobile prépayé <span class="tab-total" id="tab-total-prepaid"></span></div>
+  <div class="tab" data-tab="internet">🌐 Internet <span class="tab-total" id="tab-total-internet"></span></div>
+  <div class="tab" data-tab="dataonly">📶 SIM Data only <span class="tab-total" id="tab-total-dataonly"></span></div>
+  <div class="tab" data-tab="tv">📺 TV <span class="tab-total" id="tab-total-tv"></span></div>
+  <div class="tab" data-tab="combo">📦 Internet + TV <span class="tab-total" id="tab-total-combo"></span></div>
+  <div class="tab" data-tab="promo">🔥 Promotions <span class="tab-total" id="tab-total-promo"></span></div>
   <div class="tab" data-tab="compare">⚖️ Comparaison <span id="compare-count-badge" class="tab-badge" hidden>0</span></div>
 </div>
 
@@ -1266,13 +1266,47 @@ const tvData = [
   {operator:"Init7", name:"Init7 TV7", network:"init7", price:0.00, beforePrice:null, promo:false, channels:200, replayDays:0, recordingHours:0, streaming:true, details:"200 chaînes (85 HD) en DE / FR / IT / EN — <b>inclus gratuitement</b> avec tout abo internet Init7 (Fiber7 64.75, Easy7, etc.). Streaming pur via app Apple TV / Android TV + multicast M3U/HLS/XSPF pour lecteurs tiers. Replay 7 jours en option (+11.-/mois). ℹ️ Offre plus riche en allemand qu'en français (~80+ ch DE vs ~30 ch FR). Chaînes régionales limitées : Kanal9 (suisse-alémanique) inclus, Canal9 (valaisanne) non inclus selon retours utilisateurs (2222.ch)", channelsList: ["2M Maroc","3Sat","5 STAR","5 USA","6ter","7+/ Nick CH","Abu Dhabi TV","Al Arabiya","Al Jazeera English","Al Sharqiya","ANIXE","ARD alpha","Arryadia","arte D","arte F","auftanken.TV","BBC News","BBC One","BBC Two","Beyaz TV","BFM TV","Bibel TV","Bloomberg TV","blue Zoom D","blue Zoom F","Boing","BR Fernsehen Süd","BVN TV","Canal 24 Horas","Canal Alpha JU","Canal Alpha NE","CANAL+ en clair","Canale5","CARAC 1","CARAC 2","CARAC 3","CARAC 4","CARAC 5","Cartoonito","CBBC","Cbeebies","Channel 4","Channel 5","CNBC","CNN International","CNN Türk","Comedy Central","Das Erste","Deejay TV","Deluxe Music","Deluxe Rap","DF1 TV","Die Neue Zeit TV","Disney Channel","DMAX","DMAX italia","DOKUSAT","Dubai TV","Duna TV","DW Europe","E4","Euro D","euronews D","euronews E","euronews F","euronews I","Eurosport 1","Eurostar","Fashion TV","Film 4","Focus","France 2","France 24","France 24 E","France 3","France 4","France 5","frisbee","Giallo","Great! Romance","Great! TV","Gulli","HABERTURK","Helvetia One","hr Fernsehen","IRIS","Italia 1","Italia 2","ITV 2","ITV 3","ITV 4","Jordan TV","Just.Fishing","K-TV","K2","Kabel Eins (Schweiz)","Kabel Eins Doku","KANAL 7 AVRUPA","Kanal 9","KiKA","Kuwait TV","La 5","LA 7","La 7d","la télé","léman bleu","M6","MDR Sachsen","meteonews.TV","More4+1","n-tv","N24 Doku","NDR FS NDS","NITRO","NOVE","Oman TV","ORF 1","ORF 2","Phoenix","Polonia 1","ProSieben (Schweiz)","ProSieben MAXX","Puls 8","Qatar TV","Radio Bremen TV","RadioItaliaTV","Rai 1","Rai 2","Rai 3","Rai 4","Rai 5","Rai Gulp","Rai Movie","Rai News 24","Rai Premium","Rai Scuola","Rai Sport+","Rai Storia","Rai yoyo","rbb Berlin","Real Time","Rete 4","RMC Story","RSI LA 1","RSI LA 2","RTK 1","RTL (Schweiz)","RTL 102.5 TV","RTL 9","RTL up","RTLZWEI (Schweiz)","RTP Int.","RTS 1","RTS 2","RTSH 3","RTSH Sat","S1","SAT.1 (Schweiz)","SAT.1 GOLD","Saudi 1","Senato TV","Servus TV","Sharjah TV","Sixx","Sky News","Sonnenklar TV","SPORT1","Sportitalia","SR Fernsehen","SRF 1","SRF info","SRF zwei","STAR TV","Sterk TV","Super RTL (Schweiz)","Super Tennis","Super!","SWISS 1","Swiss Sport TV","SWR BW","tagesschau24","Tele 1","Tele 5","Tele Bärn","Tele D","Tele M1","Tele Top","Télé Versoix","Tele Z","Telebasel","TeleBielingue","Telelombardia","TeleTicino","TeleZüri","TF 1","TGCOM24","TGRT EU","TMC Monte Carlo","TOGGO plus","TOPcrime","TravelXP","TRT Cocuk","TRT Haber","TRT TURK","TRT1","TV 24","TV 25","TV Südostschweiz","TV2000","TV4E","TV5MONDE Europe","TV8","TVCG MNE","TVE Int.","TVM3","TVP Info","TVP Polonia","TVR International","VOX (Schweiz)","W9","Warner TV","WDR Fernsehen","WELT","ZDFinfo","ZDFneo"], url:"https://www.init7.net/fr/tv/tv7/"},
 ];
 
-// === Mobile prépayé — prix fixe par période (pas d'abonnement mensuel classique) ===
-// Wingo Flat Pass : vérifié sur wingo.ch/fr/mobile/wingo-prepaid le 2026-07-27.
-// Réseau Swisscom (comme tout le portefeuille Wingo).
+// === Mobile prépayé ===
+// Deux formats coexistent selon l'opérateur :
+// - prepaidType:"flat"   : durée fixe (7/28/30/90/180/365 j) avec prix payé d'un coup
+//                          → champ `price` = prix du pack, `periodDays` = durée
+// - prepaidType:"credit" : SIM avec crédit initial + tarif à la carte à consommer
+//                          → champ `price` = coût de la SIM (0 si gratuite),
+//                            `initialCreditCHF` = crédit offert au 1er achat,
+//                            détails tarifaires en texte libre dans `details`
+// Toutes les offres vérifiées live sur les sites officiels le 2026-07-27.
 const prepaidData = [
-  {operator:"Wingo", name:"Wingo Flat Pass 7", network:"swisscom", price:9.95, periodDays:7, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 7 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). Renouvellement automatique (désactivable dans myWingo).", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
-  {operator:"Wingo", name:"Wingo Flat Pass 30", network:"swisscom", price:34.95, periodDays:30, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 30 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). Renouvellement automatique (désactivable dans myWingo).", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:34.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
-  {operator:"Wingo", name:"Wingo Flat Pass 365", network:"swisscom", price:349.95, periodDays:365, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 365 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). PAS de renouvellement automatique — extension manuelle dans myWingo à l'échéance. Économie ≈ 70 CHF vs 12 Flat Pass 30 successifs.", autoRenew:false, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:349.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+  // === Réseau Swisscom ===
+  // Wingo Flat Pass — vérifié sur wingo.ch/fr/mobile/wingo-prepaid
+  {operator:"Wingo", name:"Wingo Flat Pass 7", network:"swisscom", prepaidType:"flat", price:9.95, periodDays:7, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 7 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). Renouvellement automatique (désactivable dans myWingo).", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+  {operator:"Wingo", name:"Wingo Flat Pass 30", network:"swisscom", prepaidType:"flat", price:34.95, periodDays:30, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 30 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). Renouvellement automatique (désactivable dans myWingo).", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:34.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+  {operator:"Wingo", name:"Wingo Flat Pass 365", network:"swisscom", prepaidType:"flat", price:349.95, periodDays:365, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 365 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). PAS de renouvellement automatique — extension manuelle dans myWingo à l'échéance. Économie ≈ 70 CHF vs 12 Flat Pass 30 successifs.", autoRenew:false, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:349.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+  // Coop Mobile Prepaid — vérifié sur coopmobile.ch/fr/prepaid
+  {operator:"Coop Mobile", name:"Coop Mobile Prepaid", network:"swisscom", prepaidType:"credit", price:19.80, initialCreditCHF:15.00, roaming:true, details:"Carte SIM 19.80 CHF avec 15.- de crédit initial offert · 0.24 CHF/min appels CH · 0.10 CHF/SMS CH · tarif data à la carte · roaming disponible séparément. Options achetables : Paquet 15 CENTIMES (15.- = 100 min + 100 SMS CH), Paquet Surf 750 (9.90 = 750 Mo). Crédit valable tant que SIM active (max 12 mois d'inactivité). 5G incluse.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.80}], url:"https://www.coopmobile.ch/fr/prepaid"},
+  // Migros Mobile Prepaid + Easy S/M/L — vérifié sur mobile.migros.ch/fr/prepaid
+  {operator:"Migros Mobile", name:"Migros Prepaid", network:"swisscom", prepaidType:"credit", price:19.80, initialCreditCHF:15.00, roaming:false, details:"Carte SIM 19.80 CHF avec 15.- de crédit initial + 100 Mo offerts · 0.28 CHF/min appels CH · 0.10 CHF/SMS CH · 0.28 CHF/Mo data au-delà des 10 Mo/mois gratuits · vitesse max 50/5 Mbit/s. Pas de coût mensuel. Réseau Swisscom.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.80}], url:"https://mobile.migros.ch/fr/prepaid"},
+  {operator:"Migros Mobile", name:"Migros Prepaid Easy S", network:"swisscom", prepaidType:"flat", price:4.00, periodDays:30, chUnlimited:false, callsCHUnlimited:false, roaming:false, details:"40 min d'appels + 40 SMS + 40 Mo de data en Suisse, valables 30 jours. Renouvelable automatiquement. Nécessite d'abord une carte Prepaid Migros (SIM 19.80 CHF). Réseau Swisscom.", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:4.00}], url:"https://mobile.migros.ch/fr/prepaid"},
+  {operator:"Migros Mobile", name:"Migros Prepaid Easy M", network:"swisscom", prepaidType:"flat", price:9.00, periodDays:30, chUnlimited:false, callsCHUnlimited:false, roaming:false, details:"2h d'appels + 200 SMS + 200 Mo de data en Suisse, valables 30 jours. Renouvelable automatiquement. Nécessite d'abord une carte Prepaid Migros (SIM 19.80 CHF). Réseau Swisscom.", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.00}], url:"https://mobile.migros.ch/fr/prepaid"},
+  {operator:"Migros Mobile", name:"Migros Prepaid Easy L", network:"swisscom", prepaidType:"flat", price:14.00, periodDays:30, chUnlimited:false, callsCHUnlimited:false, roaming:false, details:"4h d'appels + 400 SMS + 400 Mo de data en Suisse, valables 30 jours. Renouvelable automatiquement. Nécessite d'abord une carte Prepaid Migros (SIM 19.80 CHF). Réseau Swisscom.", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:14.00}], url:"https://mobile.migros.ch/fr/prepaid"},
+
+  // === Réseau Sunrise ===
+  // yallo Prepaid — vérifié sur yallo.ch/fr/prepaid
+  {operator:"yallo", name:"yallo Prepaid", network:"sunrise", prepaidType:"credit", price:0.00, initialCreditCHF:0.00, roaming:true, details:"Carte SIM 100% gratuite, sans crédit initial · 0.25 CHF/min appels CH (0.25 CHF/appel yallo→yallo) · 0.25 CHF/SMS CH · 0.25 CHF/10 Mo data CH · roaming EU/USA/CA 2.00 CHF/Mo, 1.00 CHF/min appel entrant, 2.00 CHF/min appel sortant. 5G Sunrise incluse. Options d'appel, data et roaming en supplément.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:0.00}], url:"https://www.yallo.ch/fr/prepaid"},
+  // TalkTalk Prepaid GO + Season 1/3/6 mois — vérifié sur talktalk.ch/fr/mobile-prepaid.html
+  {operator:"Talk Talk", name:"TalkTalk Prepaid GO", network:"sunrise", prepaidType:"credit", price:19.95, initialCreditCHF:20.00, roaming:true, details:"Carte SIM 19.95 CHF avec 20.- de crédit initial offert · 0.35 CHF/min appels CH · 0.10 CHF/SMS CH (0.15 international) · 0.20 CHF/10 Mo data CH · options rechargeables : Refill 20/30/40/50 CHF, Data Option 1/2/3/5 Go (15-35+ CHF pour 30 j avec renouvellement auto). Réseau Sunrise.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.95}], url:"https://www.talktalk.ch/fr/mobile-prepaid.html"},
+  {operator:"Talk Talk", name:"TalkTalk Season 1 Month", network:"sunrise", prepaidType:"flat", price:44.95, periodDays:30, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Surf, appels et SMS illimités en Suisse pendant 1 mois. Roaming non inclus (recharge séparée). Réseau Sunrise. Nécessite préalablement une carte TalkTalk Prepaid GO.", autoRenew:false, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:44.95}], url:"https://www.talktalk.ch/fr/mobile-prepaid.html"},
+  {operator:"Talk Talk", name:"TalkTalk Season 3 Months", network:"sunrise", prepaidType:"flat", price:79.95, periodDays:90, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Surf, appels et SMS illimités en Suisse pendant 3 mois. Roaming non inclus. Réseau Sunrise. Économie ≈55 CHF vs 3 × Season 1 Month. Nécessite préalablement une carte TalkTalk Prepaid GO.", autoRenew:false, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:79.95}], url:"https://www.talktalk.ch/fr/mobile-prepaid.html"},
+  {operator:"Talk Talk", name:"TalkTalk Season 6 Months", network:"sunrise", prepaidType:"flat", price:149.95, periodDays:180, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Surf, appels et SMS illimités en Suisse pendant 6 mois. Roaming non inclus. Réseau Sunrise. Meilleur ratio du site TalkTalk pour usage longue durée. Nécessite préalablement une carte TalkTalk Prepaid GO.", autoRenew:false, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:149.95}], url:"https://www.talktalk.ch/fr/mobile-prepaid.html"},
+  // Lebara Prepaid — vérifié sur lebara.ch/fr/prepaid
+  {operator:"Lebara", name:"Lebara Prepaid", network:"sunrise", prepaidType:"credit", price:0.00, initialCreditCHF:0.00, roaming:true, details:"Carte SIM 5G gratuite, sans engagement · Système DayPass : 1.50 CHF/jour internet illimité en Suisse, 1.50 CHF/jour appels illimités en Suisse · Appels internationaux dès 0.01 CHF/min (Lebara est reconnu pour ses tarifs très bas vers pays émergents). Roaming data 5G disponible. Réseau Sunrise (« exceptionnel » Connect).", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:0.00}], url:"https://www.lebara.ch/fr/prepaid"},
+
+  // === Réseau Salt ===
+  // Lycamobile Hello (les 3 plans les plus visibles homepage, prix en CHF confirmés)
+  {operator:"Lycamobile", name:"Lycamobile Hello Swiss Max", network:"salt", prepaidType:"flat", price:24.95, beforePrice:33.90, promo:true, promoNote:"promo lancement", periodDays:28, chUnlimited:false, callsCHUnlimited:true, roaming:true, details:"300 Go 5G en Suisse + appels illimités Suisse et vers UE/UK + 12 Go de roaming pour UE/UK/USA/CA/Turquie. Valable 28 jours, renouvelable. Réseau Salt. Sans engagement.", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:24.95}], url:"https://www.lycamobile.ch/fr/plans/hello/"},
+  {operator:"Lycamobile", name:"Lycamobile 100GB", network:"salt", prepaidType:"flat", price:9.49, periodDays:28, chUnlimited:false, callsCHUnlimited:true, roaming:true, details:"100 Go 5G en Suisse + appels et SMS illimités vers CH et UE + 3 Go roaming UE. Valable 28 jours, renouvelable. Réseau Salt. Excellent rapport data/prix.", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.49}], url:"https://www.lycamobile.ch/fr/plans/"},
+  {operator:"Lycamobile", name:"Lycamobile Surf UL", network:"salt", prepaidType:"flat", price:19.00, beforePrice:39.00, promo:true, promoNote:"rabais à vie -51%", periodDays:28, chUnlimited:true, callsCHUnlimited:false, roaming:false, details:"Internet illimité en Suisse (300 Go à haut débit en 4G puis vitesse réduite). eSIM activation immédiate. Sans engagement. Focus data uniquement, appels payants à la carte. Réseau Salt.", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.00}], url:"https://www.lycamobile.ch/fr/plans/"},
+  // Lidl Connect Smart Prepaid — vérifié sur lidl-connect.ch/fr/smart-prepaid
+  {operator:"Lidl Connect", name:"Lidl Smart Prepaid", network:"salt", prepaidType:"credit", price:4.95, initialCreditCHF:19.90, roaming:true, details:"Carte SIM 4.95 CHF avec 19.90 CHF de crédit initial (donc effectivement +14.95 CHF de crédit net) · 0.15 CHF/min appels CH · 0.15 CHF/SMS CH · appels gratuits vers autres numéros Lidl Connect et Salt · roaming disponible séparément · sans engagement. Réseau Salt (test « exceptionnel » Connect). Disponible en ligne et en magasin Lidl.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:4.95}], url:"https://www.lidl-connect.ch/fr/smart-prepaid"},
 ];
 
 // === SIM Data only — cartes SIM data seule pour appareils connectés ===
@@ -1777,27 +1811,55 @@ function renderInternetCard(item){
 // avec les abonnements mensuels classiques) : pas de compareBtn dans le rendu.
 
 function renderPrepaidCard(item){
-  const periodLabel = item.periodDays === 7 ? "7 jours"
-    : item.periodDays === 30 ? "30 jours"
-    : item.periodDays === 365 ? "365 jours"
-    : `${item.periodDays} jours`;
-  const renewPill = item.autoRenew === true
-    ? '<span class="roaming-pill roaming-no" title="Le pass se réactive automatiquement à échéance. Désactivable dans myWingo.">🔁 Renouvellement automatique</span>'
-    : item.autoRenew === false
-      ? '<span class="roaming-pill roaming-yes" title="Aucun renouvellement automatique — extension manuelle requise à l\'échéance.">✋ Sans renouvellement auto</span>'
-      : '';
   const roamingPill = item.roaming
-    ? '<span class="roaming-pill roaming-yes">✓ Data à l\'étranger incluse</span>'
+    ? '<span class="roaming-pill roaming-yes">✓ Roaming disponible (voir détails)</span>'
     : '<span class="roaming-pill roaming-no">Suisse uniquement (recharge séparée pour l\'étranger)</span>';
+
+  let priceBlock, typePill, renewPill = '';
+  if (item.prepaidType === "credit") {
+    // SIM + crédit initial + tarif à la carte
+    typePill = '<span class="roaming-pill roaming-no" title="Modèle carte SIM avec crédit initial : pas de coût mensuel fixe, tu paies à l\'usage selon les tarifs indiqués dans les détails.">💳 Crédit rechargeable</span>';
+    const simPrice = item.price === 0 ? "SIM gratuite" : `SIM CHF ${item.price.toFixed(2)}`;
+    const creditLine = item.initialCreditCHF > 0
+      ? `<div class="std-price">+ CHF ${item.initialCreditCHF.toFixed(2)} de crédit initial offert</div>`
+      : (item.price === 0 ? '<div class="std-price">Sans crédit initial (paiement à l\'usage)</div>' : '');
+    priceBlock = `
+      <div class="chf">${simPrice}</div>
+      <div class="per">à l'achat, puis tarif à la carte</div>
+      ${creditLine}`;
+  } else {
+    // Flat : durée fixe + prix unique
+    typePill = '<span class="roaming-pill roaming-yes" title="Pack durée fixe : prix payé d\'un coup pour X jours d\'utilisation.">📆 Pack durée fixe</span>';
+    renewPill = item.autoRenew === true
+      ? '<span class="roaming-pill roaming-no" title="Le pass se réactive automatiquement à échéance. Désactivable dans le portail client.">🔁 Renouvellement automatique</span>'
+      : item.autoRenew === false
+        ? '<span class="roaming-pill roaming-yes" title="Aucun renouvellement automatique — extension manuelle requise à l\'échéance.">✋ Sans renouvellement auto</span>'
+        : '';
+    const d = item.periodDays;
+    const periodLabel = d === 7 ? "7 jours"
+      : d === 28 ? "28 jours"
+      : d === 30 ? "30 jours"
+      : d === 90 ? "90 jours (3 mois)"
+      : d === 180 ? "180 jours (6 mois)"
+      : d === 365 ? "365 jours (1 an)"
+      : `${d} jours`;
+    const beforeLine = item.promo && item.beforePrice
+      ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
+      : '';
+    priceBlock = `
+      <div class="chf">${item.promo ? "🔥 " : ""}CHF ${item.price.toFixed(2)}</div>
+      <div class="per">/ ${periodLabel}</div>
+      ${beforeLine}`;
+  }
+
   return `<div class="card">
     <div>
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
     </div>
-    <div class="details">${item.details}${roamingPill}${renewPill}${affiliatePill(item)}</div>
+    <div class="details">${item.details}${typePill}${roamingPill}${renewPill}${affiliatePill(item)}</div>
     <div class="price">
-      <div class="chf">CHF ${item.price.toFixed(2)}</div>
-      <div class="per">/ ${periodLabel}</div>
+      ${priceBlock}
       ${renderPriceHistory(item)}
     </div>
     <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a></div>
@@ -2175,6 +2237,24 @@ renderCompareView();
   const rounded = Math.floor(total / 10) * 10;
   const el = document.getElementById("header-offers-total");
   if (el) el.textContent = "plus de " + rounded;
+})();
+
+// Compteurs dynamiques dans chaque onglet — calculés depuis la vraie longueur du tableau,
+// pas de valeur codée en dur, pour éviter les incohérences à chaque ajout futur d'offre.
+(() => {
+  const TAB_SOURCES = {
+    mobile: mobileData,
+    prepaid: prepaidData,
+    internet: internetData,
+    dataonly: dataOnlyData,
+    tv: tvData,
+    combo: comboData,
+    promo: promoData,
+  };
+  for (const [key, arr] of Object.entries(TAB_SOURCES)) {
+    const el = document.getElementById("tab-total-" + key);
+    if (el) el.textContent = "(" + arr.length + " offres)";
+  }
 })();
 ["tv-channels","tv-replay","tv-recording","tv-price","tv-streaming"].forEach(id => {
   const el = document.getElementById(id);
