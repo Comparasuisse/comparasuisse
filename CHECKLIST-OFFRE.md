@@ -284,18 +284,41 @@ date effective pour capter le changement dans `priceHistory`. Cocher/mettre
 - **1er septembre 2026 (idéalement dès disponibilité)** : check ciblé Wingo Swiss Smart et
   Swiss Plus. Sourcing forum (à confirmer publiquement) : Wingo Swiss Smart
   deviendrait disponible pour tous via wingo.ch directement, remplaçant
-  Swiss Plus qui disparaîtrait. Prix pressenti ~26.95 CHF avec 2e SIM/eSIM.
-  Situation vérifiée le 2026-07-27 : redirection `wingo-swiss-plus/` →
-  `wingo-swiss-max` déjà active, page produit `wingo-swiss-smart` existe
-  mais marquée « Abo actuellement indisponible » (spec confirmée : illimité
-  CH + 3 Go UE/UK, réseau 5G Swisscom, frais 59.-, sans engagement). Prix
-  non affiché sur wingo.ch. Chez mobilezone.ch : Swiss Smart 24M à 69.-/mois
-  (revendeur avec engagement 24m, non représentatif du tarif wingo.ch
-  direct à venir). « 2e SIM incluse » n'apparaît OFFICIELLEMENT que sur
-  Wingo International Pro (communiqué mai 2026), pas sur Swiss Smart —
-  donc l'affirmation du forumeur reste à confirmer début septembre.
+  Swiss Plus qui disparaîtrait. **Prix pressenti : 26.95 CHF** (précision
+  contributeur redge 2026-07-27 : Swiss Plus 25.95 + 1 CHF migration, cohérent
+  avec la hausse globale annoncée sur adaptation-2026). Situation vérifiée
+  le 2026-07-27 : redirection `wingo-swiss-plus/` → `wingo-swiss-max` déjà
+  active, page produit `wingo-swiss-smart` existe mais marquée « Abo
+  actuellement indisponible » (spec confirmée : illimité CH + 3 Go UE/UK,
+  réseau 5G Swisscom, frais 59.-, sans engagement). Prix non affiché sur
+  wingo.ch. Chez mobilezone.ch : Swiss Smart 24M à 69.-/mois (revendeur
+  avec engagement 24m, non représentatif du tarif wingo.ch direct à venir).
+  « 2e SIM incluse » n'apparaît OFFICIELLEMENT que sur Wingo International
+  Pro (communiqué mai 2026), pas sur Swiss Smart — donc l'affirmation
+  du forumeur reste à confirmer début septembre.
   **Ne pas ajouter Swiss Smart aux données avant confirmation du prix
-  officiel sur wingo.ch dès le 01.09.**
+  officiel sur wingo.ch dès le 01.09** (juste valider 26.95 CHF, spec,
+  2e SIM ou non — plutôt que deviner).
+
+- **1er-2 août 2026** : re-vérifier manuellement les 3 offres SIM Data
+  yallo (Go! S, Go! Max, Go!) suite à la hausse annoncée « Nouveaux prix
+  dès le 1.8.2026 » visible sur yallo.ch/fr/internet-go. Prix actuels
+  vérifiés le 2026-07-27 : Go! S 9.90 (vs 30.50), Go! Max 14.90 (vs 60.50),
+  Go! 40.50 (pas de rabais). Après revérif, bumper prix + verifiedAt +
+  ajouter point priceHistory via `scripts/append-price-point.mjs`.
+
+- **Dès qu'un premier lien `affiliateUrl` sera activé** sur une offre
+  (candidature Awin ou alao validée) : **remettre en place la phrase de
+  divulgation d'affiliation dans le footer d'index.html**. Texte à
+  restaurer : « Comparateur indépendant, financé par des commissions
+  d'affiliation sur les offres marquées 🤝 Partenaire — sans impact sur
+  ton prix ni sur le classement (toujours par prix croissant). ». Mettre
+  aussi à jour la FAQ (question « Comparasuisse est-il vraiment un
+  comparateur indépendant ? »), le FAQPage JSON-LD, et la section
+  « Modèle économique » des mentions légales pour retirer la mention
+  « aucune commission perçue actuellement ». La phrase actuelle
+  « Comparateur indépendant. » suffit tant qu'aucun lien affilié n'est
+  actif — la ré-activer avant serait de la publicité trompeuse (LCD).
 
 ## Ce que cette méthode ne peut PAS attraper
 
