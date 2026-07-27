@@ -203,7 +203,7 @@
   .grid{max-width:1080px; margin:0 auto; padding:0 20px; display:grid; gap:12px;}
   .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:grid; grid-template-columns:150px 1fr auto auto; gap:16px; align-items:center; min-width:0;}
   .net-tag{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; padding:3px 8px; border-radius:20px; width:fit-content; color:#fff;}
-  .net-swisscom{background:var(--swisscom);} .net-sunrise{background:var(--sunrise);} .net-salt{background:var(--salt);} .net-init7{background:var(--init7);} .net-regional{background:var(--regional);}
+  .net-swisscom{background:var(--swisscom);} .net-sunrise{background:var(--sunrise);} .net-salt{background:var(--salt);} .net-init7{background:var(--init7);} .net-regional{background:var(--regional);} .net-choice{background:#6b7280;}
   .op-name{font-weight:700; font-size:15px; margin-top:6px; word-break:break-word;}
   .details{font-size:13px; color:var(--muted); line-height:1.5; min-width:0;}
   .std-price{font-size:11px; color:#a89a80; margin-top:2px; word-break:break-word;}
@@ -346,7 +346,9 @@
 
 <div class="tabs">
   <div class="tab active" data-tab="mobile">📱 Mobile (92 offres)</div>
+  <div class="tab" data-tab="prepaid">📶 Mobile prépayé</div>
   <div class="tab" data-tab="internet">🌐 Internet (32 offres)</div>
+  <div class="tab" data-tab="dataonly">📶 SIM Data only</div>
   <div class="tab" data-tab="tv">📺 TV (24 offres)</div>
   <div class="tab" data-tab="combo">📦 Internet + TV</div>
   <div class="tab" data-tab="promo">🔥 Promotions</div>
@@ -439,6 +441,12 @@
 <div class="count" id="mobile-count"><span></span><span class="reset-link" onclick="resetMobile()">Réinitialiser les filtres</span></div>
 <div class="grid" id="mobile-grid"></div>
 
+<div class="hidden" id="prepaid-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
+  <b>📶 Mobile prépayé</b> — offres à prix fixe par période (pas d'abonnement mensuel classique). Le prix affiché correspond à la durée totale du pass, pas à un mois. Comparateur croisé indisponible pour ces offres (unité de facturation incompatible).
+</div>
+<div class="count hidden" id="prepaid-count"><span></span></div>
+<div class="grid hidden" id="prepaid-grid" style="margin-top:0;"></div>
+
 <div class="controls hidden" id="internet-controls">
   <div class="ctrl-group">
     <label>Réseau</label>
@@ -470,6 +478,48 @@
 
 <div class="count hidden" id="internet-count"><span></span><span class="reset-link" onclick="resetInternet()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="internet-grid"></div>
+
+<div class="hidden" id="dataonly-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
+  <b>📶 SIM Data only</b> — cartes SIM data seule pour appareils connectés (tablettes, routeurs, hotspots, IoT, montres). Pas d'appels ni de SMS. À ne pas confondre avec l'internet fixe maison (voir onglet Internet) ni avec les abonnements mobile classiques (voir onglet Mobile). Prix affiché par période (30 j, 365 j ou mois selon l'opérateur). Comparateur croisé indisponible pour ces offres (unité de facturation variable).
+</div>
+
+<div class="controls hidden" id="dataonly-controls">
+  <div class="ctrl-group">
+    <label>Réseau</label>
+    <div class="net-checks" id="dataonly-network">
+      <label class="net-chip"><input type="checkbox" data-net="swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="salt" checked><span>Salt</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="choice" checked><span>Choix réseau</span></label>
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>Opérateur</label>
+    <div class="net-checks" id="dataonly-operator">
+      <label class="net-chip"><input type="checkbox" data-op="Digital Republic" checked><span>Digital Republic</span></label>
+      <label class="net-chip"><input type="checkbox" data-op="Maxiconnect" checked><span>MaxiConnect</span></label>
+    </div>
+  </div>
+  <div class="ctrl-group">
+    <label>Prix max (30 j) : <span class="range-val" id="dataonly-price-label">CHF 40/30j</span></label>
+    <input type="range" id="dataonly-price" min="4" max="40" step="1" value="40">
+  </div>
+  <div class="ctrl-group">
+    <label>Data 🇨🇭 : <span class="range-val" id="dataonly-data-label">Peu importe</span> → <span class="range-val" id="dataonly-data-max-label">Illimité</span></label>
+    <div class="dual-range">
+      <div class="track"></div>
+      <div class="fill" id="dataonly-data-fill"></div>
+      <input type="range" id="dataonly-data" min="0" max="5" step="1" value="0">
+      <input type="range" id="dataonly-data-max" min="0" max="5" step="1" value="5">
+    </div>
+  </div>
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="dataonly-router-only" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Uniquement les offres explicitement autorisées pour routeur / hotspot / passerelle office</label>
+  </div>
+</div>
+
+<div class="count hidden" id="dataonly-count"><span></span><span class="reset-link" onclick="resetDataOnly()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="dataonly-grid" style="margin-top:0;"></div>
 
 <div class="controls hidden" id="tv-controls">
   <div class="ctrl-group">
@@ -836,7 +886,7 @@ function cmpUpdateBadge(){
 }
 function cmpRefreshAll(){
   cmpUpdateBadge();
-  refreshMobile(); refreshInternet(); refreshCombo(); refreshTV(); refreshPromo();
+  refreshMobile(); refreshPrepaid(); refreshInternet(); refreshDataOnly(); refreshCombo(); refreshTV(); refreshPromo();
   renderCompareView();
 }
 
@@ -1184,6 +1234,33 @@ const tvData = [
   {operator:"Init7", name:"Init7 TV7", network:"init7", price:0.00, beforePrice:null, promo:false, channels:200, replayDays:0, recordingHours:0, streaming:true, details:"200 chaînes (85 HD) en DE / FR / IT / EN — <b>inclus gratuitement</b> avec tout abo internet Init7 (Fiber7 64.75, Easy7, etc.). Streaming pur via app Apple TV / Android TV + multicast M3U/HLS/XSPF pour lecteurs tiers. Replay 7 jours en option (+11.-/mois). ℹ️ Offre plus riche en allemand qu'en français (~80+ ch DE vs ~30 ch FR). Chaînes régionales limitées : Kanal9 (suisse-alémanique) inclus, Canal9 (valaisanne) non inclus selon retours utilisateurs (2222.ch)", channelsList: ["2M Maroc","3Sat","5 STAR","5 USA","6ter","7+/ Nick CH","Abu Dhabi TV","Al Arabiya","Al Jazeera English","Al Sharqiya","ANIXE","ARD alpha","Arryadia","arte D","arte F","auftanken.TV","BBC News","BBC One","BBC Two","Beyaz TV","BFM TV","Bibel TV","Bloomberg TV","blue Zoom D","blue Zoom F","Boing","BR Fernsehen Süd","BVN TV","Canal 24 Horas","Canal Alpha JU","Canal Alpha NE","CANAL+ en clair","Canale5","CARAC 1","CARAC 2","CARAC 3","CARAC 4","CARAC 5","Cartoonito","CBBC","Cbeebies","Channel 4","Channel 5","CNBC","CNN International","CNN Türk","Comedy Central","Das Erste","Deejay TV","Deluxe Music","Deluxe Rap","DF1 TV","Die Neue Zeit TV","Disney Channel","DMAX","DMAX italia","DOKUSAT","Dubai TV","Duna TV","DW Europe","E4","Euro D","euronews D","euronews E","euronews F","euronews I","Eurosport 1","Eurostar","Fashion TV","Film 4","Focus","France 2","France 24","France 24 E","France 3","France 4","France 5","frisbee","Giallo","Great! Romance","Great! TV","Gulli","HABERTURK","Helvetia One","hr Fernsehen","IRIS","Italia 1","Italia 2","ITV 2","ITV 3","ITV 4","Jordan TV","Just.Fishing","K-TV","K2","Kabel Eins (Schweiz)","Kabel Eins Doku","KANAL 7 AVRUPA","Kanal 9","KiKA","Kuwait TV","La 5","LA 7","La 7d","la télé","léman bleu","M6","MDR Sachsen","meteonews.TV","More4+1","n-tv","N24 Doku","NDR FS NDS","NITRO","NOVE","Oman TV","ORF 1","ORF 2","Phoenix","Polonia 1","ProSieben (Schweiz)","ProSieben MAXX","Puls 8","Qatar TV","Radio Bremen TV","RadioItaliaTV","Rai 1","Rai 2","Rai 3","Rai 4","Rai 5","Rai Gulp","Rai Movie","Rai News 24","Rai Premium","Rai Scuola","Rai Sport+","Rai Storia","Rai yoyo","rbb Berlin","Real Time","Rete 4","RMC Story","RSI LA 1","RSI LA 2","RTK 1","RTL (Schweiz)","RTL 102.5 TV","RTL 9","RTL up","RTLZWEI (Schweiz)","RTP Int.","RTS 1","RTS 2","RTSH 3","RTSH Sat","S1","SAT.1 (Schweiz)","SAT.1 GOLD","Saudi 1","Senato TV","Servus TV","Sharjah TV","Sixx","Sky News","Sonnenklar TV","SPORT1","Sportitalia","SR Fernsehen","SRF 1","SRF info","SRF zwei","STAR TV","Sterk TV","Super RTL (Schweiz)","Super Tennis","Super!","SWISS 1","Swiss Sport TV","SWR BW","tagesschau24","Tele 1","Tele 5","Tele Bärn","Tele D","Tele M1","Tele Top","Télé Versoix","Tele Z","Telebasel","TeleBielingue","Telelombardia","TeleTicino","TeleZüri","TF 1","TGCOM24","TGRT EU","TMC Monte Carlo","TOGGO plus","TOPcrime","TravelXP","TRT Cocuk","TRT Haber","TRT TURK","TRT1","TV 24","TV 25","TV Südostschweiz","TV2000","TV4E","TV5MONDE Europe","TV8","TVCG MNE","TVE Int.","TVM3","TVP Info","TVP Polonia","TVR International","VOX (Schweiz)","W9","Warner TV","WDR Fernsehen","WELT","ZDFinfo","ZDFneo"], url:"https://www.init7.net/fr/tv/tv7/"},
 ];
 
+// === Mobile prépayé — prix fixe par période (pas d'abonnement mensuel classique) ===
+// Wingo Flat Pass : vérifié sur wingo.ch/fr/mobile/wingo-prepaid le 2026-07-27.
+// Réseau Swisscom (comme tout le portefeuille Wingo).
+const prepaidData = [
+  {operator:"Wingo", name:"Wingo Flat Pass 7", network:"swisscom", price:9.95, periodDays:7, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 7 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). Renouvellement automatique (désactivable dans myWingo).", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+  {operator:"Wingo", name:"Wingo Flat Pass 30", network:"swisscom", price:34.95, periodDays:30, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 30 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). Renouvellement automatique (désactivable dans myWingo).", autoRenew:true, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:34.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+  {operator:"Wingo", name:"Wingo Flat Pass 365", network:"swisscom", price:349.95, periodDays:365, chUnlimited:true, callsCHUnlimited:true, roaming:false, details:"Données mobiles illimitées en Suisse pendant 365 jours + appels et SMS illimités en Suisse. Roaming non inclus (recharge séparée nécessaire pour l'étranger). PAS de renouvellement automatique — extension manuelle dans myWingo à l'échéance. Économie ≈ 70 CHF vs 12 Flat Pass 30 successifs.", autoRenew:false, sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:349.95}], url:"https://www.wingo.ch/fr/mobile/wingo-prepaid"},
+];
+
+// === SIM Data only — cartes SIM data seule pour appareils connectés ===
+// Digital Republic Data Flat : vérifié sur digitalrepublic.ch/en/tariff-overview le 2026-07-27.
+// Data illimitée avec cap de vitesse variable, réseau Sunrise, prix 30j ET 365j officiels.
+// MaxiData : vérifié sur maxiconnect.ch/fr/maxidata le 2026-07-27. Abonnement mensuel classique
+// (choix du réseau à l'activation), data plafonnée par tier (pas illimitée).
+const dataOnlyData = [
+  {operator:"Digital Republic", name:"Data Flat 0.4", network:"sunrise", price:4.00, periodDays:30, priceYear:44.00, speedMbit:0.4, uploadMbit:0.2, chDataUnlimited:true, routerAllowed:false, details:"Data illimitée en Suisse plafonnée à 0.4/0.2 Mbit/s (débit très faible, uniquement adapté aux capteurs, trackers, sensors). Sans engagement, activation 8.- (souvent offerte 1er mois). Options roaming EU/USA disponibles séparément.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:4.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
+  {operator:"Digital Republic", name:"Data Flat 1", network:"sunrise", price:6.00, periodDays:30, priceYear:66.00, speedMbit:1, uploadMbit:0.5, chDataUnlimited:true, routerAllowed:false, details:"Data illimitée en Suisse plafonnée à 1/0.5 Mbit/s. Adapté aux traceurs GPS, wearables, caméras standby. Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA disponibles.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:6.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
+  {operator:"Digital Republic", name:"Data Flat 10", network:"sunrise", price:10.00, periodDays:30, priceYear:110.00, speedMbit:10, uploadMbit:5, chDataUnlimited:true, routerAllowed:false, details:"Data illimitée en Suisse plafonnée à 10/5 Mbit/s. Adapté aux tablettes de lecture, IoT vidéo légère. Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:10.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
+  {operator:"Digital Republic", name:"Data Flat 50", network:"sunrise", price:20.00, periodDays:30, priceYear:220.00, speedMbit:50, uploadMbit:25, chDataUnlimited:true, routerAllowed:true, details:"Data illimitée en Suisse plafonnée à 50/25 Mbit/s. AUTORISÉE pour routeur / mobile hotspot / passerelle office (contrairement aux tiers inférieurs). Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:20.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
+  {operator:"Digital Republic", name:"Data Flat 300", network:"sunrise", price:30.00, periodDays:30, priceYear:330.00, speedMbit:300, uploadMbit:150, chDataUnlimited:true, routerAllowed:true, details:"Data illimitée en Suisse plafonnée à 300/150 Mbit/s. AUTORISÉE pour routeur / mobile hotspot / passerelle office. Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:30.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
+  {operator:"Digital Republic", name:"Data Flat 2000", network:"sunrise", price:40.00, periodDays:30, priceYear:440.00, speedMbit:2000, uploadMbit:300, chDataUnlimited:true, routerAllowed:true, details:"Data illimitée en Suisse plafonnée à 2000/300 Mbit/s (5G débit maximum). AUTORISÉE pour routeur / mobile hotspot / passerelle office. Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:40.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
+  {operator:"Maxiconnect", name:"MaxiData Small", network:"choice", price:5.00, periodDays:30, chDataGB:1, routerAllowed:true, details:"1 Go de data en Suisse (pas illimité) sur 5G. Choix du réseau à l'activation (Salt / Sunrise / Swisscom selon dispo). SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts. Support suisse 7j/7.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:5.00}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Classic", network:"choice", price:9.90, periodDays:30, chDataGB:5, routerAllowed:true, details:"5 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Plus", network:"choice", price:19.90, periodDays:30, chDataGB:30, routerAllowed:true, details:"30 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Ultra", network:"choice", price:29.90, periodDays:30, chDataGB:100, routerAllowed:true, details:"100 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:29.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+];
+
 // Normalisation utilisée par la recherche (casse + accents ignorés).
 function normChannelSearch(s){
   return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -1489,7 +1566,7 @@ function resetTV(){
 }
 
 function netLabel(n){
-  return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)", regional:"Câble régional"}[n];
+  return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)", regional:"Câble régional", choice:"Choix réseau"}[n];
 }
 
 // Sparkline SVG pour historique de prix.
@@ -1652,6 +1729,131 @@ function renderInternetCard(item){
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}${renderPriceHistory(item)}</div>
     <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "internet")}</div>
   </div>`;
+}
+
+// === Renderers pour les 2 nouveaux onglets prepaid et data-only ===
+// Ces catégories utilisent des prix par PÉRIODE (7j/30j/365j) et non par mois. Elles
+// sont volontairement EXCLUES du comparateur croisé (unité de facturation incompatible
+// avec les abonnements mensuels classiques) : pas de compareBtn dans le rendu.
+
+function renderPrepaidCard(item){
+  const periodLabel = item.periodDays === 7 ? "7 jours"
+    : item.periodDays === 30 ? "30 jours"
+    : item.periodDays === 365 ? "365 jours"
+    : `${item.periodDays} jours`;
+  const renewPill = item.autoRenew === true
+    ? '<span class="roaming-pill roaming-no" title="Le pass se réactive automatiquement à échéance. Désactivable dans myWingo.">🔁 Renouvellement automatique</span>'
+    : item.autoRenew === false
+      ? '<span class="roaming-pill roaming-yes" title="Aucun renouvellement automatique — extension manuelle requise à l\'échéance.">✋ Sans renouvellement auto</span>'
+      : '';
+  const roamingPill = item.roaming
+    ? '<span class="roaming-pill roaming-yes">✓ Data à l\'étranger incluse</span>'
+    : '<span class="roaming-pill roaming-no">Suisse uniquement (recharge séparée pour l\'étranger)</span>';
+  return `<div class="card">
+    <div>
+      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
+      <div class="op-name">${item.name}</div>
+    </div>
+    <div class="details">${item.details}${roamingPill}${renewPill}${affiliatePill(item)}</div>
+    <div class="price">
+      <div class="chf">CHF ${item.price.toFixed(2)}</div>
+      <div class="per">/ ${periodLabel}</div>
+      ${renderPriceHistory(item)}
+    </div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a></div>
+  </div>`;
+}
+
+function renderDataOnlyCard(item){
+  const periodLabel = item.periodDays === 30 ? "/ 30 j"
+    : item.periodDays === 365 ? "/ 365 j"
+    : `/ ${item.periodDays} j`;
+  // Prix annuel affiché en second si dispo (ex : Digital Republic 30j + 365j)
+  const yearLine = item.priceYear
+    ? `<div class="std-price">ou <b>CHF ${item.priceYear.toFixed(2)}</b> pour 365 jours (économie CHF ${(item.price * 12 - item.priceYear).toFixed(2)} vs 12 × 30 j)</div>`
+    : '';
+  const routerPill = item.routerAllowed === true
+    ? '<span class="roaming-pill roaming-yes" title="Cette SIM peut être utilisée dans un routeur mobile, un hotspot, ou une passerelle office.">🔧 Autorisée pour routeur / hotspot</span>'
+    : item.routerAllowed === false
+      ? '<span class="roaming-pill roaming-no" title="Cette SIM n\'est PAS autorisée pour un routeur mobile ou une passerelle. Réservée aux appareils individuels (tablette, tracker, wearable).">📵 Non autorisée pour routeur</span>'
+      : '';
+  const dataLine = (typeof item.chDataGB === "number")
+    ? `<div class="std-price"><b>Data Suisse :</b> ${item.chDataGB} Go</div>`
+    : item.chDataUnlimited && item.speedMbit
+      ? `<div class="std-price"><b>Data Suisse :</b> illimitée · plafond vitesse ${item.speedMbit}/${item.uploadMbit || "?"} Mbit/s</div>`
+      : '';
+  return `<div class="card">
+    <div>
+      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
+      <div class="op-name">${item.name}</div>
+    </div>
+    <div class="details">${item.details}${dataLine}${routerPill}${affiliatePill(item)}</div>
+    <div class="price">
+      <div class="chf">CHF ${item.price.toFixed(2)}</div>
+      <div class="per">${periodLabel}</div>
+      ${yearLine}
+      ${renderPriceHistory(item)}
+    </div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a></div>
+  </div>`;
+}
+
+function refreshPrepaid(){
+  const sorted = [...prepaidData].sort((a, b) => a.price - b.price);
+  document.querySelector("#prepaid-count span").textContent = sorted.length + " offre(s)";
+  document.getElementById("prepaid-grid").innerHTML = sorted.map(renderPrepaidCard).join("");
+}
+
+// Paliers de data pour l'onglet SIM Data only, calibrés sur les vraies quantités
+// observées dans nos données : 1/5/30/100 Go chez MaxiData + illimité chez Digital Republic.
+// Différent des paliers Mobile (1/4/10 Go) car les usages tablette/routeur consomment plus.
+const DATAONLY_THRESHOLDS = [null, 1, 5, 30, 100, Infinity];
+const DATAONLY_LABELS = ["Peu importe", "1 Go", "5 Go", "30 Go", "100 Go", "Illimité"];
+
+function refreshDataOnly(){
+  clampDualRange("dataonly-data", "dataonly-data-max");
+  updateDualFill("dataonly-data-fill", "dataonly-data", "dataonly-data-max", 5);
+
+  const selectedNets = [...document.querySelectorAll('#dataonly-network input:checked')].map(i => i.dataset.net);
+  const selectedOps = [...document.querySelectorAll('#dataonly-operator input:checked')].map(i => i.dataset.op);
+  const maxPrice = parseFloat(document.getElementById("dataonly-price").value);
+  const dataMin = parseInt(document.getElementById("dataonly-data").value);
+  const dataMax = parseInt(document.getElementById("dataonly-data-max").value);
+  const routerOnly = document.getElementById("dataonly-router-only").checked;
+
+  document.getElementById("dataonly-price-label").textContent = "CHF " + maxPrice + "/30j";
+  document.getElementById("dataonly-data-label").textContent = DATAONLY_LABELS[dataMin];
+  document.getElementById("dataonly-data-max-label").textContent = DATAONLY_LABELS[dataMax];
+
+  const filtered = dataOnlyData.filter(item => {
+    if (!selectedNets.includes(item.network)) return false;
+    if (!selectedOps.includes(item.operator)) return false;
+    if (item.price > maxPrice) return false;
+    // Data en Go : chDataUnlimited (Digital Republic) traité comme Infinity.
+    const dataGB = item.chDataUnlimited ? Infinity : (typeof item.chDataGB === "number" ? item.chDataGB : 0);
+    if (!passesThreshold(dataGB, dataMin, DATAONLY_THRESHOLDS)) return false;
+    if (!passesMaxThreshold(dataGB, dataMax, DATAONLY_THRESHOLDS)) return false;
+    if (routerOnly && item.routerAllowed !== true) return false;
+    return true;
+  });
+
+  // Tri par prix, ensuite par période (30j avant 365j si prix identique) — critère stable
+  const sorted = filtered.sort((a, b) => a.price - b.price || a.periodDays - b.periodDays);
+  document.querySelector("#dataonly-count span").textContent =
+    sorted.length + " / " + dataOnlyData.length + " offre(s)";
+  document.getElementById("dataonly-grid").innerHTML = sorted.length
+    ? sorted.map(renderDataOnlyCard).join("")
+    : '<div class="empty">Aucune offre ne correspond aux filtres actuels. <span class="reset-link" onclick="resetDataOnly()">Réinitialiser</span> ?</div>';
+}
+
+function resetDataOnly(){
+  document.querySelectorAll('#dataonly-network input').forEach(i => i.checked = true);
+  document.querySelectorAll('#dataonly-operator input').forEach(i => i.checked = true);
+  document.getElementById("dataonly-price").value = 40;
+  document.getElementById("dataonly-data").value = 0;
+  document.getElementById("dataonly-data-max").value = 5;
+  document.getElementById("dataonly-router-only").checked = false;
+  refreshDataOnly();
 }
 
 const DATA_THRESHOLDS = [null, 1, 4, 10, Infinity];
@@ -1851,6 +2053,13 @@ document.getElementById("internet-combo").addEventListener("change", refreshInte
 });
 document.querySelectorAll('#internet-network input').forEach(i => i.addEventListener("change", refreshInternet));
 
+// Filtres SIM Data only
+["dataonly-price","dataonly-data","dataonly-data-max"].forEach(id => {
+  document.getElementById(id).addEventListener("input", refreshDataOnly);
+});
+document.querySelectorAll('#dataonly-network input, #dataonly-operator input').forEach(i => i.addEventListener("change", refreshDataOnly));
+document.getElementById("dataonly-router-only").addEventListener("change", refreshDataOnly);
+
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click", ()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
@@ -1859,9 +2068,16 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("mobile-controls").classList.toggle("hidden", target!=="mobile");
     document.getElementById("mobile-count").classList.toggle("hidden", target!=="mobile");
     document.getElementById("mobile-grid").classList.toggle("hidden", target!=="mobile");
+    document.getElementById("prepaid-notice").classList.toggle("hidden", target!=="prepaid");
+    document.getElementById("prepaid-count").classList.toggle("hidden", target!=="prepaid");
+    document.getElementById("prepaid-grid").classList.toggle("hidden", target!=="prepaid");
     document.getElementById("internet-controls").classList.toggle("hidden", target!=="internet");
     document.getElementById("internet-count").classList.toggle("hidden", target!=="internet");
     document.getElementById("internet-grid").classList.toggle("hidden", target!=="internet");
+    document.getElementById("dataonly-notice").classList.toggle("hidden", target!=="dataonly");
+    document.getElementById("dataonly-controls").classList.toggle("hidden", target!=="dataonly");
+    document.getElementById("dataonly-count").classList.toggle("hidden", target!=="dataonly");
+    document.getElementById("dataonly-grid").classList.toggle("hidden", target!=="dataonly");
     document.getElementById("tv-controls").classList.toggle("hidden", target!=="tv");
     document.getElementById("tv-count").classList.toggle("hidden", target!=="tv");
     document.getElementById("tv-grid").classList.toggle("hidden", target!=="tv");
@@ -1885,7 +2101,9 @@ const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
 
 refreshMobile();
+refreshPrepaid();
 refreshInternet();
+refreshDataOnly();
 refreshCombo();
 refreshPromo();
 refreshTV();
@@ -1896,7 +2114,7 @@ renderCompareView();
 // somme mobile + internet + TV + combos, arrondi à la dizaine inférieure
 // pour donner un "plus de X" naturel (ex: 156 offres → "plus de 150").
 (() => {
-  const total = mobileData.length + internetData.length + tvData.length + comboData.length;
+  const total = mobileData.length + prepaidData.length + internetData.length + dataOnlyData.length + tvData.length + comboData.length;
   const rounded = Math.floor(total / 10) * 10;
   const el = document.getElementById("header-offers-total");
   if (el) el.textContent = "plus de " + rounded;
