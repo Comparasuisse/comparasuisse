@@ -371,7 +371,7 @@ const SOURCES = [
     extract: () => ({
       flat: null,
       note:
-        "MaxiConnect (Villaz-St-Pierre) ne publie aucune liste extractible sur son site public (maxiconnect.ch/fr/television) ni dans son wiki. Seuls 20 canaux replay-avec-pub sont mentionnés dans la fiche produit — ce n'est PAS la liste complète des ~270 chaînes du pack Plus/Ultra. Aucun PDF public, pas d'API publique détectée. Décision assumée : afficher un lien vers la page officielle plutôt qu'une liste tronquée trompeuse.",
+        "MaxiConnect (Villaz-St-Pierre) ne publie aucune liste extractible. 2 passes de recherche confirmées : (1) site public /fr et /de/it/en/television + wiki + FAQ = seuls 20 canaux replay-avec-pub mentionnés, sous-ensemble non-exhaustif ; (2) sitemap complet (417 URLs) parcouru = aucune page channels/senderliste/liste-chaines, aucun PDF, article blog EN /en/actualites/maxitv-le-divertissement-suisse ne détaille pas les chaînes ni les 3 paliers Start/Plus/Ultra. Aucun endpoint API JSON détecté via Playwright. Décision assumée : afficher un lien vers la page officielle plutôt qu'une liste tronquée trompeuse.",
     }),
   },
   {
@@ -460,6 +460,43 @@ const SOURCES = [
       note:
         "Liste construite à partir de la fiche tarifaire CANAL+ Suisse (fichesTarifaires-Canal.pdf) et de la fiche produit CANAL+ Suisse — les 3 packs Sport, Ciné Séries et La Totale combinent ces chaînes (La Totale = Sport ∪ Ciné Séries ∪ 150+ chaînes complémentaires). Vérifier canalplus.ch pour la grille exhaustive.",
     }),
+  },
+  {
+    key: "salt-home-tv",
+    name: "Salt Home TV (bouquet de base)",
+    // Page publique dédiée : /fr/home/tv/channels. Rendue en JS.
+    // Structure : bouquet de base dans .tv_channels_channels_list__<hash> ;
+    // options payantes (Sky, CANAL+, thématiques) dans .tv_channels_channels_list_thematic__<hash>.
+    // On utilise [class^=...] pour éviter les hashs CSS Modules qui changent aux déploiements,
+    // et on exclut explicitement le sous-conteneur "thematic".
+    source: "https://www.salt.ch/fr/home/tv/channels",
+    type: "html",
+    extract: async (page) => {
+      await page.waitForTimeout(5000);
+      for (let i = 0; i < 15; i++) {
+        await page.evaluate(() => window.scrollBy(0, 1500));
+        await page.waitForTimeout(250);
+      }
+      const alts = await page.evaluate(() => {
+        const base = document.querySelector('[class*="tv_channels_channels_list__"]:not([class*="thematic"])');
+        if (!base) return { error: "container not found" };
+        const list = [...base.querySelectorAll("img[alt]")]
+          .map((i) => i.alt.trim())
+          .filter((a) => a && a.length > 1 && a.length < 60 && !/^salt\.?$/i.test(a) && !/onetrust|logo de la société/i.test(a));
+        return { list };
+      });
+      if (alts.error) return { flat: null, note: `Salt : ${alts.error}` };
+      const cleaned = uniqueChannels(alts.list).sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
+      return cleaned.length >= 50
+        ? {
+            flat: cleaned,
+            note:
+              "Extrait de salt.ch/fr/home/tv/channels — uniquement le BOUQUET DE BASE inclus dans Salt Home (sélecteur DOM .tv_channels_channels_list__* hors sous-container 'thematic'). Les options payantes Sky, CANAL+ et bouquets thématiques ne sont PAS incluses.",
+          }
+        : { flat: null, note: `Salt Home : ${cleaned.length} chaînes après filtrage.` };
+    },
   },
   {
     key: "talktalk-tv",

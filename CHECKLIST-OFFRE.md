@@ -192,6 +192,22 @@ date effective pour capter le changement dans `priceHistory`. Cocher/mettre
   nature** du système priceHistory — le premier changement de prix visible
   sur les sparklines depuis leur lancement le 26 juillet 2026.
 
+- **1er septembre 2026 (idéalement dès disponibilité)** : check ciblé Wingo Swiss Smart et
+  Swiss Plus. Sourcing forum (à confirmer publiquement) : Wingo Swiss Smart
+  deviendrait disponible pour tous via wingo.ch directement, remplaçant
+  Swiss Plus qui disparaîtrait. Prix pressenti ~26.95 CHF avec 2e SIM/eSIM.
+  Situation vérifiée le 2026-07-27 : redirection `wingo-swiss-plus/` →
+  `wingo-swiss-max` déjà active, page produit `wingo-swiss-smart` existe
+  mais marquée « Abo actuellement indisponible » (spec confirmée : illimité
+  CH + 3 Go UE/UK, réseau 5G Swisscom, frais 59.-, sans engagement). Prix
+  non affiché sur wingo.ch. Chez mobilezone.ch : Swiss Smart 24M à 69.-/mois
+  (revendeur avec engagement 24m, non représentatif du tarif wingo.ch
+  direct à venir). « 2e SIM incluse » n'apparaît OFFICIELLEMENT que sur
+  Wingo International Pro (communiqué mai 2026), pas sur Swiss Smart —
+  donc l'affirmation du forumeur reste à confirmer début septembre.
+  **Ne pas ajouter Swiss Smart aux données avant confirmation du prix
+  officiel sur wingo.ch dès le 01.09.**
+
 ## Ce que cette méthode ne peut PAS attraper
 
 Il faut être honnête sur les limites :

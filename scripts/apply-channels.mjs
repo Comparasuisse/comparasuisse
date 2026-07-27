@@ -126,6 +126,11 @@ if (channels["talktalk-tv"]?.flat) {
   push(/name:"Surf 100 \+ TV"/, JSON.stringify(channels["talktalk-tv"].flat));
 }
 
+// --- Salt Home (Internet + TV + Fixe) — bouquet de base uniquement ---
+if (channels["salt-home-tv"]?.flat) {
+  push(/name:"Salt Home \(Internet \+ TV \+ Fixe\)"/, JSON.stringify(channels["salt-home-tv"].flat));
+}
+
 let patched = html;
 let hits = 0;
 let misses = [];
