@@ -444,7 +444,18 @@
 <div class="hidden" id="prepaid-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
   <b>📶 Mobile prépayé</b> — offres à prix fixe par période (pas d'abonnement mensuel classique). Le prix affiché correspond à la durée totale du pass, pas à un mois. Comparateur croisé indisponible pour ces offres (unité de facturation incompatible).
 </div>
-<div class="count hidden" id="prepaid-count"><span></span></div>
+<div class="controls hidden" id="prepaid-controls">
+  <div class="ctrl-group">
+    <label>Réseau</label>
+    <div class="net-checks" id="prepaid-network">
+      <label class="net-chip"><input type="checkbox" data-net="swisscom" checked><span>Swisscom</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="salt" checked><span>Salt</span></label>
+    </div>
+  </div>
+</div>
+
+<div class="count hidden" id="prepaid-count"><span></span><span class="reset-link" onclick="resetPrepaid()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="prepaid-grid" style="margin-top:0;"></div>
 
 <div class="controls hidden" id="internet-controls">
@@ -1901,9 +1912,19 @@ function renderDataOnlyCard(item){
 }
 
 function refreshPrepaid(){
-  const sorted = [...prepaidData].sort((a, b) => a.price - b.price);
-  document.querySelector("#prepaid-count span").textContent = sorted.length + " offre(s)";
-  document.getElementById("prepaid-grid").innerHTML = sorted.map(renderPrepaidCard).join("");
+  const selectedNets = [...document.querySelectorAll('#prepaid-network input:checked')].map(i => i.dataset.net);
+  const filtered = prepaidData.filter(item => selectedNets.includes(item.network));
+  const sorted = filtered.sort((a, b) => a.price - b.price);
+  document.querySelector("#prepaid-count span").textContent =
+    sorted.length + " / " + prepaidData.length + " offre(s)";
+  document.getElementById("prepaid-grid").innerHTML = sorted.length
+    ? sorted.map(renderPrepaidCard).join("")
+    : '<div class="empty">Aucune offre prépayée sur le(s) réseau(x) sélectionné(s). <span class="reset-link" onclick="resetPrepaid()">Réinitialiser</span> ?</div>';
+}
+
+function resetPrepaid(){
+  document.querySelectorAll('#prepaid-network input').forEach(i => i.checked = true);
+  refreshPrepaid();
 }
 
 // Paliers de data pour l'onglet SIM Data only, calibrés sur les vraies quantités
@@ -2177,6 +2198,9 @@ document.querySelectorAll('#internet-connection-type input').forEach(i => i.addE
   document.getElementById(id).addEventListener("input", refreshDataOnly);
 });
 document.querySelectorAll('#dataonly-network input, #dataonly-operator input').forEach(i => i.addEventListener("change", refreshDataOnly));
+
+// Filtre réseau sur Mobile prépayé
+document.querySelectorAll('#prepaid-network input').forEach(i => i.addEventListener("change", refreshPrepaid));
 document.getElementById("dataonly-router-only").addEventListener("change", refreshDataOnly);
 
 document.querySelectorAll(".tab").forEach(tab=>{
@@ -2188,6 +2212,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("mobile-count").classList.toggle("hidden", target!=="mobile");
     document.getElementById("mobile-grid").classList.toggle("hidden", target!=="mobile");
     document.getElementById("prepaid-notice").classList.toggle("hidden", target!=="prepaid");
+    document.getElementById("prepaid-controls").classList.toggle("hidden", target!=="prepaid");
     document.getElementById("prepaid-count").classList.toggle("hidden", target!=="prepaid");
     document.getElementById("prepaid-grid").classList.toggle("hidden", target!=="prepaid");
     document.getElementById("internet-controls").classList.toggle("hidden", target!=="internet");
