@@ -148,7 +148,22 @@ for (const { nameRegex, value } of MAPPING) {
     continue;
   }
   for (const entry of matches) {
-    let updated = entry.replace(/,\s*channelsList:\s*(\{[^}]*\}|\[[^\]]*\])/g, "");
+    // Suppression d'un channelsList existant.
+    //
+    // Bug historique corrigé : l'ancien regex utilisait `\[[^\]]*\]` qui s'arrête au premier
+    // `]` interne. Ça a corrompu Talk Talk et iWay au commit 7e84e1c parce que leurs listes
+    // contenaient des noms de chaînes comme "ARTE [fr]", "Euronews [de]", "France 24 [en]".
+    // Le regex avait donc mangé `channelsList: ["nom1","nom2","ARTE [fr]` et laissé
+    // `","nom4",...,"lastname"]` en fragment orphelin cassant la syntaxe JS globale.
+    //
+    // Fix : on ancre la fin sur ` ]` immédiatement suivi de `, url:"` OU `, category:"`
+    // (les 2 champs qui suivent toujours channelsList dans nos données).
+    // Le `[\s\S]*?` non-greedy s'étend jusqu'à cet ancrage, indépendamment des `]`
+    // internes présents dans les noms de chaînes.
+    let updated = entry.replace(
+      /,\s*channelsList:\s*(?:\{[\s\S]*?\}|\[[\s\S]*?\])(?=,\s*(?:url|category):")/g,
+      ""
+    );
     // Injecter avant `, url:` (systématiquement présent en dernier)
     updated = updated.replace(/(,\s*url:")/, ", channelsList: " + value + "$1");
     if (updated !== entry) {
