@@ -67,6 +67,54 @@ au fur et à mesure des audits ou modifications.
 
 ---
 
+## 🎯 Booléens 3-états : `null` par défaut, jamais de déduction marketing
+
+Tout champ booléen à **3 états** (`true` / `false` / `null`) doit être `null`
+par défaut tant que la donnée n'est pas **explicitement confirmée tier par tier**
+sur la source officielle de l'opérateur. Jamais de déduction depuis un texte
+marketing général, même si la supposition semble raisonnable.
+
+Concerne notamment : `routerAllowed`, `ownRouterAllowed`, `streaming`,
+`autoRenew`, `chUnlimited`, `roamUnlimited`, `networkChoice`, et tout futur
+champ optionnel à 3 états.
+
+**Convention côté rendu** :
+- `true` → affiche la pill positive (« 🔧 Autorisé pour routeur »)
+- `false` → affiche la pill négative (« 📵 Non autorisé pour routeur »)
+- `null` → **rien affiché** (neutre — on ne prétend rien)
+
+**Convention côté filtre** : `if (routerOnly && item.routerAllowed !== true)
+return false;` — un champ `null` ne passe pas un filtre restrictif, par prudence.
+L'utilisateur qui coche « routeur uniquement » ne veut voir QUE ce qui est
+explicitement confirmé, pas ce qui « pourrait probablement » convenir.
+
+### Exemple concret (2026-07-27) : MaxiData vs Digital Republic
+
+**Digital Republic** (`digitalrepublic.ch/en/smart-devices/`) documente
+explicitement, tier par tier, sur la page produit :
+- Flat 0.4/1/10 : aucune mention router → `routerAllowed: false`
+- Flat 50/300/2000 : mention « For Routers and Laptops » / « For Router and
+  mobile Hotspots » → `routerAllowed: true`
+
+→ Données **source-vérifiées par tier**, pill affichée avec confiance.
+
+**MaxiData** (`maxiconnect.ch/fr/maxidata`) ne documente PAS l'autorisation
+router par tier. Le pitch général mentionne bien « Pour tablettes, routeurs
+mobiles et objets connectés » et « Routeur mobile en option », mais rien
+n'est écrit sur Small vs Classic vs Plus vs Ultra individuellement.
+
+→ Ma valeur initiale `routerAllowed: true` était une **déduction marketing**,
+pas une vérif. Corrigée en `routerAllowed: null` (commit 38862ea) : plus aucune
+pill affichée, et le filtre « router-only » exclut désormais MaxiData jusqu'à
+confirmation formelle (contact support ou update de la page produit).
+
+**Why** : la promesse du comparateur est la fiabilité. Un badge « 🔧 Autorisé
+routeur » qui s'avère faux à l'usage détruit la confiance bien plus vite qu'un
+badge absent. Dans le doute, on n'affiche pas — l'utilisateur peut toujours
+cliquer sur « Voir l'offre » pour vérifier lui-même sur la page opérateur.
+
+---
+
 ## 📈 Historique de prix (`priceHistory`) — ajout automatique
 
 Chaque offre peut porter un tableau `priceHistory: [{date:"YYYY-MM-DD", price:X.XX}, …]`
