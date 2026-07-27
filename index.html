@@ -539,6 +539,10 @@
       <input type="range" id="dataonly-data-max" min="0" max="5" step="1" value="5">
     </div>
   </div>
+  <div class="ctrl-group">
+    <label>Débit minimum : <span class="range-val" id="dataonly-speed-label">Peu importe</span></label>
+    <input type="range" id="dataonly-speed" min="0" max="5" step="1" value="0">
+  </div>
   <div class="ctrl-group" style="grid-column:1 / -1;">
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="dataonly-router-only" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Uniquement les offres explicitement autorisées pour routeur / hotspot / passerelle office</label>
   </div>
@@ -1337,10 +1341,10 @@ const dataOnlyData = [
   {operator:"Digital Republic", name:"Data Flat 50", network:"sunrise", price:20.00, periodDays:30, priceYear:220.00, speedMbit:50, uploadMbit:25, chDataUnlimited:true, routerAllowed:true, details:"Data illimitée en Suisse plafonnée à 50/25 Mbit/s. AUTORISÉE pour routeur / mobile hotspot / passerelle office (contrairement aux tiers inférieurs). Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:20.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
   {operator:"Digital Republic", name:"Data Flat 300", network:"sunrise", price:30.00, periodDays:30, priceYear:330.00, speedMbit:300, uploadMbit:150, chDataUnlimited:true, routerAllowed:true, details:"Data illimitée en Suisse plafonnée à 300/150 Mbit/s. AUTORISÉE pour routeur / mobile hotspot / passerelle office. Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:30.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
   {operator:"Digital Republic", name:"Data Flat 2000", network:"sunrise", price:40.00, periodDays:30, priceYear:440.00, speedMbit:2000, uploadMbit:300, chDataUnlimited:true, routerAllowed:true, details:"Data illimitée en Suisse plafonnée à 2000/300 Mbit/s (5G débit maximum). AUTORISÉE pour routeur / mobile hotspot / passerelle office. Sans engagement, activation 8.- (souvent offerte). Options roaming EU/USA.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:40.00}], url:"https://www.digitalrepublic.ch/en/smart-devices/"},
-  {operator:"Maxiconnect", name:"MaxiData Small", network:"choice", price:5.00, periodDays:30, chDataGB:1, routerAllowed:null, details:"1 Go de data en Suisse (pas illimité) sur 5G. Choix du réseau à l'activation (Salt / Sunrise / Swisscom selon dispo). SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts. Support suisse 7j/7.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:5.00}], url:"https://www.maxiconnect.ch/fr/maxidata"},
-  {operator:"Maxiconnect", name:"MaxiData Classic", network:"choice", price:9.90, periodDays:30, chDataGB:5, routerAllowed:null, details:"5 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
-  {operator:"Maxiconnect", name:"MaxiData Plus", network:"choice", price:19.90, periodDays:30, chDataGB:30, routerAllowed:null, details:"30 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
-  {operator:"Maxiconnect", name:"MaxiData Ultra", network:"choice", price:29.90, periodDays:30, chDataGB:100, routerAllowed:null, details:"100 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:29.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Small", network:"choice", price:5.00, periodDays:30, chDataGB:1, speedMbit:2000, uploadMbit:null, routerAllowed:null, details:"1 Go de data en Suisse (pas illimité) sur 5G. Choix du réseau à l'activation (Salt / Sunrise / Swisscom selon dispo). SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts. Support suisse 7j/7.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:5.00}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Classic", network:"choice", price:9.90, periodDays:30, chDataGB:5, speedMbit:2000, uploadMbit:null, routerAllowed:null, details:"5 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Plus", network:"choice", price:19.90, periodDays:30, chDataGB:30, speedMbit:2000, uploadMbit:null, routerAllowed:null, details:"30 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:19.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
+  {operator:"Maxiconnect", name:"MaxiData Ultra", network:"choice", price:29.90, periodDays:30, chDataGB:100, speedMbit:2000, uploadMbit:null, routerAllowed:null, details:"100 Go de data en Suisse sur 5G, sans limitation de vitesse. Choix du réseau à l'activation. SIM ou eSIM, sans engagement. Frais d'activation 49.- offerts.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:29.90}], url:"https://www.maxiconnect.ch/fr/maxidata"},
   // yallo Internet Go x3 — vérifié live sur yallo.ch/fr/internet-go le 2026-07-27.
   // Réseau Sunrise. Page produit : "La carte SIM fonctionne pour tous les appareils
   // (ordinateur portable, tablette, portable)" + "Crée ton propre réseau en utilisant
@@ -1357,7 +1361,7 @@ const dataOnlyData = [
   // Mucho DATAMINI — vérifié sur muchomobile.ch/en/prepaid/switzerland-europe-internet/datamini le 2026-07-27.
   // La page FR retourne 404, seule la version EN existe. Prépayé rechargeable : SMS "DATAMINI" au 778.
   // Réseau Swisscom (comme tout MUCHO). Pas d'info explicite router → null.
-  {operator:"Mucho", name:"Mucho DATAMINI", network:"swisscom", price:9.90, periodDays:30, chDataGB:5, routerAllowed:null, details:"5 Go de data 5G en Suisse (full speed, pas de plafond de vitesse). Prépayé auto-renouvelable (STOP DATAMINI au 778 pour désactiver). SIM MUCHO gratuite. Réseau Swisscom. Compatible SMS d'activation \"DATAMINI\" au 778.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.90}], url:"https://muchomobile.ch/en/prepaid/switzerland-europe-internet/datamini"},
+  {operator:"Mucho", name:"Mucho DATAMINI", network:"swisscom", price:9.90, periodDays:30, chDataGB:5, speedMbit:2000, uploadMbit:null, routerAllowed:null, details:"5 Go de data 5G en Suisse (full speed, pas de plafond de vitesse). Prépayé auto-renouvelable (STOP DATAMINI au 778 pour désactiver). SIM MUCHO gratuite. Réseau Swisscom. Compatible SMS d'activation \"DATAMINI\" au 778.", sourceType:"product-page", verifiedAt:"2026-07-27", priceHistory:[{date:"2026-07-27",price:9.90}], url:"https://muchomobile.ch/en/prepaid/switzerland-europe-internet/datamini"},
   // Swype Surf — vérifié sur swype.ch/fr/swype-surf le 2026-07-27.
   // Distinct de "Swype Swiss" (abo mobile complet avec appels, présent dans mobileData).
   // FAQ explicite : "L'abo Surf comprend uniquement Internet en Suisse. Avec cet abo, tu ne pourras
@@ -1962,6 +1966,12 @@ function resetPrepaid(){
 const DATAONLY_THRESHOLDS = [null, 1, 5, 30, 100, Infinity];
 const DATAONLY_LABELS = ["Peu importe", "1 Go", "5 Go", "30 Go", "100 Go", "Illimité"];
 
+// Paliers de débit MIN pour l'onglet SIM Data only, calibrés sur les vraies vitesses
+// annoncées dans notre catalogue (0.4/0.5/1/10/21/50/300/2000 Mbit/s). Différent des
+// paliers Internet fixe car les offres data-only vont de 0.4 Mbit/s (GPS tracker) à 2 Gbit/s.
+const DATAONLY_SPEED_THRESHOLDS = [null, 1, 10, 50, 300, 2000];
+const DATAONLY_SPEED_LABELS = ["Peu importe", "≥ 1 Mbit/s", "≥ 10 Mbit/s", "≥ 50 Mbit/s", "≥ 300 Mbit/s", "≥ 2 Gbit/s"];
+
 function refreshDataOnly(){
   clampDualRange("dataonly-data", "dataonly-data-max");
   updateDualFill("dataonly-data-fill", "dataonly-data", "dataonly-data-max", 5);
@@ -1971,11 +1981,13 @@ function refreshDataOnly(){
   const maxPrice = parseFloat(document.getElementById("dataonly-price").value);
   const dataMin = parseInt(document.getElementById("dataonly-data").value);
   const dataMax = parseInt(document.getElementById("dataonly-data-max").value);
+  const speedMin = parseInt(document.getElementById("dataonly-speed").value);
   const routerOnly = document.getElementById("dataonly-router-only").checked;
 
   document.getElementById("dataonly-price-label").textContent = "CHF " + maxPrice + "/30j";
   document.getElementById("dataonly-data-label").textContent = DATAONLY_LABELS[dataMin];
   document.getElementById("dataonly-data-max-label").textContent = DATAONLY_LABELS[dataMax];
+  document.getElementById("dataonly-speed-label").textContent = DATAONLY_SPEED_LABELS[speedMin];
 
   const filtered = dataOnlyData.filter(item => {
     if (!selectedNets.includes(item.network)) return false;
@@ -1985,6 +1997,9 @@ function refreshDataOnly(){
     const dataGB = item.chDataUnlimited ? Infinity : (typeof item.chDataGB === "number" ? item.chDataGB : 0);
     if (!passesThreshold(dataGB, dataMin, DATAONLY_THRESHOLDS)) return false;
     if (!passesMaxThreshold(dataGB, dataMax, DATAONLY_THRESHOLDS)) return false;
+    // Débit min : filtrage MIN uniquement. Une offre sans speedMbit connu (undefined) échoue
+    // dès qu'un seuil > 0 est demandé (comportement conservatif, cohérent avec passesThreshold).
+    if (!passesThreshold(item.speedMbit, speedMin, DATAONLY_SPEED_THRESHOLDS)) return false;
     if (routerOnly && item.routerAllowed !== true) return false;
     return true;
   });
@@ -2004,6 +2019,7 @@ function resetDataOnly(){
   document.getElementById("dataonly-price").value = 45;
   document.getElementById("dataonly-data").value = 0;
   document.getElementById("dataonly-data-max").value = 5;
+  document.getElementById("dataonly-speed").value = 0;
   document.getElementById("dataonly-router-only").checked = false;
   refreshDataOnly();
 }
@@ -2223,7 +2239,7 @@ document.querySelectorAll('#internet-network input').forEach(i => i.addEventList
 document.querySelectorAll('#internet-connection-type input').forEach(i => i.addEventListener("change", refreshInternet));
 
 // Filtres SIM Data only
-["dataonly-price","dataonly-data","dataonly-data-max"].forEach(id => {
+["dataonly-price","dataonly-data","dataonly-data-max","dataonly-speed"].forEach(id => {
   document.getElementById(id).addEventListener("input", refreshDataOnly);
 });
 document.querySelectorAll('#dataonly-network input, #dataonly-operator input').forEach(i => i.addEventListener("change", refreshDataOnly));
