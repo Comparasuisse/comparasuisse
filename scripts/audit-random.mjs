@@ -18,6 +18,7 @@
 //   - Verdict : OK / ÉCART / URL_MORTE / NON_VÉRIFIABLE
 
 import { chromium } from "playwright-core";
+import { verifyIndexHtmlSyntax } from "./lib/verify-index-syntax.mjs";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -325,6 +326,10 @@ if (APPLY_HISTORY) {
     html = html.replace(entryRe, `$1$2${newPoint}$3`);
     appended++;
   }
+  const bak = ".index.html.audit-random.bak";
+  fs.copyFileSync("index.html", bak);
   fs.writeFileSync("index.html", html);
+  verifyIndexHtmlSyntax({ backupPath: bak });
+  try { fs.unlinkSync(bak); } catch {}
   console.log(`   priceHistory : ${appended} point(s) ajouté(s), ${skipped} skip(s) (< ${DAYS_BEFORE_CONFIRM_POINT}j depuis dernier point)`);
 }

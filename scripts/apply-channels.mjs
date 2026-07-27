@@ -7,9 +7,14 @@
 // Usage :  node scripts/apply-channels.mjs
 
 import fs from "node:fs";
+import { verifyIndexHtmlSyntax } from "./lib/verify-index-syntax.mjs";
 
 const html = fs.readFileSync("index.html", "utf8");
 const channels = JSON.parse(fs.readFileSync("data/channels.json", "utf8"));
+
+// Backup pour rollback si la vérif syntaxique post-write échoue
+const BACKUP = ".index.html.apply-channels.bak";
+fs.copyFileSync("index.html", BACKUP);
 
 // Table de correspondance : quelle liste on injecte pour quel `name:` d'entrée.
 // La clé est une regex qui match le champ `name:"..."` unique dans l'entrée.
@@ -178,8 +183,14 @@ if (misses.length) {
 }
 if (hits === 0) {
   console.error("❌ Aucune insertion. Rien écrit.");
+  try { fs.unlinkSync(BACKUP); } catch {}
   process.exit(1);
 }
 
 fs.writeFileSync("index.html", patched);
 console.log(`✅ ${hits} entrées patchées avec channelsList dans index.html`);
+
+// Vérif syntaxique OBLIGATOIRE : si le patch a introduit une erreur JS, on rollback
+// depuis le backup + exit(1) pour bloquer tout commit potentiel.
+verifyIndexHtmlSyntax({ backupPath: BACKUP });
+try { fs.unlinkSync(BACKUP); } catch {}

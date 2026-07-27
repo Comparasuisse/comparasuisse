@@ -124,6 +124,47 @@ aujourd'hui » ne doit pas signifier « j'ai poussé un commit UI » mais
 bien « j'ai revérifié au moins un prix directement sur un site
 officiel aujourd'hui ».
 
+## 🛡️ Règle absolue : vérif syntaxique après tout patch d'index.html
+
+**Tout script qui écrit dans `index.html` DOIT valider la syntaxe JS du script
+inline avant de terminer.** Le helper à utiliser :
+
+```js
+import { verifyIndexHtmlSyntax } from "./lib/verify-index-syntax.mjs";
+// ... fs.writeFileSync("index.html", patched);
+verifyIndexHtmlSyntax({ backupPath: BACKUP }); // exit(1) + rollback si cassé
+```
+
+Le helper extrait le plus gros `<script>` inline, le passe à `node --check`, et
+en cas d'erreur : affiche l'erreur formatée + restaure depuis le backup fourni
++ `process.exit(1)`. Un fichier index.html cassé ne peut donc plus arriver
+jusqu'au `git commit`.
+
+**Scripts déjà câblés** :
+- `scripts/apply-channels.mjs`
+- `scripts/append-price-point.mjs`
+- `scripts/audit-random.mjs` (mode `--history`)
+
+**Pattern à respecter pour tout nouveau script qui modifie index.html** :
+
+```js
+const BAK = ".index.html.<script-name>.bak";
+fs.copyFileSync("index.html", BAK);
+try {
+  fs.writeFileSync("index.html", newContent);
+  verifyIndexHtmlSyntax({ backupPath: BAK });
+} finally {
+  try { fs.unlinkSync(BAK); } catch {}
+}
+```
+
+**Why** : le commit 7e84e1c a poussé un `index.html` avec une erreur de syntaxe
+JS globale (fragment orphelin de tableau, cassé par le bug d'idempotence du
+regex de suppression dans `apply-channels.mjs`). Le site est resté totalement
+bloqué en prod (aucun onglet cliquable, aucune offre visible) jusqu'au hotfix
+5d1952f. Ce garde-fou empêche définitivement ce scénario : même si le regex
+d'un script foire, le fichier ne peut plus atteindre le disque en état cassé.
+
 ## ⚠️ Rappel critique : checkbox de filtre à mettre à jour
 
 Après avoir ajouté une entrée à `tvData` ou `comboData` avec un `operator` qui

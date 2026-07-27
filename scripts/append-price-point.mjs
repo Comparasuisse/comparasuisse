@@ -14,6 +14,16 @@
 //   documenter la source (feature du workflow CHECKLIST-OFFRE.md).
 
 import fs from "node:fs";
+import { verifyIndexHtmlSyntax } from "./lib/verify-index-syntax.mjs";
+
+// Wrapper local : backup + write + verify. Restaure + exit(1) si syntaxe cassée.
+function safeWriteIndex(newContent) {
+  const bak = ".index.html.append-price-point.bak";
+  fs.copyFileSync("index.html", bak);
+  fs.writeFileSync("index.html", newContent);
+  verifyIndexHtmlSyntax({ backupPath: bak });
+  try { fs.unlinkSync(bak); } catch {}
+}
 
 const [, , nameArg, priceArg] = process.argv;
 if (!nameArg || !priceArg) {
@@ -48,7 +58,7 @@ if (mWith) {
   // Aussi bump verifiedAt
   const verifRe = new RegExp(`(name:"${nameEsc}"[^}]*?verifiedAt:")[^"]+(")`, "");
   html = html.replace(verifRe, `$1${today}$2`);
-  fs.writeFileSync("index.html", html);
+  safeWriteIndex(html);
   console.log(`✅ Point ajouté à priceHistory de "${nameArg}" : ${today} · CHF ${price.toFixed(2)}`);
   console.log(`   verifiedAt aussi bumpé à ${today}`);
   process.exit(0);
@@ -58,7 +68,7 @@ if (mWith) {
 const withVerifRe = new RegExp(`(name:"${nameEsc}"[^}]*?verifiedAt:")[^"]+(")`, "");
 if (withVerifRe.test(html)) {
   html = html.replace(withVerifRe, `$1${today}$2, priceHistory:[{date:"${today}",price:${price}}]`);
-  fs.writeFileSync("index.html", html);
+  safeWriteIndex(html);
   console.log(`✅ priceHistory créé pour "${nameArg}" : [${today} · CHF ${price.toFixed(2)}]`);
   console.log(`   Note : 1 seul point → pas encore de graphique visible (règle : ≥ 2 points)`);
   process.exit(0);
