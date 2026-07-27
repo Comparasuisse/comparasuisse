@@ -115,6 +115,50 @@ cliquer sur « Voir l'offre » pour vérifier lui-même sur la page opérateur.
 
 ---
 
+## 📦 Offres combo : vraie remise obligatoire avant ajout
+
+Pour tout ajout d'offre **combo** (Internet+TV, Mobile+Internet, Multi-service,
+etc.) dans `comboData` : **vérifier explicitement s'il existe une vraie remise
+combo par rapport à la somme des prix standalone des composants**, AVANT ajout.
+
+**Test à faire systématiquement** :
+1. Noter le prix standalone de chaque composant (ex : Internet 44.90 + TV 14.90 séparés)
+2. Noter le prix total combo affiché par l'opérateur (ex : 56.80 pour le pack)
+3. Comparer : différence > 0 = vraie remise combo → ajout justifié
+4. Différence = 0 = simple addition = **NE PAS AJOUTER**
+
+**Pourquoi cette règle** : le visiteur peut déjà comparer les 2 services
+séparément dans leurs onglets respectifs (Internet, TV, Mobile). Ajouter un
+combo sans rabais dans `comboData` n'apporte aucune valeur — juste du bruit
+qui gonfle artificiellement le compteur « X offres combos ». La promesse
+implicite du comparateur combo est : « voici les vraies remises quand tu
+regroupes tes abos ». Un « faux combo » brise cette promesse.
+
+**Cas rencontrés le 2026-07-27 (audit systématique)** :
+
+| Opérateur | Verdict | Justification |
+|---|---|---|
+| ✅ Sunrise Up Connect L + TV | **Ajouté** | -26% permanent, prix combo < somme standalone |
+| ✅ Sky Fiber + Séries | **Ajouté** | Fiber 39.- + Sky Show ~14.90 = ~54 CHF vs 42.90 combo (-11) |
+| ✅ Quickline Internet L + TV | **Ajouté** | TV 0.-/mois pendant 24m (économie ~15 CHF/mois) |
+| ✅ Teleboy Home 1 Gbit/s + TV | **Ajouté** | TV combo 11.90 vs 14.90 standalone (-3 CHF/mois à vie) |
+| ❌ SAK Digital | **Non ajouté** | Simulateur combo affiche la SOMME BRUTE des prix standalone : Internet S 33.- + TV S 17.- = 50.- combo (aucune remise). Modèle « à la carte » |
+| ❌ iWay | **Non ajouté** | Documentation officielle : « does not offer fixed combo packages, but you can combine all their telephony packages with their internet packages as desired » |
+| ❌ Green | **Non ajouté** | Modèle « flexible / mix and match » — packs personnalisables sans rabais combo forcé |
+| ❌ Netplus (BLI BLA BLO) | **Non ajouté** | Packs personnalisables via partenaires locaux, aucun prix combo standardisé affiché |
+| ❌ Migros Mobile | **Non ajouté** | URLs 404 (site en refonte), impossible d'auditer maintenant — à réessayer plus tard |
+
+**Note importante sur les rabais non-mensuels** : certains opérateurs affichent
+« Économisez jusqu'à X CHF » sur leurs combos, mais cette économie porte
+uniquement sur les frais d'activation (99.- offerts, 79.- offerts, etc.), pas
+sur les prix mensuels. C'est un rabais **one-shot**, pas un rabais combo à vie.
+Ces cas doivent être classés comme « pas de vraie remise combo » sauf si
+l'économie mensuelle est aussi présente. Exemple concret : le simulateur SAK
+affiche « Sie sparen bis zu 247 CHF » qui correspond au cumul des frais
+d'activation offerts, pas à un rabais mensuel — donc pas un vrai combo.
+
+---
+
 ## 📈 Historique de prix (`priceHistory`) — ajout automatique
 
 Chaque offre peut porter un tableau `priceHistory: [{date:"YYYY-MM-DD", price:X.XX}, …]`
