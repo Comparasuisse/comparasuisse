@@ -135,32 +135,44 @@ const SOURCES = [
   {
     key: "zattoo",
     name: "Zattoo (Premium & Ultimate)",
-    source: "https://zattoo.com/ch/fr/channels",
+    // Version /en/ contient les images channel avec alt exploitable ; les autres locales masquent le rendu.
+    source: "https://zattoo.com/ch/en/channels",
     type: "html",
     extract: async (page) => {
-      await page.waitForTimeout(3000);
-      for (let i = 0; i < 10; i++) {
+      await page.waitForTimeout(4000);
+      for (let i = 0; i < 25; i++) {
         await page.evaluate(() => window.scrollBy(0, 1500));
-        await page.waitForTimeout(400);
+        await page.waitForTimeout(250);
       }
-      // Chez Zattoo, chaque card chaîne a un lien vers /ch/fr/tv/[slug]
-      // avec le nom exact de la chaîne dans le texte ou l'aria-label.
-      const names = await page.evaluate(() => {
-        const found = [];
-        // Nom lisible : lien vers page chaîne, avec un heading enfant
-        for (const a of document.querySelectorAll('a[href*="/tv/"]')) {
-          const txt = (a.getAttribute("aria-label") || a.textContent || "").trim();
-          if (txt) found.push(txt);
+      // Chaque chaîne apparaît dans plusieurs img[alt] : le nom seul + variantes
+      // "X included in Free/Premium/Ultimate subscription". On garde le nom seul,
+      // et on relève au passage les 3 tiers pour distinguer Free/Premium/Ultimate.
+      const raw = await page.evaluate(() =>
+        [...document.querySelectorAll('img[alt]')].map((i) => i.alt.trim())
+      );
+      const tier = { free: new Set(), premium: new Set(), ultimate: new Set() };
+      const bare = new Set();
+      for (const a of raw) {
+        if (!a || a.length < 2 || a.length > 80) continue;
+        const m = a.match(/^(.+?) included in (Free|Premium|Ultimate) subscription$/);
+        if (m) {
+          tier[m[2].toLowerCase()].add(m[1].trim());
+        } else if (!/logo|zattoo|package|home|expand|sort/i.test(a) && !a.includes(">")) {
+          bare.add(a);
         }
-        return found;
-      });
-      const u = uniqueChannels(names);
-      return u.length >= 30
-        ? {
-            flat: u.sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" })),
-            note: "Chaînes Zattoo disponibles en Suisse (offres Premium & Ultimate). La différence Premium/Ultimate porte principalement sur la qualité vidéo et le nombre de flux simultanés, pas sur la liste des chaînes.",
-          }
-        : { flat: null, note: "Structure DOM Zattoo non parseable — page dynamique lourde." };
+      }
+      const allNames = new Set([...bare, ...tier.free, ...tier.premium, ...tier.ultimate]);
+      const cleaned = uniqueChannels([...allNames]).sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
+      if (cleaned.length < 30) return { flat: null, note: `Zattoo : seulement ${cleaned.length} chaînes détectées.` };
+      return {
+        categorized: {
+          [`Free (${tier.free.size})`]: [...tier.free].sort((a, b) => a.localeCompare(b)),
+          [`Premium (${tier.premium.size})`]: [...tier.premium].sort((a, b) => a.localeCompare(b)),
+          [`Ultimate (${tier.ultimate.size})`]: [...tier.ultimate].sort((a, b) => a.localeCompare(b)),
+        },
+        flat: cleaned,
+        note: `Zattoo Suisse — extrait de /ch/en/channels (le rendu /fr/ ne charge pas les tuiles côté serveur). Free ${tier.free.size} · Premium ${tier.premium.size} · Ultimate ${tier.ultimate.size}. Premium et Ultimate contiennent tout Free + suppléments.`,
+      };
     },
   },
   {
@@ -199,36 +211,36 @@ const SOURCES = [
   {
     key: "swisscom-blue-tv",
     name: "Swisscom blue TV (S/M/L)",
-    source: "https://www.swisscom.ch/fr/clients-prives/abonnement-tv/liste-des-chaines.html",
-    type: "html",
-    extract: async (page) => {
-      await page.waitForTimeout(5000);
-      // La page Swisscom charge les 726 chaînes en lazy-load ; il faut cliquer "Afficher plus" en boucle
-      for (let i = 0; i < 30; i++) {
-        const btn = await page.$('button:has-text("Afficher plus"), button:has-text("Show more")');
-        if (!btn) break;
-        try {
-          await btn.click({ timeout: 2000 });
-          await page.waitForTimeout(500);
-        } catch { break; }
-      }
-      await page.waitForTimeout(1500);
-      const names = await page.evaluate(() => {
-        const out = [];
-        // Swisscom rend chaque chaîne dans un article avec .name ou h3
-        for (const c of document.querySelectorAll('article, [class*="channel-card"], [class*="result-item"], li')) {
-          const h = c.querySelector('h3, h4, [class*="name"], [class*="title"]');
-          if (h) {
-            const t = h.innerText.trim();
-            if (t && t.length > 1 && t.length < 50) out.push(t);
+    // Source primaire (officielle) : documents.swisscom.com/.../senderliste-kmu-en.pdf est
+    // une CAPTURE-IMAGE du site : 7,5 MB, aucune couche texte exploitable (pdfjs extrait
+    // uniquement les headers de section + le footer de pagination). Aucun autre PDF officiel
+    // n'expose la liste sous forme texte.
+    // Source de repli : expertfries.ch/senderlisten/swisscom.pdf — capture texte propre de
+    // la senderliste officielle Swisscom (site tiers privé, publie plusieurs senderlisten
+    // suisses au format texte). Format "N   Nom de la chaîne" séparé par espaces multiples.
+    source: "https://expertfries.ch/senderlisten/swisscom.pdf",
+    type: "pdf",
+    extract: (text) => {
+      // Enlève les numéros de canal, garde uniquement les noms.
+      // Format observé : "0   blue Zoom D   1   SRF 1   2   SRF zwei ..."
+      const flat = text
+        .split(/\s{2,}|\n/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        // Vire les numéros de canal purs
+        .filter((s) => !/^\d+$/.test(s))
+        // Vire l'en-tête "Swisscom Senderliste"
+        .filter((s) => !/^Swisscom Senderliste$/i.test(s));
+      const channels = uniqueChannels(flat).sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
+      return channels.length >= 100
+        ? {
+            flat: channels,
+            note:
+              "Source Swisscom officielle (documents.swisscom.com/.../senderliste-kmu-en.pdf) : PDF présenté comme image, non parseable. Repli utilisé : expertfries.ch/senderlisten/swisscom.pdf (capture texte tierce de la même senderliste officielle Swisscom). Catalogue commun aux packs blue TV S (150+), M (290+), L (330+), XL — la différence porte sur le nombre inclus, pas la disponibilité individuelle.",
           }
-        }
-        return out;
-      });
-      const u = uniqueChannels(names);
-      return u.length >= 30
-        ? { flat: u.sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" })), note: "Liste globale blue TV — Swisscom ne sépare pas explicitement par pack S/M/L sur cette page (grille agrégée)." }
-        : { flat: null, note: `Extraction Swisscom blue TV : seulement ${u.length} chaînes détectées, sélecteur DOM à revoir.` };
+        : { flat: null, note: `Swisscom senderliste : ${channels.length} chaînes après filtrage.` };
     },
   },
   {
@@ -238,49 +250,69 @@ const SOURCES = [
     type: "html",
     extract: async (page) => {
       await page.waitForTimeout(3000);
+      // La table Teleking est bien peuplée en DOM mais les cellules ont display:none
+      // avant hydration ; innerText retourne "" alors que textContent fonctionne.
       const rows = await page.evaluate(() => {
         const out = [];
-        // Chercher spécifiquement les cellules d'une table de senderliste
-        // Les liens de navigation sont exclus (on prend le TEXTE des td, pas des a de menu)
-        for (const td of document.querySelectorAll('table td:first-child')) {
-          const t = td.innerText.replace(/\s+/g, " ").trim();
-          if (t && t.length > 1 && t.length < 60) out.push(t);
-        }
-        // Fallback : liste ul dans main
-        if (out.length < 20) {
-          for (const li of document.querySelectorAll('main ul li, article ul li')) {
-            const t = li.innerText.replace(/\s+/g, " ").trim();
-            if (t && t.length > 1 && t.length < 60) out.push(t);
-          }
+        for (const tr of document.querySelectorAll("table tr")) {
+          const tds = tr.querySelectorAll("td");
+          if (tds.length < 2) continue;
+          const name = (tds[0].textContent || "").replace(/\s+/g, " ").trim();
+          const packs = (tds[tds.length - 1].textContent || "").replace(/\s+/g, " ").trim();
+          if (name && name.length > 1 && name.length < 60) out.push({ name, packs });
         }
         return out;
       });
-      const u = uniqueChannels(rows);
-      return u.length >= 20
-        ? { flat: u.sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" })), note: "Liste Teleking KingTV — inclut potentiellement les 3 tiers (Silber ⊂ Gold ⊂ Platin selon leur documentation)." }
-        : { flat: null, note: `Table Teleking non détectée (${u.length} candidats après filtrage) — page probablement générée par JS.` };
+      if (rows.length < 20)
+        return { flat: null, note: `Table Teleking : ${rows.length} lignes seulement.` };
+      // Regroupe par pack (Silber / Gold / Platin)
+      const cats = { Silber: new Set(), Gold: new Set(), Platin: new Set() };
+      for (const r of rows) {
+        if (/silber/i.test(r.packs)) cats.Silber.add(r.name);
+        if (/gold/i.test(r.packs)) cats.Gold.add(r.name);
+        if (/platin/i.test(r.packs)) cats.Platin.add(r.name);
+      }
+      const allNames = uniqueChannels(rows.map((r) => r.name)).sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
+      return {
+        categorized: {
+          [`Silber (${cats.Silber.size})`]: [...cats.Silber].sort((a, b) => a.localeCompare(b)),
+          [`Gold (${cats.Gold.size})`]: [...cats.Gold].sort((a, b) => a.localeCompare(b)),
+          [`Platin (${cats.Platin.size})`]: [...cats.Platin].sort((a, b) => a.localeCompare(b)),
+        },
+        flat: allNames,
+        note: `Extrait de teleking.ch/tv/senderliste — table HTML (${allNames.length} chaînes uniques). Table donne pour chaque chaîne les packs qui l'incluent (Silber ⊂ Gold ⊂ Platin en général).`,
+      };
     },
   },
   {
     key: "yallo-tv",
     name: "yallo TV",
-    source: "https://www.yallo.ch/fr/tv",
-    type: "html",
-    extract: async (page) => {
-      await page.waitForTimeout(3000);
-      for (let i = 0; i < 5; i++) {
-        await page.evaluate(() => window.scrollBy(0, 1200));
-        await page.waitForTimeout(300);
-      }
-      const names = await page.evaluate(() =>
-        [...document.querySelectorAll('img[alt]')]
-          .map((i) => i.alt.trim())
-          .filter((a) => a.length > 1 && a.length < 50 && !/logo|yallo|sunrise|icon/i.test(a))
+    // PDF officiel yallo TV (février 2026), hébergé sur le CDN Prismic Sunrise-yallo.
+    // Liste multilingue (DE/EN/FR/IT). Découvert via lien direct dans la page produit yallo.ch/fr/tv.
+    source:
+      "https://sunrise-yallo.cdn.prismic.io/sunrise-yallo/aaa8iVxvIZEnjQ_h_YMK-1774_yallo_TV_Channel_List_2026_Februar.pdf",
+    type: "pdf",
+    extract: (text) => {
+      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const pieces = lines.flatMap((line) =>
+        line
+          .split(/(?:\s+HD\s+|\s+SD\s+|\s+UHD\s+|\s+4K\s+)/g)
+          .flatMap((p) => p.split(/\s{2,}|\t/))
+          .map((p) => p.trim())
+          .filter(Boolean)
       );
-      const u = uniqueChannels(names);
-      return u.length >= 10
-        ? { flat: u }
-        : { flat: null, note: "Yallo TV : page marketing sans liste détaillée directement extractible." };
+      const channels = uniqueChannels(pieces).sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
+      return channels.length >= 100
+        ? {
+            flat: channels,
+            note:
+              "Extrait du PDF officiel yallo TV (Channel List, février 2026, hébergé sur sunrise-yallo.cdn.prismic.io). Catalogue commun à yallo TV standalone et au bundle Home Supermax + TV.",
+          }
+        : { flat: null, note: `PDF yallo TV : ${channels.length} chaînes après filtrage.` };
     },
   },
   {
@@ -305,13 +337,31 @@ const SOURCES = [
   {
     key: "init7-tv7",
     name: "Init7 TV7",
-    source: null,
-    type: "manual",
-    extract: () => ({
-      flat: null,
-      note:
-        "Init7 ne publie pas de liste plate consolidée des ~200 chaînes TV7. Le contenu se découvre via l'app TV7 Apple TV / Android TV ou les playlists M3U/HLS. Selon retours utilisateurs (2222.ch), l'offre francophone est plus limitée que l'allemande, et la chaîne régionale valaisanne Canal9 n'est pas incluse (contrairement à la suisse-alémanique Kanal9). Voir page officielle pour l'offre complète.",
-    }),
+    // Playlist XSPF publique (XML) qui liste TOUS les canaux TV7 avec leur URL multicast.
+    // On extrait juste les <title> ; les URLs udp:// ne sont utiles qu'aux clients Init7.
+    source: "https://api.init7.net/tvchannels.xspf",
+    type: "text",
+    fetch: async (ctx, url) => {
+      const r = await ctx.request.get(url, { timeout: 20000 });
+      if (!r.ok()) throw new Error(`HTTP ${r.status()}`);
+      return await r.text();
+    },
+    extract: (xml) => {
+      // Pas de vrai parser XML : on extrait les <title> tracks (pas le premier <title> du playlist).
+      const titles = [...xml.matchAll(/<track>[\s\S]*?<title>([^<]+)<\/title>/g)].map((m) =>
+        m[1].trim()
+      );
+      const cleaned = uniqueChannels(titles).sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
+      return cleaned.length >= 50
+        ? {
+            flat: cleaned,
+            note:
+              "Extrait de la playlist XSPF officielle api.init7.net/tvchannels.xspf (accessible publiquement, tags <title> par track). Streams UDP multicast → utilisables uniquement depuis le réseau Init7. Replay 7 jours en option payante (+11.-/mois).",
+          }
+        : { flat: null, note: `Init7 XSPF : ${cleaned.length} chaînes après filtrage.` };
+    },
   },
   {
     key: "maxi-tv",
@@ -321,25 +371,64 @@ const SOURCES = [
     extract: () => ({
       flat: null,
       note:
-        "MaxiConnect ne publie pas de liste extractible des 250 chaînes MaxiTV sur son site public (Cortaillod). Consulter la page officielle ou contacter le support 7j/7.",
+        "MaxiConnect (Villaz-St-Pierre) ne publie aucune liste extractible sur son site public (maxiconnect.ch/fr/television) ni dans son wiki. Seuls 20 canaux replay-avec-pub sont mentionnés dans la fiche produit — ce n'est PAS la liste complète des ~270 chaînes du pack Plus/Ultra. Aucun PDF public, pas d'API publique détectée. Décision assumée : afficher un lien vers la page officielle plutôt qu'une liste tronquée trompeuse.",
     }),
   },
   {
     key: "iway-tv",
-    name: "iWay TV (base Wilmaa)",
-    source: "https://www.wilmaa.com/de/paket/wilmaa-plus",
+    name: "iWay TV (Classic/Premium/Top)",
+    // iWay charge la senderliste depuis une API JSON interne (gfo.iway.ch/api/infos/sender/default)
+    // qui refuse les requêtes directes (403) mais répond OK depuis la page /tv/senderliste/.
+    // On l'intercepte via un handler `response` Playwright.
+    source: "https://www.iway.ch/tv/senderliste/",
     type: "html",
     extract: async (page) => {
-      await page.waitForTimeout(3000);
-      const names = await page.evaluate(() =>
-        [...document.querySelectorAll('img[alt], [class*="channel"] [class*="name"]')]
-          .map((i) => (i.tagName === "IMG" ? i.alt : i.innerText).trim())
-          .filter((a) => a.length > 1 && a.length < 50 && !/logo|wilmaa|paket/i.test(a))
-      );
-      const u = uniqueChannels(names);
-      return u.length >= 10
-        ? { flat: u, note: "Extrait depuis Wilmaa (le back-end de iWay TV) — représentatif des offres Classic/Premium/Top." }
-        : { flat: null, note: "Wilmaa page structure non parseable." };
+      let payload = null;
+      let categories = null;
+      page.on("response", async (r) => {
+        const u = r.url();
+        if (u.endsWith("/api/infos/sender/default")) {
+          try { payload = await r.json(); } catch {}
+        } else if (u.endsWith("/api/info_categories/sender/default")) {
+          try { categories = await r.json(); } catch {}
+        }
+      });
+      // Rejoue la nav pour être sûr de capter les responses (Playwright ne rejoue pas les caches)
+      await page.reload({ waitUntil: "networkidle", timeout: 45000 });
+      await page.waitForTimeout(5000);
+      if (!Array.isArray(payload) || payload.length < 50)
+        return { flat: null, note: `iWay API non capturée (payload=${payload ? payload.length : "null"}).` };
+      // Map catégorie id → label pour retrouver Classic/Premium/Top
+      const catMap = {};
+      if (Array.isArray(categories)) {
+        for (const c of categories) catMap[String(c.id)] = c.title || c.name || `#${c.id}`;
+      }
+      // Chaque chaîne peut avoir "info_category_ids" = "12,45" (comma-separated string)
+      const buckets = {};
+      const allNames = new Set();
+      for (const ch of payload) {
+        const title = (ch.title || "").trim();
+        if (!title || title.length > 60) continue;
+        allNames.add(title);
+        const ids = String(ch.info_category_ids || "").split(/[,\s]+/).filter(Boolean);
+        for (const id of ids) {
+          const label = catMap[id] || `cat-${id}`;
+          (buckets[label] ||= new Set()).add(title);
+        }
+      }
+      const flat = uniqueChannels([...allNames]).sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
+      // On garde uniquement les catégories qui ressemblent à un pack (Classic/Premium/Top ou "TV2.0")
+      const catKeys = Object.keys(buckets).filter((k) => /classic|premium|top|tv\s*2/i.test(k));
+      const categorized = catKeys.length
+        ? Object.fromEntries(
+            catKeys.map((k) => [`${k} (${buckets[k].size})`, [...buckets[k]].sort((a, b) => a.localeCompare(b))])
+          )
+        : undefined;
+      return {
+        ...(categorized ? { categorized } : {}),
+        flat,
+        note: `Extrait via API interne gfo.iway.ch (${payload.length} entrées, ${flat.length} chaînes uniques). Catégories iWay détectées : ${catKeys.join(", ") || "(pas de correspondance Classic/Premium/Top trouvée — la vue flat couvre l'ensemble)"}.`,
+      };
     },
   },
   {
@@ -371,6 +460,33 @@ const SOURCES = [
       note:
         "Liste construite à partir de la fiche tarifaire CANAL+ Suisse (fichesTarifaires-Canal.pdf) et de la fiche produit CANAL+ Suisse — les 3 packs Sport, Ciné Séries et La Totale combinent ces chaînes (La Totale = Sport ∪ Ciné Séries ∪ 150+ chaînes complémentaires). Vérifier canalplus.ch pour la grille exhaustive.",
     }),
+  },
+  {
+    key: "talktalk-tv",
+    name: "Talk Talk TV (Surf + TV)",
+    // Fiche produit factsheet officielle Talk Talk (TTV.2026.TV.STD.FR.pdf) : contient la liste des chaînes.
+    source: "https://docs.talktalk.ch/public/TTI/1224_Senderliste_FR.pdf",
+    type: "pdf",
+    extract: (text) => {
+      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const pieces = lines.flatMap((line) =>
+        line
+          .split(/(?:\s+HD\s+|\s+SD\s+|\s+UHD\s+)/g)
+          .flatMap((p) => p.split(/\s{2,}|\t|·/))
+          .map((p) => p.trim())
+          .filter(Boolean)
+      );
+      const channels = uniqueChannels(pieces).sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
+      return channels.length >= 50
+        ? {
+            flat: channels,
+            note:
+              "Extrait du PDF officiel Talk Talk TTV.2026.TV.STD.FR (fiche produit TV factsheet). Applicable à l'offre Talk Talk Surf + TV.",
+          }
+        : { flat: null, note: `PDF Talk Talk : ${channels.length} chaînes après filtrage.` };
+    },
   },
 ];
 
@@ -423,6 +539,10 @@ for (const src of sources) {
       const buf = await fetchPdf(ctx, src.source);
       const text = await pdfToText(new Uint8Array(buf));
       extracted = src.extract(text);
+    } else if (src.type === "text") {
+      // Texte brut (XML/XSPF/M3U/etc.) via un fetcher custom
+      const body = await src.fetch(ctx, src.source);
+      extracted = src.extract(body);
     } else {
       const page = await ctx.newPage();
       const resp = await page.goto(src.source, { waitUntil: "domcontentloaded", timeout: 45000 });
@@ -461,13 +581,22 @@ await browser.close();
 
 // === ÉCRITURE ===
 fs.mkdirSync("data", { recursive: true });
-fs.writeFileSync("data/channels.json", JSON.stringify(results, null, 2));
+// Merge avec l'existant si on n'a lancé qu'un sous-ensemble de sources.
+// Sans ça, un `node scripts/fetch-channels.mjs zattoo` effacerait les autres résultats.
+let merged = results;
+if (requestedKeys.length && fs.existsSync("data/channels.json")) {
+  try {
+    const prev = JSON.parse(fs.readFileSync("data/channels.json", "utf8"));
+    merged = { ...prev, ...results };
+  } catch { /* corrompu : on repart de results */ }
+}
+fs.writeFileSync("data/channels.json", JSON.stringify(merged, null, 2));
 
 // Rendu markdown human-readable
 const md = ["# Listes de chaînes TV — extraction automatique", ""];
 md.push(`Généré le ${new Date().toLocaleString("fr-CH")} par \`scripts/fetch-channels.mjs\`.`);
 md.push("");
-for (const [k, r] of Object.entries(results)) {
+for (const [k, r] of Object.entries(merged)) {
   md.push(`## ${r.name} (\`${k}\`)`);
   md.push("");
   md.push(`- **Source** : ${r.source || "manuel"}`);

@@ -54,6 +54,10 @@ chaque re-vérification :
 - `factsheet-pdf` — PDF officiel de l'opérateur (le plus fiable, valeurs contractuelles)
 - `product-page` — Page produit HTML officielle
 - `third-party` — Source secondaire de confiance (moneyland, alao, checkeverything, ictjournal, xavierstuder)
+- `third-party-capture` — Capture texte tierce d'un document officiel non parseable
+  directement (ex. PDF Swisscom senderliste publié en format image → capture texte
+  via expertfries.ch). Cas rare : oblige à renseigner `channelsSourceNote` ou une
+  mention équivalente dans `details` pour signaler le repli.
 - `assumption` — Déduction ou extrapolation non vérifiable publiquement (à utiliser
   avec parcimonie ; oblige à noter dans `details` la nature de l'hypothèse)
 

@@ -56,14 +56,85 @@ if (channels.canalplus?.categorized) {
   }));
 }
 
+// --- yallo TV standalone + combo Home Supermax + TV (même catalogue) ---
+if (channels["yallo-tv"]?.flat) {
+  const list = JSON.stringify(channels["yallo-tv"].flat);
+  push(/name:"yallo TV"/, list);
+  push(/name:"Home Supermax \+ TV"/, list); // combo yallo
+}
+
+// --- Zattoo Premium / Ultimate + combo Zattoo HOME ---
+// Free/Premium/Ultimate sont incluses en cascade : Premium = Free ∪ 90+, Ultimate = Premium ∪ marginal
+if (channels.zattoo?.categorized) {
+  const zc = channels.zattoo.categorized;
+  const free = zc[Object.keys(zc).find((k) => k.startsWith("Free"))] || [];
+  const prem = zc[Object.keys(zc).find((k) => k.startsWith("Premium"))] || [];
+  const ult = zc[Object.keys(zc).find((k) => k.startsWith("Ultimate"))] || [];
+  push(/name:"Zattoo Premium"/, JSON.stringify({
+    [`Chaînes Premium (${prem.length})`]: prem,
+    [`Dont Free (${free.length}) — également accessible sans abo`]: free,
+  }));
+  push(/name:"Zattoo Ultimate"/, JSON.stringify({
+    [`Chaînes Ultimate (${ult.length})`]: ult,
+    [`Dont Free (${free.length}) — également accessible sans abo`]: free,
+  }));
+  push(/name:"Zattoo HOME \(Premium ou Ultimate\)"/, JSON.stringify({
+    [`Chaînes Premium (${prem.length})`]: prem,
+    [`Chaînes Ultimate ajoutées (${Math.max(0, ult.length - prem.length)}) — visible avec la variante ULTIMATE`]:
+      ult.filter((c) => !prem.includes(c)),
+  }));
+}
+
+// --- Swisscom blue TV S / M / L / XL Sport / XL Streaming + combo blue Internet + TV ---
+// Catalogue commun aux packs, la différence se joue sur le nombre inclus par pack.
+if (channels["swisscom-blue-tv"]?.flat) {
+  const list = JSON.stringify(channels["swisscom-blue-tv"].flat);
+  push(/name:"blue TV S"/, list);
+  push(/name:"blue TV M"/, list);
+  push(/name:"blue TV L"/, list);
+  push(/name:"blue TV XL Sport"/, list);
+  push(/name:"blue TV XL Streaming"/, list);
+  push(/name:"blue Internet \+ TV"/, list);
+}
+
+// --- iWay TV Classic / Premium / Top (catalogue commun via API iWay) ---
+if (channels["iway-tv"]?.flat) {
+  const list = JSON.stringify(channels["iway-tv"].flat);
+  push(/name:"iWay TV Classic"/, list);
+  push(/name:"iWay TV Premium"/, list);
+  push(/name:"iWay TV Top"/, list);
+}
+
+// --- Teleking KingTV Silber / Gold / Platin ---
+if (channels.teleking?.categorized) {
+  const tc = channels.teleking.categorized;
+  const silber = tc[Object.keys(tc).find((k) => k.startsWith("Silber"))] || [];
+  const gold = tc[Object.keys(tc).find((k) => k.startsWith("Gold"))] || [];
+  const platin = tc[Object.keys(tc).find((k) => k.startsWith("Platin"))] || [];
+  push(/name:"KingTV-Silber"/, JSON.stringify(silber));
+  push(/name:"KingTV-Gold"/, JSON.stringify(gold));
+  push(/name:"KingTV-Platin"/, JSON.stringify(platin));
+}
+
+// --- Init7 TV7 ---
+if (channels["init7-tv7"]?.flat) {
+  push(/name:"Init7 TV7"/, JSON.stringify(channels["init7-tv7"].flat));
+}
+
+// --- Talk Talk Surf 100 + TV ---
+if (channels["talktalk-tv"]?.flat) {
+  push(/name:"Surf 100 \+ TV"/, JSON.stringify(channels["talktalk-tv"].flat));
+}
+
 let patched = html;
 let hits = 0;
 let misses = [];
 for (const { nameRegex, value } of MAPPING) {
   // Retirer un channelsList existant sur la même entrée (pour l'idempotence).
   // Puis insérer/mettre à jour avant `, url:`.
+  // Regex tolérant les accolades imbriquées à 1 niveau (priceHistory:[{...}], channelsList:{...}).
   const entryRegex = new RegExp(
-    "\\{[^{}]*?" + nameRegex.source + "[^{}]*?\\}",
+    "\\{(?:[^{}]|\\{[^{}]*\\})*?" + nameRegex.source + "(?:[^{}]|\\{[^{}]*\\})*?\\}",
     "g"
   );
   const matches = patched.match(entryRegex);
