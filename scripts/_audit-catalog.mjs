@@ -93,6 +93,28 @@ const VAGUES = {
       'https://www.init7.net/fr/internet/fiber7/',
       'https://www.init7.net/fr/'
     ]
+  },
+  v4: {
+    quickline: [
+      'https://www.quickline.ch/fr/',
+      'https://www.quickline.ch/internet-tv',
+      'https://www.quickline.ch/mobile'
+    ],
+    iway: [
+      'https://www.iway.ch/fr/',
+      'https://www.iway.ch/fr/internet/',
+      'https://www.iway.ch/fr/mobile/',
+      'https://www.iway.ch/fr/tv/'
+    ],
+    vtx: [
+      'https://www.vtx.ch/fr/residential/internet',
+      'https://www.vtx.ch/fr/residential/mobile/abo-mobile',
+      'https://www.vtx.ch/fr/residential/tv'
+    ],
+    galaxus: [
+      'https://www.galaxus.ch/fr/page/galaxus-internet-15900',
+      'https://www.galaxus.ch/fr/page/internet-a-domicile-15901'
+    ]
   }
 };
 
