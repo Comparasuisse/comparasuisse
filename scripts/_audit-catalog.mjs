@@ -139,6 +139,26 @@ const VAGUES = {
       'https://www.go-mo.ch/fr/gomo-12-95',
       'https://www.go-mo.ch/fr/gomo-europe'
     ]
+  },
+  v5b: {
+    talktalk: [
+      'https://www.talktalk.ch/fr/',
+      'https://www.talktalk.ch/fr/mobile-abo',
+      'https://www.talktalk.ch/fr/internet-tv/mobile-home-internet.html'
+    ],
+    chmobile: [
+      'https://chmobile.ch/fr/',
+      'https://chmobile.ch/fr/plans/'
+    ],
+    aldi: [
+      'https://www.aldimobile.ch/fr/',
+      'https://www.aldimobile.ch/fr/abonnements'
+    ],
+    digitalrepublic: [
+      'https://www.digitalrepublic.ch/fr/',
+      'https://www.digitalrepublic.ch/fr/mobile',
+      'https://www.digitalrepublic.ch/fr/internet'
+    ]
   }
 };
 
