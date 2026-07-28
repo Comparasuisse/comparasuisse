@@ -1,0 +1,12 @@
+{
+  "https://online-shop.mobile.migros.ch/fr/wireless": {
+    "status": 404,
+    "text": "404\nWe are sorry,\nbut the page you are looking for cannot be found.\nBack to homepage"
+  },
+  "https://www.mobile.migros.ch/fr/": {
+    "error": "page.goto: net::ERR_CERT_COMMON_NAME_INVALID at https://www.mobile.migros.ch/fr/\nCall log:\n\u001b[2m  - navigating to \"https://www.mobile.migros.ch/fr/\", waiting until \"domcontentloaded\"\u001b[22m\n"
+  },
+  "https://www.mobile.migros.ch/fr/abonnements": {
+    "error": "page.goto: net::ERR_CERT_COMMON_NAME_INVALID at https://www.mobile.migros.ch/fr/abonnements\nCall log:\n\u001b[2m  - navigating to \"https://www.mobile.migros.ch/fr/abonnements\", waiting until \"domcontentloaded\"\u001b[22m\n"
+  }
+}
