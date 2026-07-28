@@ -159,6 +159,29 @@ const VAGUES = {
       'https://www.digitalrepublic.ch/fr/mobile',
       'https://www.digitalrepublic.ch/fr/internet'
     ]
+  },
+  v5c: {
+    lycamobile: [
+      'https://www.lycamobile.ch/fr/',
+      'https://www.lycamobile.ch/fr/plans/',
+      'https://www.lycamobile.ch/fr/plans/hello/'
+    ],
+    lidl: [
+      'https://www.lidl-connect.ch/fr/',
+      'https://www.lidl-connect.ch/fr/tarifs/prepaid'
+    ],
+    post: [
+      'https://post-mobile.ch/fr/',
+      'https://post-mobile.ch/fr/abonnements/'
+    ],
+    maxiconnect: [
+      'https://maxiconnect.ch/fr/',
+      'https://maxiconnect.ch/fr/abonnements/'
+    ],
+    mtel: [
+      'https://www.mtel.ch/fr/',
+      'https://www.mtel.ch/fr/abonnements/'
+    ]
   }
 };
 
