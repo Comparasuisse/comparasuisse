@@ -115,6 +115,30 @@ const VAGUES = {
       'https://www.galaxus.ch/fr/page/galaxus-internet-15900',
       'https://www.galaxus.ch/fr/page/internet-a-domicile-15901'
     ]
+  },
+  v5a: {
+    mucho: [
+      'https://muchomobile.ch/fr/',
+      'https://muchomobile.ch/fr/abo/',
+      'https://muchomobile.ch/fr/abos/europe-appel-internet'
+    ],
+    swype: [
+      'https://www.swype.ch/fr/',
+      'https://www.swype.ch/fr/swype-swiss',
+      'https://www.swype.ch/fr/swype-europe',
+      'https://www.swype.ch/fr/swype-surf'
+    ],
+    spusu: [
+      'https://www.spusu.ch/fr/',
+      'https://www.spusu.ch/fr/spusu1',
+      'https://www.spusu.ch/fr/spusu2',
+      'https://www.spusu.ch/fr/spusu3'
+    ],
+    gomo: [
+      'https://www.go-mo.ch/fr/',
+      'https://www.go-mo.ch/fr/gomo-12-95',
+      'https://www.go-mo.ch/fr/gomo-europe'
+    ]
   }
 };
 
