@@ -63,6 +63,36 @@ const VAGUES = {
       'https://www.mobile.migros.ch/fr/',
       'https://www.mobile.migros.ch/fr/abonnements'
     ]
+  },
+  v3: {
+    sky: [
+      'https://mobile.sky.ch/fr/',
+      'https://fiber.sky.ch/fr/',
+      'https://www.sky.ch/fr/'
+    ],
+    teleboy: [
+      'https://www.teleboy.ch/fr/tv',
+      'https://www.teleboy.ch/kombi-abo',
+      'https://www.teleboy.ch/fr/internet'
+    ],
+    zattoo: [
+      'https://zattoo.com/ch/fr',
+      'https://zattoo.com/ch/fr/offers',
+      'https://zattoo.com/ch/fr/offers/home'
+    ],
+    kingtv: [
+      'https://www.teleking.ch/tv/',
+      'https://www.teleking.ch/tv/angebote/'
+    ],
+    canalplus: [
+      'https://subscribe.canalplus.com/ch',
+      'https://subscribe.canalplus.com/ch/produits'
+    ],
+    init7: [
+      'https://www.init7.net/fr/tv/tv7/',
+      'https://www.init7.net/fr/internet/fiber7/',
+      'https://www.init7.net/fr/'
+    ]
   }
 };
 
