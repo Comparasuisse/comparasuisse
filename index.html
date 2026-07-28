@@ -85,7 +85,7 @@
         {
           "@type": "Question",
           "name": "Quels forfaits mobiles ont un rabais à vie en Suisse ?",
-          "acceptedAnswer": {"@type": "Answer", "text": "Trois opérateurs proposent actuellement des rabais à vie : Wingo (Swiss Mini/Go/Max, Europe Go/Max, International Pro, Red Swiss) ; Salt (Swiss Max jusqu'à -68% et Europe XL) ; Coop Mobile (Swiss S/M/L et Europe M à -60%). Le rabais est maintenu tant que l'abonnement reste actif."}
+          "acceptedAnswer": {"@type": "Answer", "text": "Trois opérateurs proposent actuellement des rabais à vie : Wingo (Swiss Mini/Go/Max, Europe Go/Max, International Pro, Red Swiss) ; Salt (Swiss Max jusqu'à -70% et Europe XL) ; Coop Mobile (Swiss S/M/L et Europe M à -60%). Le rabais est maintenu tant que l'abonnement reste actif."}
         },
         {
           "@type": "Question",
@@ -210,6 +210,18 @@
   .roaming-pill{font-size:10px; padding:2px 8px; border-radius:20px; width:fit-content; margin-top:6px;}
   .roaming-yes{background:#e6f4ea; color:#1e7a3d;}
   .roaming-no{background:#f1efe9; color:var(--muted);}
+  /* Bandeau promo — visuellement dominant sur la carte, occupe toute la largeur */
+  .promo-banner{grid-column:1/-1; padding:10px 14px; border-radius:8px; font-weight:600; font-size:13px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px;}
+  .promo-banner.urgent{background:linear-gradient(90deg,#dc2626,#b91c1c); color:#fff; box-shadow:0 2px 8px rgba(220,38,38,.25); animation:pulseRed 2s ease-in-out infinite;}
+  .promo-banner.attention{background:#fed7aa; color:#9a3412;}
+  .promo-banner.normal{background:#dcfce7; color:#166534;}
+  .promo-banner.upcoming{background:#dbeafe; color:#1e40af;}
+  .promo-banner.ended{background:#f3f4f6; color:#6b7280;}
+  .promo-banner .banner-icon{font-size:16px;}
+  .promo-banner .banner-time{font-family:'SF Mono','Consolas','Courier New',monospace; font-size:15px; letter-spacing:.5px; background:rgba(255,255,255,.22); padding:3px 10px; border-radius:5px; font-variant-numeric:tabular-nums;}
+  .promo-banner .banner-date{opacity:.92; font-weight:500;}
+  @keyframes pulseRed{0%,100%{box-shadow:0 2px 8px rgba(220,38,38,.25);}50%{box-shadow:0 2px 20px rgba(220,38,38,.5);}}
+  .cat-tag{display:inline-block; margin-left:6px; font-size:10px; padding:3px 8px; border-radius:20px; background:#f3f4f6; color:#4b5563; font-weight:700; text-transform:uppercase; letter-spacing:.3px;}
   .price{text-align:right;}
   .price .chf{font-size:20px; font-weight:800; color:var(--ink);}
   .price .per{font-size:11px; color:var(--muted);}
@@ -734,7 +746,7 @@ const mobileData = [
   {name:"Swype Surf Europe", network:"sunrise", price:24.95, details:"Illimité 5G (CH) + data roaming illimitée + appels/SMS illimités CH + appels illimités en roaming (41 pays)", roamData:"Illimité (roaming data + appels 41 pays)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], url:"https://www.swype.ch/fr/swype-surf-europe", callsRoaming:Infinity},
   {name:"Sunrise Swiss Travel", network:"sunrise", price:29.90, details:"Illimité (CH) + illimité data/appels (Top 8 pays UE)", roamData:"Illimité (Top 8 pays UE)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE"], sourceType:"product-page", verifiedAt:"2026-07-26", priceHistory:[{date:"2026-07-26",price:29.90}], url:"https://www.sunrise.ch/fr/mobile/swiss-travel-product-page", callsToAbroad:Infinity, callsRoaming:Infinity},
   {name:"Sunrise Swiss Connect Lite", network:"sunrise", price:34.90, details:"6 Go 5G (CH) + 100 Mo et 10 min d'appel (44 pays)", roamData:"100 Mo + 10 min d'appel (44 pays)", roaming:true, chUnlimited:false, roamUnlimited:false, chDataGB:6, roamDataGB:0.1, countries:["UE","MONDE"], url:"https://www.sunrise.ch/fr/mobile/abonnement-mobile", callsRoaming:10},
-  {name:"Salt Swiss Max (rabais à vie)", network:"salt", price:23.95, details:"Illimité 5G (CH) + 1 Go (zone Europe Salt, 37 pays)", promo:true, beforePrice:73.95, promoNote:"", roamData:"1 Go (zone Europe Salt, 37 pays)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:1, countries:["UE"], sourceType:"product-page", verifiedAt:"2026-07-26", priceHistory:[{date:"2026-07-26",price:23.95}], url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
+  {name:"Salt Swiss Max (rabais à vie)", network:"salt", price:22.95, details:"Illimité 5G (CH) + 1 Go (zone Europe Salt, 37 pays)", promo:true, beforePrice:73.95, promoNote:"rabais à vie -70%", roamData:"1 Go (zone Europe Salt, 37 pays)", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:1, countries:["UE"], sourceType:"product-page", verifiedAt:"2026-07-28", priceHistory:[{date:"2026-07-26",price:23.95},{date:"2026-07-28",price:22.95}], url:"https://www.salt.ch/fr/mobile/plans/swiss-max"},
   {name:"Salt Europe XL (rabais à vie)", network:"salt", price:29.95, details:"Illimité (CH + UE), 10 Go itinérance zone Europe", promo:true, beforePrice:96.95, promoNote:"sans engagement", roamData:"10 Go haut débit (zone Europe Salt), puis 128 kbit/s", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:10, countries:["UE"], url:"https://www.salt.ch/fr/mobile/plans/europe-xl", callsToAbroad:Infinity, callsRoaming:Infinity},
   {name:"Swisscom blue Mobile S", network:"swisscom", price:59.90, details:"Illimité 5G (CH) + 100 Mo (UE/UK) — 1 Go DE/FR/IT/AT", promo:true, beforePrice:71.8, promoNote:"après 12 mois de promo", roamData:"100 Mo/mois (UE/UK) — 1 Go DE/FR/IT/AT", roaming:true, chUnlimited:true, roamUnlimited:false, chDataGB:Infinity, roamDataGB:0.1, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-s.html"},
   {name:"Swisscom blue Mobile M (best-seller)", network:"swisscom", price:59.90, details:"Illimité 5G haut débit (CH, UE, UK)", promo:true, beforePrice:81.8, promoNote:"après 12 mois de promo", roamData:"Illimité haut débit (CH, UE, UK)", roaming:true, chUnlimited:true, roamUnlimited:true, chDataGB:Infinity, roamDataGB:Infinity, countries:["UE","UK"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-m.html", callsToAbroad:Infinity, callsRoaming:Infinity},
@@ -810,9 +822,9 @@ const mobileData = [
 ];
 
 const internetData = [
-  {name:"Wingo Internet Go", network:"swisscom", price:35.95, speed:100, details:"100 Mbit/s (fibre/DSL) — engagement 24 mois ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", connectionType:["fibre","dsl"], url:"https://www.wingo.ch/fr/promos#wireline"},
-  {name:"Wingo Internet Smart", network:"swisscom", price:40.95, speed:500, details:"500 Mbit/s (fibre) — engagement 24 mois ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", connectionType:["fibre"], url:"https://www.wingo.ch/fr/promos#wireline"},
-  {name:"Wingo Internet Ultra", network:"swisscom", price:50.95, speed:10000, details:"10 Gbit/s (fibre) — engagement 24 mois ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", connectionType:["fibre"], url:"https://www.wingo.ch/fr/promos#wireline"},
+  {name:"Wingo Internet Go", network:"swisscom", price:35.95, beforePrice:66.00, promo:true, promoNote:"rabais à vie -46% (code GOYE26)", speed:100, details:"100 Mbit/s (fibre/DSL) — engagement 24 mois ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", connectionType:["fibre","dsl"], url:"https://www.wingo.ch/fr/internet-offer#go"},
+  {name:"Wingo Internet Red", network:"swisscom", price:40.95, beforePrice:74.00, promo:true, promoNote:"rabais à vie -45% + activation offerte", speed:500, details:"500 Mbit/s (fibre) — engagement 24 mois. 🎁 Frais d'activation 99.- OFFERTS (unique dans la gamme Wingo Internet). Ex-« Wingo Internet Smart » rebrandé « Red » (branding 2026). ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-07-28", priceHistory:[{date:"2026-07-28",price:40.95}], url:"https://www.wingo.ch/fr/internet-offer#red"},
+  {name:"Wingo Internet Ultra", network:"swisscom", price:50.95, beforePrice:80.00, promo:true, promoNote:"rabais à vie -36% (code ULTRAYE26)", speed:10000, details:"10 Gbit/s (fibre) — engagement 24 mois ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", connectionType:["fibre"], url:"https://www.wingo.ch/fr/internet-offer#ultra"},
   {name:"Migros Internet Start", network:"swisscom", price:34.95, speed:100, details:"100 Mbit/s (fibre/DSL) — engagement 12 mois", connectionType:["fibre","dsl"], url:"https://online-shop.mobile.migros.ch/fr/wireline/onl/products?product_id=2106"},
   {name:"Sunrise Easy Internet", network:"sunrise", price:39.90, speed:1000, details:"1 Gbit/s fibre — engagement 12 mois, activation gratuite", connectionType:["fibre","dsl"], url:"https://www.sunrise.ch/fr/internet-tv/abonnement-internet"},
   {name:"Swisscom blue Internet S", network:"swisscom", price:39.90, speed:100, details:"100 Mbit/s fibre/DSL — engagement 24 mois", connectionType:["fibre","dsl"], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-s.html"},
@@ -1184,6 +1196,7 @@ function renderComboCard(c){
     : `<div class="price"><div class="chf" style="font-size:14px;">Rabais combiné</div></div>`;
   const hasTV = (c.replayDays !== undefined) || /\bTV\b/i.test(c.name);
   return `<div class="card">
+    ${bannerForOffer(c)}
     <div>
       <span class="net-tag net-${c.network}">${c.operator}</span>
       <div class="op-name">${c.name}</div>
@@ -1237,15 +1250,19 @@ const promoData = [
   {operator:"Wingo", name:"Swiss Go — rabais à vie", price:17.95, beforePrice:null, details:"10 Go (CH) + 1 Go (UE/UK), appels/SMS illimités (CH) — sans engagement ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", code:"SWSTA1795", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-go", category:"mobile"},
   {operator:"Wingo", name:"Swiss Max — rabais à vie", price:24.95, beforePrice:null, details:"Data illimitée 5G (CH) + data incluse en UE/UK, appels/SMS illimités (CH) — sans engagement ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", code:"SWMAX2495", from:"2026-05-13", to:"2026-12-31", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-swiss-max", category:"mobile"},
   {operator:"Wingo", name:"Red Swiss — rabais à vie -64% + 2 mois offerts", price:23.95, beforePrice:68.00, details:"Illimité (CH) + 60 min d'appels CH→UE/UK — aucune data à l'étranger. 🎁 Promo lancement : 2 mois offerts pour nouveaux clients, frais d'activation 59.-, sans durée minimale. Après les 2 mois, prix promo à vie 23.95 CHF/mois. Compte à rebours 7 jours affiché sur wingo.ch. Réseau 5G Swisscom. ⚠️ Migration Wingo 1-18 sept 2026", code:"RESW26JULY", from:"2026-07-28", to:"2026-08-03", network:"swisscom", url:"https://www.wingo.ch/fr/mobile/wingo-red-swiss", category:"mobile"},
-  {operator:"Wingo", name:"Internet Go / Smart / Ultra", discount:"Promo -36% à -45% sur les 3 abos internet", details:"Go 35.95 (100 Mbit/s, was 66) · Smart 40.95 (500 Mbit/s, was 70) · Ultra 50.95 (10 Gbit/s, was 80) — sur le réseau fibre/DSL Swisscom, engagement 24 mois ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", code:null, from:"2026-01-23", to:"2026-10-31", network:"swisscom", url:"https://www.wingo.ch/fr/promos#wireline", category:"internet"},
-  {operator:"Wingo", name:"Wingo TV Max", price:9.95, beforePrice:20, details:"Bouquet TV 290 chaînes HD sur le réseau Swisscom, sans engagement ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", code:null, from:"2025-06-02", to:"2026-12-31", network:"swisscom", channelsList: ["20 Mediaset","2M Monde","3sat","6ter CH","AB 3 CH","AB1","Adria Music Television","Ajoie TV","Al Arabiya","Al Jazeera","Al Jazeera E","ALMA TV","Alpenland TV","Animaux","Anixe Serie","ARCADIA world TV","ARD-alpha","Arte D","Arte FR","ATV Avrupa","Auftanken TV","BBC Four","BBC News","BBC One","BBC Three / CBBC","BBC Two","BBC World News","BFM Business","BFM TV","Bibel TV","Bloomberg TV","blue Zoom D","blue Zoom F","BN Music","BVN TV","C+ en clair","C8 CH","Canal 24 Horas","Canal 9","Canal Alpha JU","Canal Alpha NE","Canal Sur Andalucía","Canale 5","Canale IT","CARAC 1","CARAC 2","CARAC 3","CARAC 4","CBeebies","CBS Reality","CCTV4","CGTN","Channel 4","Channel 5","Chérie 25","cielo","Class TV Moda","Clubland TV","CNBC UK","CNEWS","CNN Türk","Comedy Central","CSTAR","ČT24","Cubavisión Int.","Das Erste","Dave","Davos Klosters","Deejay TV","Deluxe Music","Deutsches Musik TV","Diaspora TV Switzerland","Digi 24","Disney Channel D","DM Sat","DMAX","DMAX Italia","DMAX UK","Drama","Dubai TV","Duna TV","Duna World","DW Englisch","E4","ERT World","Espreso TV","EU Parlament+","Euro D","Euro Star","Euronews D","Euronews E","Euronews F","Euronews I","Eurosport 1 F","Fashion TV","Film4","France 2","France 24","France 24 E","France 3","France 4","France 5","franceinfo","FreeDOM","Frisbee","Game TV","GB News","Giallo","Grand Genève TV","GRTV/TéléVersoix","Gulli","HGTV","Hip Trip","HRT 1","HRT 4","i24 News","i24 News F","Italia 1","Italia 2","ITV1","ITV2","ITV3","ITV4","K-TV","K::CN 3","K2","Kabel eins CH","kabel eins Doku","Kanal 9","KBS World","KiKa","Kurdistan TV","L‘Equipe","La 7","La 7d","La Chaine Info","La Télé","La5","Léman Bleu","Loly TV","M1","M2","M5","M6 CH","Max TV","Mediaset Extra","MelodieTV","More Than Sports TV","More4","n-tv CH","Nitro CH","Nova BH","NOVE","Now Rock","NRJ 12","NRTV","One Music Television","ORF 1","ORF 2","ORF 3","ORTB","Phoenix Info News","Phoenix TV","Pixel","Pro TV International","ProSieben CH","ProSieben MAXX CH","Quest","Radio Italia TV","Radio Pilatus TV","Radio Ticino Channel","Rai 1","Rai 2","Rai 3","Rai 4","Rai 5","Rai Gulp","Rai Movie","Rai News 24","Rai Premium","Rai Scuola","Rai Sport +","Rai Storia","Rai Yoyo","Real Time","Record TV","regioTVplus","Rete 4","Rheinwelten TV","Rhône TV","RIC TV","RIK Sat","RMC Découverte","RMC Story","RSI LA 1","RSI LA 2","RTK 1","RTL CH","RTL ZWEI CH","RTL9 CH","RTLup","RTP Int.","RTR Planeta","RTS 1","RTS 2","RTS Svet","S1","SAT.1 CH","SAT.1 GOLD CH","Schlagerparadies TV","Senato TV","Servus TV","Session Nationalrat","Session Ständerat","Show Türk","Showmax","sixx CH","Sky News Int.","sky TG 24","Sport1","SR Fernsehen","SRF 1","SRF info","SRF zwei","Star TV","Super RTL CH","Super!","Swiss Sport TV","SWISS1","Tagesschau24","Tele 1","Tele 5","Tele Bärn","Tele Bielingue","Tele D","Tele M1","Tele Ticino","Tele Top","Tele Z","Tele Zentralschweiz","Telebasel","Telelombardia","Telenova","Telenuovo","teleSUR","Teleswizz","TeleZüri","TF1 CH","TF1 Séries Films","TFX CH","TGRT EU","TMC CH","Toggo Plus","Top Calcio 24","Top Crime","TRT Belgesel","TRT Kurdi","TRT Spor","TRT Türk","Tunisie Nationale","TV Duga+","TV Galicia","TV Romania Int.","TV2000","TV24","TV25","TV5 Monde EU","TV5 Monde FBS","TV8","TV8 Mont Blanc","TVCG MNE","TVE Int.","TVM3","TVP Polonia","Vernier Visions","Voice of America","VOX CH","VOXup","W9 CH","Welt der Wunder CH TV","Wetter.TV","Xplore","Yesterday","Z1 Televizija","ZDFinfo","ZDFneo","Zwei Music Television"], url:"https://www.wingo.ch/fr/internet/wingo-tv/tv-max", category:"tv"},
-  {operator:"Salt", name:"Swiss Max — rabais à vie -68%", price:23.95, beforePrice:73.95, details:"Data illimitée 5G (CH) + 1 Go zone Europe Salt (37 pays)", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-max", category:"mobile"},
+  {operator:"Wingo", name:"Internet Go — rabais à vie -46%", price:35.95, beforePrice:66.00, details:"100 Mbit/s (fibre/DSL Swisscom), engagement 24 mois. Nouveau client : rabais à vie via code GOYE26 (à saisir sur myWingo pour clients existants). ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois. Résiliation gratuite avant 31.08 via 0800 266 766.", code:"GOYE26", from:"2026-07-22", to:"2026-10-31", network:"swisscom", url:"https://www.wingo.ch/fr/internet-offer#go", category:"internet"},
+  {operator:"Wingo", name:"Internet Red — rabais à vie -45% + activation OFFERTE", price:40.95, beforePrice:74.00, details:"500 Mbit/s (fibre/DSL Swisscom), engagement 24 mois. Activation 99.- offerte. Code REDSUM26 (à saisir sur myWingo pour clients existants). ⚠️ Fenêtre courte : offre valable seulement jusqu'au 03.08.2026. ⚠️ Migration Wingo 1-18 sept 2026.", code:"REDSUM26", from:"2026-07-22", to:"2026-08-03", network:"swisscom", url:"https://www.wingo.ch/fr/internet-offer#red", category:"internet"},
+  {operator:"Wingo", name:"Internet Ultra — rabais à vie -36%", price:50.95, beforePrice:80.00, details:"10 Gbit/s (fibre Swisscom), engagement 24 mois. Nouveau client : rabais à vie via code ULTRAYE26 (à saisir sur myWingo pour clients existants). ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois.", code:"ULTRAYE26", from:"2026-07-22", to:"2026-10-31", network:"swisscom", url:"https://www.wingo.ch/fr/internet-offer#ultra", category:"internet"},
+  {operator:"Wingo", name:"Internet Pro + TV Max — combo à vie", discount:"Réductions combo via code PROYE26", details:"Combo Internet Pro + TV Max avec code PROYE26 dans myWingo — rabais à vie appliqué après activation. Nécessite passage à Internet Pro et TV Max si tu as d'autres abos.", code:"PROYE26", from:"2026-07-22", to:"2026-10-31", network:"swisscom", url:"https://www.wingo.ch/fr/internet-offer#combo", category:"combo"},
+  {operator:"Wingo", name:"Wingo TV Max — code TVMAX2512", price:9.95, beforePrice:20, details:"Bouquet TV 290 chaînes HD sur le réseau Swisscom, sans engagement ⚠️ Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois et nouveaux plans (plus de data roaming UE). Résiliation gratuite avant 31.08 via 0800 266 766. Détails : wingo.ch/fr/adaptation-2026", code:"TVMAX2512", from:"2026-07-22", to:"2026-12-31", network:"swisscom", channelsList: ["20 Mediaset","2M Monde","3sat","6ter CH","AB 3 CH","AB1","Adria Music Television","Ajoie TV","Al Arabiya","Al Jazeera","Al Jazeera E","ALMA TV","Alpenland TV","Animaux","Anixe Serie","ARCADIA world TV","ARD-alpha","Arte D","Arte FR","ATV Avrupa","Auftanken TV","BBC Four","BBC News","BBC One","BBC Three / CBBC","BBC Two","BBC World News","BFM Business","BFM TV","Bibel TV","Bloomberg TV","blue Zoom D","blue Zoom F","BN Music","BVN TV","C+ en clair","C8 CH","Canal 24 Horas","Canal 9","Canal Alpha JU","Canal Alpha NE","Canal Sur Andalucía","Canale 5","Canale IT","CARAC 1","CARAC 2","CARAC 3","CARAC 4","CBeebies","CBS Reality","CCTV4","CGTN","Channel 4","Channel 5","Chérie 25","cielo","Class TV Moda","Clubland TV","CNBC UK","CNEWS","CNN Türk","Comedy Central","CSTAR","ČT24","Cubavisión Int.","Das Erste","Dave","Davos Klosters","Deejay TV","Deluxe Music","Deutsches Musik TV","Diaspora TV Switzerland","Digi 24","Disney Channel D","DM Sat","DMAX","DMAX Italia","DMAX UK","Drama","Dubai TV","Duna TV","Duna World","DW Englisch","E4","ERT World","Espreso TV","EU Parlament+","Euro D","Euro Star","Euronews D","Euronews E","Euronews F","Euronews I","Eurosport 1 F","Fashion TV","Film4","France 2","France 24","France 24 E","France 3","France 4","France 5","franceinfo","FreeDOM","Frisbee","Game TV","GB News","Giallo","Grand Genève TV","GRTV/TéléVersoix","Gulli","HGTV","Hip Trip","HRT 1","HRT 4","i24 News","i24 News F","Italia 1","Italia 2","ITV1","ITV2","ITV3","ITV4","K-TV","K::CN 3","K2","Kabel eins CH","kabel eins Doku","Kanal 9","KBS World","KiKa","Kurdistan TV","L‘Equipe","La 7","La 7d","La Chaine Info","La Télé","La5","Léman Bleu","Loly TV","M1","M2","M5","M6 CH","Max TV","Mediaset Extra","MelodieTV","More Than Sports TV","More4","n-tv CH","Nitro CH","Nova BH","NOVE","Now Rock","NRJ 12","NRTV","One Music Television","ORF 1","ORF 2","ORF 3","ORTB","Phoenix Info News","Phoenix TV","Pixel","Pro TV International","ProSieben CH","ProSieben MAXX CH","Quest","Radio Italia TV","Radio Pilatus TV","Radio Ticino Channel","Rai 1","Rai 2","Rai 3","Rai 4","Rai 5","Rai Gulp","Rai Movie","Rai News 24","Rai Premium","Rai Scuola","Rai Sport +","Rai Storia","Rai Yoyo","Real Time","Record TV","regioTVplus","Rete 4","Rheinwelten TV","Rhône TV","RIC TV","RIK Sat","RMC Découverte","RMC Story","RSI LA 1","RSI LA 2","RTK 1","RTL CH","RTL ZWEI CH","RTL9 CH","RTLup","RTP Int.","RTR Planeta","RTS 1","RTS 2","RTS Svet","S1","SAT.1 CH","SAT.1 GOLD CH","Schlagerparadies TV","Senato TV","Servus TV","Session Nationalrat","Session Ständerat","Show Türk","Showmax","sixx CH","Sky News Int.","sky TG 24","Sport1","SR Fernsehen","SRF 1","SRF info","SRF zwei","Star TV","Super RTL CH","Super!","Swiss Sport TV","SWISS1","Tagesschau24","Tele 1","Tele 5","Tele Bärn","Tele Bielingue","Tele D","Tele M1","Tele Ticino","Tele Top","Tele Z","Tele Zentralschweiz","Telebasel","Telelombardia","Telenova","Telenuovo","teleSUR","Teleswizz","TeleZüri","TF1 CH","TF1 Séries Films","TFX CH","TGRT EU","TMC CH","Toggo Plus","Top Calcio 24","Top Crime","TRT Belgesel","TRT Kurdi","TRT Spor","TRT Türk","Tunisie Nationale","TV Duga+","TV Galicia","TV Romania Int.","TV2000","TV24","TV25","TV5 Monde EU","TV5 Monde FBS","TV8","TV8 Mont Blanc","TVCG MNE","TVE Int.","TVM3","TVP Polonia","Vernier Visions","Voice of America","VOX CH","VOXup","W9 CH","Welt der Wunder CH TV","Wetter.TV","Xplore","Yesterday","Z1 Televizija","ZDFinfo","ZDFneo","Zwei Music Television"], url:"https://www.wingo.ch/fr/internet/wingo-tv/tv-max", category:"tv"},
+  {operator:"Salt", name:"Swiss Max — rabais à vie -70%", price:22.95, beforePrice:73.95, details:"Data illimitée 5G (CH) + 1 Go zone Europe Salt (37 pays)", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/swiss-max", category:"mobile"},
   {operator:"Salt", name:"Europe XL — rabais à vie", price:29.95, beforePrice:96.95, details:"Illimité (CH + UE), 10 Go d'itinérance zone Europe à haut débit, puis 128 kbit/s — sans engagement", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/mobile/plans/europe-xl", category:"mobile"},
   {operator:"Quickline", name:"Internet M / L / XL — promo 24 mois", discount:"3 abos internet à 44.-/mois pendant 24 mois", details:"M 200 Mbit/s (was 59) · L 1 Gbit/s (was 69) · XL 10 Gbit/s (was 79) — Modem WLAN inclus, sur les réseaux câble/fibre régionaux des membres Quickline (coopérative câblo-opérateurs suisses-alémaniques). ⚠️ Disponibilité limitée aux zones desservies par un partenaire", code:null, from:"2026-01-01", to:"2026-12-31", network:"regional", url:"https://www.quickline.ch/fr/", category:"internet"},
   {operator:"Salt", name:"Home Internet fibre — à vie", price:39.95, beforePrice:null, details:"Jusqu'à 10 Gbit/s fibre — activation gratuite (normalement 99.90) + 250 CHF de cashback — prix à vie, sans engagement à durée limitée", code:null, from:"2026-01-01", to:"2026-12-31", network:"salt", url:"https://www.salt.ch/fr/home/internet-fibre", category:"internet"},
   {operator:"yallo", name:"Home Supermax + TV — rabais à vie", price:37.90, beforePrice:100, details:"Internet fibre jusqu'à 2,5 Gbit/s + TV 300+ chaînes, replay 7 jours — engagement 24 mois, activation offerte", code:null, from:"2026-01-01", to:"2026-12-31", network:"sunrise", url:"https://www.yallo.ch/fr", category:"combo"},
   {operator:"Swisscom", name:"blue TV S / M — 12 mois offerts", discount:"0.-/mois pendant 12 mois, puis prix standard", details:"S 15.80/mois puis 150+ chaînes replay 30h · M 25.80/mois puis 290+ chaînes replay 7j enregistrement 250h — TV-Box 5 offerte (valeur 99.-)", code:null, from:"2026-01-01", to:"2026-12-31", network:"swisscom", url:"https://www.swisscom.ch/fr/clients-prives/abonnement-tv.html", category:"tv"},
   {operator:"Teleboy", name:"Teleboy TV", price:11.90, beforePrice:14.90, details:"300+ chaînes Full HD, replay 7 jours, 2400h d'enregistrement — 5 profils, streaming pur sans box requise", code:null, from:"2026-01-01", to:"2026-12-31", network:"init7", channelsList: ["1 FL TV","1+1","20 Mediaset","24H","27 Twentyseven","3sat","4Seven","5ACTION","5SELECT","5STAR","5USA","6ter","7+ / Nick CH","Al Jazeera en","Alma TV","Anixe","Anixe+","ARD ONE","ARD-alpha","Arirang TV","Arte de","Arte fr","auftanken.tv","BBC Arabic","BBC Four","BBC News","BBC One","BBC Parliament","BBC Three","BBC Two","BBC World News","beCuriousTV","BFM TV","Bibel TV","Bloomberg","Bloomberg Quicktake","blue Zoom de","blue Zoom fr","Boing","Boing Plus","BR Fernsehen Süd","Canal Alpha Jura","Canal Alpha Neuchâtel","Canal9","Canale 5","Canale Italia","CARAC 1","CARAC 2 CH","CARAC 3","Cartoonito","CBBC","CBeebies","CBS Reality","Challenge","Channel 4","Channel 5","Cielo","Cine34","Class TV Moda","Clubland TV","CNBC Europe","CNEWS","CNN Türk","Comedy Central","CSTAR","Curiosity Now","Das Erste","Dave","Deluxe Music","Deutsche Welle ar","Deutsche Welle en","Deutsche Welle es","Deutsches Musik Fernsehen","DF1","Disney Channel","DMAX","DMAX Italia","DMAX UK","Drama","Dream Türk","E4","E4 Extra","Enquetes De Choc","Espreso TV","Euro D","Euro Star","euronews de","euronews en","euronews fr","euronews it","Eurosport 1 de","Fashion TV","Film 4","Filmgold","Focus","Folx TV","Food Network","Food Network Italia","France 2","France 24 en","France 24 fr","France 3","France 4","France 5","franceinfo","Frisbee","FUNKTIONEN","Giallo","GOD Channel","Gulli","Haber Turk","Halk TV","Helvetia One TV","HGTV Italy","Home & Garden","Homicide","hr-fernsehen","HSE24","HSE24 Extra","HSE24 Trend","INFOS ZUR TV-BOX","Iris","Italia 1","Italia 2","ITV 2","ITV 3","ITV 4","ITVBe","K-TV","K2","Kabel Eins","Kabel Eins Doku","Kanal 7 Avrupa","Kanal9","KBS World","KiKa","L'Équipe 21","La Télé","La5","La7","La7d","Léman Bleu","M6 Suisse","MDR Sachsen","Mediaset Extra 2","Melodie TV","More 4","Motor Trend","Motorvision+","Motorvision+ F","MySports 2","MySports 3","MySports 4","MySports 5","MySports 6","MySports 7","MySports 8","MySports 9","MySports EDGE","MySports Eins","MySports Un","MySports Uno","n-tv","N24 Doku","Naruto","NDR Fernsehen","NHK World","NITRO","NOVE","Now 90s","Now70s","Now80s","ORF 1","ORF 2","ORF 3","PASSENDE GESCHWINDIGKEIT","PBS America","Phoenix","ProSieben Maxx","ProSieben Schweiz","Puls 8","QS24","Quest","Quest Red","R9 Österreich","Radio Bremen TV","RADIO TICINO CHANNEL","Rai 1","Rai 2","Rai 3","Rai 4","Rai 5","Rai Gulp","Rai Movie","Rai News 24","Rai Premium","Rai Scuola","Rai Sport 1","Rai Storia","Rai Yoyo","rbb Berlin","Real Time","Record News","RecordTV","Red Bull TV (engl.)","Rete 4","RMC Découverte","RMC Life","RMC Story","ROAMING INFO","Rocket Beans TV","RSI LA 1","RSI LA 2","RTL 102.5","RTLup","RTLZWEI","RTP 3","RTPi","RTS Deux","RTS Un","S1","S4C","Sat.1","Sat.1 Gold","Schaffhauser Fernsehen","Schlager Deluxe","ServusTV","Show Turk","sixx","Sky Mix","Sky News","Sky TG24","SONLife","SPIEGEL TV Konflikt","Sport 1+","Sport1","Sportitalia","SR Fernsehen","SRF 1","SRF info","SRF zwei","Star TV","Super RTL","Super!","SuperTennis","Swiss Sport TV","SWISS1","SWR Fernsehen BW","tagesschau24","Tele 1","Tele 5","Tele D","Tele M1","Tele Südostschweiz","Tele Top","Tele Z","TeleBärn","Telebasel","TeleBielingue","Teleboy Logo","TeleTicino","TeleZüri","Terra Mater Wild","TF1","TF1 Séries Films","TGcom24","TLC Deutschland","TOGGO plus","Top Filme","Top Serien","Top True Crime","TOPcrime","TV Oberwallis","TV Suisse Plus","TV2000","TV24","TV25","TV5","TV5 Monde FBS","TV8","TV8 Int","TV8 Mont Blanc","TVEi","TVM3","TVO - das Ostschweizer Fernsehen","UATV","UniNettuno University TV","VOXup","W9","WDR Fernsehen","Wedo Big Stories","wedo movies","WELT","Welt der Wunder TV","wetter.tv","World of Freesports","Yesterday","ZDFinfo","ZDFneo"], url:"https://www.teleboy.ch/fr/tv", category:"tv"},
+  {operator:"KingTV", name:"KingTV — 1 mois offert + -50% jusqu'à fin 2026", discount:"1er mois gratuit + 50% de rabais jusqu'au 31.12.2026 (nouveaux clients)", details:"Offre KingTV pour tous les packages IPTV OTT (Silber / Gold / Platin — plusieurs centaines de chaînes internationales, replay, EPG, sans engagement). ⚠️ Inscription à faire AVANT le 31.07.2026 pour bénéficier de la promo. Prix par package à voir sur teleking.ch.", code:null, from:"2026-01-01", to:"2026-07-31", network:"regional", url:"https://www.teleking.ch/tv/angebote/", category:"tv"},
 ];
 
 // Parse "YYYY-MM-DD" en date LOCALE (00:00 heure locale), pas UTC.
@@ -1257,44 +1274,116 @@ function parseLocalDate(s){
   return new Date(y, m - 1, d, 0, 0, 0, 0);
 }
 
-function promoStatus(p){
-  const from = parseLocalDate(p.from), to = parseLocalDate(p.to);
+// Fin de journée : une promo "jusqu'au 03.08" reste valable toute la journée du 03.08
+// (jusqu'à 23:59:59). Sans ça, le compte à rebours passerait à zéro à minuit ET la promo
+// se marquerait "expirée" alors qu'elle est encore active pour la journée.
+function endOfDayLocal(s){
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d, 23, 59, 59, 999);
+}
+
+function formatHMS(ms){
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = n => String(n).padStart(2, "0");
+  return `${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+}
+
+// Composant unique de bandeau promo : rendu dans les cartes Promotions ET dans les
+// cartes d'origine (mobile/internet/tv/combo) qui pointent vers la même URL.
+// Renvoie du HTML autonome — pas de dépendance à l'appelant.
+function promoBanner(p){
+  if (!p || !p.from || !p.to) return "";
+  const from = parseLocalDate(p.from);
+  const to = endOfDayLocal(p.to);
   const toDMY = to.toLocaleDateString("fr-CH");
-
-  // Cas 1 : expirée → garder juste le badge d'expiration, PAS de countdown
-  if (TODAY > to) return {label:"⏱ Probablement expirée — vérifie sur le site", cls:"roaming-no"};
-
-  // Cas 2 : à venir → countdown en complément de la date de début
-  if (TODAY < from) {
-    const daysUntil = Math.ceil((from - TODAY) / (1000*60*60*24));
-    return {label:`À venir dès le ${from.toLocaleDateString("fr-CH")} (dans ${daysUntil} j.)`, cls:"roaming-no"};
-  }
-
-  // Cas 3 : active — calcul temps restant précis (dynamique à chaque render).
-  // Si < 24h, afficher en heures pour créer un vrai sentiment d'urgence.
-  // La date exacte (toDMY) reste TOUJOURS visible, le countdown vient en complément.
   const now = new Date();
-  const msLeft = to - now;
-  const hoursLeft = Math.max(0, Math.floor(msLeft / (1000*60*60)));
 
-  if (hoursLeft < 24) {
-    const hoursLabel = hoursLeft <= 0 ? "aujourd'hui" : `dans ${hoursLeft} h`;
-    return {label:`⏰ Expire ${hoursLabel} ! (${toDMY})`, cls:"roaming-no"};
+  if (now > to) {
+    return `<div class="promo-banner ended"><span>⏱ Probablement expirée le ${toDMY} — vérifie sur le site</span></div>`;
   }
-  // Math.ceil pour arrondir au jour supérieur : plus intuitif pour un compte à rebours
-  // (« il reste au moins X jours pleins »). Sinon 36h affiche « 1 j. » ce qui est trompeur.
+  if (now < from) {
+    const daysUntil = Math.ceil((from - now) / 86400000);
+    return `<div class="promo-banner upcoming"><span>📅 À venir dès le ${from.toLocaleDateString("fr-CH")} (dans ${daysUntil} j.)</span></div>`;
+  }
+
+  const msLeft = to - now;
+  const hoursLeft = msLeft / 3600000;
+
+  // < 48h → bandeau URGENT rouge avec HH:MM:SS qui défile en direct via tickPromoBanners
+  if (hoursLeft < 48) {
+    return `<div class="promo-banner urgent" data-promo-to="${to.toISOString()}">
+      <span class="banner-icon">⏰</span>
+      <span class="banner-label">Il te reste</span>
+      <span class="banner-time">${formatHMS(msLeft)}</span>
+      <span class="banner-date">— jusqu'au ${toDMY}</span>
+    </div>`;
+  }
+
   const daysLeft = Math.ceil(hoursLeft / 24);
-  if (daysLeft <= 3) {
-    return {label:`⚠ Expire dans ${daysLeft} j. ! (${toDMY})`, cls:"roaming-no"};
-  }
   if (daysLeft <= 7) {
-    return {label:`⏳ Expire dans ${daysLeft} j. (${toDMY})`, cls:"roaming-no"};
+    return `<div class="promo-banner attention">
+      <span class="banner-icon">⏳</span>
+      <span class="banner-label">Expire dans ${daysLeft} j.</span>
+      <span class="banner-date">— jusqu'au ${toDMY}</span>
+    </div>`;
   }
-  return {label:`✓ Active jusqu'au ${toDMY} (encore ${daysLeft} j.)`, cls:"roaming-yes"};
+  return `<div class="promo-banner normal">
+    <span class="banner-icon">✓</span>
+    <span class="banner-label">Active jusqu'au ${toDMY}</span>
+    <span class="banner-date">(encore ${daysLeft} j.)</span>
+  </div>`;
+}
+
+// Tick 1s : met à jour les compteurs HH:MM:SS des bandeaux urgent uniquement.
+// Si le temps atteint 0, on repasse un cycle de refreshPromo pour changer d'état
+// (urgent → ended) et rafraîchir les cartes d'origine.
+function tickPromoBanners(){
+  const banners = document.querySelectorAll(".promo-banner.urgent[data-promo-to]");
+  if (!banners.length) return;
+  const now = new Date();
+  let needsFullRefresh = false;
+  banners.forEach(el => {
+    const to = new Date(el.dataset.promoTo);
+    const ms = to - now;
+    if (ms <= 0) { needsFullRefresh = true; return; }
+    const span = el.querySelector(".banner-time");
+    if (span) span.textContent = formatHMS(ms);
+  });
+  if (needsFullRefresh) refreshAllPromoBanners();
+}
+
+// Re-rend tous les onglets qui contiennent des bandeaux promo. Appelé quand un
+// compteur atteint zéro (rare) ou à l'init si des bandeaux sont déjà passés à urgent
+// pendant que le tab était en background.
+function refreshAllPromoBanners(){
+  if (typeof refreshPromo === "function") refreshPromo();
+  if (typeof refreshMobile === "function") refreshMobile();
+  if (typeof refreshInternet === "function") refreshInternet();
+  if (typeof refreshCombo === "function") refreshCombo();
+  if (typeof refreshTV === "function") refreshTV();
+}
+
+// Map URL → promoData entry, calculée à l'init. Permet à renderMobileCard etc.
+// d'injecter le bandeau sur la carte d'origine sans dupliquer les dates.
+let promoByUrl = new Map();
+function buildPromoByUrl(){
+  promoByUrl = new Map();
+  for (const p of promoData) {
+    if (p.url) promoByUrl.set(p.url, p);
+  }
+}
+
+// Wrapper : renvoie le bandeau pour une offre catalogue si sa URL matche une promo.
+function bannerForOffer(item){
+  const p = promoByUrl.get(item.url);
+  return p ? promoBanner(p) : "";
 }
 
 function renderPromoCard(p){
-  const status = promoStatus(p);
+  const banner = promoBanner(p);
   const codeLine = p.code ? `<div class="std-price">Code promo : <b>${p.code}</b></div>` : '';
   const beforeLine = p.beforePrice
     ? `<div class="std-price">au lieu de <s>CHF ${p.beforePrice.toFixed(2)}</s></div>`
@@ -1302,13 +1391,16 @@ function renderPromoCard(p){
   const priceBlock = p.price
     ? `<div class="price"><div class="chf">🔥 CHF ${p.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>`
     : `<div class="price"><div class="chf" style="font-size:15px; line-height:1.2;">🔥 ${p.discount}</div></div>`;
+  const catLabel = {mobile:"📶 Mobile", internet:"🌐 Internet", tv:"📺 TV", combo:"📦 Internet + TV"}[p.category] || p.category;
   return `<div class="card">
+    ${banner}
     <div>
       <span class="net-tag net-${p.network}">${p.operator}</span>
+      <span class="cat-tag" title="Catégorie d'origine de l'offre">${catLabel}</span>
       <div class="op-name">${p.name}</div>
       ${codeLine}
     </div>
-    <div class="details"><b>Ce qui est inclus :</b><br>${p.details}<div class="std-price" style="margin-top:6px;"><span class="roaming-pill ${status.cls}">${status.label}</span> ${affiliatePill(p)}</div></div>
+    <div class="details"><b>Ce qui est inclus :</b><br>${p.details}<div class="std-price" style="margin-top:6px;">${affiliatePill(p)}</div></div>
     ${priceBlock}
     <div class="card-actions"><a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}">Voir l'offre →</a>${compareBtn(p, p.category)}</div>
   </div>`;
@@ -1631,6 +1723,7 @@ function renderTVCard(item){
     ? `<div class="chf" style="font-size:22px;">Inclus</div><div class="per">avec l'abo internet</div>`
     : `<div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>`;
   return `<div class="card">
+    ${bannerForOffer(item)}
     <div>
       <span class="net-tag net-${item.network}">${item.operator}</span>
       <div class="op-name">${item.name}</div>
@@ -1890,6 +1983,7 @@ function renderMobileCard(item){
     ? `<span class="roaming-pill age-pill" title="Cette offre est réservée aux clients de moins de ${item.ageRestriction} ans. Passé cet âge, l'opérateur bascule automatiquement vers un plan adulte plus cher.">🔞 Réservé aux moins de ${item.ageRestriction}</span>`
     : '';
   return `<div class="card">
+    ${bannerForOffer(item)}
     <div>
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
@@ -1909,6 +2003,7 @@ function renderInternetCard(item){
         : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : ''))
     : '';
   return `<div class="card">
+    ${bannerForOffer(item)}
     <div>
       <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
       <div class="op-name">${item.name}</div>
@@ -2359,6 +2454,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
 const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
 
+buildPromoByUrl();
 refreshMobile();
 refreshPrepaid();
 refreshInternet();
@@ -2368,6 +2464,10 @@ refreshPromo();
 refreshTV();
 cmpUpdateBadge();
 renderCompareView();
+
+// Tick 1s pour faire défiler les compteurs HH:MM:SS des bandeaux urgents.
+// Léger : ne touche que les .promo-banner.urgent avec data-promo-to, qui sont rares.
+setInterval(tickPromoBanners, 1000);
 
 // Total dynamique dans le sous-titre du header : reflète toujours la vraie
 // somme mobile + internet + TV + combos, arrondi à la dizaine inférieure
