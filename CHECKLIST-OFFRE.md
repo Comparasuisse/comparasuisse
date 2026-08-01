@@ -280,6 +280,42 @@ sur un réseau existant. Il ne peut survenir que si on introduit un nouveau
 type de réseau (comme "regional" pour Netplus/Quickline internet — checkbox
 "Câble régional" ajoutée à ce moment-là).
 
+## 📺 Règle absolue : liste des chaînes TV OBLIGATOIRE à chaque ajout `tvData` / `comboData`
+
+Chaque fois qu'une offre TV est ajoutée (dans `tvData` OU dans une entrée
+`comboData` qui inclut de la TV), la **liste complète des chaînes** doit être
+extraite via `scripts/fetch-channels.mjs` et injectée dans le champ
+`channelsList` (accordéon "Voir les chaînes" + recherche sur la carte).
+
+**Format** : soit un array flat (`["RTS 1", "TF1", ...]`), soit un objet
+catégorisé (`{"Généralistes":[...], "Sport":[...]}`) selon ce que la source
+fournit.
+
+**Sources acceptables** (par ordre de préférence) :
+1. PDF officiel du fournisseur (Swisscom, Sunrise, etc.) → parseur pdfjs
+2. Page HTML dédiée avec DOM extractible (Zattoo, Teleboy, KingTV, Init7,
+   MTEL via `img alt` sur logos)
+3. Fichier XSPF/M3U/JSON exposé par l'opérateur
+4. Extraction manuelle depuis une capture texte tierce (avec `channelsSourceNote`
+   qui documente la source)
+
+**Si aucune source publique n'existe** (déjà rencontré sur MaxiTV et sur le
+bouquet "Salt Home base") : ne PAS inventer une liste. Documenter clairement
+dans `channelsList: null` + `channelsSourceNote` avec le raison (opérateur ne
+publie pas de grille détaillée, seulement un pitch marketing "300+ chaînes",
+etc.), et laisser le lien externe vers la page opérateur pour que le visiteur
+puisse consulter directement.
+
+**Réflexe systématique** : NE JAMAIS ajouter une offre TV sans avoir tenté
+l'extraction via fetch-channels. Si tu ajoutes sans channelsList, tu dois
+avoir tenté ET documenté pourquoi.
+
+**Exemples de fallback documenté acceptables** :
+- MaxiTV : `channelsSourceNote: "MaxiConnect ne publie pas de grille détaillée
+  publique"`
+- Salt Home base (avant extraction) : `channelsSourceNote: "Bouquet standard
+  285 chaînes, liste PDF non publiée officiellement"`
+
 ## Workflow standard à chaque ajout
 
 1. **Fetch live** de la page produit officielle (WebFetch, puis Playwright si JS lourd)
