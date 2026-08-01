@@ -1,6 +1,34 @@
 # Checklist obligatoire à chaque ajout ou modification d'offre
 
-**Règle absolue** : rien n'est ajouté dans `mobileData` / `internetData` / `tvData` /
+## 🚨 RÈGLE ABSOLUE #1 : jamais de `git push` sans autorisation explicite
+
+**Cette règle prime sur tout le reste.** Elle est la plus importante du projet
+côté workflow.
+
+- **NE JAMAIS** exécuter `git push` sans que le propriétaire l'ait demandé
+  explicitement dans un message, peu importe le contexte : commit prêt, suite
+  logique évidente, "go", "applique", validation d'un plan, etc.
+- Le mot **"push"** (ou synonyme direct : "on pousse", "envoie", "publie",
+  "déploie") doit apparaître **littéralement** dans la demande courante.
+- **Correspondances valides** : `go push`, `go commit + push`, `push maintenant`,
+  `on pousse`, `envoie ça`, `déploie sur main`.
+- **Correspondances invalides** : `go`, `go commit`, `applique`, `procède`,
+  `on y va`, `valide`, `commit local`, `enchaîne`, `continue`.
+- Une autorisation "push" vaut pour **un seul push**. Le prochain commit
+  nécessite une nouvelle autorisation, même dans la même session.
+- Un `git push --force` exige une demande **encore plus explicite** — jamais
+  déduit d'un "push" simple.
+
+**Pourquoi cette règle** : chaque push déclenche un rebuild Netlify (facturé)
+et surtout un déploiement en prod que le propriétaire veut valider AVANT
+qu'il parte. La règle a été enfreinte plusieurs fois par le passé —
+d'où l'insistance sur l'explicite absolu du mot "push".
+
+---
+
+## Règle absolue #2 (ajout de données)
+
+Rien n'est ajouté dans `mobileData` / `internetData` / `tvData` /
 `comboData` / `promoData` sans avoir coché explicitement les 8 points ci-dessous
 et **présenté le récap à l'utilisateur pour validation avant écriture**.
 
