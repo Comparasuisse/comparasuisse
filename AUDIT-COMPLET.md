@@ -148,21 +148,41 @@ Voir [[feedback-audit-sitemap-landing-check]] dans la mémoire.
 4. Le comparateur doit refléter ce qui est **réellement souscriptible**
    aujourd'hui, pas l'archive SEO.
 
-### Étape 2 — WebFetch → si insuffisant, browser MCP inline
+### Étape 2 — Playwright/browser MCP OBLIGATOIRE, WebFetch en pré-scan seulement
 
-Voir [[feedback-webfetch-screenshot-ground-truth]] et
-[[feedback-no-reports-playwright-inline]].
+Voir [[feedback-webfetch-screenshot-ground-truth]],
+[[feedback-no-reports-playwright-inline]] et
+[[feedback-playwright-always-for-prices]].
 
-1. **WebFetch d'abord** pour un premier scan de prix.
-2. **Ne pas faire confiance aveuglément** aux tableaux de prix retournés
-   par WebFetch. Le petit modèle de résumé peut confondre prix barré /
-   prix promo / prix hardware / prix marketing. Cas connu : VTX Mobile
-   où WebFetch a listé les prix catalogue (19.95, 39.95) au lieu des
-   prix promo courants (14.95, 44.95) confirmés au screenshot.
-3. Si le résumé WebFetch **contredit nos données actuelles** ou paraît
-   incohérent → **immédiatement** rendre la page dans le browser MCP
-   (`mcp__Claude_Browser__navigate` puis `javascript_tool` /
-   `computer{action:"screenshot"}`) et vérifier au DOM rendu.
+**Règle absolue** : pour toute vérification de prix ou de promo,
+**ne jamais se fier à un simple WebFetch** — même si le résumé retourné
+paraît complet. Toute promo à durée limitée / countdown / bandeau flash
+peut être **chargée en JavaScript uniquement** et donc **invisible pour
+un fetch statique**. Cas concret raté malgré l'audit Ex1-Ex5 complet :
+Mucho Europe Full affichait « RABAIS -62% DISPONIBLE 1j 11h 44min 26sec »
+sur son widget `.timer-container`, invisible via curl/WebFetch → 5 offres
+Mucho ont vécu 24h dans nos données sans countdown.
+
+**Protocole obligatoire pour chaque offre auditée** :
+
+1. **WebFetch d'abord** est autorisé uniquement comme pré-scan grossier
+   pour identifier les URLs / structures. Ne jamais s'en tenir là pour
+   confirmer un prix ou une promo.
+2. **Browser MCP systématique** : `mcp__Claude_Browser__navigate` sur la
+   page produit, attendre le rendu complet (2-3 s si SPA), puis :
+   - `javascript_tool` pour inspecter le DOM finalisé
+   - Chercher explicitement : `.timer-container`, `.countdown`,
+     `[class*="expirable"]`, `lib-countdown`, `.pack-expirable-offer`,
+     et tout texte du style « n jours n h n min n sec » /
+     « RABAIS DISPONIBLE » / « À saisir »
+   - Extraire toute `new Date("…")` des scripts inline (souvent le format
+     `YYYY-MM-DDTHH:MM:SS`)
+3. **Screenshot obligatoire** si un doute persiste (widget non extractible
+   par le DOM, timing complexe, promo qui semble « à vie » mais avec
+   fenêtre de souscription cachée). Un rabais annoncé « permanent » /
+   « à vie » sur la page peut malgré tout avoir une deadline pour
+   verrouiller ce tarif (modèle Mucho : « rabais à vie une fois souscrit
+   avant la deadline, sinon retour au prix catalogue »).
 4. **Zéro report** — jamais de « je verrai ça dans une passe Playwright
    dédiée plus tard ». Chaque cas se traite dans la vague en cours,
    quitte à passer plus de temps.
@@ -212,7 +232,7 @@ immédiatement (voir décisions éditoriales ambiguës ci-dessus).
 
 Toute promo dont la deadline est visible sur le site officiel (bandeau
 « National Day Deal jusqu'au 03.08 », compte à rebours flash Mucho, action
-Aldi 20.07-15.08, etc.) doit avoir :
+Aldi 20.07-15.08, widget `lib-countdown` CHmobile, etc.) doit avoir :
 
 - Une entrée `promoData` dédiée avec `to:"YYYY-MM-DD"` (ou
   `to:"YYYY-MM-DDTHH:MM:SS"` pour deadline à l'heure précise, comme
@@ -224,9 +244,24 @@ Aldi 20.07-15.08, etc.) doit avoir :
 - Vérifier en browser que le bandeau `⏰ Il te reste HH:MM:SS` s'affiche
   bien et que le compteur défile en temps réel via `tickPromoBanners`
 
-Chercher la vraie heure de fin sur la page officielle : souvent dans un
-`<script>` en `new Date("YYYY-MM-DDTHH:MM:SS")`, ou dans le tag
-`slt-announcement-bar` avec attribut `text` mentionnant la date.
+Chercher la vraie heure de fin sur la page officielle :
+- Dans un `<script>` en `new Date("YYYY-MM-DDTHH:MM:SS")` (pattern Mucho,
+  Sky Mobile)
+- Dans un tag `<slt-announcement-bar text="…jusqu'au X">` (pattern GoMo)
+- Sur widget Angular custom `<lib-countdown>` : extraire les valeurs
+  `[jours, heures, minutes, secondes]` puis calculer `deadline = now + msLeft`
+  (pattern CHmobile)
+- Sur `.timer-container` / `.pack-expirable-offer` : chercher le composant
+  dataflow dans les scripts inline (pattern Mucho)
+- Si la deadline exacte n'est pas extractible, utiliser
+  `to:"YYYY-MM-DD"` (jour uniquement) qui via `endOfDayLocal` traduit en
+  23:59:59.999 — fallback acceptable si drift < 1 jour
+
+**Un rabais annoncé « permanent »/« à vie »/« sans date » peut malgré tout
+avoir une fenêtre de souscription limitée** — le prix est verrouillé À
+VIE si tu souscris pendant la fenêtre, mais la fenêtre elle-même est
+limitée. Ne pas se fier à la formulation marketing seule : chercher le
+widget countdown visible avant de conclure « pas de deadline ».
 
 ### 4. Checkboxes de filtre — vérifier à chaque nouvel opérateur/tier
 
@@ -366,6 +401,70 @@ littéralement dans le message utilisateur.
 
 ---
 
+## 🎯 AUDIT COUNTDOWN — chantier récurrent séparé
+
+**Déclencheur** : le mot-clé **« AUDIT COUNTDOWN »** dans une future
+conversation lance ce chantier de manière autonome (règles identiques à
+AUDIT COMPLET : enchaîne sans validation intermédiaire, ne s'arrête que
+pour décision éditoriale ambiguë ou contexte épuisé, récap consolidé
+final avant « push »).
+
+**Objectif** : détecter les countdowns / fenêtres promo cachées en
+JavaScript sur les pages des opérateurs, que le catalogue actuel marque
+à tort comme « rabais à vie / permanent ».
+
+**Pourquoi c'est un chantier récurrent** : ces fenêtres promo peuvent
+apparaître ou disparaître **sans préavis** (marketing operator décide
+d'un flash sale du jour au lendemain). Le catalogue peut donc être
+correct un jour et périmé le lendemain. Cas concret :
+- Ex1-Ex5 (01.08.2026) a vérifié tous les prix Mucho via
+  `.entire`+`.decimal`, sans regarder les countdowns → **5 offres Mucho
+  ont vécu 24h dans nos données sans countdown**, alors qu'un widget
+  `.timer-container` avec deadline `2026-08-03T11:59:59` était affiché
+  sur chaque page produit.
+- Même chose pour CHmobile Plus + Europe : widget `lib-countdown`
+  Angular affichant `1j 0h 22m 24s` restants sans deadline dans un
+  attribut extractable, découvert lors de cette passe AUDIT COUNTDOWN.
+
+**Protocole AUDIT COUNTDOWN** :
+
+1. Grep de toutes les offres actuellement marquées « à vie » /
+   « permanent » / sans `promoData` associée :
+   ```bash
+   awk '/const mobileData/,/^\];/' index.html | grep -E 'à vie' | \
+     grep -oE 'name:"[^"]+"|url:"[^"]+"' | paste -d' ' - -
+   ```
+   Répéter pour internetData / tvData / prepaidData / dataOnlyData /
+   comboData.
+2. Pour chaque URL identifiée, navigate en browser MCP + screenshot
+   plein-écran + inspection DOM. Chercher explicitement :
+   - Élément visible avec texte `n jours n h n min n sec` (mucho pattern)
+   - Widget `<lib-countdown>` Angular (chmobile pattern)
+   - Bandeau `<slt-announcement-bar>` (gomo pattern)
+   - Div `.timer-container` / `.plan-countdown` / `.pack-expirable-offer`
+   - Texte type « À saisir », « Rabais disponible », « Encore n h »
+3. Si widget visible + valeurs qui décrémentent → **vraie promo à
+   durée limitée**. Extraire deadline via :
+   - `new Date("…")` dans les scripts inline
+   - Calcul `now + msLeft` à partir des valeurs affichées (jours,
+     heures, minutes, secondes)
+   - Data attribute `data-end` / `data-target` sur le widget
+4. Si `.plan-countdown` invisible / texte trouvé uniquement dans HTML
+   raw sans widget visible → **faux positif** (mention CGV ou
+   configuration inactive). Ne pas ajouter de countdown.
+5. Créer ou mettre à jour l'entrée `promoData` correspondante avec :
+   - `to:"YYYY-MM-DDTHH:MM:SS"` (deadline précise) ou `to:"YYYY-MM-DD"`
+     (fallback fin-de-jour si drift < 1 j acceptable)
+   - `url` matching **exactement** l'URL de l'entrée mobileData/etc.
+   - `warning` sur l'entrée d'origine mentionnant la deadline
+6. Vérifier en browser que le bandeau urgent s'affiche et ticke.
+
+**Fréquence recommandée** : mensuelle, ou dès qu'un feedback utilisateur
+mentionne un countdown non couvert (comme la remontée du 02.08.2026 sur
+Mucho Europe Full).
+
+---
+
 ## 🔗 Références mémoire
 
 Toutes les règles ci-dessus renvoient aux mémoires suivantes :
@@ -373,6 +472,8 @@ Toutes les règles ci-dessus renvoient aux mémoires suivantes :
 - [[feedback-audit-sitemap-landing-check]] — sitemap ≠ catalogue actif
 - [[feedback-no-reports-playwright-inline]] — zéro report Playwright inline
 - [[feedback-webfetch-screenshot-ground-truth]] — WebFetch summary ≠ DOM
+- [[feedback-playwright-always-for-prices]] — Playwright/browser MCP
+  obligatoire pour toute vérif prix/promo, jamais WebFetch seul
 - [[feedback-verify-offers-live]] — vérif live systématique
 - [[feedback-verify-all-offers-workflow]] — passe catalogue complet
 - [[feedback-show-before-push]] — validation UI avant push

@@ -26,6 +26,52 @@ d'où l'insistance sur l'explicite absolu du mot "push".
 
 ---
 
+## 🚨 RÈGLE ABSOLUE #1.5 : Playwright/browser MCP OBLIGATOIRE pour toute vérif prix/promo
+
+**Ne jamais se fier à un simple WebFetch** pour confirmer un prix, un
+rabais, ou l'absence de promo à durée limitée. Toute page produit
+opérateur peut contenir un widget countdown ou bandeau flash chargé
+**uniquement en JavaScript**, invisible pour un fetch statique.
+
+**Protocole obligatoire à chaque vérif live d'offre** :
+
+1. WebFetch autorisé uniquement comme pré-scan grossier (identifier les
+   URLs, la structure).
+2. `mcp__Claude_Browser__navigate` sur la page produit + attendre le
+   rendu complet (2-3 s pour SPA).
+3. `javascript_tool` pour inspecter le DOM finalisé et chercher
+   **explicitement** les patterns de countdown :
+   - Élément visible avec texte `n jours n h n min n sec`
+   - Widget `<lib-countdown>` Angular
+   - Bandeau `<slt-announcement-bar>`
+   - Div `.timer-container` / `.plan-countdown` / `.pack-expirable-offer`
+   - Texte type « À saisir », « Rabais disponible », « Encore n h »
+4. Screenshot obligatoire si un doute persiste sur la visibilité du
+   widget ou sur son état actif.
+5. Si countdown détecté → extraire deadline via `new Date("…")` inline,
+   ou calcul `now + msLeft` depuis les valeurs affichées, et créer
+   entrée `promoData` dédiée (voir AUDIT-COMPLET.md §3).
+
+**Pourquoi cette règle** : la campagne d'audit Ex1-Ex5 (01.08.2026) a
+vérifié tous les prix Mucho via extraction DOM `.entire`+`.decimal` mais
+n'a pas capturé les 5 countdowns cachés (Mini/Swiss/Europe Surf/Europe/
+Europe Full pointaient vers deadline flash `2026-08-03T11:59:59`). Le
+02.08.2026, remontée utilisateur sur Mucho Europe Full a révélé le
+manque : « RABAIS -62% DISPONIBLE 1j 11h 44min 26sec » sur widget
+`.timer-container`. Même chose découverte le lendemain sur CHmobile
+Plus + Europe (widget `<lib-countdown>`).
+
+Un rabais annoncé « permanent » / « à vie » / « sans date » peut
+malgré tout avoir une fenêtre de souscription limitée (prix verrouillé
+à vie SI souscrit pendant la fenêtre). Ne pas se fier à la formulation
+marketing seule.
+
+Voir AUDIT-COMPLET.md pour le chantier récurrent **AUDIT COUNTDOWN**
+qui repasse périodiquement toutes les offres marquées « à vie » avec
+Playwright.
+
+---
+
 ## Règle absolue #2 (ajout de données)
 
 Rien n'est ajouté dans `mobileData` / `internetData` / `tvData` /
