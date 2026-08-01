@@ -465,6 +465,98 @@ Mucho Europe Full).
 
 ---
 
+## 🔗 AUDIT LIENS — chantier récurrent séparé
+
+**Déclencheur** : le mot-clé **« AUDIT LIENS »** dans une future
+conversation lance ce chantier de manière autonome (règles identiques à
+AUDIT COMPLET / AUDIT COUNTDOWN : enchaîne sans validation intermédiaire,
+ne s'arrête que pour décision éditoriale ambiguë ou contexte épuisé,
+récap consolidé final avant « push »).
+
+**Objectif** : garantir que chaque URL enregistrée dans
+`mobileData` / `internetData` / `tvData` / `comboData` / `prepaidData` /
+`dataOnlyData` / `promoData` pointe vers **la page produit exacte** de
+l'offre concernée, pas vers une page catalogue/liste générale qui
+regroupe plusieurs offres différentes. Un lien « Voir l'offre → » du
+comparateur doit atterrir directement sur la description/checkout de
+l'offre que le visiteur a vue.
+
+**Pourquoi c'est un chantier récurrent** : la structure d'URL d'un
+opérateur peut changer sans préavis (Mucho a migré 3 offres vers un
+listing commun à un moment, Sunrise lance/retire régulièrement des
+pages produit individuelles). Les cas historiques déjà découverts :
+- Mucho (Europe Surf / Europe / Europe Full) pointaient tous vers
+  `/fr/abos/europe-appel-internet` (liste commune, remontée
+  utilisateur 02.08.2026) — corrigé vers
+  `www.mucho.ch/fr/abo/mucho{europesurf,europe,europefull}` individuels
+- Coop Mobile (Extra S / Extra L / Europe L) pointaient tous vers
+  `/fr/abonnement-mobile` (landing) — corrigé vers
+  `/fr/abonnement-mobile/{extra-s,extra-l,europe-l}` individuels
+- CHmobile Plus / Europe pointaient vers `chmobile.ch/fr/` (landing) —
+  corrigé vers `/fr/plus` et `/fr/europe`
+- Sunrise Swiss Connect Lite / Swiss Travel+ pointaient vers
+  `/fr/mobile` ou `/fr/mobile/abonnement-mobile` (landing) — corrigé
+  vers `/fr/mobile/swiss-connect-lite` et `/fr/mobile/swiss-travel-plus`
+- iWay Internet (les 4 tiers) pointaient tous vers `/internet/abos/`
+  (landing) — corrigé vers `/internet/{20,100,1000,10-gbit-s}/` individuels
+
+**Protocole AUDIT LIENS** :
+
+1. **Inventaire URLs partagées** — grep de toutes les URLs utilisées
+   par >1 offre (potentielles listes) :
+   ```bash
+   grep -oE 'url:"[^"]+"' index.html | sort | uniq -c | sort -rn | \
+     awk '$1 > 1' | head -40
+   ```
+2. **Pour chaque URL partagée** :
+   - Si toutes les offres qui pointent dessus sont **le même produit
+     rendu dans plusieurs blocs data** (ex. Home Supermax + TV présent
+     dans comboData ET promoData avec URL identique → normal, la
+     jointure promoByUrl exige ce matching) → laisser tel quel
+   - Si les offres sont **distinctes** (ex. Salt Start Max + Salt
+     Travel + Salt Europe Max tous vers `/fr/mobile`) → URL suspecte,
+     à vérifier
+3. **Pour chaque URL suspecte** : tester avec `curl -sL -o /dev/null
+   -w "%{http_code}"` les variantes `/{plan-slug}`, `/{plan-slug}.html`,
+   `/abo/{plan-slug}`, `/plans/{plan-slug}`, `/produit/{plan-slug}` sur
+   le domaine de l'opérateur. Si un 200 est trouvé → URL individuelle
+   existe.
+4. **Vérifier avec browser MCP** que la page trouvée présente bien
+   l'offre spécifique (nom, prix correspondant, pas juste un redirect
+   silencieux vers la landing).
+5. **Corriger dans les données** : mettre à jour `url:` de l'entrée
+   concernée. Si l'entrée a une `promoData` matching via `promoByUrl`,
+   corriger AUSSI l'URL de la promoData pour que le countdown reste
+   fonctionnel.
+6. **Si aucune page dédiée n'existe** pour l'offre précise (certains
+   opérateurs comme Talk Talk / Aldi / Quickline / Lycamobile /
+   MaxiConnect n'ont qu'une seule landing regroupant tous leurs plans) :
+   laisser l'URL landing telle quelle. Ce n'est pas une erreur — c'est
+   une contrainte de l'opérateur.
+
+**Cas légitimes de landing partagée** (vérifiés le 02.08.2026,
+aucune correction possible) :
+- Talk Talk (7 mobile plans → `/fr/`)
+- Aldi Mobile (6 plans → `/fr/`)
+- MaxiConnect Mobile (5 plans → `/fr/`)
+- Quickline (5 plans → `/fr/`)
+- Lycamobile (5 plans → `/fr/plans/`)
+- Digital Republic Smart Devices (6 tiers SIM Data → `/en/smart-devices/`)
+- VTX Mobile (5 plans → `/residential/mobile/abo-mobile`)
+- Teleboy Internet/Mobile (multiples → landing par catégorie)
+- Wingo mobile individuels : chaque plan a bien son URL propre
+- Migros Mobile : URLs vers online-shop.mobile.migros.ch (checkout
+  deep-links, techniquement corrects même si moins « descriptifs »)
+- Swisscom blue Mobile S/M/L/XL : URLs individuelles OK
+- CanalPlus (4 packs → `boutique.suisse.canalplus.com/`) : boutique
+  bloque le probe direct (403), landing conservée
+
+**Fréquence recommandée** : trimestrielle, ou dès qu'un feedback
+utilisateur mentionne un lien qui aboutit sur une liste au lieu du
+produit annoncé.
+
+---
+
 ## 🔗 Références mémoire
 
 Toutes les règles ci-dessus renvoient aux mémoires suivantes :
