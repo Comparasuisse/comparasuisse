@@ -1366,6 +1366,7 @@ const promoData = [
   {operator:"Aldi Mobile", name:"Aktion été — jusqu'à -60% sur tous les abos", discount:"Rabais promo temporaire sur toute la gamme mobile Aldi : Basic 9.90 (au lieu de 12.90), Swiss Unlimited 11.90 (au lieu de 24.90), Swiss Unlimited Extra 14.90 (au lieu de 29.90), et rabais sur International/Roaming Unlimited/Medium", details:"Grande action Aldi Mobile été 2026 : rabais promo sur tous les abos mobile. Activation à 1.- au lieu de 49.-. Sans engagement, réseau Sunrise. Prix normaux ré-appliqués après le 15.08.2026.", code:null, from:"2026-07-20", to:"2026-08-15", network:"sunrise", url:"https://www.aldimobile.ch/fr/", category:"mobile"},
   {operator:"Sky", name:"Swiss+ Mobile — promo temporaire -35%", price:14.95, beforePrice:22.95, details:"14.95 CHF/mois au lieu de 22.95 — data illimitée 5G en Suisse + 1 Go Europe/USA/Canada + activation gratuite. Prix à vie une fois souscrit avant la deadline. Réseau Salt.", code:null, from:"2026-07-01", to:"2026-08-10", network:"salt", url:"https://mobile.sky.ch/fr/", category:"mobile"},
   {operator:"Sky", name:"Europe+ Mobile — promo temporaire -29%", price:24.95, beforePrice:34.95, details:"24.95 CHF/mois au lieu de 34.95 — data illimitée 5G CH + illim Europe/USA/CAN dont 20 Go haut débit + illim appels/SMS. Prix à vie une fois souscrit avant la deadline. Réseau Salt.", code:null, from:"2026-07-01", to:"2026-08-03", network:"salt", url:"https://mobile.sky.ch/fr/", category:"mobile"},
+  {operator:"Mucho", name:"Mucho Nano — flash promo -54% à vie (compte à rebours)", price:4.50, beforePrice:9.90, details:"4.50 CHF/mois au lieu de 9.90 — 1 Go 5G en Suisse + 75 min + 75 SMS + 100 Mo roaming UE. Rabais à vie verrouillé si souscrit AVANT le 03.08.2026 à 11:59:59 (heure locale suisse), sinon retour au prix catalogue. Countdown officiel actif sur mucho.ch/fr/abo/muchonano. Sans engagement, activation gratuite, réseau Swisscom via MVNO.", code:null, from:"2026-08-01", to:"2026-08-03T11:59:59", network:"swisscom", url:"https://muchomobile.ch/fr/abo/muchonano", category:"mobile"},
 ];
 
 // Parse "YYYY-MM-DD" en date LOCALE (00:00 heure locale), pas UTC.
@@ -1380,7 +1381,15 @@ function parseLocalDate(s){
 // Fin de journée : une promo "jusqu'au 03.08" reste valable toute la journée du 03.08
 // (jusqu'à 23:59:59). Sans ça, le compte à rebours passerait à zéro à minuit ET la promo
 // se marquerait "expirée" alors qu'elle est encore active pour la journée.
+// Si le string contient un T (format ISO avec heure), on parse la vraie heure de fin
+// (utile pour promos flash à l'heure précise, ex. Mucho Nano fin 2026-08-03T11:59:59).
 function endOfDayLocal(s){
+  if (s.includes("T")) {
+    const [datePart, timePart] = s.split("T");
+    const [y, m, d] = datePart.split("-").map(Number);
+    const [hh, mm, ss] = timePart.split(":").map(Number);
+    return new Date(y, m - 1, d, hh || 0, mm || 0, ss || 0, 0);
+  }
   const [y, m, d] = s.split("-").map(Number);
   return new Date(y, m - 1, d, 23, 59, 59, 999);
 }
