@@ -555,6 +555,60 @@ aucune correction possible) :
 utilisateur mentionne un lien qui aboutit sur une liste au lieu du
 produit annoncé.
 
+### Étape complémentaire — Recherche Google élargie (pages orphelines de campagne)
+
+Le scan classique (sitemap + landing publique) rate un cas structurel : les
+**pages promo orphelines** — pages produit qui existent chez un opérateur
+mais qui ne sont liées depuis AUCUNE autre page de leur site. Elles servent
+souvent d'atterrissage pour des campagnes Facebook / newsletter / display
+sponso, et sont donc **invisibles au crawl standard** puisqu'aucun lien
+interne n'y mène.
+
+**Protocole complémentaire — à appliquer à chaque AUDIT LIENS et AUDIT COMPLET** :
+
+Pour chaque opérateur du catalogue, lancer via `WebSearch` (ou équivalent) :
+
+1. `site:{domaine-operateur}.ch promo` puis `deal` puis `offre limitée`
+   puis `rabais` (4 mots-clés, un par requête, à combiner via OR si
+   l'outil le permet)
+2. `site:{domaine-operateur}.ch "CHF" mois` (capte toute page contenant
+   un prix affiché — révèle les pages produit indexées mais orphelines)
+
+Pour chaque URL retournée :
+- Comparer avec la liste des URLs déjà présentes dans notre catalogue
+  (grep sur `index.html`)
+- Toute URL trouvée qui ne correspond à AUCUNE offre existante est un
+  **candidat orphelin** — vérifier via browser MCP si c'est :
+  - Une vraie offre commercialement active (à ajouter au catalogue)
+  - Une page archive/historique (à ignorer)
+  - Une variante géo/appareil-ciblée (à documenter)
+
+**Limite honnête à assumer** : même avec cette recherche élargie, il
+reste un risque résiduel de pages promo :
+
+- **Ultra-récentes** (< 24-48h) — Google n'a pas encore indexé
+- **Géo-ciblées** — visibles uniquement pour visiteurs d'une région ou
+  d'un canton spécifique
+- **Appareil-ciblées** — pages servies uniquement en mobile, ou avec
+  un User-Agent spécifique
+- **Facebook-exclusives** — landing pages liées uniquement depuis un
+  Ads Manager, jamais indexées publiquement
+- **Newsletter-only** — deep links envoyés par email à des segments
+  clients existants
+
+Ces cas échappent structurellement à toute méthode de scan automatique.
+Ce n'est pas un échec de la méthodologie, c'est **une vraie limite du
+web publicitaire moderne**. Les signalements utilisateur sur des pubs
+vues (comme la remontée du 02.08.2026 sur yallo Home Cable M + TV depuis
+Preispirat) restent **complémentaires et utiles** pour ces cas — nous
+documentons systématiquement chaque page ajoutée via ce canal comme
+« découvert via signal externe » dans le commit message.
+
+**Fréquence recommandée pour la recherche Google** : mensuelle sur les
+opérateurs actifs en promo (Wingo, Mucho, CHmobile, Coop, Aldi, Lidl,
+GoMo, yallo, Talk Talk), trimestrielle sur les opérateurs stables
+(Swisscom, Sunrise abo standard, Salt catalogue standard).
+
 ---
 
 ## 🔗 Références mémoire
