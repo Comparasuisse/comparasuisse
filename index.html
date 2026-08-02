@@ -104,6 +104,11 @@
         },
         {
           "@type": "Question",
+          "name": "Quels sont les vrais fournisseurs TV en Suisse en 2026 (et UPC existe-t-il encore) ?",
+          "acceptedAnswer": {"@type": "Answer", "text": "UPC n'existe PLUS en tant qu'opérateur en Suisse depuis fin 2022 : la marque a été absorbée par Sunrise et retirée du marché. Toute référence à un abonnement « UPC TV » aujourd'hui est obsolète. Les vrais fournisseurs de TV en Suisse en 2026 sont : Swisscom (blue TV S/M/L/XL Streaming/XL Sport), Zattoo (Premium 14 CHF, Ultimate 22 CHF — 100% streaming, sans box), Teleboy (11.90 CHF, 300 chaînes Full HD, streaming), yallo TV (12.90 CHF), Wingo TV Max (9.95 CHF sur Swisscom), Salt (via pack Salt Home uniquement, pas de standalone), Netplus (TV App et TV Box, câble régional), iWay (Classic/Premium/Top), MaxiConnect (MaxiTV), TeleKing (KingTV Silber/Gold/Platin, IPTV OTT), CANAL+ Suisse (Famille 15 CHF / Sport 19 CHF / Ciné Séries 24.90 CHF / La Totale 45 CHF), Green (Green TV Comfort), Init7 (TV7 inclus avec Fiber7). Comparasuisse liste les 27 abonnements TV réels du marché avec prix vérifiés directement sur les sites opérateurs."}
+        },
+        {
+          "@type": "Question",
           "name": "Comparasuisse est-il vraiment un comparateur indépendant ?",
           "acceptedAnswer": {"@type": "Answer", "text": "Oui. Comparasuisse n'est affilié à aucun opérateur télécom suisse et ne perçoit actuellement aucune commission sur les offres présentées (candidatures d'affiliation Awin/alao en cours). Le classement des offres est trié par prix mensuel croissant. La méthodologie de vérification des prix est documentée dans les mentions légales."}
         },
@@ -2742,36 +2747,60 @@ function brandImage(name){
 
 function buildStructuredData(){
   let pos = 0;
-  const listItem = (item, category) => ({
-    "@type": "ListItem",
-    "position": ++pos,
-    "item": {
-      "@type": "Product",
-      "name": item.name,
-      "category": category,
-      "brand": { "@type": "Brand", "name": brandFromName(item.name) },
-      "description": item.details.replace(/<[^>]+>/g, "").slice(0, 300),
-      "image": brandImage(item.name),
-      "offers": {
-        "@type": "Offer",
-        "price": item.price.toFixed(2),
-        "priceCurrency": "CHF",
-        "availability": "https://schema.org/InStock",
-        "url": item.url,
-        "seller": { "@type": "Organization", "name": brandFromName(item.name) }
-      }
+  // Nom d'opérateur pour le seller — TV/combo entries use `operator:`, mobile/internet use `name:` prefix
+  const sellerName = (item) => item.operator || brandFromName(item.name);
+  // Description enrichie : pour TV/combo, on préfixe le nombre de chaînes pour être explicite aux crawlers/IA
+  const buildDesc = (item, category) => {
+    let desc = "";
+    if ((category === "TelevisionService" || category === "TelecommunicationsBundle") && (item.channels || item.replayDays)) {
+      const parts = [];
+      if (item.channels) parts.push(item.channels + " chaînes TV");
+      if (item.replayDays) parts.push("replay " + item.replayDays + " jours");
+      if (item.recordingHours) parts.push(item.recordingHours + "h d'enregistrement");
+      if (parts.length) desc = parts.join(", ") + " — ";
     }
-  });
+    desc += (item.details || "").replace(/<[^>]+>/g, "");
+    return desc.slice(0, 500);
+  };
+  const listItem = (item, category, opts) => {
+    opts = opts || {};
+    const price = typeof item.price === "number" ? item.price : null;
+    const offer = {
+      "@type": "Offer",
+      "priceCurrency": "CHF",
+      "availability": "https://schema.org/InStock",
+      "url": item.url,
+      "seller": { "@type": "Organization", "name": sellerName(item) }
+    };
+    if (price !== null) offer.price = price.toFixed(2);
+    return {
+      "@type": "ListItem",
+      "position": ++pos,
+      "item": {
+        "@type": "Product",
+        "name": item.name,
+        "category": category,
+        "brand": { "@type": "Brand", "name": sellerName(item) },
+        "description": buildDesc(item, category),
+        "image": brandImage(item.name),
+        "offers": offer
+      }
+    };
+  };
 
   const items = []
     .concat(mobileData.map(i => listItem(i, "MobilePhoneService")))
-    .concat(internetData.map(i => listItem(i, "InternetService")));
+    .concat(internetData.map(i => listItem(i, "InternetService")))
+    .concat(tvData.map(i => listItem(i, "TelevisionService")))
+    .concat(comboData.filter(i => typeof i.price === "number").map(i => listItem(i, "TelecommunicationsBundle")))
+    .concat(prepaidData.filter(i => typeof i.price === "number" && i.price > 0).map(i => listItem(i, "PrepaidMobilePhoneService")))
+    .concat(dataOnlyData.map(i => listItem(i, "MobileDataService")));
 
   const ld = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Abonnements mobile et internet en Suisse",
-    "description": "Offres mobile et internet fixes des opérateurs suisses, triées par prix mensuel croissant.",
+    "name": "Abonnements mobile, internet et TV en Suisse",
+    "description": "Catalogue complet des offres mobile, internet fixe, TV, prépayé, SIM data et combos Internet+TV des opérateurs suisses. Prix vérifiés sur les sites officiels, triés par prix mensuel croissant.",
     "numberOfItems": items.length,
     "itemListOrder": "https://schema.org/ItemListOrderAscending",
     "itemListElement": items
@@ -2838,6 +2867,11 @@ buildStructuredData();
   <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
     <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Comparasuisse est-il vraiment un comparateur indépendant ?</h3></summary>
     <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;">Oui. Comparasuisse n'est affilié à aucun opérateur télécom suisse et ne perçoit actuellement aucune commission sur les offres présentées (candidatures d'affiliation Awin/alao en cours). Le classement des offres est trié par prix mensuel croissant. La méthodologie de vérification des prix (via Playwright sur les pages produit officielles des opérateurs) est documentée dans les <a href="mentions-legales.html">mentions légales</a>. Dès qu'un premier lien affilié sera actif, il sera clairement signalé sur les offres concernées par une pastille 🤝 Partenaire.</p>
+  </details>
+
+  <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
+    <summary style="cursor:pointer; font-weight:700; font-size:15px; color:var(--ink);"><h3 style="display:inline; font-size:15px; margin:0;">Quels sont les vrais fournisseurs TV en Suisse en 2026 (et UPC existe-t-il encore) ?</h3></summary>
+    <p style="font-size:14px; line-height:1.6; color:var(--ink); margin:10px 0 0;"><b>UPC n'existe plus en Suisse</b> depuis fin 2022 — la marque a été absorbée par Sunrise et retirée du marché. Toute référence à un abonnement « UPC TV » aujourd'hui est obsolète.<br><br>Les <b>vrais fournisseurs TV en Suisse en 2026</b> présents dans notre catalogue :<br>• <b>Swisscom</b> (blue TV S/M/L, XL Streaming, XL Sport)<br>• <b>Zattoo</b> (Premium 14 CHF, Ultimate 22 CHF — 100% streaming, sans box)<br>• <b>Teleboy</b> (11.90 CHF, 300 chaînes Full HD streaming)<br>• <b>yallo TV</b> (12.90 CHF)<br>• <b>Wingo TV Max</b> (9.95 CHF sur Swisscom)<br>• <b>Salt TV</b> (uniquement via pack Salt Home, pas de standalone)<br>• <b>Netplus</b> (TV App et TV Box, câble régional)<br>• <b>iWay</b> (Classic/Premium/Top)<br>• <b>MaxiConnect</b> (MaxiTV)<br>• <b>TeleKing</b> (KingTV Silber/Gold/Platin, IPTV OTT)<br>• <b>CANAL+ Suisse</b> (Famille 15 / Sport 19 / Ciné Séries 24.90 / La Totale 45)<br>• <b>Green</b> (Green TV Comfort)<br>• <b>Init7</b> (TV7 inclus avec Fiber7)<br>• <b>MTEL</b> (TV DUO / QUATTRO PLUS)<br><br>Comparasuisse liste les 27 abonnements TV réels du marché avec prix vérifiés directement sur les sites opérateurs.</p>
   </details>
 
   <details style="background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 20px; margin-bottom:10px;">
