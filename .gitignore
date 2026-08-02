@@ -17,3 +17,8 @@ desktop.ini
 # Node (outils de dev uniquement — le site est statique en prod)
 node_modules/
 package-lock.json
+
+# Audit quotidien — fichiers générés à chaque run (voir AUDIT-COMPLET.md § Architecture hybride)
+scripts/daily-audit-log.md
+scripts/daily-audit-state.json
+scripts/daily-audit-cron.log

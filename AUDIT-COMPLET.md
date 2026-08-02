@@ -12,6 +12,112 @@ plus vite.
 
 ---
 
+## ⚙️ Architecture hybride (processus standard depuis le 03.08.2026)
+
+L'audit n'est plus déclenché exclusivement à la main : un scan quotidien
+automatisé décide chaque matin si un AUDIT COMPLET manuel est nécessaire,
+ou si le catalogue est stable et n'a besoin d'aucune intervention.
+
+### 1. Scan quotidien automatisé (rapide, sans jugement)
+
+Le script **`scripts/_audit-catalog.mjs`** est planifié par le Task Scheduler
+Windows (voir **`scripts/install-daily-audit-task.ps1`** pour l'installer,
+défaut : 07:00, rattrapage si PC éteint). À chaque run il :
+
+1. Parcourt **toutes les offres** du catalogue qui ont une `url` (277 offres,
+   ~175 URLs uniques au 03.08.2026).
+2. Charge chaque URL via Playwright headless (Chrome local).
+3. Extrait les prix visibles avec la même regex que `audit-random.mjs`
+   (les fragments sont recollés — voir `scripts/lib/audit-lib.mjs`).
+4. Compare le prix stocké au prix trouvé sur la page.
+5. **Flague explicitement** trois types de cas ambigus :
+   - **Prix inextractable** → `PAGE_VIDE` ou `NON_VÉRIFIABLE`
+     (page SPA bloquée sur un loader, protection bot, prix « à partir de… »).
+   - **Mots-clés marketing agressifs** dans le texte visible :
+     `à vie`, `pour toujours`, `countdown`, `il te reste`, `expire`,
+     `à saisir`, `jusqu'au`, `flash promo`, `aktion`, `national day`,
+     `summer deal`, `last chance`, etc.
+     (liste maintenue dans `SUSPICIOUS_KEYWORDS`).
+   - **Écart de prix** peu importe le sens (hausse ou baisse) →
+     verdict `ÉCART` avec les prix trouvés + suggestions à ±15%.
+6. Écrit un rapport rolling dans **`scripts/daily-audit-log.md`**
+   (le run le plus récent en tête) + met à jour
+   **`scripts/daily-audit-state.json`** avec la date du dernier run
+   et la date de la dernière passe complète manuelle validée.
+
+Ce script **ne modifie jamais `index.html`** et n'auto-corrige rien.
+C'est un capteur, pas un correcteur.
+
+### 2. Décision : AUDIT COMPLET manuel oui / non
+
+Le rapport ouvre par un verdict binaire :
+
+- **🚨 AUDIT COMPLET REQUIS** si l'une de ces conditions est vraie :
+  - au moins un cas flagué (écart, illisible, mot-clé suspect), OU
+  - plus de **2 jours** se sont écoulés depuis la dernière passe complète
+    manuelle (seuil `DAYS_BEFORE_FORCED_FULL_PASS`).
+- **✅ Pas de trigger** sinon : le catalogue est réputé stable, aucune
+  intervention nécessaire ce jour.
+
+### 3. AUDIT COMPLET manuel (Playwright + jugement)
+
+Quand le trigger tombe, on relance la méthode manuelle décrite plus bas
+(vagues Wx, browser MCP, jugement sur les cas ambigus, commits par vague).
+La **différence importante** : on ne re-visite pas tout le catalogue à
+chaque fois — on cible :
+
+- **Les cas flagués** listés dans `scripts/daily-audit-log.md` (obligatoire).
+- **Un tour de vérification légère** sur le reste du catalogue au moins
+  tous les 2 jours (obligatoire — c'est le rôle du seuil des 2 jours).
+
+Une fois la passe manuelle validée, commitée et pushée, exécuter :
+
+```bash
+node scripts/_audit-catalog.mjs --mark-full-pass
+```
+
+pour enregistrer la date dans le state et remettre le compteur à zéro.
+Sans cette étape, le trigger « overdue » se re-déclenchera dès le
+lendemain.
+
+### 4. Commandes utiles
+
+```bash
+node scripts/_audit-catalog.mjs                       # run complet
+node scripts/_audit-catalog.mjs --limit 20            # premiers 20 (debug)
+node scripts/_audit-catalog.mjs --category mobile     # subset catégorie
+node scripts/_audit-catalog.mjs --dry-run             # inventaire sans Playwright
+node scripts/_audit-catalog.mjs --mark-full-pass      # marque passe manuelle validée
+
+# Installation / suppression de la tâche planifiée Windows (PowerShell) :
+pwsh -File scripts\install-daily-audit-task.ps1                 # crée / met à jour
+pwsh -File scripts\install-daily-audit-task.ps1 -TimeOfDay 08:30
+pwsh -File scripts\install-daily-audit-task.ps1 -Uninstall
+```
+
+### 5. Fichiers produits par le pipeline
+
+| Fichier | Rôle |
+|---|---|
+| `scripts/daily-audit-log.md` | Rapport humain rolling (récent en haut, garde les runs précédents) |
+| `scripts/daily-audit-state.json` | État machine : dernier run, dernière passe complète, historique 30 derniers runs |
+| `scripts/daily-audit-cron.log` | stdout/stderr du run planifié (généré par Task Scheduler) |
+| `scripts/lib/audit-lib.mjs` | Helpers partagés (chargement `index.html`, extraction prix, détection mots-clés) |
+
+### 6. Que faire si le script échoue silencieusement
+
+- Vérifier `scripts/daily-audit-cron.log` — si Chrome/Node manque, l'erreur
+  y sera loggée.
+- Vérifier que la tâche est bien enregistrée :
+  `Get-ScheduledTask -TaskName ComparasuisseDailyAudit`
+- Forcer un run test :
+  `Start-ScheduledTask -TaskName ComparasuisseDailyAudit`
+- Un run manuel qui échoue → charger `index.html` a peut-être introduit
+  une nouvelle `const NAME = …` référencée dans les data arrays qui n'est
+  pas dans `HELPER_CONST_NAMES` de `audit-lib.mjs`. L'ajouter là.
+
+---
+
 ## 🎯 Comportement autonome
 
 **Une seule validation utilisateur à la fin de tout le processus, pas par vague.**
