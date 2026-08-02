@@ -356,6 +356,23 @@
   gtag('js', new Date());
   gtag('config', 'AW-18345847104');
 </script>
+<!-- Google Ads conversion action pour clics "Voir l'offre →" (target=_blank).
+     Appelée en onclick sans argument URL : l'ancre gère l'ouverture dans un nouvel onglet
+     et gtag envoie l'événement de conversion en parallèle, sans bloquer la navigation. -->
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-18345847104/KXcICM2NvdUcEMDS_atE',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
 </head>
 <body>
 
@@ -1290,7 +1307,7 @@ function renderCompareView(){
     : "";
 
   // Voir l'offre row
-  const offerLinksRow = `<tr><th>Lien officiel</th>${items.map(x => `<td><a class="offer-btn" href="${offerUrl(x.item)}" target="_blank" rel="${offerRel(x.item)}">Voir l'offre →</a></td>`).join("")}</tr>`;
+  const offerLinksRow = `<tr><th>Lien officiel</th>${items.map(x => `<td><a class="offer-btn" href="${offerUrl(x.item)}" target="_blank" rel="${offerRel(x.item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a></td>`).join("")}</tr>`;
 
   container.innerHTML = `
     <div class="cmp-header-bar">
@@ -1318,7 +1335,7 @@ function renderComboCard(c){
     </div>
     <div class="details">${c.details} ${affiliatePill(c)}${renderWarning(c)}</div>
     ${priceBlock}
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(c)}" target="_blank" rel="${offerRel(c)}">Voir l'offre →</a>${compareBtn(c, "combo")}</div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(c)}" target="_blank" rel="${offerRel(c)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(c, "combo")}</div>
     ${hasTV ? renderChannels(c) : ""}
   </div>`;
 }
@@ -1561,7 +1578,7 @@ function renderPromoCard(p){
     </div>
     <div class="details"><b>Ce qui est inclus :</b><br>${p.details}${renderWarning(p)}<div class="std-price" style="margin-top:6px;">${affiliatePill(p)}</div></div>
     ${priceBlock}
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}">Voir l'offre →</a>${compareBtn(p, p.category)}</div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(p, p.category)}</div>
   </div>`;
 }
 
@@ -1904,7 +1921,7 @@ function renderTVCard(item){
     </div>
     <div class="details">${item.details}<span class="roaming-pill roaming-yes">${item.channels}+ chaînes</span>${streamPill}<div class="std-price"><b>Fonctionnalités :</b> ${replayTxt} · ${recTxt}</div> ${affiliatePill(item)}${renderWarning(item)}</div>
     <div class="price">${priceBlock}${beforeLine}${renderPriceHistory(item)}</div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "tv")}</div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(item, "tv")}</div>
     ${renderChannels(item)}
   </div>`;
 }
@@ -2164,7 +2181,7 @@ function renderMobileCard(item){
     </div>
     <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${choicePill}${agePill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · 🌍→🌍 ${callsRoamingLabel(item)}</div>${renderWarning(item)}</div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}${renderPriceHistory(item)}</div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "mobile")}</div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(item, "mobile")}</div>
   </div>`;
 }
 
@@ -2184,7 +2201,7 @@ function renderInternetCard(item){
     </div>
     <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span>${item.ownRouterAllowed ? '<span class="roaming-pill roaming-yes" title="Ce fournisseur autorise l\'utilisation de votre propre routeur/matériel, pas obligé de prendre le sien.">🔧 Routeur perso autorisé</span>' : ''} ${affiliatePill(item)}${renderWarning(item)}</div>
     <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}${renderPriceHistory(item)}</div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a>${compareBtn(item, "internet")}</div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(item, "internet")}</div>
   </div>`;
 }
 
@@ -2245,7 +2262,7 @@ function renderPrepaidCard(item){
       ${priceBlock}
       ${renderPriceHistory(item)}
     </div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a></div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a></div>
   </div>`;
 }
 
@@ -2279,7 +2296,7 @@ function renderDataOnlyCard(item){
       ${yearLine}
       ${renderPriceHistory(item)}
     </div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}">Voir l'offre →</a></div>
+    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a></div>
   </div>`;
 }
 
