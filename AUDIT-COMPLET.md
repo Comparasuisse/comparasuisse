@@ -30,7 +30,7 @@ défaut : 07:00, rattrapage si PC éteint). À chaque run il :
 3. Extrait les prix visibles avec la même regex que `audit-random.mjs`
    (les fragments sont recollés — voir `scripts/lib/audit-lib.mjs`).
 4. Compare le prix stocké au prix trouvé sur la page.
-5. **Flague explicitement** trois types de cas ambigus :
+5. **Flague explicitement** quatre types de cas ambigus :
    - **Prix inextractable** → `PAGE_VIDE` ou `NON_VÉRIFIABLE`
      (page SPA bloquée sur un loader, protection bot, prix « à partir de… »).
    - **Mots-clés marketing agressifs** dans le texte visible :
@@ -40,6 +40,9 @@ défaut : 07:00, rattrapage si PC éteint). À chaque run il :
      (liste maintenue dans `SUSPICIOUS_KEYWORDS`).
    - **Écart de prix** peu importe le sens (hausse ou baisse) →
      verdict `ÉCART` avec les prix trouvés + suggestions à ±15%.
+   - **TIMEOUT** : la vérification a dépassé le hard timeout (20 s par
+     défaut, `hardTimeout` dans `audit-lib.mjs`). Cf. § 7 ci-dessous
+     pour le contexte de cette garde-fou.
 6. Écrit un rapport rolling dans **`scripts/daily-audit-log.md`**
    (le run le plus récent en tête) + met à jour
    **`scripts/daily-audit-state.json`** avec la date du dernier run
@@ -115,6 +118,33 @@ pwsh -File scripts\install-daily-audit-task.ps1 -Uninstall
 - Un run manuel qui échoue → charger `index.html` a peut-être introduit
   une nouvelle `const NAME = …` référencée dans les data arrays qui n'est
   pas dans `HELPER_CONST_NAMES` de `audit-lib.mjs`. L'ajouter là.
+
+### 7. Garde-fous de robustesse (post-incident 03.08.2026)
+
+Trois protections ont été ajoutées après un premier déploiement pathologique
+où plusieurs runs se sont empilés parce que certaines pages « hanguaient »
+indéfiniment (Sunrise Swiss Travel+ 82 min, Lebara Relax S 68 min, Wingo
+Swiss Max 59 min avant erreur, etc.). Playwright peut caler dans
+`page.evaluate` ou `page.close` quand le contexte Chrome sature ou qu'un
+SPA garde une boucle JS active.
+
+| Garde-fou | Où | Comportement |
+|---|---|---|
+| **Hard timeout par page** | `audit-lib.mjs` `checkOffer(hardTimeout=20000)` | `Promise.race` : si la vérif dépasse 20 s, on émet un verdict `TIMEOUT` et on ferme la page en fire-and-forget. Le run continue sans être bloqué. |
+| **Navigation timeout court** | `audit-lib.mjs` `setDefaultNavigationTimeout(15000)` | `page.goto` timeout à 15 s au lieu du défaut Playwright 30 s. |
+| **Lock file** | `scripts/daily-audit.lock` | Un nouveau run refuse de démarrer si un précédent tourne encore (PID vérifié). Exit code 75 (EX_TEMPFAIL, retry-friendly). Un lock de plus de 90 min est considéré zombie et écrasé. Libéré via `process.on("exit")`. |
+| **Historique borné** | `_audit-catalog.mjs` `MAX_RUNS_KEPT_IN_LOG=7` | Le rapport `daily-audit-log.md` ne garde que les 7 derniers blocs `# Daily audit — YYYY-MM-DD` — évite l'accumulation en cas de runs multi-quotidiens ou de tests répétés. |
+
+Si des runs zombies traînent malgré ces garde-fous :
+
+```powershell
+# Kill tous les node + wscript + Chrome enfants de node
+Get-Process -Name node, wscript -EA SilentlyContinue | Stop-Process -Force
+# Puis Chrome enfants de node — voir scripts/cleanup-zombies.ps1 s'il est ajouté
+```
+
+Le lock file peut être supprimé à la main si vraiment coincé :
+`Remove-Item scripts\daily-audit.lock`.
 
 ---
 

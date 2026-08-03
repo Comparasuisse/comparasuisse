@@ -41,10 +41,55 @@ const UA =
 
 const LOG_PATH = "scripts/daily-audit-log.md";
 const STATE_PATH = "scripts/daily-audit-state.json";
+const LOCK_PATH = "scripts/daily-audit.lock";
 
 // Nombre de jours max entre 2 passes complètes AVANT que le trigger « manuel »
 // soit forcé, même sans flag. Cf. AUDIT-COMPLET.md.
 const DAYS_BEFORE_FORCED_FULL_PASS = 2;
+// Nombre maximum de runs (bloc `# Daily audit — YYYY-MM-DD`) conservés dans
+// le fichier de log rolling. Les runs plus vieux sont supprimés au run suivant
+// pour éviter que le fichier explose en taille en cas d'audits multi-quotidiens
+// (déclenchés à la main pour debug par exemple).
+const MAX_RUNS_KEPT_IN_LOG = 7;
+
+// === Lock file ===
+// Un run précédent qui traîne (hang Playwright, PC en veille pendant un run,
+// etc.) ne doit pas se voir marcher dessus par un nouveau run. Cf. incident
+// 03.08.2026 : plusieurs runs empilés sur le même daily-audit-log.md car les
+// runs précédents hanguaient jusqu'à 82 min sans jamais terminer.
+function acquireLock() {
+  if (fs.existsSync(LOCK_PATH)) {
+    let staleLock = false;
+    try {
+      const raw = JSON.parse(fs.readFileSync(LOCK_PATH, "utf8"));
+      // PID vivant ? Sous Windows, process.kill(pid, 0) renvoie true si le
+      // process existe, throw sinon.
+      try { process.kill(raw.pid, 0); }
+      catch { staleLock = true; }
+      // Sécurité : un lock de plus de 90 min est forcément mort (ExecutionTimeLimit
+      // Task Scheduler = 1h, donc au-delà on est en zombie).
+      if (!staleLock && raw.startedAt) {
+        const ageMs = Date.now() - new Date(raw.startedAt).getTime();
+        if (ageMs > 90 * 60 * 1000) staleLock = true;
+      }
+      if (!staleLock) {
+        console.error(`⛔ Un run est déjà en cours (PID ${raw.pid} depuis ${raw.startedAt}). Exit.`);
+        process.exit(75); // EX_TEMPFAIL — Task Scheduler retry-friendly
+      }
+      console.warn(`⚠ Lock obsolète détecté (PID ${raw.pid}), nettoyage.`);
+    } catch {
+      // Lock corrompu → on écrase.
+    }
+    try { fs.unlinkSync(LOCK_PATH); } catch {}
+  }
+  fs.writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }));
+}
+function releaseLock() {
+  try { fs.unlinkSync(LOCK_PATH); } catch {}
+}
+process.on("exit", releaseLock);
+process.on("SIGINT", () => { releaseLock(); process.exit(130); });
+process.on("SIGTERM", () => { releaseLock(); process.exit(143); });
 
 // === Args ===
 const args = process.argv.slice(2);
@@ -69,6 +114,10 @@ if (flag("mark-full-pass")) {
 const LIMIT = parseInt(argVal("limit") || "0", 10);
 const CATEGORY = argVal("category"); // "mobile" | "internet" | "tv" | "combo" | "promo"
 const DRY = flag("dry-run");
+
+// Acquiert le verrou avant tout autre traitement lourd. `--dry-run` peut
+// passer sans lock (inventaire seul).
+if (!DRY) acquireLock();
 
 // === Chargement des offres ===
 const data = loadData();
@@ -126,7 +175,7 @@ for (const item of subset) {
   process.stdout.write(`  [${idx}/${subset.length}] ${item.__cat}/${item.operator || ""}/${item.name} `);
   const snap = await getUrlSnapshot(item.url);
   let verdict;
-  if (snap.status === "URL_MORTE" || snap.status === "PAGE_VIDE" || snap.status === "ERREUR") {
+  if (snap.status === "URL_MORTE" || snap.status === "PAGE_VIDE" || snap.status === "ERREUR" || snap.status === "TIMEOUT") {
     verdict = { ...snap };
   } else {
     // Comparaison prix stocké vs pricesOnPage
@@ -148,7 +197,7 @@ for (const item of subset) {
   const keywords = snap.text ? detectSuspiciousKeywords(snap.text) : [];
   verdict.keywords = keywords;
   const ms = Date.now() - t0;
-  const icon = { OK: "✅", ÉCART: "⚠️", URL_MORTE: "❌", PAGE_VIDE: "📭", ERREUR: "💥", NON_VÉRIFIABLE: "ℹ️", SKIP_NO_URL: "⏭" }[verdict.status] || "?";
+  const icon = { OK: "✅", ÉCART: "⚠️", URL_MORTE: "❌", PAGE_VIDE: "📭", TIMEOUT: "⏱", ERREUR: "💥", NON_VÉRIFIABLE: "ℹ️", SKIP_NO_URL: "⏭" }[verdict.status] || "?";
   const kwFlag = keywords.length ? ` [kw:${keywords.length}]` : "";
   console.log(`${icon} ${verdict.status}${kwFlag} (${ms}ms)`);
   results.push({ item, verdict, ms });
@@ -157,13 +206,14 @@ for (const item of subset) {
 await browser.close();
 
 // === Agrégation par verdict ===
-const counts = { OK: 0, ÉCART: 0, URL_MORTE: 0, PAGE_VIDE: 0, ERREUR: 0, NON_VÉRIFIABLE: 0 };
+const counts = { OK: 0, ÉCART: 0, URL_MORTE: 0, PAGE_VIDE: 0, TIMEOUT: 0, ERREUR: 0, NON_VÉRIFIABLE: 0 };
 for (const r of results) counts[r.verdict.status] = (counts[r.verdict.status] || 0) + 1;
 const withKeywords = results.filter(r => r.verdict.keywords?.length > 0);
 const flagged = results.filter(r =>
   r.verdict.status === "ÉCART" ||
   r.verdict.status === "URL_MORTE" ||
   r.verdict.status === "PAGE_VIDE" ||
+  r.verdict.status === "TIMEOUT" ||
   r.verdict.status === "ERREUR" ||
   (r.verdict.keywords?.length > 0)
 );
@@ -219,7 +269,7 @@ if (triggerManual) {
 
 // Section par verdict problématique
 const groupBy = (verdict) => results.filter(r => r.verdict.status === verdict);
-for (const v of ["ÉCART", "URL_MORTE", "PAGE_VIDE", "ERREUR"]) {
+for (const v of ["ÉCART", "URL_MORTE", "PAGE_VIDE", "TIMEOUT", "ERREUR"]) {
   const g = groupBy(v);
   if (!g.length) continue;
   lines.push(`### ${v} (${g.length})`);
@@ -230,6 +280,7 @@ for (const v of ["ÉCART", "URL_MORTE", "PAGE_VIDE", "ERREUR"]) {
     if (verdict.pricesOnPage?.length) lines.push(`  - Prix trouvés : ${verdict.pricesOnPage.join(", ")}`);
     if (verdict.near?.length) lines.push(`  - Prix proches (±15%) : ${verdict.near.join(", ")}`);
     if (verdict.httpStatus) lines.push(`  - HTTP : ${verdict.httpStatus}`);
+    if (verdict.hardTimeoutMs) lines.push(`  - Hard timeout : ${verdict.hardTimeoutMs}ms`);
     if (verdict.error) lines.push(`  - Erreur : \`${verdict.error}\``);
     if (verdict.keywords?.length) lines.push(`  - Mots-clés : ${verdict.keywords.join(", ")}`);
   }
@@ -254,12 +305,19 @@ lines.push("---");
 lines.push("");
 
 // === Sauvegarde : append en tête (rolling log, récent en haut) ===
+// Idempotence : si un bloc du jour existe déjà, on le remplace au lieu de doubler.
+// Limite : on ne conserve que les MAX_RUNS_KEPT_IN_LOG derniers blocs — évite
+// que le fichier explose (chaque run pèse 30-50 KB, un empilement d'une semaine
+// se lit encore d'un coup, au-delà on perd la vue d'ensemble).
 fs.mkdirSync("scripts", { recursive: true });
 let prev = "";
 if (fs.existsSync(LOG_PATH)) prev = fs.readFileSync(LOG_PATH, "utf8");
-// Retire un éventuel bloc du jour existant (idempotence si run 2x le même jour)
 prev = prev.replace(new RegExp(`# Daily audit — ${today}[\\s\\S]*?(?=# Daily audit — |$)`), "");
-fs.writeFileSync(LOG_PATH, lines.join("\n") + prev);
+// Découpe le prev en blocs et garde les N-1 plus récents (le nouveau bloc
+// qu'on ajoute en tête complètera à N).
+const prevBlocks = prev.split(/(?=# Daily audit — )/).filter(b => b.trim().length);
+const kept = prevBlocks.slice(0, Math.max(0, MAX_RUNS_KEPT_IN_LOG - 1));
+fs.writeFileSync(LOG_PATH, lines.join("\n") + kept.join(""));
 
 // === État persistant ===
 state.lastRunDate = today;

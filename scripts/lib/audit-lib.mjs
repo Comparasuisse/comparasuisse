@@ -78,36 +78,39 @@ export function loadData() {
 //   - ÉCART           : prix stocké absent de la page (mais d'autres prix présents)
 //   - URL_MORTE       : HTTP 4xx/5xx
 //   - PAGE_VIDE       : < 100 chars visible (protection bot / JS bloqué)
+//   - TIMEOUT         : la vérification a dépassé opts.hardTimeout (défaut 20s)
+//                       (le Playwright interne peut hanger : page.evaluate ou
+//                        page.close bloquent parfois indéfiniment sur SPA lourde
+//                        ou context saturé). Un wrapper Promise.race gère ce cas.
 //   - NON_VÉRIFIABLE  : prix null/0 ou pas de champ price
 //   - SKIP_NO_URL     : aucune URL enregistrée pour l'offre
 //   - ERREUR          : timeout / réseau / autre
 export async function checkOffer(ctx, item, opts = {}) {
-  const timeout = opts.timeout || 30000;
-  const waitAfter = opts.waitAfter || 1200;
   if (!item.url) return { status: "SKIP_NO_URL" };
+  const navigationTimeout = opts.timeout || 15000;
+  const waitAfter = opts.waitAfter || 800;
+  // Hard timeout : borne TOTALE de la vérification. Nécessaire parce que
+  // Playwright peut hanger sur page.evaluate ou page.close (constaté 03.08.2026
+  // sur Sunrise Swiss Travel+ = 82 min, Lebara Relax S = 68 min, etc.).
+  const hardTimeout = opts.hardTimeout || 20000;
+
   const page = await ctx.newPage();
-  try {
-    const resp = await page.goto(item.url, { waitUntil: "domcontentloaded", timeout });
+  // Timers Playwright internes courts pour ne pas dépendre du hardTimeout.
+  page.setDefaultNavigationTimeout(navigationTimeout);
+  page.setDefaultTimeout(navigationTimeout);
+
+  const runCheck = async () => {
+    const resp = await page.goto(item.url, { waitUntil: "domcontentloaded", timeout: navigationTimeout });
     const status = resp?.status?.() ?? 0;
-    if (status < 200 || status >= 400) {
-      await page.close();
-      return { status: "URL_MORTE", httpStatus: status };
-    }
-    await page.waitForLoadState("networkidle", { timeout: 12000 }).catch(() => {});
+    if (status < 200 || status >= 400) return { status: "URL_MORTE", httpStatus: status };
+    await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(waitAfter);
     const text = await page.evaluate(() => document.body.innerText).catch(() => "");
-    await page.close();
-
-    if (!text || text.length < 100) {
-      return { status: "PAGE_VIDE", httpStatus: status, textLength: text.length };
-    }
+    if (!text || text.length < 100) return { status: "PAGE_VIDE", httpStatus: status, textLength: text.length };
     const pricesOnPage = extractPrices(text);
     const expected = typeof item.price === "number" ? item.price.toFixed(2) : null;
-    if (!expected || item.price === 0) {
-      return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, text };
-    }
-    const found = pricesOnPage.includes(expected);
-    if (found) return { status: "OK", expected, pricesOnPage: pricesOnPage.slice(0, 15), text };
+    if (!expected || item.price === 0) return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, text };
+    if (pricesOnPage.includes(expected)) return { status: "OK", expected, pricesOnPage: pricesOnPage.slice(0, 15), text };
     const near = pricesOnPage
       .map(p => ({ p, diff: Math.abs(parseFloat(p) - parseFloat(expected)) }))
       .filter(x => x.diff <= parseFloat(expected) * 0.15)
@@ -115,9 +118,25 @@ export async function checkOffer(ctx, item, opts = {}) {
       .slice(0, 3)
       .map(x => x.p);
     return { status: "ÉCART", expected, pricesOnPage: pricesOnPage.slice(0, 15), near, text };
-  } catch (e) {
-    try { await page.close(); } catch {}
-    return { status: "ERREUR", error: e.message };
+  };
+
+  let timedOut = false;
+  const timeoutPromise = new Promise((resolve) => {
+    setTimeout(() => { timedOut = true; resolve({ status: "TIMEOUT", hardTimeoutMs: hardTimeout }); }, hardTimeout);
+  });
+
+  try {
+    const result = await Promise.race([runCheck().catch(e => ({ status: "ERREUR", error: e.message })), timeoutPromise]);
+    return result;
+  } finally {
+    // Ferme la page en fire-and-forget : si Playwright hangue sur close,
+    // on ne bloque pas le run suivant. Un léger fuite mémoire est tolérable.
+    Promise.resolve().then(() => page.close({ runBeforeUnload: false }).catch(() => {}));
+    if (timedOut) {
+      // Signale au caller que ce run a laissé une page ouverte : au bout de
+      // ~10 runs consécutifs en TIMEOUT, le caller peut décider de recycler
+      // le context Playwright pour libérer la mémoire.
+    }
   }
 }
 
