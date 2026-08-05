@@ -35,24 +35,29 @@ export function extractPrices(text) {
 // === Chargement des données depuis index.html ===
 // Pattern : les arrays de données sont écrits en JavaScript inline dans index.html.
 // On les extrait par regex + eval sécurisé (Function). Le contenu est trusted (écrit par nous).
+//
 // Certaines entrées référencent des constantes helpers (WINGO_MIGRATION_TITLE,
-// WINGO_MIGRATION_WARNING, YALLO_TV_CHANNELS…) déclarées AVANT les arrays. On les
-// extrait aussi et on les prépend au corps de la Function pour que l'eval résolve.
-const HELPER_CONST_NAMES = [
-  "WINGO_MIGRATION_WARNING",
-  "WINGO_MIGRATION_TITLE",
-  "YALLO_TV_CHANNELS",
-];
+// WINGO_RED_UNAVAILABLE_WARNING, YALLO_TV_CHANNELS…) déclarées AVANT les arrays.
+// On AUTO-DÉCOUVRE toutes les `const NAME = ...;` top-level en ALL_CAPS (ligne unique
+// se terminant par `;`) et on les prépend au corps de la Function pour que l'eval
+// résolve les références. Ce mécanisme est zero-maintenance : ajouter une nouvelle
+// constante dans index.html ne demande AUCUNE mise à jour de ce script (bug résolu
+// le 06.08.2026 après que WINGO_RED_UNAVAILABLE_* aient cassé le daily audit 2 jours).
+export function extractTopLevelConstants(html) {
+  // Matches lines starting with `const NAME_IN_CAPS = <one-line expr>;`
+  // NAME must be at least 2 chars, uppercase + digits + underscores, and start with a letter.
+  // Only single-line consts sont capturées (suffisant pour tous nos helpers actuels).
+  const re = /^const ([A-Z][A-Z0-9_]{1,})\s*=\s*[^\n;]+;/gm;
+  const out = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    out.push({ name: m[1], decl: m[0] });
+  }
+  return out;
+}
 export function loadData() {
   const html = fs.readFileSync("index.html", "utf8");
-  // Extrait les `const NAME = ...;` (une seule ligne, terminé par ";")
-  const helperPrefix = HELPER_CONST_NAMES
-    .map((name) => {
-      const re = new RegExp(`^const ${name}\\s*=\\s*[^;]+;`, "m");
-      const m = html.match(re);
-      return m ? m[0] : `const ${name} = undefined;`;
-    })
-    .join("\n");
+  const helperPrefix = extractTopLevelConstants(html).map((c) => c.decl).join("\n");
   const extract = (name) => {
     const re = new RegExp(`const ${name} = \\[([\\s\\S]*?)\\n\\];`);
     const m = html.match(re);
