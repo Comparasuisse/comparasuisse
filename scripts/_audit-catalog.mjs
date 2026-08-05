@@ -177,6 +177,13 @@ for (const item of subset) {
   let verdict;
   if (snap.status === "URL_MORTE" || snap.status === "PAGE_VIDE" || snap.status === "ERREUR" || snap.status === "TIMEOUT") {
     verdict = { ...snap };
+  } else if (snap.status === "NON_VÉRIFIABLE" && !snap.text) {
+    // Court-circuit whitelist (isNonVerifiableUrl dans audit-lib.mjs) : URL
+    // structurellement inextractable. Le stub-item ci-dessus RETOURNE
+    // NON_VÉRIFIABLE parce que price=null, mais ce cas-là a text + pricesOnPage
+    // (donc snap.text est présent). Le short-circuit whitelist retourne
+    // NON_VÉRIFIABLE SANS text (Playwright pas exécuté). Discriminant = text.
+    verdict = { status: "NON_VÉRIFIABLE", raison: snap.raison || "URL whitelistée" };
   } else {
     // Comparaison prix stocké vs pricesOnPage
     const expected = typeof item.price === "number" ? item.price.toFixed(2) : null;

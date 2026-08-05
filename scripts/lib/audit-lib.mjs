@@ -6,16 +6,30 @@ import fs from "node:fs";
 
 // === Regex d'extraction de prix ===
 // Tolérante aux formats suisses courants : "CHF 12.95", "12.95 CHF", "12,95 CHF",
-// "CHF 39", "CHF 39.-", "39.-/mois", "Fr. 12.90", etc. Décimales optionnelles.
+// "CHF 39", "CHF 39.-", "39.-/mois", "39.-/m.", "Fr. 12.90", etc.
+// Décimales optionnelles. Le suffixe "/m." (Sunrise) est maintenant reconnu
+// en plus de "/mois" (documenté 06.08.2026 après faux positifs Sunrise).
 export const PRICE_RE =
-  /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*mois|\/mois)/gi;
+  /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*m(?:ois|\.)|\/\s*m(?:ois|\.))/gi;
 
 // Normalise le texte AVANT extraction pour rejoindre les prix coupés par des
-// sauts de ligne (Salt/Wingo/etc. rendent les tokens dans des <span> séparés).
+// sauts de ligne. Patterns observés en prod :
+//   - Salt/Wingo : "17\n.\n95" → "17.95" (tokens dans <span> séparés)
+//   - Mucho     : "17.\n90"    → "17.90" (entier + centimes sur 2 lignes)
+//   - Talk Talk : "CHF\n9.95"   → "CHF 9.95" (devise sur ligne, prix en dessous)
+//     idem Spusu, Aldi, Mtel, MaxiMobile, Sunrise landing SPA
 export function normalizePriceFragments(text) {
   return text
+    // "CHF\n9.95" ou "Fr.\n9.95" → "CHF 9.95" (devise et prix sur lignes séparées)
+    // Doit passer AVANT les autres normalisations pour que le prix rejoint la devise.
+    .replace(/\b(CHF|Fr\.)\s*\n+\s*(\d)/gi, "$1 $2")
+    // "17.\n90" → "17.90" (Mucho pattern : entier avec point suivi de centimes sur ligne d'après)
+    .replace(/(\d{1,3})\.\s*\n+\s*(\d{2})\b/g, "$1.$2")
+    // "17 . 95" → "17.95" et "17 , 95" → "17,95"
     .replace(/(\d{1,3})\s+([.,])\s*(\d{2})\b/g, "$1$2$3")
+    // "17. 95" → "17.95"
     .replace(/(\d{1,3})([.,])\s+(\d{2})\b/g, "$1$2$3")
+    // "39\n.-" → "39.-"
     .replace(/(\d{1,3})\s*\n\s*\.[-–]/g, "$1.-");
 }
 
@@ -30,6 +44,88 @@ export function extractPrices(text) {
     if (!isNaN(n) && n >= 1 && n < 1000) out.add(n.toFixed(2));
   }
   return [...out].sort((a, b) => parseFloat(a) - parseFloat(b));
+}
+
+// === URLs structurellement non-vérifiables (whitelist) ===
+// Certaines pages ne permettent PAS d'extraire le prix mensuel par lecture
+// naïve du DOM finalisé, même avec Playwright + waitForLoadState. Causes
+// documentées (06.08.2026 après faux positifs répétés dans daily-audit-log) :
+//   - SPA sans interaction : les cards sont chargées mais le prix nécessite
+//     un clic ou est calculé après scroll (Sunrise Young, Sunrise landings)
+//   - Prix rendu en image/badge : le SVG ou l'image portait le nombre, pas
+//     de texte extractible (Swisscom TV, Netplus, iWay TV, TeleKing)
+//   - Deep-links catalogue : la page ne présente que l'appareil, le prix
+//     mensuel est ailleurs (Migros online-shop/wireless/onl/*)
+//   - Landings marketing : la page présente une gamme sans prix par tier
+//     (Sunrise /fr/mobile/roaming)
+//
+// Ces URLs remontent en NON_VÉRIFIABLE au lieu d'ÉCART/PAGE_VIDE pour ne pas
+// polluer le rapport quotidien avec des flags manuels inutiles. À revérifier
+// manuellement en cas de doute, mais elles ne sont plus signalées automatiquement.
+export const NON_VERIFIABLE_EXACT_URLS = new Set([
+  // SPA Sunrise (les cards ne rendent pas le prix mensuel côté innerText)
+  "https://www.sunrise.ch/fr/mobile/young",
+  "https://www.sunrise.ch/fr/mobile/swiss-travel-plus",
+  "https://www.sunrise.ch/fr/mobile",
+  "https://www.sunrise.ch/fr/mobile/roaming",
+  // Landings multi-plans où la comparaison 1-vs-1 casse (une page = plusieurs
+  // tiers, on ne peut pas savoir quel prix appartient à quel tier sans parsing
+  // structurel)
+  "https://www.quickline.ch/mobile",
+  "https://abos.galaxus.ch/mobile",
+  "https://abos.galaxus.ch/internet",
+]);
+// URL prefix patterns for broader classes of non-verifiable pages.
+export const NON_VERIFIABLE_URL_PATTERNS = [
+  // Deep-links Migros online-shop : la page présente l'appareil, pas le prix
+  // mensuel de l'abo (le prix affiché est celui de l'appareil ou 59.- activation)
+  /^https:\/\/online-shop\.mobile\.migros\.ch\/fr\/wireless\/onl\//,
+  // TV — prix rendus dans badges/images/SVG non captés par innerText.
+  // (Vérifiés au cas par cas 06.08.2026 : les 4 opérateurs ci-dessous ont
+  // tous été confirmés comme rendant leurs prix TV dans des éléments non
+  // extractibles.)
+  /^https:\/\/www\.swisscom\.ch\/.*\/tv\//i,
+  /^https:\/\/www\.netplus\.ch\/tv/i,
+  /^https:\/\/www\.iway\.ch\/tv\//i,
+  /^https:\/\/www\.teleking\.ch\//i,
+  // Landings partagées documentées comme légitimes dans AUDIT-COMPLET.md §
+  // "Cas légitimes de landing partagée" : plusieurs plans (parfois 5-8) pointent
+  // sur une même URL landing car l'opérateur n'expose PAS de page produit
+  // individuelle. L'extraction naïve ne peut pas distinguer les tiers ; on doit
+  // vérifier manuellement.
+  //
+  // Vérifié 06.08.2026 sur le DOM réel via Playwright :
+  //   - Talk Talk /fr/ : format "39.95\n102.95" (nouveau/ancien prix sans CHF)
+  //   - Aldi /fr/, MaxiConnect /fr/, Lycamobile /fr/plans/ : cards multiples
+  //     sans distinction 1-vs-1 possible
+  //   - VTX /residential/mobile/abo-mobile : landing groupée
+  //   - Digital Republic /en/smart-devices/ : 6 tiers SIM Data groupés
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/?$/i,
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile\.html$/i,
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/internet-tv\.html$/i,
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaid\.html$/i,
+  /^https:\/\/(www\.)?aldi-mobile\.ch\/fr\/?$/i,
+  /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/?$/i,
+  /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/maxidata\/?$/i,
+  /^https:\/\/(www\.)?lycamobile\.ch\/fr\/plans\/?$/i,
+  /^https:\/\/(www\.)?vtx\.ch\/fr\/residential\/mobile\/abo-mobile\/?$/i,
+  /^https:\/\/(www\.)?digitalrepublic\.ch\/en\/smart-devices\/?$/i,
+  /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
+  /^https:\/\/(chmobile\.ch|www\.chmobile\.ch)\/fr\/?$/i,
+  /^https:\/\/boutique\.suisse\.canalplus\.com\/?$/i,
+  // Mtel — DOM Angular où les prix sont dans des composants custom non lus
+  // par innerText. Les scans du 03.08 remontaient systématiquement 7.50/9.95
+  // (mentions marketing "à partir de") au lieu du prix du plan concerné.
+  // Vérifié : mtel.ch/fr/produits/{sha}/{slug} = même problème sur toutes.
+  /^https:\/\/mtel\.ch\/fr\/produits\//i,
+  // Spusu — DOM Vue.js où les prix sont dans des tokens {{price}} non
+  // extractibles côté innerText après rendu partiel.
+  /^https:\/\/(www\.)?spusu\.ch\/fr\/spusu/i,
+];
+export function isNonVerifiableUrl(url) {
+  if (!url) return false;
+  if (NON_VERIFIABLE_EXACT_URLS.has(url)) return true;
+  return NON_VERIFIABLE_URL_PATTERNS.some((re) => re.test(url));
 }
 
 // === Chargement des données depuis index.html ===
@@ -92,6 +188,12 @@ export function loadData() {
 //   - ERREUR          : timeout / réseau / autre
 export async function checkOffer(ctx, item, opts = {}) {
   if (!item.url) return { status: "SKIP_NO_URL" };
+  // Short-circuit : URLs connues comme structurellement non-vérifiables.
+  // Évite un scan Playwright inutile ET remonte NON_VÉRIFIABLE plutôt qu'ÉCART
+  // pour éviter de polluer le rapport quotidien. Cf. NON_VERIFIABLE_EXACT_URLS.
+  if (isNonVerifiableUrl(item.url)) {
+    return { status: "NON_VÉRIFIABLE", raison: "URL whitelistée (SPA sans interaction, deep-link, prix en image, ou landing multi-plans)" };
+  }
   const navigationTimeout = opts.timeout || 15000;
   const waitAfter = opts.waitAfter || 800;
   // Hard timeout : borne TOTALE de la vérification. Nécessaire parce que
