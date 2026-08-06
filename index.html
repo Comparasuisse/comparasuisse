@@ -1469,6 +1469,21 @@ function formatHMS(ms){
   return `${pad(h)}h ${pad(m)}m ${pad(s)}s`;
 }
 
+// Compteur au format "Xj YYh MMm SSs" — utilisé pour les bandeaux « attention »
+// et « normal » dont la deadline est à plus de 48h. Pas d'arrondi vers le haut :
+// on tronque strictement, donc « 4j 23h 59m 59s » n'affiche jamais « 5 j. » à
+// tort (bug historique 06.08.2026 où Math.ceil affichait « 5 j. » pour un
+// temps restant réel de 4-5 jours, désaligné avec la date "jusqu'au X" affichée).
+function formatDHMS(ms){
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = n => String(n).padStart(2, "0");
+  return `${d}j ${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+}
+
 // Composant unique de bandeau promo : rendu dans les cartes Promotions ET dans les
 // cartes d'origine (mobile/internet/tv/combo) qui pointent vers la même URL.
 // Renvoie du HTML autonome — pas de dépendance à l'appelant.
@@ -1489,10 +1504,11 @@ function promoBanner(p){
 
   const msLeft = to - now;
   const hoursLeft = msLeft / 3600000;
+  const toISO = to.toISOString();
 
   // < 48h → bandeau URGENT rouge avec HH:MM:SS qui défile en direct via tickPromoBanners
   if (hoursLeft < 48) {
-    return `<div class="promo-banner urgent" data-promo-to="${to.toISOString()}">
+    return `<div class="promo-banner urgent" data-promo-to="${toISO}" data-promo-fmt="hms">
       <span class="banner-icon">⏰</span>
       <span class="banner-label">Il te reste</span>
       <span class="banner-time">${formatHMS(msLeft)}</span>
@@ -1500,26 +1516,32 @@ function promoBanner(p){
     </div>`;
   }
 
-  const daysLeft = Math.ceil(hoursLeft / 24);
-  if (daysLeft <= 7) {
-    return `<div class="promo-banner attention">
+  // 2j-7j → bandeau attention orange avec compteur Dj HHh MMm SSs live
+  if (hoursLeft < 24 * 7) {
+    return `<div class="promo-banner attention" data-promo-to="${toISO}" data-promo-fmt="dhms">
       <span class="banner-icon">⏳</span>
-      <span class="banner-label">Expire dans ${daysLeft} j.</span>
+      <span class="banner-label">Il te reste</span>
+      <span class="banner-time">${formatDHMS(msLeft)}</span>
       <span class="banner-date">— jusqu'au ${toDMY}</span>
     </div>`;
   }
-  return `<div class="promo-banner normal">
+  // > 7j → bandeau normal vert avec compteur Dj HHh MMm SSs live (élimine
+  // l'ambiguïté visiteur entre "encore N j." arrondi et "jusqu'au X" absolu)
+  return `<div class="promo-banner normal" data-promo-to="${toISO}" data-promo-fmt="dhms">
     <span class="banner-icon">✓</span>
-    <span class="banner-label">Active jusqu'au ${toDMY}</span>
-    <span class="banner-date">(encore ${daysLeft} j.)</span>
+    <span class="banner-label">Active jusqu'au ${toDMY} — encore</span>
+    <span class="banner-time">${formatDHMS(msLeft)}</span>
   </div>`;
 }
 
-// Tick 1s : met à jour les compteurs HH:MM:SS des bandeaux urgent uniquement.
-// Si le temps atteint 0, on repasse un cycle de refreshPromo pour changer d'état
-// (urgent → ended) et rafraîchir les cartes d'origine.
+// Tick 1s : met à jour les compteurs en direct de TOUS les bandeaux qui
+// portent data-promo-to (urgent → HH:MM:SS, attention/normal → Dj HHh MMm SSs
+// selon data-promo-fmt). Élimine l'ambiguïté visiteur entre l'arrondi jours
+// et la date "jusqu'au X" absolue (bug historique 06.08.2026).
+// Si le temps atteint 0 sur n'importe quel bandeau (rare), on relance
+// refreshPromo pour changer d'état (attention → urgent, urgent → ended).
 function tickPromoBanners(){
-  const banners = document.querySelectorAll(".promo-banner.urgent[data-promo-to]");
+  const banners = document.querySelectorAll(".promo-banner[data-promo-to]");
   if (!banners.length) return;
   const now = new Date();
   let needsFullRefresh = false;
@@ -1528,7 +1550,14 @@ function tickPromoBanners(){
     const ms = to - now;
     if (ms <= 0) { needsFullRefresh = true; return; }
     const span = el.querySelector(".banner-time");
-    if (span) span.textContent = formatHMS(ms);
+    if (!span) return;
+    span.textContent = el.dataset.promoFmt === "hms" ? formatHMS(ms) : formatDHMS(ms);
+    // Rebascule automatique attention/normal → urgent quand on descend
+    // sous les 48h — évite un bandeau vert affichant 47h alors qu'un
+    // reload donnerait un bandeau rouge.
+    if (el.dataset.promoFmt === "dhms" && ms < 48 * 3600000) {
+      needsFullRefresh = true;
+    }
   });
   if (needsFullRefresh) refreshAllPromoBanners();
 }
