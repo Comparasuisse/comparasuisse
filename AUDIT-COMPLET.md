@@ -57,8 +57,10 @@ Le rapport ouvre par un verdict binaire :
 
 - **🚨 AUDIT COMPLET REQUIS** si l'une de ces conditions est vraie :
   - au moins un cas flagué (écart, illisible, mot-clé suspect), OU
-  - plus de **2 jours** se sont écoulés depuis la dernière passe complète
-    manuelle (seuil `DAYS_BEFORE_FORCED_FULL_PASS`).
+  - au moins **1 jour** s'est écoulé depuis la dernière passe complète
+    manuelle (seuil `DAYS_BEFORE_FORCED_FULL_PASS` = 1, comparateur `>=` :
+    trigger dès le lendemain d'une passe complète — audit exhaustif
+    quotidien souhaité).
 - **✅ Pas de trigger** sinon : le catalogue est réputé stable, aucune
   intervention nécessaire ce jour.
 
@@ -71,7 +73,7 @@ chaque fois — on cible :
 
 - **Les cas flagués** listés dans `scripts/daily-audit-log.md` (obligatoire).
 - **Un tour de vérification légère** sur le reste du catalogue au moins
-  tous les 2 jours (obligatoire — c'est le rôle du seuil des 2 jours).
+  quotidien (obligatoire — c'est le rôle du seuil à 1 jour).
 
 Une fois la passe manuelle validée, commitée et pushée, exécuter :
 

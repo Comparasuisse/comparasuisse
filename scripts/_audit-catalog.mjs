@@ -45,7 +45,9 @@ const LOCK_PATH = "scripts/daily-audit.lock";
 
 // Nombre de jours max entre 2 passes complètes AVANT que le trigger « manuel »
 // soit forcé, même sans flag. Cf. AUDIT-COMPLET.md.
-const DAYS_BEFORE_FORCED_FULL_PASS = 2;
+// Seuil à 1j + comparateur `>=` → trigger dès le lendemain d'une passe complète
+// (audit exhaustif quotidien souhaité par le mainteneur).
+const DAYS_BEFORE_FORCED_FULL_PASS = 1;
 // Nombre maximum de runs (bloc `# Daily audit — YYYY-MM-DD`) conservés dans
 // le fichier de log rolling. Les runs plus vieux sont supprimés au run suivant
 // pour éviter que le fichier explose en taille en cas d'audits multi-quotidiens
@@ -240,7 +242,7 @@ const today = todayLocalISO();
 const daysSinceFullPass = state.lastFullPassDate
   ? Math.floor((new Date(today) - new Date(state.lastFullPassDate)) / 86400000)
   : null;
-const overdue = daysSinceFullPass === null || daysSinceFullPass > DAYS_BEFORE_FORCED_FULL_PASS;
+const overdue = daysSinceFullPass === null || daysSinceFullPass >= DAYS_BEFORE_FORCED_FULL_PASS;
 const triggerManual = flagged.length > 0 || overdue;
 
 // === Rapport markdown ===
