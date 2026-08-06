@@ -499,6 +499,52 @@ const SOURCES = [
     },
   },
   {
+    key: "green-tv-comfort",
+    name: "Green TV Comfort",
+    // Factsheet officiel Green : liste des chaînes du pack TV Comfort (260+ chaînes).
+    // URL découverte : green.ch/fileadmin/user_upload/Factsheets/TV_Comfort_Senderliste.pdf
+    // (variante FR/EN identiques : TV_Comfort_Channel_List.pdf renvoie le même document).
+    source: "https://www.green.ch/fileadmin/user_upload/Factsheets/TV_Comfort_Senderliste.pdf",
+    type: "pdf",
+    extract: (text) => {
+      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const pieces = lines.flatMap((line) =>
+        line
+          .split(/(?:\s+HD\s+|\s+SD\s+|\s+UHD\s+|\s+4K\s+)/g)
+          .flatMap((p) => p.split(/\s{2,}|\t|·/))
+          .map((p) => p.trim())
+          .filter(Boolean)
+      );
+      // Bruit spécifique au PDF Green (tableau avec colonnes replay/audio/langue) :
+      // - "30h", "7d" (durée replay)
+      // - "Nr." (Nummer = #), "Programm", "Sprache" (headers colonnes)
+      // - "Ausgabe Datum" (date d'édition du factsheet)
+      // - Noms de langue en allemand qui remplissent la colonne "Sprache" :
+      //   Deutsch/Englisch/Französisch/Italienisch/Spanisch/Türkisch/Polnisch/
+      //   Portugiesisch/Russisch/Ungarisch/Kroatisch/Serbisch/Rumänisch/Albanisch/
+      //   Chinesisch/Japanisch/Koreanisch/Kurdisch/Arabisch/Holländisch/Galizisch/Land
+      const GREEN_NOISE = new RegExp(
+        "^(" +
+          "30h|7d|nr\\.?|version|jusqu|dispo|programm|sprache|ausgabe datum|land" +
+          "|deutsch|englisch|franz[oö]sisch|italienisch|spanisch|t[uü]rkisch|polnisch" +
+          "|portugiesisch|russisch|ungarisch|kroatisch|serbisch|rum[aä]nisch|albanisch" +
+          "|chinesisch|japanisch|koreanisch|kurdisch|arabisch|holl[aä]ndisch|galizisch" +
+          ")$",
+        "i"
+      );
+      const channels = uniqueChannels(pieces)
+        .filter((c) => !GREEN_NOISE.test(c))
+        .sort((a, b) => a.localeCompare(b, "fr", { sensitivity: "base" }));
+      return channels.length >= 100
+        ? {
+            flat: channels,
+            note:
+              "Extrait du PDF officiel Green TV_Comfort_Senderliste (green.ch/fileadmin/user_upload/Factsheets/). Pack unique Green TV Comfort — pas de tiers Start/Plus/Ultra au catalogue Green actuel.",
+          }
+        : { flat: null, note: `PDF Green TV Comfort : ${channels.length} chaînes après filtrage.` };
+    },
+  },
+  {
     key: "talktalk-tv",
     name: "Talk Talk TV (Surf + TV)",
     // Fiche produit factsheet officielle Talk Talk (TTV.2026.TV.STD.FR.pdf) : contient la liste des chaînes.
