@@ -43,6 +43,20 @@ const LOG_PATH = "scripts/daily-audit-log.md";
 const STATE_PATH = "scripts/daily-audit-state.json";
 const LOCK_PATH = "scripts/daily-audit.lock";
 
+// === Watchdog global processus ===
+// Dernier rempart : quoi qu'il arrive dans Playwright/Chrome/réseau, le
+// processus DOIT se terminer avant cette borne. Un run normal dure 5-10 min
+// (~180 URLs × 1-2s hit-cache + ~50 URLs × 5-15s cold-load). 30 min = 3× le
+// pire cas raisonnable. Cf. incident 07.08.2026 : yallo Home Max Fiber a
+// bloqué le script 25h à cause d'une coupure réseau, sans que le
+// Promise.race interne ne libère le processus (le hard timeout logiciel
+// a bien fired mais le browser.close() final a hangé indéfiniment).
+const MAX_TOTAL_RUN_TIME_MS = 30 * 60 * 1000;
+// Seuil de failures consécutives (TIMEOUT/ERREUR/PAGE_VIDE) après lequel
+// on recycle le browser+context — évite qu'un contexte saturé/dégradé
+// pollue les URLs suivantes.
+const RECYCLE_BROWSER_AFTER_N_CONSECUTIVE_FAILURES = 3;
+
 // Nombre de jours max entre 2 passes complètes AVANT que le trigger « manuel »
 // soit forcé, même sans flag. Cf. AUDIT-COMPLET.md.
 // Seuil à 1j + comparateur `>=` → trigger dès le lendemain d'une passe complète
@@ -121,6 +135,26 @@ const DRY = flag("dry-run");
 // passer sans lock (inventaire seul).
 if (!DRY) acquireLock();
 
+// === Watchdog processus ===
+// Ce setTimeout tourne indépendamment de la boucle event Node : si tout le
+// reste hangue (page.goto qui ne rend jamais la main, browser.close() qui
+// bloque sur un contexte saturé, socket TCP mort qui n'est jamais fermé
+// côté Chrome), ce timer fait sortir le processus manu militari.
+// process.exit(124) = code Unix "command exited due to timeout" — le
+// script cron peut le distinguer d'un exit propre (0) ou d'une erreur (1).
+if (!DRY) {
+  const watchdog = setTimeout(() => {
+    console.error(`\n⏰⏰⏰ WATCHDOG : run > ${MAX_TOTAL_RUN_TIME_MS/1000}s, kill forcé du processus.`);
+    // Libère le lock file explicitement avant d'exit — process.on('exit') ne
+    // s'exécute pas toujours quand le processus est tué violemment.
+    try { fs.unlinkSync(LOCK_PATH); } catch {}
+    process.exit(124);
+  }, MAX_TOTAL_RUN_TIME_MS);
+  // .unref() : ne bloque pas la sortie propre du processus quand le script
+  // finit normalement avant le timeout (sinon Node attendrait 30 min).
+  watchdog.unref();
+}
+
 // === Chargement des offres ===
 const data = loadData();
 const CATS = CATEGORY ? [CATEGORY] : ["mobile", "internet", "tv", "combo", "promo"];
@@ -147,14 +181,44 @@ let subset = pool;
 if (LIMIT > 0) subset = pool.slice(0, LIMIT);
 
 // === Playwright ===
-const browser = await chromium.launch({ executablePath: CHROME_PATH, headless: true });
-const ctx = await browser.newContext({
-  userAgent: UA,
-  locale: "fr-CH",
-  timezoneId: "Europe/Zurich",
-  viewport: { width: 1280, height: 900 },
-  extraHTTPHeaders: { "accept-language": "fr-CH,fr;q=0.9,en;q=0.5" },
-});
+// Factorisé pour permettre le recyclage browser+context si trop de failures
+// consécutives (contexte Chrome pollué par une SPA malformée ou par un pic
+// de saturation mémoire).
+async function launchBrowser() {
+  const br = await chromium.launch({ executablePath: CHROME_PATH, headless: true });
+  const c = await br.newContext({
+    userAgent: UA,
+    locale: "fr-CH",
+    timezoneId: "Europe/Zurich",
+    viewport: { width: 1280, height: 900 },
+    extraHTTPHeaders: { "accept-language": "fr-CH,fr;q=0.9,en;q=0.5" },
+  });
+  return { br, c };
+}
+
+// Ferme le browser sans jamais hanguer : race entre browser.close() propre
+// et un kill SIGKILL du process Chrome sous-jacent au bout de 8s.
+// Le vrai risque scénario 07.08 : browser.close() attend qu'un socket TCP
+// mort réponde, mais Chrome ne libère jamais la connection → hang infini.
+async function hardCloseBrowser(br) {
+  if (!br) return;
+  const proc = br.process?.();
+  try {
+    await Promise.race([
+      br.close().catch(() => {}),
+      new Promise((resolve) => setTimeout(() => {
+        console.warn("  ⚠ browser.close() > 8s, kill Chrome subprocess");
+        try { proc?.kill("SIGKILL"); } catch {}
+        resolve();
+      }, 8000)),
+    ]);
+  } catch {}
+  // Garde-fou paranoïaque : même si Promise.race retourne, vérifie que le
+  // process est mort. Si non, kill.
+  try { if (proc && !proc.killed) proc.kill("SIGKILL"); } catch {}
+}
+
+let { br: browser, c: ctx } = await launchBrowser();
 
 // Cache par URL : si plusieurs offres pointent vers la même URL, on ne charge
 // la page qu'une fois. Économie de temps significative sur les gros opérateurs.
@@ -171,11 +235,26 @@ async function getUrlSnapshot(url) {
 
 const results = [];
 let idx = 0;
+let consecutiveFailures = 0;
+const FAILURE_STATUSES = new Set(["TIMEOUT", "ERREUR", "PAGE_VIDE"]);
 for (const item of subset) {
   idx++;
   const t0 = Date.now();
   process.stdout.write(`  [${idx}/${subset.length}] ${item.__cat}/${item.operator || ""}/${item.name} `);
   const snap = await getUrlSnapshot(item.url);
+  // Track failure streak & recycle browser si contexte semble bloqué.
+  // On ignore les URLs cache-hit (déjà comptées au premier passage) et
+  // les whitelist NON_VÉRIFIABLE (pas d'appel Playwright).
+  const isFailure = FAILURE_STATUSES.has(snap.status);
+  if (isFailure) consecutiveFailures++;
+  else if (snap.status !== "NON_VÉRIFIABLE" || snap.text) consecutiveFailures = 0;
+  if (consecutiveFailures >= RECYCLE_BROWSER_AFTER_N_CONSECUTIVE_FAILURES) {
+    console.log(`\n  ♻ ${consecutiveFailures} failures consécutives → recyclage browser`);
+    await hardCloseBrowser(browser);
+    urlCache.clear(); // invalidate le cache : le nouveau browser doit tout re-tester
+    ({ br: browser, c: ctx } = await launchBrowser());
+    consecutiveFailures = 0;
+  }
   let verdict;
   if (snap.status === "URL_MORTE" || snap.status === "PAGE_VIDE" || snap.status === "ERREUR" || snap.status === "TIMEOUT") {
     verdict = { ...snap };
@@ -212,7 +291,7 @@ for (const item of subset) {
   results.push({ item, verdict, ms });
 }
 
-await browser.close();
+await hardCloseBrowser(browser);
 
 // === Agrégation par verdict ===
 const counts = { OK: 0, ÉCART: 0, URL_MORTE: 0, PAGE_VIDE: 0, TIMEOUT: 0, ERREUR: 0, NON_VÉRIFIABLE: 0 };
