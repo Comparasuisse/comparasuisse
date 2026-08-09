@@ -132,8 +132,10 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // (vérifié 09.08.2026). C'est donc la seule cible acceptable en français.
   /^https:\/\/(www\.)?lycamobile\.ch\/fr\/?$/i,
   /^https:\/\/(www\.)?vtx\.ch\/residential\/mobile\/abo-mobile\/?$/i,
-  /^https:\/\/(www\.)?digitalrepublic\.ch\/en\/smart-devices\/?$/i,
-  /^https:\/\/(www\.)?digitalrepublic\.ch\/fr\/mobile\/?$/i,
+  // Digital Republic : les deux motifs (/en/smart-devices/ et /fr/mobile/) ont
+  // été RETIRÉS le 09.08.2026. Le sitemap expose en réalité une page produit par
+  // plan sous /fr/produit/<slug>/ — 9 offres y ont été rebasculées, chacune sur
+  // sa fiche affichant son propre prix. Plus rien à court-circuiter ici.
   // Sunrise /fr/internet-tv/abonnement-combine — vérifié 09.08.2026 : les
   // cards de packs sont rendues avec des placeholders U+200C (zero-width
   // non-joiner) à la place des libellés et des prix. Le seul nombre lisible

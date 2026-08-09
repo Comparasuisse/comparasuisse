@@ -3591,6 +3591,22 @@
    },
    "finding": "Sitemap 208 URLs : aucune page par plan hors /internet/10-gbit-s/ (déjà utilisée par Internet 10000). Les pages /internet/, /mobile/mobile-abos/ et /tv/ sont les plus précises disponibles. /tv/senderpakete/ écarté : ce sont des packs de chaînes en option, pas les abos.",
    "remaining": "9 offres sur pages catégorie — aucune page individuelle n existe, constat confirmé par sitemap."
+  },
+  {
+   "host": "digitalrepublic.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 11,
+    "urls": 4,
+    "grouped": 9
+   },
+   "after": {
+    "offers": 11,
+    "urls": 11,
+    "grouped": 0
+   },
+   "finding": "Sitemap : répertoire /fr/produit/<slug>/ avec UNE PAGE PAR PLAN, y compris les 3 mobile et les 6 Data Flat. Contredit la conclusion antérieure (commit 8aa7938) selon laquelle DR aurait fusionné ses plans sur une page à ancres sans fiches individuelles. Prix confirmés un par un en browser : Flat Mobile Swiss 13, Flat Mobile 18, Flat Mobile Plus 25, Data Flat 4/6/10/20/30/40.",
+   "remaining": "Aucune. 11 offres = 11 URLs individuelles. Les 2 motifs de whitelist DR ont été supprimés."
   }
  ],
  "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData."
