@@ -120,7 +120,12 @@ const argVal = (name) => {
 // Ex : `node scripts/_audit-catalog.mjs --mark-full-pass`
 if (flag("mark-full-pass")) {
   const state = loadState();
-  const today = new Date().toISOString().slice(0, 10);
+  // Date LOCALE, pas UTC. toISOString() renvoyait la veille entre minuit et
+  // 02:00 heure suisse (constaté le 10.08.2026 à 00:47 : UTC disait encore
+  // 08-09), alors que le run du jour, lui, se date via todayLocalISO(). Les
+  // deux valeurs divergeaient d'un jour dans le state, ce qui redéclenchait
+  // le trigger « overdue » 24 h trop tôt.
+  const today = todayLocalISO();
   state.lastFullPassDate = today;
   saveState(state);
   console.log(`✅ Passe complète manuelle enregistrée le ${today}.`);
