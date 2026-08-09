@@ -3842,11 +3842,11 @@
    },
    "after": {
     "offers": 4,
-    "urls": 2,
-    "grouped": 3
+    "urls": 4,
+    "grouped": 0
    },
    "finding": "INCOMPLET. CANAL+ Famille a bien une URL produit individuelle (canalplus.com/ch/produits/otfamily_otbasiq/canal-famille/12), donc le motif existe. Mais subscribe.canalplus.com/ch/ est une page de saisie de code promo, et canalplus.com/ch/ est un SPA dont les liens produit ne sortent pas au crawl. Les codes produit internes ne sont pas devinables. | 09.08 : tentative de navigation interactive → canalplus.com/ch/ renvoie {\"message\":\"Unexpected Request\"} sur Chrome headless, protection anti-bot au niveau CDN. Playwright headless est structurellement bloqué sur ce domaine.",
-   "remaining": "3 offres (Sport, Ciné Séries, La Totale) — BLOQUÉ par protection anti-bot, pas par manque de recherche. Piste restante : le navigateur MCP (vrai Chrome de l utilisateur, session réelle) passerait probablement là où le headless est refusé. Sinon récupérer les identifiants produit à la main depuis le tunnel de souscription."
+   "remaining": "RÉSOLU le 09.08.2026 via le navigateur MCP (vrai Chrome) : la protection anti-bot ne s applique qu au headless. Les 4 URLs produit sont exposées sur canalplus.com/ch/ et suivent le motif /ch/produits/<code>_otbasiq/<slug>/12. Sport, Ciné Séries et La Totale rattachées. 4 offres = 4 URLs."
   },
   {
    "host": "mobile.migros.ch",
@@ -3914,9 +3914,7 @@
   }
  ],
  "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData.",
- "nextUp": [
-  "canalplus Sport/Ciné Séries/La Totale (3) — navigation interactive requise dans le tunnel de souscription, seul reliquat du chantier"
- ],
+ "nextUp": [],
  "phase2": {
   "date": "2026-08-09",
   "soloOffers": 185,
