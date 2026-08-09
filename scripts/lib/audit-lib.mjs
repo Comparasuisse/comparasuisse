@@ -118,7 +118,13 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/internet-tv\/internet-et-tv\.html$/i,
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaye\/prepaid\.html$/i,
   /^https:\/\/(www\.)?aldi-mobile\.ch\/fr\/?$/i,
-  /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/?$/i,
+  // MaxiConnect : sitemap de 441 URLs passé en revue le 09.08.2026, aucune page
+  // par plan n'existe — seulement des pages catégorie. Les 5 MaxiMobile quittent
+  // la racine pour /fr/mobile (qui rend bien les prix, mais 8 montants pour 5
+  // plans : attribution 1-vs-1 impossible, d'où la whitelist).
+  // /fr/television n'est PAS whitelistée : MaxiTV y est seule et son prix 13.90
+  // est directement vérifiable.
+  /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/mobile\/?$/i,
   /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/maxidata\/?$/i,
   // Lycamobile : le site FR est quasi inexistant — /fr/plans/ redirige vers la
   // homepage ALLEMANDE, /fr/abonnements/ et /fr/plans-mobiles/ vers l'ANGLAISE,
