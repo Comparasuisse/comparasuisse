@@ -3845,8 +3845,8 @@
     "urls": 2,
     "grouped": 3
    },
-   "finding": "INCOMPLET. CANAL+ Famille a bien une URL produit individuelle (canalplus.com/ch/produits/otfamily_otbasiq/canal-famille/12), donc le motif existe. Mais subscribe.canalplus.com/ch/ est une page de saisie de code promo, et canalplus.com/ch/ est un SPA dont les liens produit ne sortent pas au crawl. Les codes produit internes ne sont pas devinables.",
-   "remaining": "3 offres (Sport, Ciné Séries, La Totale) — À REPRENDRE avec navigation interactive dans le tunnel de souscription pour capter les URLs produit."
+   "finding": "INCOMPLET. CANAL+ Famille a bien une URL produit individuelle (canalplus.com/ch/produits/otfamily_otbasiq/canal-famille/12), donc le motif existe. Mais subscribe.canalplus.com/ch/ est une page de saisie de code promo, et canalplus.com/ch/ est un SPA dont les liens produit ne sortent pas au crawl. Les codes produit internes ne sont pas devinables. | 09.08 : tentative de navigation interactive → canalplus.com/ch/ renvoie {\"message\":\"Unexpected Request\"} sur Chrome headless, protection anti-bot au niveau CDN. Playwright headless est structurellement bloqué sur ce domaine.",
+   "remaining": "3 offres (Sport, Ciné Séries, La Totale) — BLOQUÉ par protection anti-bot, pas par manque de recherche. Piste restante : le navigateur MCP (vrai Chrome de l utilisateur, session réelle) passerait probablement là où le headless est refusé. Sinon récupérer les identifiants produit à la main depuis le tunnel de souscription."
   },
   {
    "host": "mobile.migros.ch",
@@ -3861,8 +3861,8 @@
     "urls": 2,
     "grouped": 3
    },
-   "finding": "Les 3 Prepaid Easy passent de /fr/prepaid-easy à /fr/prepaid-easy-s-m-l, page qui traite explicitement les paliers S, M et L. Pas de page par palier.",
-   "remaining": "3 offres sur la page S/M/L — le plus précis disponible."
+   "finding": "ERREUR CORRIGÉE DANS LA MÊME SESSION : j avais basculé les 3 Prepaid Easy sur /fr/prepaid-easy-s-m-l, mais le contrôle HTTP final a montré que cette URL REDIRIGE vers /fr/prepaid — le contenu que la sonde affichait était donc celui de la destination, pas d une page dédiée. Retour sur /fr/prepaid-easy, qui répond 200 sans redirection. Aucune page par palier n existe.",
+   "remaining": "3 offres sur /fr/prepaid-easy — confirmé, page stable."
   },
   {
    "host": "wingo.ch",
