@@ -3607,6 +3607,102 @@
    },
    "finding": "Sitemap : répertoire /fr/produit/<slug>/ avec UNE PAGE PAR PLAN, y compris les 3 mobile et les 6 Data Flat. Contredit la conclusion antérieure (commit 8aa7938) selon laquelle DR aurait fusionné ses plans sur une page à ancres sans fiches individuelles. Prix confirmés un par un en browser : Flat Mobile Swiss 13, Flat Mobile 18, Flat Mobile Plus 25, Data Flat 4/6/10/20/30/40.",
    "remaining": "Aucune. 11 offres = 11 URLs individuelles. Les 2 motifs de whitelist DR ont été supprimés."
+  },
+  {
+   "host": "quickline.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 9,
+    "urls": 3,
+    "grouped": 8
+   },
+   "after": {
+    "offers": 9,
+    "urls": 3,
+    "grouped": 8
+   },
+   "finding": "Sitemap complet : aucune page par plan. Pages catégorie /mobile, /internet, /internet-tv uniquement — déjà les plus précises. Pistes /mobile/handy-abos et /mobile/preise écartées (doublons de /mobile).",
+   "remaining": "8 offres sur pages catégorie — confirmé sans fiche individuelle."
+  },
+  {
+   "host": "teleboy.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 10,
+    "urls": 4,
+    "grouped": 8
+   },
+   "after": {
+    "offers": 10,
+    "urls": 4,
+    "grouped": 8
+   },
+   "finding": "Sitemap : uniquement /internet, /mobile, /tv, /kombi-abo, /mobile-data. Aucune page par palier.",
+   "remaining": "8 offres sur pages catégorie — confirmé."
+  },
+  {
+   "host": "vtx.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 8,
+    "urls": 2,
+    "grouped": 8
+   },
+   "after": {
+    "offers": 8,
+    "urls": 2,
+    "grouped": 8
+   },
+   "finding": "Sitemap 89 URLs : /residential/internet/, /residential/mobile/abo-mobile/ et /abo-data/. Aucune page par plan. Vérifié que /abo-data/ (5.35, 15.10) ne correspond PAS à notre VTX Mobile Europe Data à 24.95, qui reste sur abo-mobile.",
+   "remaining": "8 offres sur pages catégorie — confirmé."
+  },
+  {
+   "host": "aldi-mobile.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 6,
+    "urls": 1,
+    "grouped": 6
+   },
+   "after": {
+    "offers": 6,
+    "urls": 1,
+    "grouped": 6
+   },
+   "finding": "Sitemap 23 URLs FR : aucune page par plan. Le lien de navigation « Mobile-Abo » pointe sur /fr — la racine EST la page des abonnements. Chaque plan dispose en revanche d une factsheet PDF dédiée (/api/media/Factsheet_Abo_<plan>_fr_*.pdf), utilisable comme source de vérification mais pas comme destination visiteur.",
+   "remaining": "6 offres sur /fr/ — confirmé, c est la page produit."
+  },
+  {
+   "host": "lycamobile.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 6,
+    "urls": 1,
+    "grouped": 6
+   },
+   "after": {
+    "offers": 6,
+    "urls": 1,
+    "grouped": 6
+   },
+   "finding": "Site FR quasi inexistant (déjà constaté à l audit liens : /fr/plans/ redirige vers la homepage allemande, /fr/abonnements/ vers l anglaise). Seul /fr/ répond en 200. Aucune page par plan.",
+   "remaining": "6 offres sur /fr/ — confirmé, seule cible FR viable."
+  },
+  {
+   "host": "abos.galaxus.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 6,
+    "urls": 2,
+    "grouped": 6
+   },
+   "after": {
+    "offers": 6,
+    "urls": 2,
+    "grouped": 6
+   },
+   "finding": "Pas de sitemap. Crawl : versions FR /fr/mobile, /fr/internet, /fr/tv existantes alors que nos URLs étaient sans préfixe de langue. Contenu FR confirmé en browser. Aucune page par plan.",
+   "remaining": "6 offres sur pages catégorie FR — confirmé."
   }
  ],
  "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData."
