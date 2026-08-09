@@ -3735,7 +3735,50 @@
    },
    "finding": "Sitemap complet : aucune page par plan. /fr/offres-mobiles-irresistibles/ et /fr/offres-combo/ sont les pages produit, déjà utilisées.",
    "remaining": "6 offres sur pages catégorie — confirmé."
+  },
+  {
+   "host": "zattoo.com",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 3,
+    "urls": 2,
+    "grouped": 2
+   },
+   "after": {
+    "offers": 3,
+    "urls": 3,
+    "grouped": 0
+   },
+   "finding": "Page dédiée /ch/fr/ultimate trouvée pour Zattoo Ultimate. Pas de /premium équivalent — Premium reste sur /ch/fr. NB : la page ultimate affiche 18.33 et 16.67, qui sont des équivalents mensuels d abonnements ANNUELS ; notre prix mensuel de 22.- n est pas contredit.",
+   "remaining": "Zattoo Premium sur /ch/fr — pas de page dédiée."
+  },
+  {
+   "host": "fiber.sky.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 3,
+    "urls": 1,
+    "grouped": 3
+   },
+   "after": {
+    "offers": 3,
+    "urls": 1,
+    "grouped": 3
+   },
+   "finding": "Sitemap : seules /fr/ et /fr/fb/check existent. Aucune page par offre.",
+   "remaining": "3 offres sur /fr/ — confirmé."
   }
  ],
- "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData."
+ "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData.",
+ "nextUp": [
+  "lidl-connect.ch (3)",
+  "swisscom blue-internet-m (3)",
+  "teleking.ch (3)",
+  "subscribe.canalplus.com (3)",
+  "wingo prepaid (3)",
+  "mobile.migros.ch prepaid-easy (3)",
+  "yallo internet-go (3)",
+  "swype.ch (2)",
+  "lebara.ch /fr/data (2)"
+ ]
 }
