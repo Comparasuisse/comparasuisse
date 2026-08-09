@@ -33,15 +33,38 @@ export function normalizePriceFragments(text) {
     .replace(/(\d{1,3})\s*\n\s*\.[-–]/g, "$1.-");
 }
 
+// Certains opérateurs écrivent le libellé et le montant sur deux lignes, sans
+// aucun marqueur de devise accolé au nombre :
+//     Prix par mois
+//     70.95
+// PRICE_RE exige « CHF », « Fr. », « .- » ou « /mois » collé au montant et ne
+// voit donc rien. Constaté le 10.08.2026 sur les 9 pages produit /fr/lp/ de
+// Talk Talk, toutes remontées en ÉCART avec « prix trouvés : (aucun) » alors
+// qu'elles affichent bien leur tarif. On récupère ces cas en capturant le
+// premier montant décimal qui suit un libellé de prix.
+// Repère un libellé de prix ; les montants sont ensuite cherchés dans la
+// fenêtre courte qui le suit (le prix promo, puis souvent le prix barré).
+const PRICE_LABEL_RE = /(?:prix|preis|price|tarif)\b/gi;
+const BARE_AMOUNT_RE = /\b(\d{1,3}[.,]\d{2})\b/g;
+const LABEL_WINDOW = 48;
+
 export function extractPrices(text) {
   const normalized = normalizePriceFragments(text);
   const out = new Set();
+  const add = (raw) => {
+    const n = parseFloat(String(raw).replace(",", "."));
+    if (!isNaN(n) && n >= 1 && n < 1000) out.add(n.toFixed(2));
+  };
   let m;
   const re = new RegExp(PRICE_RE.source, PRICE_RE.flags);
-  while ((m = re.exec(normalized)) !== null) {
-    const raw = (m[1] || m[2]).replace(",", ".");
-    const n = parseFloat(raw);
-    if (!isNaN(n) && n >= 1 && n < 1000) out.add(n.toFixed(2));
+  while ((m = re.exec(normalized)) !== null) add(m[1] || m[2]);
+
+  const lab = new RegExp(PRICE_LABEL_RE.source, PRICE_LABEL_RE.flags);
+  while ((m = lab.exec(normalized)) !== null) {
+    const win = normalized.slice(m.index + m[0].length, m.index + m[0].length + LABEL_WINDOW);
+    const amt = new RegExp(BARE_AMOUNT_RE.source, BARE_AMOUNT_RE.flags);
+    let a;
+    while ((a = amt.exec(win)) !== null) add(a[1]);
   }
   return [...out].sort((a, b) => parseFloat(a) - parseFloat(b));
 }
@@ -156,6 +179,16 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // valeur). Le court-circuit reste donc nécessaire pour cette URL.
   /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/la-box-tv/i,
   /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/application-tv-mobile/i,
+  // Galaxus abos — vérifié 10.08.2026 en browser : les cards affichent le nom
+  // du plan et ses caractéristiques, mais AUCUN montant n'apparaît dans le
+  // texte rendu, ni en FR ni en DE. Les valeurs 12/19/29 et 27/34/39 sont
+  // présentes dans le HTML brut mais hors innerText (image ou pseudo-élément
+  // CSS). Le scan remontait « 16.00, 34.00 » : ce sont des nombres captés
+  // ailleurs sur la page, pas des prix d'abonnement.
+  /^https:\/\/abos\.galaxus\.ch\/(fr|de|it|en)?\/?(mobile|internet|tv)\/?$/i,
+  // Spusu /fr/tariffs — même famille que /fr/spusu* déjà listé : tableau de
+  // tarifs rendu en composants Vue dont les montants ne sortent pas au texte.
+  /^https:\/\/(www\.)?spusu\.ch\/fr\/tariffs\/?$/i,
   /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
   // CHmobile : les deux plans partagent la landing, désambiguïsés par ancres
   // #plus / #europe le 09.08.2026 — le motif doit donc tolérer un fragment.
