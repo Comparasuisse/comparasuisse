@@ -3559,6 +3559,39 @@
    },
    "finding": "Pages produit individuelles trouvées sous /fr/lp/<plan>.html — invisibles depuis la navigation, découvertes via le sitemap (263 URLs).",
    "remaining": "8 offres sans page dédiée : Surf 100/1000 (configurateur internet), Home ULTRA/Fast (page Home Internet 4G/5G), 4 prépayés (page prepaid). Vérifié dans le sitemap : aucune page /lp/ pour ces plans."
+  },
+  {
+   "host": "maxiconnect.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 10,
+    "urls": 2,
+    "grouped": 10
+   },
+   "after": {
+    "offers": 10,
+    "urls": 4,
+    "grouped": 9
+   },
+   "finding": "Sitemap 441 URLs : AUCUNE page par plan, uniquement des pages catégorie. 6 offres sorties de la racine vers /fr/mobile et /fr/television.",
+   "remaining": "5 MaxiMobile sur /fr/mobile et 4 MaxiData sur /fr/maxidata — pas de page dédiée, confirmé."
+  },
+  {
+   "host": "iway.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 10,
+    "urls": 4,
+    "grouped": 9
+   },
+   "after": {
+    "offers": 10,
+    "urls": 4,
+    "grouped": 9
+   },
+   "finding": "Sitemap 208 URLs : aucune page par plan hors /internet/10-gbit-s/ (déjà utilisée par Internet 10000). Les pages /internet/, /mobile/mobile-abos/ et /tv/ sont les plus précises disponibles. /tv/senderpakete/ écarté : ce sont des packs de chaînes en option, pas les abos.",
+   "remaining": "9 offres sur pages catégorie — aucune page individuelle n existe, constat confirmé par sitemap."
   }
- ]
+ ],
+ "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData."
 }
