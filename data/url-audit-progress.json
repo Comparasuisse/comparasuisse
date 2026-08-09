@@ -3915,7 +3915,14 @@
  ],
  "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData.",
  "nextUp": [
-  "canalplus Sport/Ciné Séries/La Totale (3, navigation interactive requise dans le tunnel de souscription)",
-  "Balayage des ~190 offres déjà sur URL unique : confirmer page produit vs landing"
- ]
+  "canalplus Sport/Ciné Séries/La Totale (3) — navigation interactive requise dans le tunnel de souscription, seul reliquat du chantier"
+ ],
+ "phase2": {
+  "date": "2026-08-09",
+  "soloOffers": 185,
+  "specificSlug": 170,
+  "landingLike": 15,
+  "realDefect": 1,
+  "note": "Balayage des offres seules sur leur URL. 170/185 ont un slug spécifique (présomption de page produit). Sur les 15 restantes d allure landing, 14 sont légitimes : ancres de désambiguïsation posées volontairement (Sky #swiss-plus/#europe-plus, CHmobile #plus/#europe), et pages catégorie qui ne contiennent QU UNE offre (yallo TV /fr/tv, Teleboy TV /fr/tv, MaxiTV /fr/television, prépayés Migros/Lebara/yallo, combos Teleboy /kombi-abo, Salt /fr/internet-tv, Quickline /internet-tv). Un seul vrai défaut : yallo Home Supermax + TV pointait sur la racine yallo.ch/fr, corrigé vers /fr/supermax-plus-tv (37.90 confirmé)."
+ }
 }
