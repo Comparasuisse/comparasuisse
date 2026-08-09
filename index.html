@@ -540,8 +540,8 @@ function gtag_report_conversion(url) {
     <div class="dual-range">
       <div class="track"></div>
       <div class="fill" id="internet-speed-fill"></div>
-      <input type="range" id="internet-speed" min="0" max="4" step="1" value="0">
-      <input type="range" id="internet-speed-max" min="0" max="4" step="1" value="4">
+      <input type="range" id="internet-speed" min="0" max="5" step="1" value="0">
+      <input type="range" id="internet-speed-max" min="0" max="5" step="1" value="5">
     </div>
   </div>
   <div class="ctrl-group">
@@ -710,8 +710,8 @@ function gtag_report_conversion(url) {
     <div class="dual-range">
       <div class="track"></div>
       <div class="fill" id="combo-speed-fill"></div>
-      <input type="range" id="combo-speed" min="0" max="4" step="1" value="0">
-      <input type="range" id="combo-speed-max" min="0" max="4" step="1" value="4">
+      <input type="range" id="combo-speed" min="0" max="5" step="1" value="0">
+      <input type="range" id="combo-speed-max" min="0" max="5" step="1" value="5">
     </div>
   </div>
   <div class="ctrl-group">
@@ -971,8 +971,16 @@ const internetData = [
   {name:"Teleboy Internet 1 Gbit/s", network:"swisscom", price:44.90, beforePrice:59.00, promo:true, promoNote:"prix promo à vie une fois conclu", speed:1000, details:"1 Gbit/s (DSL & fibre) — routeur WLAN gratuit. Sur le réseau Swisscom. Sans engagement. Pour grandes familles, colocations et heavy-streamers.", connectionType:["fibre","dsl"], sourceType:"product-page", verifiedAt:"2026-07-28", priceHistory:[{date:"2026-07-28",price:44.90}], url:"https://www.teleboy.ch/fr/internet"},
   {name:"Teleboy Internet 10 Gbit/s", network:"swisscom", price:48.90, beforePrice:69.00, promo:true, promoNote:"prix promo à vie une fois conclu", speed:10000, details:"10 Gbit/s (fibre) — routeur WLAN gratuit. Sur le réseau Swisscom. Sans engagement. Pour utilisateurs intensifs et professionnels.", connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-07-28", priceHistory:[{date:"2026-07-28",price:48.90}], url:"https://www.teleboy.ch/fr/internet"},
   {name:"Swisscom blue Internet M + TV M", network:"swisscom", price:81.80, speed:1000, details:"1 Gbit/s fibre + 300+ chaînes TV dont sport — palier 1 Gbit/s du combo (paliers : 100 Mbit/s 66.80, 1 Gbit/s 81.80 par défaut, 10 Gbit/s 91.80). Activation 99.90 offerte en ligne. Routeur perso autorisé sur sous-réseau séparé (source : swisscom.ch/fr/clients-prives/aide/peripheriques/internet/routeur-externe.html) — sur blue TV, activer le proxy IGMP Multicast.", ownRouterAllowed:true, connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-08-03", priceHistory:[{date:"2026-08-03",price:81.80}], url:"https://www.swisscom.ch/fr/clients-prives/abonnement-combine.html"},
-  {name:"Green Internet Home", network:"swisscom", price:25.00, beforePrice:69.90, promo:true, promoNote:"promo 12 mois, puis 49.90 à vie (engagement 24 mois)", speed:2500, details:"2.5 Gbit/s fibre/DSL sur les réseaux Swisscom et Salt — routeur WiFi 7 inclus. Engagement 24 mois, nouveaux clients uniquement. Green.ch, hébergeur suisse historique (Winterthur).", warningTitle:"Prix promo 12 mois, engagement 24 mois", warning:"⚠️ Structure prix à 2 paliers : 25.-/mois les 12 premiers mois, PUIS 49.90.-/mois à partir du 13e mois — vous êtes engagé pour 12 mois supplémentaires à ce prix plein (mois 13 à 24). Coût total sur 24 mois : 25×12 + 49.90×12 = 898.80 CHF (au lieu des 300.- que suggérerait une lecture naïve « 25.- × 12 mois puis résiliation »). Le catalogue 69.90 n'est jamais vraiment payé — le vrai prix « à vie tant que client » est 49.90.", sourceType:"product-page", verifiedAt:"2026-07-26", priceHistory:[{date:"2026-07-26",price:25.00}], connectionType:["fibre","dsl"], url:"https://www.green.ch/fr/clients-prives/abonnement-internet"},
-  {name:"Sky Fiber", network:"swisscom", price:39.00, speed:2500, details:"2.5 Gbit/s symétrique fibre (DSL fallback selon disponibilité) — data illimitée, WiFi 7 router inclus, engagement 12 mois. Rabais à CHF 30.-/mois pour clients Sky Show ou Sky Sport (économie CHF 9.-/mois). Activation offerte. Réseau primé par Ookla (Internet fixe le plus rapide en Suisse 2024)", sourceType:"product-page", verifiedAt:"2026-08-01", priceHistory:[{date:"2026-07-26",price:39.00}], connectionType:["fibre"], url:"https://fiber.sky.ch/fr/"},
+  {name:"Green Internet Home", network:"salt", price:25.00, beforePrice:69.90, promo:true, promoNote:"promo 12 mois, puis 49.90 à vie (engagement 24 mois)", speed:2500, details:"2.5 Gbit/s fibre (réseau Salt principal, primé Ookla « Internet fixe le plus rapide en Suisse ») avec fallback xDSL Swisscom + autres fournisseurs locaux selon disponibilité à ton adresse — routeur WiFi 7 inclus. Engagement 24 mois, nouveaux clients uniquement. Green.ch, hébergeur suisse historique (Winterthur).", warningTitle:"Prix promo 12 mois, engagement 24 mois",
+  // Green n'exploite pas son propre réseau : il agrège plusieurs backbones et route
+  // chaque adresse vers le plus performant disponible. Citation officielle FAQ green.ch/
+  // fr/clients-prives/abonnement-internet#c35989 (vérifié 08.08.2026) : « nous utilisons
+  // tous les grands réseaux suisses – y compris ceux de Swisscom, Salt ainsi que de
+  // nombreux fournisseurs locaux. Pour chaque site, nous sélectionnons précisément le
+  // réseau le plus performant ». L'entrée est donc `network:"salt"` (backbone dominant
+  // pour l'offre 2.5G FTTH vendue) mais avec fallback multi-opérateurs documenté ci-dessus.
+  warning:"⚠️ Structure prix à 2 paliers : 25.-/mois les 12 premiers mois, PUIS 49.90.-/mois à partir du 13e mois — vous êtes engagé pour 12 mois supplémentaires à ce prix plein (mois 13 à 24). Coût total sur 24 mois : 25×12 + 49.90×12 = 898.80 CHF (au lieu des 300.- que suggérerait une lecture naïve « 25.- × 12 mois puis résiliation »). Le catalogue 69.90 n'est jamais vraiment payé — le vrai prix « à vie tant que client » est 49.90.\n\nℹ️ Réseau variable selon localisation : Green route chaque adresse vers le meilleur backbone disponible (Salt fibre principal, Swisscom xDSL en fallback, autres fournisseurs locaux le cas échéant). Le débit 2.5 Gbit/s n'est atteignable que sur les zones couvertes par la fibre Salt.", sourceType:"product-page", verifiedAt:"2026-08-08", priceHistory:[{date:"2026-07-26",price:25.00}], connectionType:["fibre","dsl"], url:"https://www.green.ch/fr/clients-prives/abonnement-internet"},
+  {name:"Sky Fiber", network:"salt", price:39.00, speed:2500, details:"2.5 Gbit/s symétrique fibre sur le réseau Salt (mention verbatim fiber.sky.ch : « Profite du réseau fibre rapide et fiable de Salt, officiellement reconnu comme l'internet fixe le plus rapide par Ookla® »). Data illimitée, WiFi 7 router inclus, engagement 12 mois. Rabais à CHF 30.-/mois pour clients Sky Show ou Sky Sport (économie CHF 9.-/mois). Activation offerte.", sourceType:"product-page", verifiedAt:"2026-08-08", priceHistory:[{date:"2026-07-26",price:39.00}], connectionType:["fibre"], url:"https://fiber.sky.ch/fr/"},
   {name:"VTX Pack 50M", network:"swisscom", price:49.00, speed:50, details:"Internet 50 Mbit/s (fibre/DSL selon zone) — VTXbox Wi-Fi incluse. VTX Telecom (Lausanne), revente sur infra Swisscom", sourceType:"product-page", verifiedAt:"2026-07-26", priceHistory:[{date:"2026-07-26",price:49.00}], connectionType:["fibre","dsl"], url:"https://www.vtx.ch/fr/residential/internet"},
   {name:"VTX Pack 100M", network:"swisscom", price:39.00, beforePrice:59.00, promo:true, promoNote:"rabais à vie", speed:100, details:"Internet 100 Mbit/s (fibre/DSL) — VTXbox Wi-Fi incluse. VTX Telecom (Lausanne)", sourceType:"product-page", verifiedAt:"2026-07-26", priceHistory:[{date:"2026-07-26",price:39.00}], connectionType:["fibre","dsl"], url:"https://www.vtx.ch/fr/residential/internet"},
   {name:"VTX Pack 1 GIGA MAX", network:"swisscom", price:45.00, beforePrice:69.00, promo:true, promoNote:"rabais à vie · 1er mois offert", speed:1000, details:"Internet 1 Gbit/s max (fibre) — VTXbox Wi-Fi 6 incluse, activation gratuite. VTX Telecom (Lausanne)", sourceType:"product-page", verifiedAt:"2026-07-26", priceHistory:[{date:"2026-07-26",price:45.00}], connectionType:["fibre"], url:"https://www.vtx.ch/fr/residential/internet"},
@@ -1040,12 +1048,12 @@ const comboData = [
   // Sky Fiber + Séries — vérifié sur fiber.sky.ch/fr le 2026-07-27
   // Vraie remise combo : Sky Fiber seul 39.-/mois + Sky Show séparé ~14.90 = ~54 CHF vs 42.90
   // en combo → économie ~11 CHF/mois. Sans engagement, streaming Sky Show inclus.
-  {operator:"Sky", name:"Sky Fiber + Séries", price:42.90, beforePrice:54.90, promo:true, promoNote:"puis 40.90 CHF/mois dès le 7e mois", speed:2500, replayDays:0, recordingHours:0, streaming:true, details:"Internet fibre 2.5 Gbit/s + Sky Show (séries et films illimités streaming) — 42.90 les 6 premiers mois puis 40.90/mois (baisse à long terme). Combo remise ~11 CHF/mois vs Sky Fiber standalone 39.- + Sky Show séparé. Sans engagement (résiliation 30 jours de préavis). Routeur WiFi 7 offert. Activation 79.-.", network:"swisscom", connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-08-01", priceHistory:[{date:"2026-07-27",price:42.90}], url:"https://fiber.sky.ch/fr/"},
+  {operator:"Sky", name:"Sky Fiber + Séries", price:42.90, beforePrice:54.90, promo:true, promoNote:"puis 40.90 CHF/mois dès le 7e mois", speed:2500, replayDays:0, recordingHours:0, streaming:true, details:"Internet fibre 2.5 Gbit/s sur le réseau Salt + Sky Show (séries et films illimités streaming) — 42.90 les 6 premiers mois puis 40.90/mois (baisse à long terme). Combo remise ~11 CHF/mois vs Sky Fiber standalone 39.- + Sky Show séparé. Sans engagement (résiliation 30 jours de préavis). Routeur WiFi 7 offert. Activation 79.-.", network:"salt", connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-08-08", priceHistory:[{date:"2026-07-27",price:42.90}], url:"https://fiber.sky.ch/fr/"},
 
   // Sky Fiber + Sport — vérifié sur fiber.sky.ch/fr le 2026-07-27
   // Segment sport premium (Bundesliga, Formule 1, Premier League, etc.). Vraie remise vs
   // Sky Fiber + Sky Sport séparés.
-  {operator:"Sky", name:"Sky Fiber + Sport", price:59.90, promo:true, promoNote:"puis 52.90 CHF/mois dès le 7e mois", speed:2500, replayDays:0, recordingHours:0, streaming:true, details:"Internet fibre 2.5 Gbit/s + Sky Sport (Bundesliga, Formule 1, Premier League, tennis) streaming — 59.90 les 6 premiers mois puis 52.90/mois. Vraie remise combo vs Sky Fiber standalone + Sky Sport séparé. Sans engagement (résiliation 30 jours). Routeur WiFi 7 offert. Activation 79.-.", network:"swisscom", connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-08-01", priceHistory:[{date:"2026-07-27",price:54.90},{date:"2026-08-01",price:59.90}], url:"https://fiber.sky.ch/fr/"},
+  {operator:"Sky", name:"Sky Fiber + Sport", price:59.90, promo:true, promoNote:"puis 52.90 CHF/mois dès le 7e mois", speed:2500, replayDays:0, recordingHours:0, streaming:true, details:"Internet fibre 2.5 Gbit/s sur le réseau Salt + Sky Sport (Bundesliga, Formule 1, Premier League, tennis) streaming — 59.90 les 6 premiers mois puis 52.90/mois. Vraie remise combo vs Sky Fiber standalone + Sky Sport séparé. Sans engagement (résiliation 30 jours). Routeur WiFi 7 offert. Activation 79.-.", network:"salt", connectionType:["fibre"], sourceType:"product-page", verifiedAt:"2026-08-08", priceHistory:[{date:"2026-07-27",price:54.90},{date:"2026-08-01",price:59.90}], url:"https://fiber.sky.ch/fr/"},
 
   // Teleboy Home Internet 1 Gbit/s + TV — vérifié sur teleboy.ch/kombi-abo et /internet le 2026-07-27.
   // Vraie remise combo : Teleboy TV standalone 14.90 → 11.90 en combo (-3 CHF/mois).
@@ -1363,7 +1371,7 @@ function refreshCombo(){
   const speedMaxVal = parseInt(document.getElementById("combo-speed-max").value);
   document.getElementById("combo-speed-label").textContent = SPEED_LABELS[speedMinVal];
   document.getElementById("combo-speed-max-label").textContent = SPEED_LABELS[speedMaxVal];
-  updateDualFill("combo-speed-fill", "combo-speed", "combo-speed-max", 4);
+  updateDualFill("combo-speed-fill", "combo-speed", "combo-speed-max", 5);
 
   const filtered = comboData.filter(c => {
     if (!selectedOps.includes(c.operator)) return false;
@@ -1386,7 +1394,7 @@ function resetCombo(){
   document.getElementById("combo-replay").value = 0;
   document.getElementById("combo-recording").value = 0;
   document.getElementById("combo-speed").value = 0;
-  document.getElementById("combo-speed-max").value = 4;
+  document.getElementById("combo-speed-max").value = 5;
   refreshCombo();
 }
 
@@ -2533,8 +2541,18 @@ function refreshInternetComboToggle(){
   }
 }
 
-const SPEED_THRESHOLDS = [null, 100, 500, 1000, 10000];
-const SPEED_LABELS = ["Peu importe", "100 Mbit/s", "500 Mbit/s", "1 Gbit/s", "10 Gbit/s"];
+// Paliers calibrés sur les technologies réellement déployées en Suisse (source
+// mainteneur 08.08.2026, réf. Sunrise Community 2.5 Gbit + factsheet Xavier
+// Studer 2.5G + membres Suissedigital) :
+//   - 100 Mbit/s  = entrée de gamme xDSL/HFC (câble coax)
+//   - 500 Mbit/s  = plafond xDSL/VDSL cuivre + gamme HFC intermédiaire
+//   - 1 Gbit/s    = fibre standard (FTTH P2P/AON ou P2M/XGS-PON, symétrique)
+//   - 2,5 Gbit/s  = HFC max (upgrade Sunrise ex-UPC 2024) + palier fibre courant
+//   - 10 Gbit/s   = FTTH max actuel en Suisse (XGS-PON G.9807.1)
+// 25 Gbit/s pas encore déployé commercialement en CH (technologie 25G-PON
+// existe mais aucun opérateur ne le vend), donc non listé.
+const SPEED_THRESHOLDS = [null, 100, 500, 1000, 2500, 10000];
+const SPEED_LABELS = ["Peu importe", "100 Mbit/s", "500 Mbit/s", "1 Gbit/s", "2,5 Gbit/s", "10 Gbit/s"];
 
 // Helper multi-select connectionType (OU logique).
 // Une offre passe si :
@@ -2561,7 +2579,7 @@ function refreshInternet(){
   document.getElementById("internet-speed-label").textContent = SPEED_LABELS[speedMinVal];
   document.getElementById("internet-speed-max-label").textContent = SPEED_LABELS[speedMaxVal];
   document.getElementById("internet-price-label").textContent = "CHF " + maxPrice + "/mois";
-  updateDualFill("internet-speed-fill", "internet-speed", "internet-speed-max", 4);
+  updateDualFill("internet-speed-fill", "internet-speed", "internet-speed-max", 5);
 
   let filtered = internetData.filter(d => {
     if (!selectedNets.includes(d.network)) return false;
@@ -2600,7 +2618,7 @@ function resetInternet(){
   document.querySelectorAll('#internet-network input').forEach(i => i.checked = true);
   document.querySelectorAll('#internet-connection-type input').forEach(i => i.checked = true);
   document.getElementById("internet-speed").value = 0;
-  document.getElementById("internet-speed-max").value = 4;
+  document.getElementById("internet-speed-max").value = 5;
   document.getElementById("internet-price").value = 100;
   refreshInternet();
 }
