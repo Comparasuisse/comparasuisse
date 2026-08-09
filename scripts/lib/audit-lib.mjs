@@ -118,6 +118,14 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   /^https:\/\/(www\.)?vtx\.ch\/fr\/residential\/mobile\/abo-mobile\/?$/i,
   /^https:\/\/(www\.)?digitalrepublic\.ch\/en\/smart-devices\/?$/i,
   /^https:\/\/(www\.)?digitalrepublic\.ch\/fr\/mobile\/?$/i,
+  // Sunrise /fr/internet-tv/abonnement-combine — vérifié 09.08.2026 : les
+  // cards de packs sont rendues avec des placeholders U+200C (zero-width
+  // non-joiner) à la place des libellés et des prix. Le seul nombre lisible
+  // est « 159.80 », qui est l'économie sur les FRAIS D'ACTIVATION, pas un
+  // prix mensuel — d'où un ÉCART quotidien garanti si on ne whiteliste pas.
+  // (La landing internet /fr/internet-tv/abonnement-internet, elle, rend
+  // correctement et reste vérifiée normalement.)
+  /^https:\/\/(www\.)?sunrise\.ch\/fr\/internet-tv\/abonnement-combine\/?$/i,
   /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
   /^https:\/\/(chmobile\.ch|www\.chmobile\.ch)\/fr\/?$/i,
   /^https:\/\/boutique\.suisse\.canalplus\.com\/?$/i,
