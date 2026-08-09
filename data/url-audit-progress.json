@@ -1,0 +1,3546 @@
+{
+ "generatedAt": "2026-08-09",
+ "totalOffers": 331,
+ "summary": [
+  {
+   "host": "wingo.ch",
+   "offers": 25,
+   "uniqueUrls": 16,
+   "shared": 17
+  },
+  {
+   "host": "talktalk.ch",
+   "offers": 18,
+   "uniqueUrls": 5,
+   "shared": 16
+  },
+  {
+   "host": "mucho.ch",
+   "offers": 12,
+   "uniqueUrls": 6,
+   "shared": 12
+  },
+  {
+   "host": "coopmobile.ch",
+   "offers": 14,
+   "uniqueUrls": 9,
+   "shared": 10
+  },
+  {
+   "host": "teleboy.ch",
+   "offers": 11,
+   "uniqueUrls": 4,
+   "shared": 10
+  },
+  {
+   "host": "quickline.ch",
+   "offers": 10,
+   "uniqueUrls": 3,
+   "shared": 10
+  },
+  {
+   "host": "maxiconnect.ch",
+   "offers": 10,
+   "uniqueUrls": 2,
+   "shared": 10
+  },
+  {
+   "host": "digitalrepublic.ch",
+   "offers": 11,
+   "uniqueUrls": 4,
+   "shared": 9
+  },
+  {
+   "host": "iway.ch",
+   "offers": 10,
+   "uniqueUrls": 4,
+   "shared": 9
+  },
+  {
+   "host": "sunrise.ch",
+   "offers": 17,
+   "uniqueUrls": 11,
+   "shared": 8
+  },
+  {
+   "host": "salt.ch",
+   "offers": 17,
+   "uniqueUrls": 13,
+   "shared": 8
+  },
+  {
+   "host": "post-mobile.ch",
+   "offers": 11,
+   "uniqueUrls": 7,
+   "shared": 8
+  },
+  {
+   "host": "vtx.ch",
+   "offers": 8,
+   "uniqueUrls": 2,
+   "shared": 8
+  },
+  {
+   "host": "yallo.ch",
+   "offers": 21,
+   "uniqueUrls": 17,
+   "shared": 7
+  },
+  {
+   "host": "aldi-mobile.ch",
+   "offers": 7,
+   "uniqueUrls": 1,
+   "shared": 7
+  },
+  {
+   "host": "netplus.ch",
+   "offers": 8,
+   "uniqueUrls": 4,
+   "shared": 6
+  },
+  {
+   "host": "abos.galaxus.ch",
+   "offers": 6,
+   "uniqueUrls": 2,
+   "shared": 6
+  },
+  {
+   "host": "lycamobile.ch",
+   "offers": 6,
+   "uniqueUrls": 1,
+   "shared": 6
+  },
+  {
+   "host": "go-mo.ch",
+   "offers": 4,
+   "uniqueUrls": 2,
+   "shared": 4
+  },
+  {
+   "host": "mobile.sky.ch",
+   "offers": 4,
+   "uniqueUrls": 2,
+   "shared": 4
+  },
+  {
+   "host": "chmobile.ch",
+   "offers": 4,
+   "uniqueUrls": 2,
+   "shared": 4
+  },
+  {
+   "host": "swisscom.ch",
+   "offers": 15,
+   "uniqueUrls": 13,
+   "shared": 3
+  },
+  {
+   "host": "lidl-connect.ch",
+   "offers": 5,
+   "uniqueUrls": 3,
+   "shared": 3
+  },
+  {
+   "host": "subscribe.canalplus.com",
+   "offers": 4,
+   "uniqueUrls": 2,
+   "shared": 3
+  },
+  {
+   "host": "mobile.migros.ch",
+   "offers": 4,
+   "uniqueUrls": 2,
+   "shared": 3
+  },
+  {
+   "host": "fiber.sky.ch",
+   "offers": 3,
+   "uniqueUrls": 1,
+   "shared": 3
+  },
+  {
+   "host": "teleking.ch",
+   "offers": 3,
+   "uniqueUrls": 1,
+   "shared": 3
+  },
+  {
+   "host": "lebara.ch",
+   "offers": 17,
+   "uniqueUrls": 16,
+   "shared": 2
+  },
+  {
+   "host": "swype.ch",
+   "offers": 5,
+   "uniqueUrls": 4,
+   "shared": 2
+  },
+  {
+   "host": "init7.net",
+   "offers": 4,
+   "uniqueUrls": 3,
+   "shared": 2
+  },
+  {
+   "host": "zattoo.com",
+   "offers": 3,
+   "uniqueUrls": 2,
+   "shared": 2
+  },
+  {
+   "host": "mtel.ch",
+   "offers": 16,
+   "uniqueUrls": 16,
+   "shared": 0
+  },
+  {
+   "host": "spusu.ch",
+   "offers": 7,
+   "uniqueUrls": 7,
+   "shared": 0
+  },
+  {
+   "host": "online-shop.mobile.migros.ch",
+   "offers": 6,
+   "uniqueUrls": 6,
+   "shared": 0
+  },
+  {
+   "host": "green.ch",
+   "offers": 2,
+   "uniqueUrls": 2,
+   "shared": 0
+  },
+  {
+   "host": "mobilezone.ch",
+   "offers": 1,
+   "uniqueUrls": 1,
+   "shared": 0
+  },
+  {
+   "host": "monforfait.ch",
+   "offers": 1,
+   "uniqueUrls": 1,
+   "shared": 0
+  },
+  {
+   "host": "muchomobile.ch",
+   "offers": 1,
+   "uniqueUrls": 1,
+   "shared": 0
+  }
+ ],
+ "entries": [
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Swiss S",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/swiss-s",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Swiss M",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/swiss-m",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Swiss L",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/swiss-l",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Extra S",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/extra-s",
+   "host": "coopmobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Extra L",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/extra-l",
+   "host": "coopmobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Europe M",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/europe-m",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Coop Mobile Europe L",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/europe-l",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Quickline Mobile L",
+   "url": "https://www.quickline.ch/mobile",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Quickline Mobile M",
+   "url": "https://www.quickline.ch/mobile",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Quickline Mobile S",
+   "url": "https://www.quickline.ch/mobile",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Quickline Mobile XL",
+   "url": "https://www.quickline.ch/mobile",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Digital Republic Flat Mobile Swiss",
+   "url": "https://digitalrepublic.ch/fr/mobile/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Digital Republic Flat Mobile",
+   "url": "https://digitalrepublic.ch/fr/mobile/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Digital Republic Flat Mobile Plus",
+   "url": "https://digitalrepublic.ch/fr/mobile/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Next",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_next",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Teleboy Mobile Eco",
+   "url": "https://www.teleboy.ch/fr/mobile",
+   "host": "teleboy.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Teleboy Mobile Swiss",
+   "url": "https://www.teleboy.ch/fr/mobile",
+   "host": "teleboy.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Teleboy Mobile International",
+   "url": "https://www.teleboy.ch/fr/mobile",
+   "host": "teleboy.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Next L",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_next_l",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Next M",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_next_m",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Swiss M",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_swiss_m",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Swiss",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_swiss",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Swiss Flat",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_swiss_flat",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Swiss L",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_swiss_l",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Europe",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_europe",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Europe L",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_europe_l",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Europe XL",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_europe_xl",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Relax S",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_relax_s",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Relax L",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_relax_l",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara Relax XXL",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_relax_xxl",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lebara XXL",
+   "url": "https://www.lebara.ch/fr/mobile-products/lebara_xxl",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Swiss Mini",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-swiss-mini",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Swiss Go",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-swiss-go",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Swiss Max",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-swiss-max",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Europe Go",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-europe-go",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Europe Max",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-europe-max",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo International Pro",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-international-pro",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Red Swiss",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-red-swiss",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Red",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-red",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Wingo Red Pro",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-red-pro",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Migros Mobile Swiss Start",
+   "url": "https://online-shop.mobile.migros.ch/fr/wireless/onl/3070",
+   "host": "online-shop.mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Migros Mobile Swiss Classic",
+   "url": "https://online-shop.mobile.migros.ch/fr/wireless/onl/3071",
+   "host": "online-shop.mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Migros Mobile Swiss Max",
+   "url": "https://online-shop.mobile.migros.ch/fr/wireless/onl/3072",
+   "host": "online-shop.mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Migros Mobile Swiss Travel",
+   "url": "https://online-shop.mobile.migros.ch/fr/wireless/onl/3073",
+   "host": "online-shop.mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "yallo Swiss Max",
+   "url": "https://www.yallo.ch/fr/mobile-products/yallo_swiss_max",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "yallo Europe",
+   "url": "https://www.yallo.ch/fr/mobile-products/yallo_europe",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "yallo Europe Plus",
+   "url": "https://www.yallo.ch/fr/mobile-products/yallo_europe_plus",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "yallo Europe Max",
+   "url": "https://www.yallo.ch/fr/mobile-products/yallo_europe_max",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swype Surf",
+   "url": "https://www.swype.ch/fr/swype-surf",
+   "host": "swype.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swype Swiss",
+   "url": "https://www.swype.ch/fr/swype-swiss",
+   "host": "swype.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swype Surf Europe",
+   "url": "https://www.swype.ch/fr/swype-surf-europe",
+   "host": "swype.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swype Europe",
+   "url": "https://www.swype.ch/fr/swype-europe",
+   "host": "swype.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Travel",
+   "url": "https://www.sunrise.ch/fr/mobile/roaming",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Travel+",
+   "url": "https://www.sunrise.ch/fr/mobile/swiss-travel-plus",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Europe+",
+   "url": "https://www.sunrise.ch/fr/mobile/swiss-connect-europe-plus",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Lite",
+   "url": "https://www.sunrise.ch/fr/mobile/swiss-connect-lite",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Neighbors",
+   "url": "https://www.sunrise.ch/fr/mobile/swiss-connect-neighbors",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Global",
+   "url": "https://www.sunrise.ch/fr/mobile/swiss-connect-global",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Start Max",
+   "url": "https://www.salt.ch/fr/mobile/plans/start-max",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Travel",
+   "url": "https://www.salt.ch/fr/mobile/plans/travel",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Europe Max",
+   "url": "https://www.salt.ch/fr/mobile/plans/europe-max",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Swiss Max (rabais à vie)",
+   "url": "https://www.salt.ch/fr/mobile/plans/swiss-max",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Europe XL (rabais à vie)",
+   "url": "https://www.salt.ch/fr/mobile/plans/europe-xl",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Europe XXL",
+   "url": "https://www.salt.ch/fr/mobile/plans/europe-xxl",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Smart",
+   "url": "https://www.salt.ch/fr/mobile/plans/smart",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Swiss Travel",
+   "url": "https://www.salt.ch/fr/mobile/plans/swiss-travel",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Swiss XXL",
+   "url": "https://www.salt.ch/fr/mobile/plans/swiss-xxl",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Salt Travel Max",
+   "url": "https://www.salt.ch/fr/mobile/plans/travel-max",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swisscom blue Mobile S",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-s.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swisscom blue Mobile M (best-seller)",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-m.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Up Mobile XL",
+   "url": "https://www.mobilezone.ch/fr/abonnements/sunrise/up-mobile-xl",
+   "host": "mobilezone.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swisscom blue Mobile L",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-l.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Swisscom blue Mobile XL",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-mobile/blue-mobile-xl.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "GoMo Suisse",
+   "url": "https://www.go-mo.ch/fr/gomo-12-95",
+   "host": "go-mo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "GoMo Europe",
+   "url": "https://www.go-mo.ch/fr/gomo-europe",
+   "host": "go-mo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "spusu 1",
+   "url": "https://www.spusu.ch/fr/spusu1",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "spusu 10",
+   "url": "https://www.spusu.ch/fr/spusu10",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "spusu 15",
+   "url": "https://www.spusu.ch/fr/spusu15",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "spusu legendär XXL",
+   "url": "https://www.spusu.ch/fr/tariffs",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "spusu Europa",
+   "url": "https://www.spusu.ch/fr/spusueuropa",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "spusu Europa XL",
+   "url": "https://www.spusu.ch/fr/spusueuropaxl",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "iWay Mobile Basic",
+   "url": "https://www.iway.ch/mobile/mobile-abos/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "iWay Mobile Classic",
+   "url": "https://www.iway.ch/mobile/mobile-abos/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "iWay Mobile Premium",
+   "url": "https://www.iway.ch/mobile/mobile-abos/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Netplus MobiGo",
+   "url": "https://www.netplus.ch/fr/offres-mobiles-irresistibles/",
+   "host": "netplus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Netplus MobiSwiss",
+   "url": "https://www.netplus.ch/fr/offres-mobiles-irresistibles/",
+   "host": "netplus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Netplus MobiEuro",
+   "url": "https://www.netplus.ch/fr/offres-mobiles-irresistibles/",
+   "host": "netplus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "MaxiMobile Small",
+   "url": "https://www.maxiconnect.ch/fr/",
+   "host": "maxiconnect.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "MaxiMobile Start",
+   "url": "https://www.maxiconnect.ch/fr/",
+   "host": "maxiconnect.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "MaxiMobile Classic",
+   "url": "https://www.maxiconnect.ch/fr/",
+   "host": "maxiconnect.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "MaxiMobile Plus",
+   "url": "https://www.maxiconnect.ch/fr/",
+   "host": "maxiconnect.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "MaxiMobile Ultra",
+   "url": "https://www.maxiconnect.ch/fr/",
+   "host": "maxiconnect.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mucho Nano",
+   "url": "https://www.mucho.ch/fr/abo/muchonano",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mucho Mini",
+   "url": "https://www.mucho.ch/fr/abo/muchomini",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mucho Swiss",
+   "url": "https://www.mucho.ch/fr/abo/muchoswiss",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mucho Europe Surf",
+   "url": "https://www.mucho.ch/fr/abo/muchoeuropesurf",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mucho Europe",
+   "url": "https://www.mucho.ch/fr/abo/muchoeurope",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mucho Europe Full",
+   "url": "https://www.mucho.ch/fr/abo/muchoeuropefull",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sky Swiss+",
+   "url": "https://mobile.sky.ch/fr/#swiss-plus",
+   "host": "mobile.sky.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sky Europe+",
+   "url": "https://mobile.sky.ch/fr/#europe-plus",
+   "host": "mobile.sky.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "CHmobile Plus",
+   "url": "https://www.chmobile.ch/fr/#plus",
+   "host": "chmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "CHmobile Europe",
+   "url": "https://www.chmobile.ch/fr/#europe",
+   "host": "chmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Post Mobile Start",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/start",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Post Mobile Swiss",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/swiss",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Post Mobile Europe",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/europe",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Post Mobile World",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/world",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Post Mobile Young",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/young",
+   "host": "post-mobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lidl Connect Swiss Abo 12 Go",
+   "url": "https://www.lidl-connect.ch/fr/",
+   "host": "lidl-connect.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lidl Connect Surf & Call",
+   "url": "https://www.lidl-connect.ch/fr/",
+   "host": "lidl-connect.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lidl Connect Swiss Unlimited",
+   "url": "https://www.lidl-connect.ch/fr/",
+   "host": "lidl-connect.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Lidl Connect Europe",
+   "url": "https://www.lidl-connect.ch/fr/europe-abo",
+   "host": "lidl-connect.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Aldi Mobile Basic",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Aldi Mobile Medium",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Aldi Mobile Swiss Unlimited",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Aldi Mobile Swiss Unlimited Extra",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Aldi Mobile International",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Aldi Mobile Roaming Unlimited",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk SWISS LIGHT",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk Purple Deal",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk Swiss Extra Flex",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk International 20.95",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk Swiss Premium",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk International 31.95",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk International M",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk Swiss Platinum",
+   "url": "https://www.talktalk.ch/fr/",
+   "host": "talktalk.ch",
+   "sharedWith": 7,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Talk Talk ALL IN",
+   "url": "https://www.talktalk.ch/fr/mobile/abonnements-mobiles.html",
+   "host": "talktalk.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel Sweazy M",
+   "url": "https://mtel.ch/fr/produits/690b43fa66de7c44fb3c1225/sweazy-m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel Sweazy Extreme",
+   "url": "https://mtel.ch/fr/produits/690b442b66de7c44fb3c1227/sweazy-extreme",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel My World M",
+   "url": "https://mtel.ch/fr/produits/690b58e1303e14e9258e8d92/my-world-m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel My World L",
+   "url": "https://mtel.ch/fr/produits/6a3bb12a841ef69f49079d29/my-world-l-100-24m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel Sweazy S 24M",
+   "url": "https://mtel.ch/fr/produits/690dc05a2341010412b762a5/sweazy-s-24m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel Young M",
+   "url": "https://mtel.ch/fr/produits/690b5964303e14e9258e8d98/young-m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel Young L",
+   "url": "https://mtel.ch/fr/produits/690b5981303e14e9258e8d9a/young-l",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel Young Extreme",
+   "url": "https://mtel.ch/fr/produits/690b59a9303e14e9258e8d9c/young-extreme",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Mtel My World Extreme",
+   "url": "https://mtel.ch/fr/produits/690dc6ea2341010412b762b1/my-world-extreme-24m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Neighbors Young",
+   "url": "https://www.sunrise.ch/fr/mobile/young",
+   "host": "sunrise.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Europe+ Young",
+   "url": "https://www.sunrise.ch/fr/mobile/young",
+   "host": "sunrise.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Sunrise Swiss Connect Global Young",
+   "url": "https://www.sunrise.ch/fr/mobile/young",
+   "host": "sunrise.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Galaxus Mobile Basic",
+   "url": "https://abos.galaxus.ch/mobile",
+   "host": "abos.galaxus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Galaxus Mobile CH Illimité",
+   "url": "https://abos.galaxus.ch/mobile",
+   "host": "abos.galaxus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "Galaxus Mobile International",
+   "url": "https://abos.galaxus.ch/mobile",
+   "host": "abos.galaxus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "VTX Mobile Swiss 5 Go",
+   "url": "https://www.vtx.ch/residential/mobile/abo-mobile/",
+   "host": "vtx.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "VTX Mobile Swiss",
+   "url": "https://www.vtx.ch/residential/mobile/abo-mobile/",
+   "host": "vtx.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "VTX Mobile Europe Data",
+   "url": "https://www.vtx.ch/residential/mobile/abo-mobile/",
+   "host": "vtx.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "VTX Mobile Europe",
+   "url": "https://www.vtx.ch/residential/mobile/abo-mobile/",
+   "host": "vtx.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "mobile",
+   "name": "VTX Mobile International",
+   "url": "https://www.vtx.ch/residential/mobile/abo-mobile/",
+   "host": "vtx.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Wingo Internet Go",
+   "url": "https://www.wingo.ch/fr/internet#go",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Wingo Internet Red",
+   "url": "https://www.wingo.ch/fr/internet#red",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Wingo Internet Ultra",
+   "url": "https://www.wingo.ch/fr/internet#ultra",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Migros Internet Start",
+   "url": "https://online-shop.mobile.migros.ch/fr/wireline/onl/products?product_id=2106",
+   "host": "online-shop.mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Sunrise Easy Internet",
+   "url": "https://www.sunrise.ch/fr/internet-tv/abonnement-internet",
+   "host": "sunrise.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Sunrise Up Connect M",
+   "url": "https://www.sunrise.ch/fr/internet-tv/abonnement-internet",
+   "host": "sunrise.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Sunrise Up Connect L",
+   "url": "https://www.sunrise.ch/fr/internet-tv/abonnement-internet",
+   "host": "sunrise.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Sunrise Up Connect XL",
+   "url": "https://www.sunrise.ch/fr/internet-tv/abonnement-internet",
+   "host": "sunrise.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Sunrise Internet Unlimited 5G",
+   "url": "https://www.sunrise.ch/fr/internet-tv/abonnement-internet",
+   "host": "sunrise.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Swisscom blue Internet S",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-s.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Swisscom blue Internet M",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-m.html",
+   "host": "swisscom.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Quickline Internet S",
+   "url": "https://www.quickline.ch/internet",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Quickline Internet M",
+   "url": "https://www.quickline.ch/internet",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Quickline Internet L",
+   "url": "https://www.quickline.ch/internet",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Quickline Internet XL",
+   "url": "https://www.quickline.ch/internet",
+   "host": "quickline.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Migros Internet Max",
+   "url": "https://online-shop.mobile.migros.ch/fr/wireline/onl/products?product_id=2107",
+   "host": "online-shop.mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Salt Home",
+   "url": "https://www.salt.ch/fr/home/internet-fibre",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Swisscom blue Internet L",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-l.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Init7 Fiber7",
+   "url": "https://www.init7.net/fr/internet/fiber7/",
+   "host": "init7.net",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Init7 Easy7",
+   "url": "https://www.init7.net/fr/internet/easy7",
+   "host": "init7.net",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Teleboy Internet 25 Mbit/s",
+   "url": "https://www.teleboy.ch/fr/internet",
+   "host": "teleboy.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Teleboy Internet 100 Mbit/s",
+   "url": "https://www.teleboy.ch/fr/internet",
+   "host": "teleboy.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Teleboy Internet 500 Mbit/s",
+   "url": "https://www.teleboy.ch/fr/internet",
+   "host": "teleboy.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Teleboy Internet 1 Gbit/s",
+   "url": "https://www.teleboy.ch/fr/internet",
+   "host": "teleboy.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Teleboy Internet 10 Gbit/s",
+   "url": "https://www.teleboy.ch/fr/internet",
+   "host": "teleboy.ch",
+   "sharedWith": 4,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Swisscom blue Internet M + TV M",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-m.html",
+   "host": "swisscom.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Green Internet Home",
+   "url": "https://www.green.ch/fr/clients-prives/abonnement-internet",
+   "host": "green.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Sky Fiber",
+   "url": "https://fiber.sky.ch/fr/",
+   "host": "fiber.sky.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "VTX Pack 50M",
+   "url": "https://www.vtx.ch/residential/internet/",
+   "host": "vtx.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "VTX Pack 100M",
+   "url": "https://www.vtx.ch/residential/internet/",
+   "host": "vtx.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "VTX Pack 1 GIGA MAX",
+   "url": "https://www.vtx.ch/residential/internet/",
+   "host": "vtx.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Talk Talk Surf 100",
+   "url": "https://www.talktalk.ch/fr/internet-tv/internet-et-tv.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Talk Talk Surf 1000",
+   "url": "https://www.talktalk.ch/fr/internet-tv/internet-et-tv.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Talk Talk Home ULTRA (5G)",
+   "url": "https://www.talktalk.ch/fr/internet-tv/internet-et-tv.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Talk Talk Home Fast (4G)",
+   "url": "https://www.talktalk.ch/fr/internet-tv/mobile-home-internet.html",
+   "host": "talktalk.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Digital Republic Flat Home 4G",
+   "url": "https://digitalrepublic.ch/fr/produit/flat-home-4g/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Digital Republic Flat Home 5G",
+   "url": "https://digitalrepublic.ch/fr/produit/flat-home-5g/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Galaxus Internet 200 Mbit/s",
+   "url": "https://abos.galaxus.ch/internet",
+   "host": "abos.galaxus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Galaxus Internet 1 Gbit/s",
+   "url": "https://abos.galaxus.ch/internet",
+   "host": "abos.galaxus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Galaxus Internet 10 Gbit/s Fiber",
+   "url": "https://abos.galaxus.ch/internet",
+   "host": "abos.galaxus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "yallo Home Cable M",
+   "url": "https://www.yallo.ch/fr/cable-m",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "yallo Home 5G Start",
+   "url": "https://www.yallo.ch/fr/home-5g-start",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "yallo Home 5G",
+   "url": "https://www.yallo.ch/fr/home-5g",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "yallo Home Max Cable",
+   "url": "https://www.yallo.ch/fr/cable",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "yallo Home Supermax",
+   "url": "https://www.yallo.ch/fr/supermax",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "yallo Home Max Fiber",
+   "url": "https://www.yallo.ch/fr/yallo-best-fiber-internet",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "iWay Internet 20",
+   "url": "https://www.iway.ch/internet/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "iWay Internet 100",
+   "url": "https://www.iway.ch/internet/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "iWay Internet 1000",
+   "url": "https://www.iway.ch/internet/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "iWay Internet 10000",
+   "url": "https://www.iway.ch/internet/10-gbit-s/",
+   "host": "iway.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Netplus Internet 200",
+   "url": "https://www.netplus.ch/fr/offres-combo/",
+   "host": "netplus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Netplus Internet 400",
+   "url": "https://www.netplus.ch/fr/offres-combo/",
+   "host": "netplus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "internet",
+   "name": "Netplus Internet 10 Gbit/s",
+   "url": "https://www.netplus.ch/fr/offres-combo/",
+   "host": "netplus.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Wingo TV Max",
+   "url": "https://www.wingo.ch/fr/internet/wingo-tv",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Teleboy TV",
+   "url": "https://www.teleboy.ch/fr/tv",
+   "host": "teleboy.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "yallo TV",
+   "url": "https://www.yallo.ch/fr/tv",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Zattoo Premium",
+   "url": "https://zattoo.com/ch/fr",
+   "host": "zattoo.com",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "blue TV S",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-s.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "blue TV M",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-m.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "blue TV L",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-l.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Zattoo Ultimate",
+   "url": "https://zattoo.com/ch/fr",
+   "host": "zattoo.com",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "blue TV XL Sport",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-xl-sport.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "blue TV XL Streaming",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-tv/blue-tv-xl-streaming.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Netplus TV App",
+   "url": "https://www.netplus.ch/fr/television/application-tv-mobile-547",
+   "host": "netplus.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Netplus TV Box",
+   "url": "https://www.netplus.ch/fr/television/la-box-tv-3921",
+   "host": "netplus.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "iWay TV Classic",
+   "url": "https://www.iway.ch/tv/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "iWay TV Premium",
+   "url": "https://www.iway.ch/tv/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "iWay TV Top",
+   "url": "https://www.iway.ch/tv/",
+   "host": "iway.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "MaxiTV",
+   "url": "https://www.maxiconnect.ch/fr/",
+   "host": "maxiconnect.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "KingTV-Silber",
+   "url": "https://www.teleking.ch/tv/angebote/",
+   "host": "teleking.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "KingTV-Gold",
+   "url": "https://www.teleking.ch/tv/angebote/",
+   "host": "teleking.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "KingTV-Platin",
+   "url": "https://www.teleking.ch/tv/angebote/",
+   "host": "teleking.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "CANAL+ Famille",
+   "url": "https://subscribe.canalplus.com/ch/produits/otfamily_otbasiq/canal-famille/12",
+   "host": "subscribe.canalplus.com",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "CANAL+ Sport",
+   "url": "https://subscribe.canalplus.com/ch/",
+   "host": "subscribe.canalplus.com",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "CANAL+ Ciné Séries",
+   "url": "https://subscribe.canalplus.com/ch/",
+   "host": "subscribe.canalplus.com",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "CANAL+ La Totale",
+   "url": "https://subscribe.canalplus.com/ch/",
+   "host": "subscribe.canalplus.com",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Green TV Comfort",
+   "url": "https://www.green.ch/fr/clients-prives/abonnement-tv",
+   "host": "green.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "MTEL TV DUO PLUS",
+   "url": "https://mtel.ch/fr/produits/6912f53838c702c4b70939b7/mtel-tv-duo-plus",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "MTEL TV QUATTRO PLUS",
+   "url": "https://mtel.ch/fr/produits/68a5cf80a03ba2ad920a8f5d/mtel-tv-quattro-plus",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "tv",
+   "name": "Init7 TV7",
+   "url": "https://www.init7.net/fr/tv/tv7/",
+   "host": "init7.net",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Home Cable M + TV",
+   "url": "https://www.yallo.ch/fr/cable-m-plus-tv",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Home Max Fiber + TV — rabais pour toujours",
+   "url": "https://www.yallo.ch/fr/fiber-plus-tv",
+   "host": "yallo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Home Max Cable + TV",
+   "url": "https://www.yallo.ch/fr/cable-plus-tv",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Home Supermax + TV",
+   "url": "https://www.yallo.ch/fr",
+   "host": "yallo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Internet + TV Max",
+   "url": "https://www.wingo.ch/fr/promos#wireline",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Salt Home (Internet + TV + Fixe)",
+   "url": "https://www.salt.ch/fr/internet-tv",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "blue Internet M + TV M",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-internet/blue-internet-m.html",
+   "host": "swisscom.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Rabais Multi-Mobile (combo Internet + Mobile)",
+   "url": "https://monforfait.ch/box-internet/offre-combine-internet-mobile-suisse/",
+   "host": "monforfait.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Rabais Multi-Mobile / Home Benefit",
+   "url": "https://www.sunrise.ch/fr/support/nouveaux-prix",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Zattoo HOME (Premium ou Ultimate)",
+   "url": "https://zattoo.com/ch/fr/offers/home",
+   "host": "zattoo.com",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Surf 100 + TV",
+   "url": "https://www.talktalk.ch/fr/internet-tv/internet-et-tv.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Sunrise Swiss Connect Neighbors + Internet + TV",
+   "url": "https://www.sunrise.ch/fr/internet-tv/abonnement-combine",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Sky Fiber + Séries",
+   "url": "https://fiber.sky.ch/fr/",
+   "host": "fiber.sky.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Sky Fiber + Sport",
+   "url": "https://fiber.sky.ch/fr/",
+   "host": "fiber.sky.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Teleboy Home Internet 1 Gbit/s + TV",
+   "url": "https://www.teleboy.ch/kombi-abo",
+   "host": "teleboy.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "combo",
+   "name": "Quickline Internet L + TV",
+   "url": "https://www.quickline.ch/internet-tv",
+   "host": "quickline.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Swiss Mini — rabais à vie",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-swiss-mini",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Swiss Go — rabais à vie",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-swiss-go",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Swiss Max — rabais à vie",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-swiss-max",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Internet Go — rabais à vie -46%",
+   "url": "https://www.wingo.ch/fr/internet#go",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Internet Red — rabais à vie -45% + activation OFFERTE",
+   "url": "https://www.wingo.ch/fr/internet#red",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Internet Ultra — rabais à vie -36%",
+   "url": "https://www.wingo.ch/fr/internet#ultra",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Internet Pro + TV Max — combo à vie",
+   "url": "https://www.wingo.ch/fr/internet#combo",
+   "host": "wingo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Wingo TV Max — code TVMAX2512",
+   "url": "https://www.wingo.ch/fr/internet/wingo-tv",
+   "host": "wingo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Swiss Max — rabais à vie -70%",
+   "url": "https://www.salt.ch/fr/mobile/plans/swiss-max",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Europe XL — rabais à vie",
+   "url": "https://www.salt.ch/fr/mobile/plans/europe-xl",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Internet+TV M / L / XL — promo bundle 24 mois",
+   "url": "https://www.quickline.ch/internet-tv",
+   "host": "quickline.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Home Internet fibre — à vie",
+   "url": "https://www.salt.ch/fr/home/internet-fibre",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Salt Home — activation offerte + 50.- cashback",
+   "url": "https://www.salt.ch/fr/internet-tv",
+   "host": "salt.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Home Supermax + TV — rabais à vie",
+   "url": "https://www.yallo.ch/fr",
+   "host": "yallo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Home Max Fiber + TV — rabais -50% pour toujours",
+   "url": "https://www.yallo.ch/fr/fiber-plus-tv",
+   "host": "yallo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "blue TV S / M — 12 mois offerts",
+   "url": "https://www.swisscom.ch/fr/clients-prives/abonnement-tv.html",
+   "host": "swisscom.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Teleboy TV",
+   "url": "https://www.teleboy.ch/fr/tv",
+   "host": "teleboy.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Frais d'activation 18.- au lieu de 77.-/222.-",
+   "url": "https://www.init7.net/fr/internet/fiber7/",
+   "host": "init7.net",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "GoMo Suisse — Hot Deal activation offerte",
+   "url": "https://www.go-mo.ch/fr/gomo-12-95",
+   "host": "go-mo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "GoMo Europe — Hot Deal activation offerte",
+   "url": "https://www.go-mo.ch/fr/gomo-europe",
+   "host": "go-mo.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "4 mois gratuits sur tous les abos",
+   "url": "https://www.spusu.ch/fr/",
+   "host": "spusu.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Aktion été — jusqu'à -60% sur tous les abos",
+   "url": "https://www.aldi-mobile.ch/fr/",
+   "host": "aldi-mobile.ch",
+   "sharedWith": 6,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Swiss+ Mobile — rabais à vie -35%",
+   "url": "https://mobile.sky.ch/fr/#swiss-plus",
+   "host": "mobile.sky.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Europe+ Mobile — rabais à vie -29%",
+   "url": "https://mobile.sky.ch/fr/#europe-plus",
+   "host": "mobile.sky.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Mucho Nano — nouvelle vague -60% à vie (compte à rebours)",
+   "url": "https://www.mucho.ch/fr/abo/muchonano",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Mucho Mini — nouvelle vague -78% à vie (compte à rebours)",
+   "url": "https://www.mucho.ch/fr/abo/muchomini",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Mucho Swiss — nouvelle vague -70% à vie (compte à rebours)",
+   "url": "https://www.mucho.ch/fr/abo/muchoswiss",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Mucho Europe Surf — nouvelle vague -75% à vie (compte à rebours)",
+   "url": "https://www.mucho.ch/fr/abo/muchoeuropesurf",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Mucho Europe — nouvelle vague -75% à vie (compte à rebours)",
+   "url": "https://www.mucho.ch/fr/abo/muchoeurope",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Mucho Europe Full — nouvelle vague -65% à vie (compte à rebours)",
+   "url": "https://www.mucho.ch/fr/abo/muchoeuropefull",
+   "host": "mucho.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "CHmobile Plus — rabais -56% pour toujours + activation offerte",
+   "url": "https://www.chmobile.ch/fr/#plus",
+   "host": "chmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "CHmobile Europe — rabais -50% pour toujours + activation offerte",
+   "url": "https://www.chmobile.ch/fr/#europe",
+   "host": "chmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Coop Mobile Swiss S — campagne rabais à vie",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/swiss-s",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Coop Mobile Swiss M — campagne rabais à vie",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/swiss-m",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Coop Mobile Swiss L — campagne rabais à vie",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/swiss-l",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Coop Mobile Europe M — campagne rabais à vie",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/europe-m",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Coop Mobile Europe L — campagne rabais à vie",
+   "url": "https://www.coopmobile.ch/fr/abonnement-mobile/europe-l",
+   "host": "coopmobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Coop Mobile Basic — Box Trophée (magasin + carte cadeau 100.-)",
+   "url": "https://www.coopmobile.ch/fr/actions/trophy",
+   "host": "coopmobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Post Mobile Start — rabais à vie",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/start",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Post Mobile Swiss — rabais à vie",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/swiss",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Post Mobile Europe — rabais à vie",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/europe",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "promo",
+   "name": "Post Mobile World — rabais à vie",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/world",
+   "host": "post-mobile.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Wingo Flat Pass 7",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-prepaid",
+   "host": "wingo.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Wingo Flat Pass 30",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-prepaid",
+   "host": "wingo.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Wingo Flat Pass 365",
+   "url": "https://www.wingo.ch/fr/mobile/wingo-prepaid",
+   "host": "wingo.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Coop Mobile Prepaid",
+   "url": "https://www.coopmobile.ch/fr/mobile-prepaid",
+   "host": "coopmobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Migros Prepaid",
+   "url": "https://mobile.migros.ch/fr/prepaid",
+   "host": "mobile.migros.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Migros Prepaid Easy S",
+   "url": "https://mobile.migros.ch/fr/prepaid-easy",
+   "host": "mobile.migros.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Migros Prepaid Easy M",
+   "url": "https://mobile.migros.ch/fr/prepaid-easy",
+   "host": "mobile.migros.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Migros Prepaid Easy L",
+   "url": "https://mobile.migros.ch/fr/prepaid-easy",
+   "host": "mobile.migros.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "yallo Prepaid",
+   "url": "https://www.yallo.ch/fr/prepaid",
+   "host": "yallo.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "TalkTalk Prepaid GO",
+   "url": "https://www.talktalk.ch/fr/mobile-prepaye/prepaid.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "TalkTalk Season 1 Month",
+   "url": "https://www.talktalk.ch/fr/mobile-prepaye/prepaid.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "TalkTalk Season 3 Months",
+   "url": "https://www.talktalk.ch/fr/mobile-prepaye/prepaid.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "TalkTalk Season 6 Months",
+   "url": "https://www.talktalk.ch/fr/mobile-prepaye/prepaid.html",
+   "host": "talktalk.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lebara Prepaid",
+   "url": "https://www.lebara.ch/fr/prepaid",
+   "host": "lebara.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lycamobile Hello Swiss S",
+   "url": "https://www.lycamobile.ch/fr/",
+   "host": "lycamobile.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lycamobile Hello Swiss M",
+   "url": "https://www.lycamobile.ch/fr/",
+   "host": "lycamobile.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lycamobile Hello Swiss L",
+   "url": "https://www.lycamobile.ch/fr/",
+   "host": "lycamobile.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lycamobile Hello Swiss Max",
+   "url": "https://www.lycamobile.ch/fr/",
+   "host": "lycamobile.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lycamobile Hello Swiss Truly Unlimited",
+   "url": "https://www.lycamobile.ch/fr/",
+   "host": "lycamobile.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lycamobile Surf UL",
+   "url": "https://www.lycamobile.ch/fr/",
+   "host": "lycamobile.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "prepaid",
+   "name": "Lidl Smart Prepaid",
+   "url": "https://www.lidl-connect.ch/fr/smart-prepaid",
+   "host": "lidl-connect.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Post Mobile Surf 5 GB",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/surf-5-gb",
+   "host": "post-mobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Post Mobile Surf Unlimited",
+   "url": "https://www.post-mobile.ch/fr/subscriptions/surf-unlimited",
+   "host": "post-mobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Data Flat 0.4",
+   "url": "https://digitalrepublic.ch/en/smart-devices/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Data Flat 1",
+   "url": "https://digitalrepublic.ch/en/smart-devices/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Data Flat 10",
+   "url": "https://digitalrepublic.ch/en/smart-devices/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Data Flat 50",
+   "url": "https://digitalrepublic.ch/en/smart-devices/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Data Flat 300",
+   "url": "https://digitalrepublic.ch/en/smart-devices/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Data Flat 2000",
+   "url": "https://digitalrepublic.ch/en/smart-devices/",
+   "host": "digitalrepublic.ch",
+   "sharedWith": 5,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "MaxiData Small",
+   "url": "https://www.maxiconnect.ch/fr/maxidata",
+   "host": "maxiconnect.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "MaxiData Classic",
+   "url": "https://www.maxiconnect.ch/fr/maxidata",
+   "host": "maxiconnect.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "MaxiData Plus",
+   "url": "https://www.maxiconnect.ch/fr/maxidata",
+   "host": "maxiconnect.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "MaxiData Ultra",
+   "url": "https://www.maxiconnect.ch/fr/maxidata",
+   "host": "maxiconnect.ch",
+   "sharedWith": 3,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "yallo Go! S",
+   "url": "https://www.yallo.ch/fr/internet-go",
+   "host": "yallo.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "yallo Go! Max",
+   "url": "https://www.yallo.ch/fr/internet-go",
+   "host": "yallo.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "yallo Go!",
+   "url": "https://www.yallo.ch/fr/internet-go",
+   "host": "yallo.ch",
+   "sharedWith": 2,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Sunrise We Connect Track",
+   "url": "https://www.sunrise.ch/en/residential/mobile/we-connect/we-connect-track.html",
+   "host": "sunrise.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Mucho DATAMINI",
+   "url": "https://muchomobile.ch/en/prepaid/switzerland-europe-internet/datamini",
+   "host": "muchomobile.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Swype Surf",
+   "url": "https://www.swype.ch/fr/swype-surf",
+   "host": "swype.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Salt Surf Unlimited",
+   "url": "https://www.salt.ch/fr/mobile/plans/mobile-data",
+   "host": "salt.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Lebara Data S",
+   "url": "https://www.lebara.ch/fr/data",
+   "host": "lebara.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Lebara Data",
+   "url": "https://www.lebara.ch/fr/data",
+   "host": "lebara.ch",
+   "sharedWith": 1,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Mtel Flow S",
+   "url": "https://mtel.ch/fr/produits/690b0cafd4fbd867590d0829/flow-s",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Mtel Flow M",
+   "url": "https://mtel.ch/fr/produits/690b25155069c22f1f0f24e3/flow-m",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Mtel Flow L",
+   "url": "https://mtel.ch/fr/produits/690b3cbe66de7c44fb3c121d/flow-l",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Mtel Flow XL",
+   "url": "https://mtel.ch/fr/produits/690b3c6f66de7c44fb3c121b/flow-xl",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  },
+  {
+   "cat": "dataOnly",
+   "name": "Mtel Free Plus",
+   "url": "https://mtel.ch/fr/produits/69174b3cce01d2172002011b/free-plus",
+   "host": "mtel.ch",
+   "sharedWith": 0,
+   "status": "todo",
+   "note": null,
+   "checkedAt": null
+  }
+ ]
+}
