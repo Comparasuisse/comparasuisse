@@ -102,6 +102,12 @@ node scripts/audit-probe.mjs urls.txt                 # un lot (1 URL par ligne)
 node scripts/audit-probe.mjs urls.txt --grep=rabais   # extrait les lignes matchant
 PROBE_OUT=out.json node scripts/audit-probe.mjs urls.txt --full   # + innerText complet
 
+# Découverte de pages produit (sitemaps + crawl) — cf. chantier url-audit
+node scripts/discover-pages.mjs <url-de-depart> [motif-regex]
+
+# Mini-QA — À LANCER APRÈS CHAQUE COMMIT touchant index.html (cf. règle 7)
+node scripts/qa-quick.mjs
+
 # Installation / suppression de la tâche planifiée Windows (PowerShell) :
 pwsh -File scripts\install-daily-audit-task.ps1                 # crée / met à jour
 pwsh -File scripts\install-daily-audit-task.ps1 -TimeOfDay 08:30
@@ -446,7 +452,40 @@ chaque edit d'index.html, lancer :
 node -e "const fs=require('fs');const html=fs.readFileSync('index.html','utf8');const scripts=[...html.matchAll(/<script(?![^>]*src=)[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);const largest=scripts.reduce((a,b)=>b.length>a.length?b:a,'');fs.writeFileSync('.check.tmp.mjs',largest);" && node --check .check.tmp.mjs && rm -f .check.tmp.mjs
 ```
 
-### 7. Bump du footer « Prix vérifiés le … »
+### 7. Mini-QA après CHAQUE commit — pas seulement en fin de campagne
+
+**Règle permanente, applicable à toutes les sessions.** Après chaque commit
+touchant `index.html`, avant de passer à la tâche suivante :
+
+```bash
+node scripts/qa-quick.mjs
+```
+
+~15 s, trois contrôles, sortie en code 1 si l'un échoue :
+
+1. **Syntaxe JS** du plus gros bloc `<script>` inline (ce que faisait déjà la
+   règle 6 — le script l'intègre, plus besoin de la lancer séparément).
+2. **Zéro erreur console** : `index.html` est chargé dans un vrai Chrome
+   headless. Les artefacts de `file://` (chemins absolus `/favicon.svg`,
+   `og-image`) et les pixels de tracking sont filtrés — ils ne résolvent pas
+   en local mais fonctionnent en production, ce ne sont pas des régressions.
+3. **Comptages d'onglets alignés sur les données** : le compteur « X / Y » de
+   chacun des 7 onglets est comparé au nombre réel d'entrées du dataset
+   correspondant, et chaque `operator` de `tvData` / `comboData` /
+   `dataOnlyData` doit avoir sa checkbox déclarée (bug historique récurrent,
+   cf. règle 4).
+
+**Si le mini-QA échoue : corriger immédiatement**, dans le même commit s'il
+n'est pas encore poussé, sinon dans un commit `fix(qa):` juste après. Ne
+jamais enchaîner sur la tâche suivante en laissant un commit cassé derrière
+soi — un défaut découvert en fin de campagne coûte bien plus cher à retrouver
+qu'un contrôle de 15 s, et il pollue tous les commits intermédiaires.
+
+Cette règle ne remplace pas le **test QA final** (§ Protocole de fin d'audit),
+qui reste obligatoire et couvre en plus les filtres, le comparateur, les
+accordéons de chaînes et le défilement des countdowns.
+
+### 8. Bump du footer « Prix vérifiés le … »
 
 À chaque commit qui contient au moins une vraie vérification live, bumper la
 ligne `<span style="opacity:.7;">Prix vérifiés le [date]</span>` du footer
@@ -461,11 +500,14 @@ En mode AUDIT COMPLET, après chaque vague :
 1. **Commit local** avec message détaillé (format existant : opérateur,
    changements listés, contexte, note aucun report). Toujours co-authored
    Claude.
-2. **Ne présente PAS de récap à l'utilisateur** — enchaîne directement sur
+2. **`node scripts/qa-quick.mjs` juste après le commit** (règle absolue 7).
+   Si le mini-QA échoue, corriger AVANT d'entamer la vague suivante — jamais
+   de vague enchaînée par-dessus un commit cassé.
+3. **Ne présente PAS de récap à l'utilisateur** — enchaîne directement sur
    la vague suivante. Le récap détaillé arrivera à la fin.
-3. **Log très concis** possible : « Vw commit `xxxxxxx` — N changements
-   appliqués, aucun cas reporté. Passage à Wx+1. »
-4. Ne demande jamais « dis go pour la suite » entre vagues. Enchaîne.
+4. **Log très concis** possible : « Vw commit `xxxxxxx` — N changements
+   appliqués, mini-QA OK, aucun cas reporté. Passage à Wx+1. »
+5. Ne demande jamais « dis go pour la suite » entre vagues. Enchaîne.
 
 ---
 
