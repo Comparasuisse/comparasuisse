@@ -474,6 +474,12 @@ node scripts/qa-quick.mjs
    correspondant, et chaque `operator` de `tvData` / `comboData` /
    `dataOnlyData` doit avoir sa checkbox déclarée (bug historique récurrent,
    cf. règle 4).
+4. **Footer « Prix vérifiés le … » pas en retard** sur le `verifiedAt` le plus
+   récent du catalogue. Ajouté le 10.08.2026 après un oubli constaté : quinze
+   offres portaient un `verifiedAt` du jour pendant que le footer annonçait
+   encore la veille, donc une fraîcheur sous-estimée affichée au visiteur.
+   La règle 8 est manuelle et donc oubliable ; cette divergence-là, elle, est
+   mécaniquement détectable — autant la laisser au script.
 
 **Si le mini-QA échoue : corriger immédiatement**, dans le même commit s'il
 n'est pas encore poussé, sinon dans un commit `fix(qa):` juste après. Ne
@@ -490,6 +496,16 @@ accordéons de chaînes et le défilement des countdowns.
 À chaque commit qui contient au moins une vraie vérification live, bumper la
 ligne `<span style="opacity:.7;">Prix vérifiés le [date]</span>` du footer
 d'index.html à la date du jour (règle mémoire existante).
+
+**Bumper aussi le `verifiedAt` de chaque offre dont la page a été réellement
+chargée** — pas seulement celles dont le prix a changé. Le fait d'avoir
+reconfirmé un prix est l'information utile ; une offre vérifiée aujourd'hui
+mais restée datée d'il y a une semaine se retrouve à tort en tête des
+priorités de la passe suivante.
+
+Ces deux gestes sont manuels et ont déjà été oubliés ensemble le 10.08.2026.
+Le mini-QA de la règle 7 vérifie désormais que le footer n'est pas en retard
+sur le `verifiedAt` le plus récent : c'est le filet, pas la règle.
 
 ---
 

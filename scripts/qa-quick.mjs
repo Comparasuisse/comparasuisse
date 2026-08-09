@@ -44,7 +44,27 @@ if (fail.length) {
   process.exit(1);
 }
 
-// ── 2 & 3. Navigateur
+// ── 2. Footer « Prix vérifiés le … » cohérent avec les verifiedAt
+// Ce contrôle existe parce que la règle de bump du footer est manuelle et a
+// déjà été oubliée : le 10.08.2026, quinze offres portaient un verifiedAt du
+// jour alors que le footer annonçait encore le 9 août. Un visiteur lisait donc
+// une fraîcheur sous-estimée. La divergence est mécaniquement détectable.
+const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+{
+  const mf = html.match(/Prix vérifiés le\s+(\d{1,2})\s+([a-zéû]+)\s+(\d{4})/i);
+  if (!mf) ko("footer « Prix vérifiés le … » introuvable");
+  else {
+    const mi = MOIS.findIndex((x) => x === mf[2].toLowerCase());
+    const footer = `${mf[3]}-${String(mi + 1).padStart(2, "0")}-${String(+mf[1]).padStart(2, "0")}`;
+    const latest = [...html.matchAll(/verifiedAt:"(\d{4}-\d{2}-\d{2})"/g)].map((m) => m[1]).sort().pop();
+    if (!latest) ok(`footer « ${mf[0]} » (aucun verifiedAt à comparer)`);
+    else if (footer < latest)
+      ko(`footer en retard : « ${mf[0]} » (${footer}) alors que le verifiedAt le plus récent est ${latest} — bumper le footer (règle 8)`);
+    else ok(`footer « ${mf[0]} » cohérent avec le verifiedAt le plus récent (${latest})`);
+  }
+}
+
+// ── 3 & 4. Navigateur
 const data = await loadData();
 const expected = {
   mobile: data.mobile.length,
