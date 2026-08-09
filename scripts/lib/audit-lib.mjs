@@ -144,15 +144,18 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // (La landing internet /fr/internet-tv/abonnement-internet, elle, rend
   // correctement et reste vérifiée normalement.)
   /^https:\/\/(www\.)?sunrise\.ch\/fr\/internet-tv\/abonnement-combine\/?$/i,
-  // Migros wireline — vérifié 09.08.2026 : le shop est bloqué derrière un
-  // contrôle d'éligibilité par adresse (« 1 Eligibilité / 2 Raccordement et
-  // produit »). Tant qu'aucune adresse n'est saisie, la page ne contient
-  // aucun produit ni aucun prix, quel que soit le product_id.
-  /^https:\/\/online-shop\.mobile\.migros\.ch\/fr\/wireline\//i,
-  // Netplus La Box TV — vérifié 09.08.2026 : page de présentation du boîtier
-  // (fonctionnalités, Android TV, replay…) sans aucun tarif. Le prix de 18.-
-  // ne figure que dans les offres combinées, pas sur cette page.
+  // Migros wireline (online-shop, éligibilité par adresse) : motif RETIRÉ le
+  // 10.08.2026. Les 2 offres internet ont quitté le shop pour la page
+  // marketing mobile.migros.ch/fr/internet-tv-et-telephonie-fixe/internet,
+  // qui affiche les prix sans demander d'adresse. Elles redeviennent donc
+  // vérifiables automatiquement.
+  // Netplus La Box TV — conservé. C'est bien la page produit du boîtier, donc
+  // la bonne destination visiteur, mais elle ne porte aucun tarif : le prix de
+  // 18.- n'est énoncé que dans le configurateur /fr/offres-combo/ (« Box &
+  // Application TV — CHF 18.- », relevé le 10.08.2026, conforme à notre
+  // valeur). Le court-circuit reste donc nécessaire pour cette URL.
   /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/la-box-tv/i,
+  /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/application-tv-mobile/i,
   /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
   // CHmobile : les deux plans partagent la landing, désambiguïsés par ancres
   // #plus / #europe le 09.08.2026 — le motif doit donc tolérer un fragment.
