@@ -3767,18 +3767,95 @@
    },
    "finding": "Sitemap : seules /fr/ et /fr/fb/check existent. Aucune page par offre.",
    "remaining": "3 offres sur /fr/ — confirmé."
+  },
+  {
+   "host": "lidl-connect.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 5,
+    "urls": 3,
+    "grouped": 3
+   },
+   "after": {
+    "offers": 5,
+    "urls": 5,
+    "grouped": 0
+   },
+   "finding": "Pages produit individuelles trouvées (/fr/swiss-abo-12gb, /fr/smart-abo-surf-call, /fr/swiss-abo-unlimited). Swiss Unlimited : prix corrigé 11.90→14.90 (page : 24.90 barré, -40% à vie) + countdown officiel relevé, deadline 2026-08-10T23:59:59, promoData créée. Attention : /fr/smart-abo-unlimited est un plan DIFFÉRENT (29.90), ne pas confondre.",
+   "remaining": "Aucune."
+  },
+  {
+   "host": "lebara.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 17,
+    "urls": 16,
+    "grouped": 2
+   },
+   "after": {
+    "offers": 17,
+    "urls": 17,
+    "grouped": 0
+   },
+   "finding": "Les 2 offres data étaient sur la landing /fr/data alors que /fr/mobile-products/lebara_data et lebara_data_s existent. Prix confirmés 10.45 et 14.45.",
+   "remaining": "Aucune."
+  },
+  {
+   "host": "swype.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 5,
+    "urls": 4,
+    "grouped": 2
+   },
+   "after": {
+    "offers": 5,
+    "urls": 4,
+    "grouped": 2
+   },
+   "finding": "FAUX GROUPAGE : chaque plan a déjà sa page (/fr/swype-surf, swype-swiss, swype-surf-europe, swype-europe). Les 2 « groupées » sont la même offre Swype Surf listée à la fois en mobile et en dataOnly — intentionnel.",
+   "remaining": "Aucune anomalie."
+  },
+  {
+   "host": "teleking.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 3,
+    "urls": 1,
+    "grouped": 3
+   },
+   "after": {
+    "offers": 3,
+    "urls": 1,
+    "grouped": 3
+   },
+   "finding": "Sitemap : seule /tv/angebote/ existe pour les abos TV. Aucune page par palier.",
+   "remaining": "3 offres — confirmé."
+  },
+  {
+   "host": "subscribe.canalplus.com",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 4,
+    "urls": 2,
+    "grouped": 3
+   },
+   "after": {
+    "offers": 4,
+    "urls": 2,
+    "grouped": 3
+   },
+   "finding": "INCOMPLET. CANAL+ Famille a bien une URL produit individuelle (canalplus.com/ch/produits/otfamily_otbasiq/canal-famille/12), donc le motif existe. Mais subscribe.canalplus.com/ch/ est une page de saisie de code promo, et canalplus.com/ch/ est un SPA dont les liens produit ne sortent pas au crawl. Les codes produit internes ne sont pas devinables.",
+   "remaining": "3 offres (Sport, Ciné Séries, La Totale) — À REPRENDRE avec navigation interactive dans le tunnel de souscription pour capter les URLs produit."
   }
  ],
  "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData.",
  "nextUp": [
-  "lidl-connect.ch (3)",
   "swisscom blue-internet-m (3)",
-  "teleking.ch (3)",
-  "subscribe.canalplus.com (3)",
   "wingo prepaid (3)",
   "mobile.migros.ch prepaid-easy (3)",
   "yallo internet-go (3)",
-  "swype.ch (2)",
-  "lebara.ch /fr/data (2)"
+  "canalplus Sport/Ciné/Totale (3, navigation interactive requise)",
+  "PUIS balayage des ~200 offres déjà sur URL unique"
  ]
 }
