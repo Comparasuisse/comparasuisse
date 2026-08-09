@@ -3703,6 +3703,38 @@
    },
    "finding": "Pas de sitemap. Crawl : versions FR /fr/mobile, /fr/internet, /fr/tv existantes alors que nos URLs étaient sans préfixe de langue. Contenu FR confirmé en browser. Aucune page par plan.",
    "remaining": "6 offres sur pages catégorie FR — confirmé."
+  },
+  {
+   "host": "sunrise.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 17,
+    "urls": 11,
+    "grouped": 8
+   },
+   "after": {
+    "offers": 17,
+    "urls": 12,
+    "grouped": 7
+   },
+   "finding": "Sitemap 11284 URLs. Les abos mobile ont déjà chacun leur page (/fr/mobile/swiss-connect-*). TROUVÉ : Internet Unlimited 5G a une page dédiée /fr/internet-tv/super-deal/abonnement-internet-5g, que la landing ne référence pas — ce qui explique le faux constat de retrait. Prix corrigé 29.90→31.40 / 95.30→96.80 (hausse Sunrise du 1.8.2026 que cette offre avait ratée). Aucune page par plan pour les 3 Young ni pour les 4 tiers internet.",
+   "remaining": "7 offres : 4 tiers internet sur la landing, 3 Young sur /fr/mobile/young — confirmé sans page dédiée."
+  },
+  {
+   "host": "netplus.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 8,
+    "urls": 4,
+    "grouped": 6
+   },
+   "after": {
+    "offers": 8,
+    "urls": 4,
+    "grouped": 6
+   },
+   "finding": "Sitemap complet : aucune page par plan. /fr/offres-mobiles-irresistibles/ et /fr/offres-combo/ sont les pages produit, déjà utilisées.",
+   "remaining": "6 offres sur pages catégorie — confirmé."
   }
  ],
  "metricNote": "sharedWith inclut à tort les paires offre+promoData (URLs identiques par conception, requises par promoByUrl/bannerForOffer). Métrique réelle : 122 offres groupées sur 289 hors promoData."
