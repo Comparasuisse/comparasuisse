@@ -126,6 +126,15 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // (La landing internet /fr/internet-tv/abonnement-internet, elle, rend
   // correctement et reste vérifiée normalement.)
   /^https:\/\/(www\.)?sunrise\.ch\/fr\/internet-tv\/abonnement-combine\/?$/i,
+  // Migros wireline — vérifié 09.08.2026 : le shop est bloqué derrière un
+  // contrôle d'éligibilité par adresse (« 1 Eligibilité / 2 Raccordement et
+  // produit »). Tant qu'aucune adresse n'est saisie, la page ne contient
+  // aucun produit ni aucun prix, quel que soit le product_id.
+  /^https:\/\/online-shop\.mobile\.migros\.ch\/fr\/wireline\//i,
+  // Netplus La Box TV — vérifié 09.08.2026 : page de présentation du boîtier
+  // (fonctionnalités, Android TV, replay…) sans aucun tarif. Le prix de 18.-
+  // ne figure que dans les offres combinées, pas sur cette page.
+  /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/la-box-tv/i,
   /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
   /^https:\/\/(chmobile\.ch|www\.chmobile\.ch)\/fr\/?$/i,
   /^https:\/\/boutique\.suisse\.canalplus\.com\/?$/i,
