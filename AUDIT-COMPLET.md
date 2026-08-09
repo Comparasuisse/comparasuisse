@@ -94,6 +94,14 @@ node scripts/_audit-catalog.mjs --category mobile     # subset catégorie
 node scripts/_audit-catalog.mjs --dry-run             # inventaire sans Playwright
 node scripts/_audit-catalog.mjs --mark-full-pass      # marque passe manuelle validée
 
+# Sonde Playwright ciblée — outil de la passe MANUELLE (ajoutée le 09.08.2026).
+# Rend la page dans un vrai Chrome et remonte prix + widgets countdown +
+# mentions « à vie » + deadlines des scripts inline, ce que WebFetch rate.
+node scripts/audit-probe.mjs <url>                    # une URL
+node scripts/audit-probe.mjs urls.txt                 # un lot (1 URL par ligne)
+node scripts/audit-probe.mjs urls.txt --grep=rabais   # extrait les lignes matchant
+PROBE_OUT=out.json node scripts/audit-probe.mjs urls.txt --full   # + innerText complet
+
 # Installation / suppression de la tâche planifiée Windows (PowerShell) :
 pwsh -File scripts\install-daily-audit-task.ps1                 # crée / met à jour
 pwsh -File scripts\install-daily-audit-task.ps1 -TimeOfDay 08:30
