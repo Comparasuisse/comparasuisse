@@ -59,7 +59,7 @@ const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août"
     const latest = [...html.matchAll(/verifiedAt:"(\d{4}-\d{2}-\d{2})"/g)].map((m) => m[1]).sort().pop();
     if (!latest) ok(`footer « ${mf[0]} » (aucun verifiedAt à comparer)`);
     else if (footer < latest)
-      ko(`footer en retard : « ${mf[0]} » (${footer}) alors que le verifiedAt le plus récent est ${latest} — bumper le footer (règle 8)`);
+      ko(`footer en retard : « ${mf[0]} » (${footer}) alors que le verifiedAt le plus récent est ${latest} — bumper le footer (règle 10)`);
     else ok(`footer « ${mf[0]} » cohérent avec le verifiedAt le plus récent (${latest})`);
   }
 }

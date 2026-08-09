@@ -108,6 +108,11 @@ node scripts/discover-pages.mjs <url-de-depart> [motif-regex]
 # Mini-QA — À LANCER APRÈS CHAQUE COMMIT touchant index.html (cf. règle 7)
 node scripts/qa-quick.mjs
 
+# Inventaire de couverture — OBLIGATOIRE en fin d AUDIT COMPLET (cf. règle 8)
+node scripts/coverage-report.mjs
+node scripts/coverage-report.mjs --md      # écrit data/coverage-AAAA-MM-JJ.md
+node scripts/coverage-report.mjs --stale 7 # offres non vérifiées depuis 7 j+
+
 # Installation / suppression de la tâche planifiée Windows (PowerShell) :
 pwsh -File scripts\install-daily-audit-task.ps1                 # crée / met à jour
 pwsh -File scripts\install-daily-audit-task.ps1 -TimeOfDay 08:30
@@ -461,7 +466,7 @@ touchant `index.html`, avant de passer à la tâche suivante :
 node scripts/qa-quick.mjs
 ```
 
-~15 s, trois contrôles, sortie en code 1 si l'un échoue :
+~15 s, quatre contrôles, sortie en code 1 si l'un échoue :
 
 1. **Syntaxe JS** du plus gros bloc `<script>` inline (ce que faisait déjà la
    règle 6 — le script l'intègre, plus besoin de la lancer séparément).
@@ -478,7 +483,7 @@ node scripts/qa-quick.mjs
    récent du catalogue. Ajouté le 10.08.2026 après un oubli constaté : quinze
    offres portaient un `verifiedAt` du jour pendant que le footer annonçait
    encore la veille, donc une fraîcheur sous-estimée affichée au visiteur.
-   La règle 8 est manuelle et donc oubliable ; cette divergence-là, elle, est
+   La règle 10 est manuelle et donc oubliable ; cette divergence-là, elle, est
    mécaniquement détectable — autant la laisser au script.
 
 **Si le mini-QA échoue : corriger immédiatement**, dans le même commit s'il
@@ -491,7 +496,53 @@ Cette règle ne remplace pas le **test QA final** (§ Protocole de fin d'audit),
 qui reste obligatoire et couvre en plus les filtres, le comparateur, les
 accordéons de chaînes et le défilement des countdowns.
 
-### 8. Bump du footer « Prix vérifiés le … »
+### 8. Un AUDIT COMPLET doit PROUVER sa couverture, offre par offre
+
+**Règle absolue, non négociable.** « AUDIT COMPLET » signifie *chaque offre du
+catalogue, sans exception* — pas un échantillon, pas les cas qui paraissent
+prioritaires, pas seulement les offres flaguées par le scan.
+
+À la fin de toute campagne, produire l'inventaire :
+
+```bash
+node scripts/coverage-report.mjs          # 100% des offres + verifiedAt
+node scripts/coverage-report.mjs --md     # écrit data/coverage-AAAA-MM-JJ.md
+node scripts/coverage-report.mjs --stale 7 # seulement les >= 7 jours
+```
+
+Le récap final doit s'appuyer sur cet inventaire **ligne par ligne**, et non sur
+un résumé par thème ou par écart trouvé. Un résumé par écart ne prouve rien :
+il ne parle que des offres regardées, jamais de celles oubliées.
+
+Toute offre non vérifiée pendant la session doit être **explicitement listée
+comme telle** dans le message de reprise. Jamais d'omission silencieuse.
+
+**Pourquoi cette règle existe.** Le 10.08.2026, Salt Travel Max était en promo
+à 59.95 au lieu de 106.95 (-43%) et le site affichait encore 106.95. L'offre
+n'apparaissait dans aucun récapitulatif de la journée, alors que plusieurs
+AUDIT COMPLET avaient été menés. Cause immédiate : salt.ch renvoie un HTTP 429
+au scan quotidien depuis le 03.08 — six runs d'affilée — donc son prix n'avait
+jamais été lu. Cause de fond : les récaps listaient les écarts traités, jamais
+les offres non couvertes, ce qui rendait l'angle mort structurellement
+invisible. Salt Swiss XXL était dans le même cas (25.95 au lieu de 85.95, -69%).
+
+### 9. Un statut non concluant n'est PAS une vérification
+
+HTTP 429, timeout, `PAGE_VIDE`, `NON_VÉRIFIABLE` : ces verdicts signifient
+**« prix inconnu »**, jamais « prix correct ». Une URL qui répond 429 est
+valide — c'est bien une URL vivante — mais cela ne dit strictement rien du
+tarif affiché dessus. Confondre les deux est exactement ce qui a laissé Salt
+Travel Max périmé pendant dix jours.
+
+Toute offre dont le verdict automatique est non concluant doit être :
+- soit re-vérifiée à la main dans la session (browser, la sonde
+  `audit-probe.mjs` passe là où le scan se fait jeter) ;
+- soit listée comme non couverte dans le récap final.
+
+Ne jamais clore un cas 429 ou TIMEOUT en « faux positif connu » sans avoir lu
+le prix par un autre moyen.
+
+### 10. Bump du footer « Prix vérifiés le … »
 
 À chaque commit qui contient au moins une vraie vérification live, bumper la
 ligne `<span style="opacity:.7;">Prix vérifiés le [date]</span>` du footer
