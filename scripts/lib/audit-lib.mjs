@@ -108,14 +108,21 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   //     3 plans partagent donc la même URL et leurs 3 prix cohabitent sur la
   //     page sans attribution 1-vs-1 possible.
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/?$/i,
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile\.html$/i,
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/internet-tv\.html$/i,
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaid\.html$/i,
+  // Chemins réalignés le 09.08.2026 sur les cibles de redirection réelles
+  // (AUDIT LIENS) : Talk Talk et VTX ont réorganisé leur arborescence, et
+  // Lycamobile /fr/plans/ redirigeait vers la homepage ALLEMANDE.
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile\/abonnements-mobiles\.html$/i,
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/internet-tv\/internet-et-tv\.html$/i,
+  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaye\/prepaid\.html$/i,
   /^https:\/\/(www\.)?aldi-mobile\.ch\/fr\/?$/i,
   /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/?$/i,
   /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/maxidata\/?$/i,
-  /^https:\/\/(www\.)?lycamobile\.ch\/fr\/plans\/?$/i,
-  /^https:\/\/(www\.)?vtx\.ch\/fr\/residential\/mobile\/abo-mobile\/?$/i,
+  // Lycamobile : le site FR est quasi inexistant — /fr/plans/ redirige vers la
+  // homepage ALLEMANDE, /fr/abonnements/ et /fr/plans-mobiles/ vers l'ANGLAISE,
+  // et la racine du domaine vers /de/. Seul /fr/ répond en 200 sans redirection
+  // (vérifié 09.08.2026). C'est donc la seule cible acceptable en français.
+  /^https:\/\/(www\.)?lycamobile\.ch\/fr\/?$/i,
+  /^https:\/\/(www\.)?vtx\.ch\/residential\/mobile\/abo-mobile\/?$/i,
   /^https:\/\/(www\.)?digitalrepublic\.ch\/en\/smart-devices\/?$/i,
   /^https:\/\/(www\.)?digitalrepublic\.ch\/fr\/mobile\/?$/i,
   // Sunrise /fr/internet-tv/abonnement-combine — vérifié 09.08.2026 : les
@@ -136,8 +143,12 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // ne figure que dans les offres combinées, pas sur cette page.
   /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/la-box-tv/i,
   /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
-  /^https:\/\/(chmobile\.ch|www\.chmobile\.ch)\/fr\/?$/i,
-  /^https:\/\/boutique\.suisse\.canalplus\.com\/?$/i,
+  // CHmobile : les deux plans partagent la landing, désambiguïsés par ancres
+  // #plus / #europe le 09.08.2026 — le motif doit donc tolérer un fragment.
+  /^https:\/\/(www\.)?chmobile\.ch\/fr\/?(#.*)?$/i,
+  // CANAL+ a migré sa boutique de boutique.suisse.canalplus.com vers
+  // subscribe.canalplus.com/ch/ (constaté par redirection le 09.08.2026).
+  /^https:\/\/subscribe\.canalplus\.com\/ch\/?$/i,
   // Mtel — DOM Angular où les prix sont dans des composants custom non lus
   // par innerText. Les scans du 03.08 remontaient systématiquement 7.50/9.95
   // (mentions marketing "à partir de") au lieu du prix du plan concerné.
