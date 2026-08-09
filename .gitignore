@@ -23,3 +23,6 @@ scripts/daily-audit-log.md
 scripts/daily-audit-state.json
 scripts/daily-audit-cron.log
 scripts/daily-audit.lock
+
+# Logs générés par les scripts de vérification (full-run-verify.log, etc.)
+scripts/*.log
