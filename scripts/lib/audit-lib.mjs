@@ -100,6 +100,13 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   //     sans distinction 1-vs-1 possible
   //   - VTX /residential/mobile/abo-mobile : landing groupée
   //   - Digital Republic /en/smart-devices/ : 6 tiers SIM Data groupés
+  //
+  // Ajouté 09.08.2026 :
+  //   - Digital Republic /fr/mobile/ : l'opérateur a fusionné Flat Mobile
+  //     Swiss / Flat Mobile / Flat Mobile Plus sur une page unique à ancres.
+  //     Les anciennes pages produit individuelles n'existent plus (404), les
+  //     3 plans partagent donc la même URL et leurs 3 prix cohabitent sur la
+  //     page sans attribution 1-vs-1 possible.
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/?$/i,
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile\.html$/i,
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/internet-tv\.html$/i,
@@ -110,6 +117,7 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   /^https:\/\/(www\.)?lycamobile\.ch\/fr\/plans\/?$/i,
   /^https:\/\/(www\.)?vtx\.ch\/fr\/residential\/mobile\/abo-mobile\/?$/i,
   /^https:\/\/(www\.)?digitalrepublic\.ch\/en\/smart-devices\/?$/i,
+  /^https:\/\/(www\.)?digitalrepublic\.ch\/fr\/mobile\/?$/i,
   /^https:\/\/(www\.)?lidl-connect\.ch\/fr\/?$/i,
   /^https:\/\/(chmobile\.ch|www\.chmobile\.ch)\/fr\/?$/i,
   /^https:\/\/boutique\.suisse\.canalplus\.com\/?$/i,

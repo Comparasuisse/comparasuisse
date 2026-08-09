@@ -680,6 +680,10 @@ aucune correction possible) :
 - Quickline (5 plans → `/fr/`)
 - Lycamobile (5 plans → `/fr/plans/`)
 - Digital Republic Smart Devices (6 tiers SIM Data → `/en/smart-devices/`)
+- Digital Republic Mobile (3 plans Flat Mobile Swiss / Flat Mobile /
+  Flat Mobile Plus → `/fr/mobile/`, constaté le 09.08.2026) : les pages
+  produit individuelles ont été supprimées par l'opérateur (404), les 3
+  plans sont désormais fusionnés sur une page unique à ancres
 - VTX Mobile (5 plans → `/residential/mobile/abo-mobile`)
 - Teleboy Internet/Mobile (multiples → landing par catégorie)
 - Wingo mobile individuels : chaque plan a bien son URL propre
