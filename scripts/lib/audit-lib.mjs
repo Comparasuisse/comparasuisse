@@ -107,7 +107,10 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   //     Les anciennes pages produit individuelles n'existent plus (404), les
   //     3 plans partagent donc la même URL et leurs 3 prix cohabitent sur la
   //     page sans attribution 1-vs-1 possible.
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/?$/i,
+  // NB : talktalk.ch/fr/ (landing nue) a été retiré de cette liste le 09.08.2026.
+  // Les 9 abos mobile qui y étaient groupés pointent désormais chacun sur leur
+  // page /fr/lp/<plan>.html, qui rend son prix — ils redeviennent donc
+  // vérifiables automatiquement et ne doivent plus être court-circuités.
   // Chemins réalignés le 09.08.2026 sur les cibles de redirection réelles
   // (AUDIT LIENS) : Talk Talk et VTX ont réorganisé leur arborescence, et
   // Lycamobile /fr/plans/ redirigeait vers la homepage ALLEMANDE.

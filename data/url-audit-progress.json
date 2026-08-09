@@ -3542,5 +3542,23 @@
    "note": null,
    "checkedAt": null
   }
+ ],
+ "processed": [
+  {
+   "host": "talktalk.ch",
+   "date": "2026-08-09",
+   "before": {
+    "offers": 18,
+    "urls": 5,
+    "grouped": 16
+   },
+   "after": {
+    "offers": 18,
+    "urls": 13,
+    "grouped": 8
+   },
+   "finding": "Pages produit individuelles trouvées sous /fr/lp/<plan>.html — invisibles depuis la navigation, découvertes via le sitemap (263 URLs).",
+   "remaining": "8 offres sans page dédiée : Surf 100/1000 (configurateur internet), Home ULTRA/Fast (page Home Internet 4G/5G), 4 prépayés (page prepaid). Vérifié dans le sitemap : aucune page /lp/ pour ces plans."
+  }
  ]
 }
