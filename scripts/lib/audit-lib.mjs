@@ -102,7 +102,12 @@ export const NON_VERIFIABLE_EXACT_URLS = new Set([
 export const NON_VERIFIABLE_URL_PATTERNS = [
   // Deep-links Migros online-shop : la page présente l'appareil, pas le prix
   // mensuel de l'abo (le prix affiché est celui de l'appareil ou 59.- activation)
-  /^https:\/\/online-shop\.mobile\.migros\.ch\/fr\/wireless\/onl\//,
+  // Migros wireless deep-links : motif RETIRÉ le 10.08.2026. Le commentaire
+  // d'origine (« la page ne présente que l'appareil, le prix mensuel est
+  // ailleurs ») était faux : vérifié en browser, /fr/wireless/onl/3070 à 3073
+  // renvoient chacun exactement un prix — 13.95, 17.95, 25.95, 29.95 — soit
+  // les quatre Migros Mobile Swiss. Ces offres sont donc vérifiables, et le
+  // court-circuit les avait au contraire laissées sans aucun verifiedAt.
   // TV — prix rendus dans badges/images/SVG non captés par innerText.
   // (Vérifiés au cas par cas 06.08.2026 : les 4 opérateurs ci-dessous ont
   // tous été confirmés comme rendant leurs prix TV dans des éléments non
