@@ -64,7 +64,22 @@ const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août"
   }
 }
 
-// ── 3 & 4. Navigateur
+// ── 3. Clés dupliquées (source lue ≠ valeur utilisée par le site)
+{
+  const { execFileSync } = await import("child_process");
+  try {
+    execFileSync(process.execPath, [`${ROOT}/scripts/check-duplicate-keys.mjs`], {
+      cwd: ROOT,
+      stdio: "pipe",
+    });
+    ok("aucune clé dupliquée (valeurs évaluées conformes à la source)");
+  } catch (e) {
+    const out = String(e.stdout || "").trim().split("\n").filter((l) => l.includes("❌") || l.includes("→")).slice(0, 6);
+    ko("clé(s) dupliquée(s) détectée(s) :\n     " + out.join("\n     "));
+  }
+}
+
+// ── 4 & 5. Navigateur
 const data = await loadData();
 const expected = {
   mobile: data.mobile.length,
