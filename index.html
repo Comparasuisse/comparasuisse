@@ -1044,7 +1044,20 @@ const comboData = [
   // Sunrise Swiss Connect Neighbors + Easy Internet + TV — vérifié sur sunrise.ch/fr/internet-tv/abonnement-combine
   // Nouvel offre combo bundle Mobile+Internet+TV (remplacement du modèle "Up Connect L + TV" qui n'existe plus).
   // Palier médian (les 2 autres : Swiss Travel & Easy 79.80, Swiss Connect Europe+ 90.60). Prix 85.60 was 132.80.
-  {operator:"Sunrise", name:"Sunrise Swiss Connect Neighbors + Internet + TV", price:85.60, beforePrice:132.80, promo:true, promoNote:"rabais permanent -36% sur bundle 12 mois", speed:2500, replayDays:7, recordingHours:2000, details:"Bundle mobile (Swiss Connect Neighbors) + Easy Internet 2.5 Gbit/s + Sunrise TV 280+ chaînes + TV Box + 2000h enregistrement. Palier médian (79.80 Swiss Travel & Easy / 85.60 Swiss Connect Neighbors / 90.60 Swiss Connect Europe+). Contrat 12 mois. Cumule Sunrise Rewards.", network:"sunrise", connectionType:["fibre","dsl"], sourceType:"product-page", verifiedAt:"2026-08-03", priceHistory:[{date:"2026-07-27",price:81.30},{date:"2026-08-03",price:85.60}], url:"https://www.sunrise.ch/fr/internet-tv/abonnement-combine"},
+  // Swiss Connect Neighbors + Internet + TV — VÉRIFICATION MANUELLE REQUISE.
+  // Le prix n'apparaît que dans la vue « Avec TV » de la page combinée, et le
+  // sélecteur « Sans TV / Avec TV » NE BASCULE PAS par clic automatisé : trois
+  // tentatives le 10.08.2026 (clic via sélecteur d'accessibilité, puis deux
+  // clics souris aux coordonnées exactes du libellé, widget de chat fermé au
+  // préalable) ont toutes laissé la vue sur « Sans TV ». La vue par défaut
+  // n'affiche que les combos SANS TV — Swiss Travel 69.80/88.40, Neighbors
+  // 75.60/122.80, Europe+ 80.60/132.80 — d'où l'absence de 85.60 au texte.
+  // Prix confirmé par capture d'écran de l'utilisateur, sélecteur « Avec TV »
+  // actif : « Swiss Connect Neighbors & Easy Internet & TV — 85.60/mois au lieu
+  // de 132.80, Rabais pour toujours ». D'où sourceType:"user-screenshot" et non
+  // "product-page" : la valeur n'a pas été lue par nos outils.
+  // Aux passes futures : capture d'écran, pas de navigation automatisée.
+  {operator:"Sunrise", name:"Sunrise Swiss Connect Neighbors + Internet + TV", price:85.60, beforePrice:132.80, promo:true, promoNote:"rabais permanent -36% sur bundle 12 mois", speed:2500, replayDays:7, recordingHours:2000, details:"Bundle mobile (Swiss Connect Neighbors) + Easy Internet 2.5 Gbit/s + Sunrise TV 280+ chaînes + TV Box + 2000h enregistrement. Palier médian (79.80 Swiss Travel & Easy / 85.60 Swiss Connect Neighbors / 90.60 Swiss Connect Europe+). Contrat 12 mois. Cumule Sunrise Rewards.", network:"sunrise", connectionType:["fibre","dsl"], sourceType:"user-screenshot", verifiedAt:"2026-08-10", priceHistory:[{date:"2026-07-27",price:81.30},{date:"2026-08-03",price:85.60},{date:"2026-08-10",price:85.60}], url:"https://www.sunrise.ch/fr/internet-tv/abonnement-combine"},
 
   // Sky Fiber + Séries — vérifié sur fiber.sky.ch/fr le 2026-07-27
   // Vraie remise combo : Sky Fiber seul 39.-/mois + Sky Show séparé ~14.90 = ~54 CHF vs 42.90
