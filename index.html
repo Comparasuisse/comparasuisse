@@ -269,7 +269,7 @@
     position:relative; flex:0 0 auto; vertical-align:middle;
     transition:border-color .12s, box-shadow .12s, background .12s;}
   input[type=checkbox]:hover{border-color:var(--accent);}
-  input[type=checkbox]:checked{border-color:var(--accent); background:#EEF3FF; box-shadow:0 0 0 2px rgba(47,94,255,.16);}
+  input[type=checkbox]:checked{border-color:var(--accent); background:var(--card); box-shadow:0 0 0 2px rgba(47,94,255,.20);}
   input[type=checkbox]:checked::after{content:""; position:absolute; left:50%; top:47%; width:3.5px; height:7px; margin:-4.5px 0 0 -2px;
     border:solid var(--accent); border-width:0 2px 2px 0; transform:rotate(45deg);}
   input[type=checkbox]:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
@@ -279,7 +279,7 @@
     color:var(--muted); font-weight:600; letter-spacing:0; margin-bottom:0;}
   .net-chip input{cursor:pointer; width:13px; height:13px; margin:0;}
   .net-chip input:checked{box-shadow:none;}
-  .net-chip:has(input:checked){background:#EEF3FF; color:var(--accent-dark); border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,94,255,.14);}
+  .net-chip:has(input:checked){background:var(--card); color:var(--accent-dark); border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,94,255,.20);}
 
   /* interrupteurs on/off */
   .ctrl-group label.sw-row{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:5px 0; cursor:pointer;}
