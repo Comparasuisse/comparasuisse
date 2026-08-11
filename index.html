@@ -800,6 +800,21 @@ function gtag_report_conversion(url) {
 </div>
 
 <div class="controls hidden" id="tv-controls">
+  <!-- La recherche de chaînes ouvre un menu de suggestions : placée en fin de
+       panneau, ce menu tombait sous la ligne de flottaison sur écran court.
+       Remontée en tête, elle est aussi le point d'entrée le plus direct pour
+       qui cherche une chaîne précise ; les filtres qui suivent affinent. -->
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label>🔍 Chercher une chaîne précise <span style="font-weight:400; color:var(--muted); font-size:12px;">— tape le nom d'une chaîne (ex : "RTS", "beIN Sport"), choisis-la dans les suggestions ou appuie sur Entrée. Ajoute plusieurs chaînes si tu veux : seules les offres qui les proposent toutes s'afficheront.</span></label>
+    <div id="tv-channel-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
+    <div style="position:relative;">
+      <div style="display:flex; gap:6px;">
+        <input type="search" id="tv-channel-search" autocomplete="off" placeholder="Ex : RTS, TF1, beIN Sport…" style="flex:1; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
+        <button type="button" id="tv-channel-add" style="padding:8px 14px; border:1px solid var(--line); border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
+      </div>
+      <div id="tv-channel-suggestions" class="chan-suggestions" hidden></div>
+    </div>
+  </div>
   <div class="ctrl-group">
     <label>Opérateur</label>
     <div class="net-checks" id="tv-operator">
@@ -850,17 +865,6 @@ function gtag_report_conversion(url) {
   </div>
   <div class="ctrl-group">
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="tv-streaming" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Streaming pur (sans box requise)</label>
-  </div>
-  <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label>🔍 Chercher une chaîne précise <span style="font-weight:400; color:var(--muted); font-size:12px;">— tape le nom d'une chaîne (ex : "RTS", "beIN Sport"), choisis-la dans les suggestions ou appuie sur Entrée. Ajoute plusieurs chaînes si tu veux : seules les offres qui les proposent toutes s'afficheront.</span></label>
-    <div id="tv-channel-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
-    <div style="position:relative;">
-      <div style="display:flex; gap:6px;">
-        <input type="search" id="tv-channel-search" autocomplete="off" placeholder="Ex : RTS, TF1, beIN Sport…" style="flex:1; box-sizing:border-box; padding:8px 12px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:inherit; background:#fff;">
-        <button type="button" id="tv-channel-add" style="padding:8px 14px; border:1px solid var(--line); border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
-      </div>
-      <div id="tv-channel-suggestions" class="chan-suggestions" hidden></div>
-    </div>
   </div>
 </div>
 
