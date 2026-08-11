@@ -44,7 +44,12 @@ export function normalizePriceFragments(text) {
 // premier montant décimal qui suit un libellé de prix.
 // Repère un libellé de prix ; les montants sont ensuite cherchés dans la
 // fenêtre courte qui le suit (le prix promo, puis souvent le prix barré).
-const PRICE_LABEL_RE = /(?:prix|preis|price|tarif)\b/gi;
+// « frais mensuels » ajouté le 11.08.2026 : le tunnel Migros écrit
+// « Swiss Start / 13.95 / Frais mensuels / 13.95 » sans marqueur de devise, et
+// le seul montant capté était le « 59.– » des frais d'activation — donnant un
+// faux ÉCART sur les quatre abos Migros Mobile. « mensuel » couvre aussi les
+// variantes « prix mensuel », « montant mensuel ».
+const PRICE_LABEL_RE = /(?:prix|preis|price|tarif|mensuel|monatlich)\w*\b/gi;
 const BARE_AMOUNT_RE = /\b(\d{1,3}[.,]\d{2})\b/g;
 const LABEL_WINDOW = 48;
 
