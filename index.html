@@ -482,6 +482,27 @@
   .empty{padding:28px; text-align:center; color:var(--muted); font-size:13px;}
   .promo-card{}
 
+  /* ---------- Densité renforcée : panneau Mobile uniquement ----------
+     Mobile est le seul onglet dont les filtres dépassent la hauteur d écran :
+     3 interrupteurs, 5 curseurs à double poignée, 2 titres de section et les
+     cases d âge. Il déclenchait donc un défilement interne dans la colonne,
+     qui donnait l impression d un panneau détaché du reste de la page.
+     Tout est borné à #mobile-controls : les sept autres onglets ne bougent pas. */
+  #mobile-controls{gap:7px; padding:12px;}
+  #mobile-controls .ctrl-group label{font-size:9.5px; letter-spacing:.45px; margin-bottom:3px;}
+  #mobile-controls .range-val{font-size:11px;}
+  #mobile-controls .dual-range{height:18px; margin-top:2px;}
+  #mobile-controls .dual-range input[type=range]{height:18px;}
+  #mobile-controls .dual-range input[type=range]::-webkit-slider-thumb{width:13px; height:13px; margin-top:-5px;}
+  #mobile-controls .dual-range input[type=range]::-moz-range-thumb{width:13px; height:13px;}
+  #mobile-controls input[type=range]{height:17px;}
+  #mobile-controls .section-title{padding:3px 8px; margin:1px 0 0;}
+  #mobile-controls .net-chip{padding:3px 7px; font-size:11px; gap:5px;}
+  #mobile-controls .net-checks{gap:3px;}
+  #mobile-controls label.sw-row{padding:2px 0;}
+  #mobile-controls label.sw-row span{font-size:11.5px;}
+  /* Les deux cases d âge : libellés longs, on resserre l interligne. */
+  #mobile-controls .ctrl-group > label[style]{font-size:11.5px !important; line-height:1.35; margin-bottom:2px; text-transform:none; letter-spacing:0; color:var(--ink-2);}
   /* ---------- Responsive ---------- */
   @media(max-width:900px){
     .shell{grid-template-columns:minmax(0,1fr); gap:12px;}
@@ -2896,7 +2917,12 @@ function refreshInternet(){
 
 function resetMobile(){
   document.querySelectorAll('#mobile-network input').forEach(i => i.checked = true);
-  ["mobile-sw-roam","mobile-sw-callsto","mobile-sw-roamunl"].forEach(id => { const e = document.getElementById(id); if (e) { e.checked = false; if (e.nextElementSibling) e.nextElementSibling.classList.remove("on"); } });
+  ["mobile-sw-roam","mobile-sw-callsto","mobile-sw-roamunl"].forEach(id => {
+    const e = document.getElementById(id); if (!e) return;
+    e.checked = false;
+    const pill = e.nextElementSibling;
+    if (pill) { pill.classList.remove("on"); pill.style.background = "var(--line)"; pill.style.setProperty("--knob", "translateX(0)"); }
+  });
   document.getElementById("mobile-ch-unlimited").value = 0;
   document.getElementById("mobile-ch-max").value = 4;
   document.getElementById("mobile-roaming").value = 0;
