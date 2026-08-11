@@ -305,6 +305,43 @@ Voir [[feedback-audit-sitemap-landing-check]] dans la mémoire.
 4. Le comparateur doit refléter ce qui est **réellement souscriptible**
    aujourd'hui, pas l'archive SEO.
 
+#### ⚠️ Les tableaux comparatifs repliés — « Afficher tous les produits »
+
+**Ne jamais conclure « ce plan a disparu de la landing » à partir de
+`document.body.innerText`.** Plusieurs opérateurs replient une partie de leur
+tableau comparatif derrière un bouton d'expansion. Les lignes repliées sont
+absentes de `innerText` alors que le produit est bel et bien au catalogue.
+
+Cas constaté le 11.08.2026 : sur `wingo.ch/fr/mobile`, un bouton
+**« Afficher tous les produits ↓ »** en bas du tableau masque trois lignes.
+Un premier passage avait conclu que Wingo Red Swiss / Red / Red Pro avaient
+disparu du catalogue ; après clic, les trois apparaissent avec leurs tarifs
+(68.- / 78.- / 88.-). La conclusion était fausse, et elle reposait uniquement
+sur l'absence de la chaîne « Wingo Red » dans `innerText`.
+
+Protocole à appliquer sur toute landing avant de conclure à un retrait :
+
+1. Chercher un bouton d'expansion — libellés observés : « Afficher tous les
+   produits », « Voir tous nos abos », « Afficher plus », « Tous les tarifs ».
+   Le sélecteur générique qui marche :
+   ```js
+   [...document.querySelectorAll('button,a')]
+     .filter(e => /afficher|voir tous|tous les|plus de produits/i.test(e.textContent||''))
+     .map(e => e.textContent.trim())
+   ```
+2. Cliquer, attendre 2-3 s, **puis** relire.
+3. Compter les lignes du tableau (`tr`, `[role="row"]`) plutôt que de chercher
+   un nom dans le texte : une ligne repliée existe dans le DOM.
+
+**Corollaire, tout aussi important** : figurer dans le tableau ne veut pas dire
+commandable. Toujours vérifier qu'un chemin de commande réel existe —
+bouton « Commander » dans la ligne, ou lien vers `online-shop.<operateur>.ch`.
+Chez Wingo, les lignes Red ne portent aucun bouton et ne mènent qu'à la page
+produit, laquelle affiche « Abo actuellement indisponible » sans prix ni
+bouton. Les trois boutons « Commander » présents sur cette page appartiennent
+au bloc de cross-sell (Swiss Mini/Go/Max) — vérifier le `href` avant de
+conclure, pas seulement la présence du libellé.
+
 ### Étape 2 — Playwright/browser MCP OBLIGATOIRE, WebFetch en pré-scan seulement
 
 Voir [[feedback-webfetch-screenshot-ground-truth]],
