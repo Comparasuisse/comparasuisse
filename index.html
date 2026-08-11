@@ -503,6 +503,24 @@
   #mobile-controls label.sw-row span{font-size:11.5px;}
   /* Les deux cases d âge : libellés longs, on resserre l interligne. */
   #mobile-controls .ctrl-group > label[style]{font-size:11.5px !important; line-height:1.35; margin-bottom:2px; text-transform:none; letter-spacing:0; color:var(--ink-2);}
+  /* ---------- Densité renforcée : panneau TV uniquement ----------
+     Même traitement que Mobile, mêmes causes : 13 pastilles opérateur (217 px
+     à elles seules) et un bloc de recherche de chaînes dont la phrase d aide,
+     héritant du text-transform des titres de groupe, s étalait sur huit lignes.
+     Tout est borné à #tv-controls. */
+  #tv-controls{gap:7px; padding:12px;}
+  #tv-controls .ctrl-group label{font-size:9.5px; letter-spacing:.45px; margin-bottom:3px;}
+  #tv-controls .range-val{font-size:11px;}
+  #tv-controls select{padding:5px 8px; font-size:12px;}
+  #tv-controls input[type=range]{height:17px;}
+  #tv-controls .net-chip{padding:3px 7px; font-size:11px; gap:5px;}
+  #tv-controls .net-checks{gap:3px;}
+  /* Phrase d aide de la recherche : c est de la prose, pas un intitulé. */
+  #tv-controls .ctrl-group label span[style]{text-transform:none !important; font-size:10.5px !important; line-height:1.4; letter-spacing:0;}
+  /* Case « streaming pur » : intitulé d option, casse normale comme sur Mobile. */
+  #tv-controls .ctrl-group > label[style]{font-size:11.5px !important; line-height:1.35; margin-bottom:2px; text-transform:none; letter-spacing:0; color:var(--ink-2);}
+  #tv-controls .chan-search{padding:5px 8px; font-size:11.5px; margin-bottom:6px;}
+  #tv-controls .chan-suggestions{max-height:150px;}
   /* ---------- Responsive ---------- */
   @media(max-width:900px){
     .shell{grid-template-columns:minmax(0,1fr); gap:12px;}
