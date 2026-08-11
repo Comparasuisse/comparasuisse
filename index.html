@@ -198,7 +198,7 @@
   *{box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;}
   body{
-    margin:0; background:var(--bg); color:var(--ink); padding-bottom:60px; overflow-x:hidden;
+    margin:0; background:var(--bg); color:var(--ink); padding-bottom:60px; overflow-x:clip;
     font-family:"Space Grotesk",-apple-system,BlinkMacSystemFont,sans-serif;
     font-weight:400; font-size:14px; line-height:1.45;
     font-variant-numeric:tabular-nums; -webkit-font-smoothing:antialiased;
@@ -231,7 +231,7 @@
   .shell{max-width:1180px; margin:0 auto; padding:0 20px; display:grid;
     grid-template-columns:minmax(0,258px) minmax(0,1fr); gap:18px; align-items:start;
     border-top:1px solid var(--line); padding-top:18px;}
-  .shell-side{position:sticky; top:12px; display:flex; flex-direction:column; gap:10px;}
+  .shell-side{position:sticky; top:12px; display:flex; flex-direction:column; gap:10px; max-height:calc(100vh - 24px); overflow-y:auto; overscroll-behavior:contain;}
   .shell-main{min-width:0;}
 
   /* ---------- Panneau de filtres ---------- */
@@ -485,7 +485,7 @@
   /* ---------- Responsive ---------- */
   @media(max-width:900px){
     .shell{grid-template-columns:minmax(0,1fr); gap:12px;}
-    .shell-side{position:static;}
+    .shell-side{position:static; max-height:none; overflow:visible;}
     .controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px;}
     .controls .section-title{grid-column:1/-1;}
   }
@@ -664,9 +664,6 @@ function gtag_report_conversion(url) {
   </div>
 </div>
 
-<div class="hidden" id="prepaid-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
-  <b>📶 Mobile prépayé</b> — offres à prix fixe par période (pas d'abonnement mensuel classique). Le prix affiché correspond à la durée totale du pass, pas à un mois. Comparateur croisé indisponible pour ces offres (unité de facturation incompatible).
-</div>
 <div class="controls hidden" id="prepaid-controls">
   <div class="ctrl-group">
     <label>Réseau</label>
@@ -714,10 +711,6 @@ function gtag_report_conversion(url) {
   <div class="ctrl-group">
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="internet-combo" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Combiné avec TV (voir onglet Internet + TV)</label>
   </div>
-</div>
-
-<div class="hidden" id="dataonly-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
-  <b>📶 SIM Data only</b> — cartes SIM data seule pour appareils connectés (tablettes, routeurs, hotspots, IoT, montres). Pas d'appels ni de SMS. À ne pas confondre avec l'internet fixe maison (voir onglet Internet) ni avec les abonnements mobile classiques (voir onglet Mobile). Prix affiché par période (30 j, 365 j ou mois selon l'opérateur). Comparateur croisé indisponible pour ces offres (unité de facturation variable).
 </div>
 
 <div class="controls hidden" id="dataonly-controls">
@@ -832,7 +825,6 @@ function gtag_report_conversion(url) {
   </div>
 </div>
 
-<div class="notice hidden" id="combo-notice">📦 <b>Abonnements Internet + TV</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
 <div class="controls hidden" id="combo-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
     <label>Opérateur</label>
@@ -885,7 +877,6 @@ function gtag_report_conversion(url) {
     </select>
   </div>
 </div>
-<div class="notice hidden" id="promo-notice">🗓️ <b>Les promotions sont limitées dans le temps</b> — certaines expirent dans les prochains jours (voir statut sur chaque carte). Vérifie toujours la date sur le site de l'opérateur avant de souscrire, ces fenêtres promo bougent souvent.</div>
 <div class="controls hidden" id="promo-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
     <label>Catégorie</label>
@@ -907,9 +898,18 @@ function gtag_report_conversion(url) {
     </div>
   </div>
 </div>
-<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie : clique une ligne pour la déplier, puis « + Comparer » dans le détail. Reviens ensuite ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
 </aside>
 <div class="shell-main">
+<div class="hidden" id="prepaid-notice" style="padding:12px 16px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
+  <b>📶 Mobile prépayé</b> — offres à prix fixe par période (pas d'abonnement mensuel classique). Le prix affiché correspond à la durée totale du pass, pas à un mois. Comparateur croisé indisponible pour ces offres (unité de facturation incompatible).
+</div>
+<div class="hidden" id="dataonly-notice" style="padding:12px 16px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
+  <b>📶 SIM Data only</b> — cartes SIM data seule pour appareils connectés (tablettes, routeurs, hotspots, IoT, montres). Pas d'appels ni de SMS. À ne pas confondre avec l'internet fixe maison (voir onglet Internet) ni avec les abonnements mobile classiques (voir onglet Mobile). Prix affiché par période (30 j, 365 j ou mois selon l'opérateur). Comparateur croisé indisponible pour ces offres (unité de facturation variable).
+</div>
+
+<div class="notice hidden" id="combo-notice">📦 <b>Abonnements Internet + TV</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
+<div class="notice hidden" id="promo-notice">🗓️ <b>Les promotions sont limitées dans le temps</b> — certaines expirent dans les prochains jours (voir statut sur chaque carte). Vérifie toujours la date sur le site de l'opérateur avant de souscrire, ces fenêtres promo bougent souvent.</div>
+<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie : clique une ligne pour la déplier, puis « + Comparer » dans le détail. Reviens ensuite ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
 <div class="count" id="mobile-count"><span></span><span class="reset-link" onclick="resetMobile()">Réinitialiser les filtres</span></div>
 <div class="grid" id="mobile-grid"></div>
 
