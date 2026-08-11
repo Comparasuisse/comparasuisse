@@ -20,12 +20,23 @@ const html = fs.readFileSync("index.html", "utf8");
 const data = await loadData();
 const KEYS = ["price", "beforePrice", "verifiedAt", "sourceType", "url", "promoNote"];
 
+const seen = new Map();
 let bad = 0;
 let checked = 0;
 for (const [cat, arr] of Object.entries(data)) {
   for (const it of arr) {
-    const anchor = `name:"${String(it.name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`;
-    const m = html.match(new RegExp(anchor));
+    // « Swype Surf » et « Teleboy TV » existent dans deux catégories AVEC LE
+    // MÊME nom et la MÊME url : ni l'un ni l'autre ne les distingue. On prend
+    // donc la k-ième occurrence dans le fichier, k comptant les entrées déjà
+    // traitées portant cette même signature (constaté le 11.08.2026, faux
+    // positif de clé dupliquée sur Swype Surf).
+    const esc = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const sig = `${it.name}|${it.url || ""}`;
+    const k = (seen.get(sig) || 0);
+    seen.set(sig, k + 1);
+    const re = new RegExp(`name:"${esc(it.name)}"`, "g");
+    let m = null;
+    for (let j = 0; j <= k; j++) m = re.exec(html);
     if (!m) continue;
     const seg = html.slice(m.index, m.index + 2500);
     for (const k of KEYS) {

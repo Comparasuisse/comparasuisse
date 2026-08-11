@@ -61,7 +61,7 @@ const browser = await chromium.launch({
 });
 const ctx = await browser.newContext({ userAgent: UA, locale: "fr-CH", timezoneId: "Europe/Zurich" });
 
-const okNames = [];
+const okEntries = [];
 const stats = { OK: 0, "ÉCART": 0, VIDE: 0, ERR: 0 };
 
 for (const [url, group] of byUrl) {
@@ -96,7 +96,7 @@ for (const [url, group] of byUrl) {
     else if (p === null) verdict = "OK"; // price:null volontaire (remise décrite)
     else verdict = prices.includes(p) ? "OK" : "ÉCART";
     stats[verdict]++;
-    if (verdict === "OK") okNames.push(o.name);
+    if (verdict === "OK") okEntries.push({ name: o.name, url: o.url });
     const detail =
       verdict === "OK" ? "" : verdict === "ERR" ? `  ${err}` : `  stocké ${p} · rendus ${prices.slice(0, 7).join(", ") || "(aucun)"}`;
     console.log(`  ${verdict.padEnd(6)} [${o.cat}] ${o.name.slice(0, 40).padEnd(41)} ${age(o.verifiedAt) === Infinity ? "∞" : age(o.verifiedAt) + "j"}${detail}`);
@@ -106,13 +106,19 @@ await browser.close();
 
 console.log(`\n${Object.entries(stats).map(([k, v]) => `${k}=${v}`).join("  ")}`);
 
-if (APPLY && okNames.length) {
+if (APPLY && okEntries.length) {
   const F = "C:/Users/cicer/Documents/comparasuisse/index.html";
   const L = fs.readFileSync(F, "utf8").split("\n");
   let n = 0;
-  for (const nm of okNames) {
-    const i = L.findIndex((l) => l.includes(`name:"${nm}"`));
+  // Ancrage name + url : « Swype Surf » et « Teleboy TV » existent dans deux
+  // catégories. Chercher par le seul nom mettait à jour deux fois la première
+  // entrée et laissait l'homonyme silencieusement non vérifié (11.08.2026).
+  const used = new Set();
+  for (const { name: nm, url: u } of okEntries) {
+    let i = L.findIndex((l, k) => !used.has(k) && l.includes(`name:"${nm}"`) && l.includes(`url:"${u}"`));
+    if (i < 0) i = L.findIndex((l, k) => !used.has(k) && l.includes(`name:"${nm}"`));
     if (i < 0) continue;
+    used.add(i);
     L[i] = /verifiedAt:/.test(L[i])
       ? L[i].replace(/verifiedAt:"[^"]*"/, `verifiedAt:"${TODAY}"`)
       : L[i].replace(/\burl:/, `sourceType:"product-page", verifiedAt:"${TODAY}", url:`);
