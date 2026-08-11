@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comparatif Mobile, Internet & TV Suisse — Comparasuisse</title>
 <meta name="description" content="Comparez les abonnements mobile, internet et TV en Suisse : Swisscom, Sunrise, Salt, Wingo et plus. Filtrez par prix, data et réseau. 100% gratuit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-512.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="/favicon-512.png">
@@ -164,189 +167,331 @@
 </script>
 
 <style>
+  /* ============================================================
+     TERMINAL — système visuel dense, esprit ticker de prix.
+     Les noms de variables historiques (--ink, --card, --line, --red…)
+     sont conservés : la FAQ, les ressources et le footer les utilisent
+     en styles inline et suivent donc la refonte sans être retouchés.
+     ============================================================ */
   :root{
-    --red:#d52b1e; --red-dark:#a81f16; --ink:#1c1c1e; --paper:#faf8f5; --card:#ffffff;
-    --line:#e7e2da; --muted:#6b6660;
-    --swisscom:#0d4ea3; --sunrise:#e2001a; --salt:#1c1c1e; --init7:#0f8a5f; --regional:#7c3aed;
+    --bg:#F2F3F5;
+    --paper:#F2F3F5;
+    --card:#FFFFFF;
+    --ink:#14161A;
+    --ink-2:#3A4048;
+    --muted:#6E757E;
+    --line:#E2E5EA;
+    --line-2:#EDEFF2;
+    --accent:#2F5EFF;
+    --accent-dark:#1E42C4;
+    --green:#16794F;
+    --green-bg:#E7F4EE;
+    --amber:#B8860B;
+    --amber-bg:#FDF6E3;
+    /* alias legacy — le rouge de marque cède la place au bleu signal */
+    --red:#2F5EFF; --red-dark:#1E42C4;
+    /* pastilles réseau */
+    --swisscom:#2F5EFF; --sunrise:#E8590C; --salt:#14161A;
+    --init7:#0F766E; --regional:#6E757E; --choice:#B8860B;
+    --mono:"Space Grotesk",ui-monospace,"SF Mono",Consolas,monospace;
   }
   *{box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;}
-  body{margin:0; font-family:"Helvetica Neue",Arial,sans-serif; background:var(--paper); color:var(--ink); padding-bottom:60px; overflow-x:hidden;}
-  header{background:var(--ink); color:#fff; padding:36px 24px 28px; position:relative; overflow:hidden;}
-  header::after{content:"+"; position:absolute; right:24px; top:-30px; font-size:220px; color:var(--red); opacity:.15; font-weight:700;}
-  header h1{margin:0 0 6px; font-size:28px; letter-spacing:-0.5px;}
-  .logo-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
-  .logo{width:40px; height:40px; flex-shrink:0; border-radius:10px;}
-  .logo-row h1{margin:0;}
-  header p{margin:0; color:#cfcac2; font-size:14px; max-width:640px;}
-  .wrap{max-width:1080px; margin:0 auto; padding:0 20px;}
-  .notice{background:#fff7ed; border:1px solid #f0d9b5; color:#7a5a1e; font-size:13px; padding:12px 16px; border-radius:10px; margin:-16px auto 28px; width:min(calc(100% - 40px), 1080px);}
-  .roaming-pill.affiliate{background:#efe6f7; color:#5a2b7a; cursor:help;}
-  .tabs{display:flex; flex-wrap:wrap; gap:8px; margin:28px auto 18px; max-width:1080px; padding:0 20px;}
-  .tab{padding:10px 18px; border-radius:10px; background:#fff; border:1px solid var(--line); cursor:pointer; font-weight:600; font-size:14px; color:var(--muted); white-space:nowrap;}
-  .tab.active{background:var(--ink); color:#fff; border-color:var(--ink);}
-  .controls{background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px; width:min(calc(100% - 40px), 1080px); margin:0 auto 18px; display:grid; gap:14px; grid-template-columns:1fr 1fr 1fr;}
-  .ctrl-group label{display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); margin-bottom:6px;}
-  select{width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--line); font-size:13px; background:#fff; color:var(--ink);}
-  input[type=range]{width:100%; accent-color:var(--red); height:24px;}
-  .range-val{font-size:13px; font-weight:700; margin-top:4px; text-transform:none;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink); padding-bottom:60px; overflow-x:hidden;
+    font-family:"Space Grotesk",-apple-system,BlinkMacSystemFont,sans-serif;
+    font-weight:400; font-size:14px; line-height:1.45;
+    font-variant-numeric:tabular-nums; -webkit-font-smoothing:antialiased;
+  }
 
-  /* Range à double poignée — min + max sur le même track */
-  .dual-range{position:relative; height:26px; margin-top:8px;}
-  .dual-range .track{position:absolute; top:50%; left:0; right:0; height:4px; background:var(--line); border-radius:2px; transform:translateY(-50%);}
-  .dual-range .fill{position:absolute; top:50%; height:4px; background:var(--red); border-radius:2px; transform:translateY(-50%);}
-  .dual-range input[type=range]{position:absolute; top:0; left:0; width:100%; height:26px; background:none; margin:0; padding:0; pointer-events:none; -webkit-appearance:none; appearance:none;}
+  /* ---------- En-tête ---------- */
+  header{background:var(--ink); color:#fff; padding:26px 24px 22px; position:relative; overflow:hidden;}
+  header::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:11px 100%;}
+  header h1{margin:0; font-size:24px; font-weight:700; letter-spacing:-0.4px;}
+  .logo-row{display:flex; align-items:center; gap:12px; margin-bottom:4px;}
+  .logo{width:34px; height:34px; flex-shrink:0; border-radius:8px;}
+  header p{margin:0; color:#A8AFB8; font-size:13px; max-width:640px; font-weight:400;}
+  header h2{font-size:13px !important; color:#A8AFB8 !important; font-weight:500 !important;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px;}
+
+  /* ---------- Onglets ---------- */
+  .tabs{display:flex; flex-wrap:wrap; gap:4px; margin:0 auto; max-width:1180px; padding:14px 20px 0;}
+  .tab{padding:8px 13px; border-radius:6px 6px 0 0; background:transparent; border:1px solid transparent;
+    border-bottom:none; cursor:pointer; font-weight:600; font-size:13px; color:var(--muted); white-space:nowrap;
+    letter-spacing:-0.1px; transition:color .12s, background .12s;}
+  .tab:hover{color:var(--ink); background:rgba(255,255,255,.6);}
+  .tab.active{background:var(--card); color:var(--ink); border-color:var(--line); position:relative;}
+  .tab.active::before{content:""; position:absolute; left:0; right:0; top:-1px; height:2px; background:var(--accent); border-radius:2px 2px 0 0;}
+  .tab-total{font-weight:500; color:var(--muted); font-size:12px;}
+  .tab.active .tab-total{color:var(--accent);}
+
+  /* ---------- Coquille : sidebar filtres + liste ---------- */
+  .shell{max-width:1180px; margin:0 auto; padding:0 20px; display:grid;
+    grid-template-columns:minmax(0,258px) minmax(0,1fr); gap:18px; align-items:start;
+    border-top:1px solid var(--line); padding-top:18px;}
+  .shell-side{position:sticky; top:12px; display:flex; flex-direction:column; gap:10px;}
+  .shell-main{min-width:0;}
+
+  /* ---------- Panneau de filtres ---------- */
+  .controls{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px;
+    display:flex; flex-direction:column; gap:13px; width:auto; margin:0;}
+  .ctrl-group{min-width:0;}
+  .ctrl-group label{display:block; font-size:10px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.6px; color:var(--muted); margin-bottom:5px;}
+  .range-val{font-size:12px; font-weight:700; color:var(--ink); text-transform:none; letter-spacing:0;}
+  select{width:100%; padding:7px 9px; border-radius:6px; border:1px solid var(--line); font-size:12.5px;
+    background:var(--card); color:var(--ink); font-family:inherit; font-weight:500;}
+  select:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,94,255,.14);}
+  input[type=range]{width:100%; accent-color:var(--accent); height:22px;}
+
+  .section-title{margin:4px 0 0; padding:5px 9px; font-size:10px; font-weight:700; color:var(--ink);
+    text-transform:uppercase; letter-spacing:.6px; background:var(--bg);
+    border-left:2px solid var(--accent); border-radius:0 3px 3px 0;}
+
+  /* dual-range conservé — plus expressif qu'un simple interrupteur */
+  .dual-range{position:relative; height:24px; margin-top:6px;}
+  .dual-range .track{position:absolute; top:50%; left:0; right:0; height:3px; background:var(--line); border-radius:2px; transform:translateY(-50%);}
+  .dual-range .fill{position:absolute; top:50%; height:3px; background:var(--accent); border-radius:2px; transform:translateY(-50%);}
+  .dual-range input[type=range]{position:absolute; top:0; left:0; width:100%; height:24px; background:none; margin:0; padding:0; pointer-events:none; -webkit-appearance:none; appearance:none;}
   .dual-range input[type=range]::-webkit-slider-runnable-track{background:transparent; border:none;}
   .dual-range input[type=range]::-moz-range-track{background:transparent; border:none;}
-  .dual-range input[type=range]::-webkit-slider-thumb{pointer-events:auto; -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:var(--red); border:2px solid #fff; box-shadow:0 0 3px rgba(0,0,0,.35); cursor:pointer; margin-top:-7px;}
-  .dual-range input[type=range]::-moz-range-thumb{pointer-events:auto; width:18px; height:18px; border-radius:50%; background:var(--red); border:2px solid #fff; box-shadow:0 0 3px rgba(0,0,0,.35); cursor:pointer;}
+  .dual-range input[type=range]::-webkit-slider-thumb{pointer-events:auto; -webkit-appearance:none; appearance:none; width:15px; height:15px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 1px 3px rgba(20,22,26,.3); cursor:pointer; margin-top:-6px;}
+  .dual-range input[type=range]::-moz-range-thumb{pointer-events:auto; width:15px; height:15px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 1px 3px rgba(20,22,26,.3); cursor:pointer;}
 
-  /* En-têtes de section dans les blocs de filtres */
-  .section-title{grid-column:1/-1; margin:10px 0 -4px; padding:6px 12px; font-size:12px; font-weight:800; color:var(--ink); text-transform:uppercase; letter-spacing:.5px; background:var(--paper); border-left:3px solid var(--red); border-radius:4px;}
-
-  /* Multi-select réseaux via cases à cocher */
-  .net-checks{display:flex; flex-wrap:wrap; gap:6px; margin-top:2px;}
-  .net-chip{display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:#fff; cursor:pointer; font-size:13px; text-transform:none; color:var(--muted); font-weight:600; letter-spacing:0; margin-bottom:0;}
-  .net-chip input{accent-color:var(--red); cursor:pointer; width:14px; height:14px; margin:0;}
+  /* pastilles réseau / opérateur */
+  .net-checks{display:flex; flex-wrap:wrap; gap:4px; margin-top:2px;}
+  .net-chip{display:inline-flex; align-items:center; gap:4px; padding:4px 8px; border:1px solid var(--line);
+    border-radius:5px; background:var(--card); cursor:pointer; font-size:11.5px; text-transform:none;
+    color:var(--muted); font-weight:600; letter-spacing:0; margin-bottom:0;}
+  .net-chip input{accent-color:var(--accent); cursor:pointer; width:12px; height:12px; margin:0;}
   .net-chip:has(input:checked){background:var(--ink); color:#fff; border-color:var(--ink);}
-  .count{font-size:12px; color:var(--muted); max-width:1080px; margin:0 auto 10px; padding:0 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;}
-  .grid{max-width:1080px; margin:0 auto; padding:0 20px; display:grid; gap:12px;}
-  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:grid; grid-template-columns:150px minmax(0,1fr) auto auto; gap:16px; align-items:center; min-width:0;}
-  .net-tag{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; padding:3px 8px; border-radius:20px; width:fit-content; color:#fff;}
-  .net-swisscom{background:var(--swisscom);} .net-sunrise{background:var(--sunrise);} .net-salt{background:var(--salt);} .net-init7{background:var(--init7);} .net-regional{background:var(--regional);} .net-choice{background:#6b7280;}
-  .op-name{font-weight:700; font-size:15px; margin-top:6px; word-break:break-word;}
-  .details{font-size:13px; color:var(--muted); line-height:1.5; min-width:0;}
-  .std-price{font-size:11px; color:#a89a80; margin-top:2px; word-break:break-word;}
-  .roaming-pill{font-size:10px; padding:2px 8px; border-radius:20px; width:fit-content; margin-top:6px;}
-  .roaming-yes{background:#e6f4ea; color:#1e7a3d;}
-  .roaming-no{background:#f1efe9; color:var(--muted);}
-  /* Bandeau promo — visuellement dominant sur la carte, occupe toute la largeur */
-  .promo-banner{grid-column:1/-1; padding:10px 14px; border-radius:8px; font-weight:600; font-size:13px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px;}
-  .promo-banner.urgent{background:linear-gradient(90deg,#dc2626,#b91c1c); color:#fff; box-shadow:0 2px 8px rgba(220,38,38,.25); animation:pulseRed 2s ease-in-out infinite;}
-  .promo-banner.attention{background:#fed7aa; color:#9a3412;}
-  .promo-banner.normal{background:#dcfce7; color:#166534;}
-  .promo-banner.upcoming{background:#dbeafe; color:#1e40af;}
-  .promo-banner.ended{background:#f3f4f6; color:#6b7280;}
-  .promo-banner .banner-icon{font-size:16px;}
-  .promo-banner .banner-time{font-family:'SF Mono','Consolas','Courier New',monospace; font-size:15px; letter-spacing:.5px; background:rgba(255,255,255,.22); padding:3px 10px; border-radius:5px; font-variant-numeric:tabular-nums;}
-  .promo-banner .banner-date{opacity:.92; font-weight:500;}
-  @keyframes pulseRed{0%,100%{box-shadow:0 2px 8px rgba(220,38,38,.25);}50%{box-shadow:0 2px 20px rgba(220,38,38,.5);}}
-  .cat-tag{display:inline-block; margin-left:6px; font-size:10px; padding:3px 8px; border-radius:20px; background:#f3f4f6; color:#4b5563; font-weight:700; text-transform:uppercase; letter-spacing:.3px;}
-  /* Avertissement discret sous les détails : migration opérateur, structure de prix à paliers, etc. */
-  .offer-warning{font-size:11px; color:#92400e; background:#fef3c7; border-left:3px solid #f59e0b; padding:6px 10px; border-radius:4px; margin-top:8px; line-height:1.45;}
+
+  /* interrupteurs on/off */
+  .sw-row{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:5px 0; cursor:pointer;}
+  .sw-row span{font-size:12px; font-weight:500; color:var(--ink-2); text-transform:none; letter-spacing:0;}
+  .sw{position:relative; width:32px; height:18px; flex:0 0 32px; background:var(--line); border-radius:20px; transition:background .15s;}
+  .sw::after{content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; background:#fff; border-radius:50%; transition:transform .15s; box-shadow:0 1px 2px rgba(0,0,0,.2);}
+  .sw-row input{position:absolute; opacity:0; width:0; height:0;}
+  .sw-row input:checked + .sw{background:var(--accent);}
+  .sw-row input:checked + .sw::after{transform:translateX(14px);}
+
+  /* ---------- Barre de compte ---------- */
+  .count{font-size:12px; color:var(--muted); margin:0 0 8px; padding:0; display:flex;
+    justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; font-weight:500;}
+  .count b{color:var(--ink); font-weight:700;}
+  .reset-link{font-size:11.5px; color:var(--accent); cursor:pointer; font-weight:600; white-space:nowrap;}
+  .reset-link:hover{color:var(--accent-dark); text-decoration:underline;}
+
+  /* ---------- Lignes (ticker) ---------- */
+  .grid{max-width:none; margin:0; padding:0; display:flex; flex-direction:column;
+    background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .card{background:var(--card); border:none; border-bottom:1px solid var(--line-2); border-radius:0;
+    padding:0; display:block; min-width:0;}
+  .card:last-child{border-bottom:none;}
+
+  .row{display:grid; grid-template-columns:minmax(0,26px) minmax(0,1fr) minmax(0,140px) minmax(0,92px) minmax(0,132px) minmax(0,84px);
+    gap:10px; align-items:center; padding:9px 12px; cursor:pointer; transition:background .1s;}
+  .row:hover{background:#F7F9FC;}
+  .card.open .row{background:#F4F7FF;}
+  .row-dot{width:9px; height:9px; border-radius:50%; justify-self:center;}
+  .dot-swisscom{background:var(--swisscom);} .dot-sunrise{background:var(--sunrise);} .dot-salt{background:var(--salt);}
+  .dot-init7{background:var(--init7);} .dot-regional{background:var(--regional);} .dot-choice{background:var(--choice);}
+  .row-id{min-width:0;}
+  .row-name{font-size:13.5px; font-weight:700; letter-spacing:-0.2px; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .row-sub{font-size:11px; color:var(--muted); font-weight:400; margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .row-data{font-size:11.5px; color:var(--ink-2); font-weight:500; min-width:0; line-height:1.35;}
+  .row-data em{font-style:normal; color:var(--muted); font-weight:400;}
+  .net-tag{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
+    padding:2.5px 6px; border-radius:4px; width:fit-content; color:#fff; white-space:nowrap;}
+  .net-swisscom{background:var(--swisscom);} .net-sunrise{background:var(--sunrise);} .net-salt{background:var(--salt);}
+  .net-init7{background:var(--init7);} .net-regional{background:var(--regional);} .net-choice{background:var(--choice);}
+  .row-price{text-align:right; min-width:0;}
+  .row-chf{font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.4px; white-space:nowrap;}
+  .row-chf .cur{font-size:10px; font-weight:600; color:var(--muted); margin-right:2px;}
+  .row-was{font-size:10.5px; color:var(--muted); text-decoration:line-through; margin-right:4px;}
+  .row-off{display:inline-block; font-size:10px; font-weight:700; color:var(--green);
+    background:var(--green-bg); padding:1px 5px; border-radius:3px; white-space:nowrap;}
+  .row-per{font-size:10px; color:var(--muted); font-weight:400;}
+  .row-go{display:inline-block; background:var(--accent); color:#fff; text-decoration:none; font-size:11.5px;
+    font-weight:700; padding:7px 10px; border-radius:6px; white-space:nowrap; text-align:center; justify-self:end;}
+  .row-go:hover{background:var(--accent-dark);}
+  .row-caret{font-size:9px; color:var(--muted); margin-left:5px; transition:transform .15s; display:inline-block;}
+  .card.open .row-caret{transform:rotate(90deg);}
+
+  /* ---------- Panneau de détail (accordéon) ---------- */
+  .row-detail{display:none; padding:0 12px 14px 48px; background:#FBFCFE; border-top:1px solid var(--line-2);}
+  .card.open .row-detail{display:block;}
+  .rd-warn{background:var(--amber-bg); border-left:3px solid var(--amber); color:#6B4E06;
+    padding:8px 11px; border-radius:0 5px 5px 0; font-size:12px; line-height:1.5; margin:12px 0;}
+  .rd-warn b{color:#4A3604;}
+  .rd-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+    background:var(--line-2); border:1px solid var(--line-2); border-radius:6px; overflow:hidden; margin-top:12px;}
+  .rd-cell{background:var(--card); padding:7px 10px; min-width:0;}
+  .rd-k{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted);}
+  .rd-v{font-size:12.5px; font-weight:600; color:var(--ink); margin-top:2px; word-break:break-word;}
+  .rd-note{font-size:12px; color:var(--ink-2); line-height:1.55; margin-top:12px;}
+  .rd-note b{font-weight:700; color:var(--ink);}
+  .rd-actions{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; align-items:center;}
+
+  /* ---------- Bandeau promo ---------- */
+  .promo-banner{padding:6px 12px; font-weight:600; font-size:12px; display:flex; align-items:center;
+    gap:7px; flex-wrap:wrap; border-bottom:1px solid var(--line-2);}
+  .promo-banner.urgent{background:#FEF2F2; color:#B42318; border-left:3px solid #D92D20;}
+  .promo-banner.attention{background:var(--amber-bg); color:#8A6508; border-left:3px solid var(--amber);}
+  .promo-banner.normal{background:var(--green-bg); color:var(--green); border-left:3px solid var(--green);}
+  .promo-banner.upcoming{background:#EEF3FF; color:var(--accent-dark); border-left:3px solid var(--accent);}
+  .promo-banner.ended{background:var(--bg); color:var(--muted); border-left:3px solid var(--line);}
+  .promo-banner .banner-icon{font-size:13px;}
+  .promo-banner .banner-time{font-family:var(--mono); font-weight:700; font-size:12.5px; letter-spacing:.4px;
+    background:rgba(20,22,26,.07); padding:1px 7px; border-radius:4px; font-variant-numeric:tabular-nums;}
+  .promo-banner .banner-date{opacity:.85; font-weight:500;}
+
+  /* ---------- Pastilles ---------- */
+  .roaming-pill{display:inline-block; font-size:10px; padding:1.5px 6px; border-radius:4px; width:fit-content; font-weight:600;}
+  .roaming-yes{background:var(--green-bg); color:var(--green);}
+  .roaming-no{background:var(--bg); color:var(--muted);}
+  .roaming-pill.affiliate{background:#EEF3FF; color:var(--accent-dark); cursor:help;}
+  .age-pill{background:var(--amber-bg); color:#8A6508;}
+  .cat-tag{display:inline-block; margin-left:5px; font-size:9.5px; padding:2px 6px; border-radius:4px;
+    background:var(--bg); color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.4px;}
+  .std-price{font-size:10.5px; color:var(--muted); margin-top:1px; word-break:break-word; font-weight:400;}
+
+  /* ---------- Avertissement (legacy, réutilisé dans le détail) ---------- */
+  .offer-warning{font-size:11.5px; color:#6B4E06; background:var(--amber-bg); border-left:3px solid var(--amber);
+    padding:7px 10px; border-radius:0 5px 5px 0; margin-top:10px; line-height:1.5;}
   .offer-warning .warn-icon{margin-right:4px;}
-  /* Version repliable pour les warnings longs — même principe que .channels-toggle */
-  .offer-warning.collapsible summary{cursor:pointer; list-style:none; font-weight:600; user-select:none; display:flex; align-items:center; gap:4px;}
+  .offer-warning.collapsible summary{cursor:pointer; list-style:none; font-weight:700; user-select:none; display:flex; align-items:center; gap:4px;}
   .offer-warning.collapsible summary::-webkit-details-marker{display:none;}
-  .offer-warning.collapsible summary::after{content:"▼"; font-size:9px; margin-left:auto; opacity:.6;}
-  .offer-warning.collapsible[open] summary::after{content:"▲";}
-  .offer-warning.collapsible .warn-detail{margin-top:6px; padding-top:6px; border-top:1px dashed rgba(146,64,14,.35);}
-  .price{text-align:right; min-width:0; max-width:280px; overflow-wrap:anywhere;}
-  .price .chf{font-size:20px; font-weight:800; color:var(--ink);}
-  .price .per{font-size:11px; color:var(--muted);}
-  .offer-btn{display:inline-block; background:var(--red); color:#fff; text-decoration:none; font-size:12px; font-weight:700; padding:10px 14px; border-radius:8px; white-space:nowrap; text-align:center;}
-  .channels-toggle{grid-column:1/-1; margin-top:8px; border-top:1px dashed var(--line); padding-top:8px;}
-  .channels-toggle summary{cursor:pointer; font-size:12px; font-weight:700; color:var(--red-dark); list-style:none; user-select:none;}
+  .offer-warning.collapsible summary::after{content:"▾"; font-size:10px; margin-left:auto; opacity:.7;}
+  .offer-warning.collapsible[open] summary::after{content:"▴";}
+  .offer-warning.collapsible .warn-detail{margin-top:6px; padding-top:6px; border-top:1px dashed rgba(184,134,11,.4);}
+
+  /* ---------- Boutons ---------- */
+  .offer-btn{display:inline-block; background:var(--accent); color:#fff; text-decoration:none; font-size:11.5px;
+    font-weight:700; padding:7px 11px; border-radius:6px; white-space:nowrap; text-align:center;}
+  .offer-btn:hover{background:var(--accent-dark);}
+  .cmp-btn{padding:6px 10px; border:1px solid var(--line); background:var(--card); color:var(--ink-2);
+    border-radius:6px; font-size:11px; font-weight:700; cursor:pointer; text-align:center; white-space:nowrap; font-family:inherit;}
+  .cmp-btn:hover:not(:disabled){border-color:var(--ink); background:var(--bg);}
+  .cmp-btn.cmp-btn-added{background:var(--green-bg); color:var(--green); border-color:#B9DFCD;}
+  .cmp-btn:disabled{opacity:.35; cursor:not-allowed; background:var(--bg);}
+
+  /* ---------- Sparkline prix ---------- */
+  .price-history{display:flex; flex-direction:column; align-items:flex-start; margin-top:8px;}
+  .price-history svg{display:block; opacity:.9;}
+  .price-history .ph-note{margin-top:2px; font-size:9.5px; color:var(--muted); letter-spacing:.1px;}
+  .price-history .ph-point{cursor:pointer;}
+  #ph-tooltip{position:fixed; z-index:1000; background:var(--ink); color:#fff; padding:5px 9px; border-radius:5px;
+    font-size:11.5px; font-weight:600; pointer-events:none; white-space:nowrap; box-shadow:0 3px 10px rgba(0,0,0,.22); font-family:inherit;}
+  #ph-tooltip[hidden]{display:none;}
+
+  /* ---------- Chaînes TV ---------- */
+  .channels-toggle{margin-top:12px; border-top:1px solid var(--line-2); padding-top:10px;}
+  .channels-toggle summary{cursor:pointer; font-size:11.5px; font-weight:700; color:var(--accent); list-style:none; user-select:none;}
   .channels-toggle summary::-webkit-details-marker{display:none;}
-  .channels-toggle summary::before{content:"▶ "; font-size:9px; margin-right:4px;}
-  .channels-toggle[open] summary::before{content:"▼ ";}
-  .channels-list{font-size:12px; line-height:1.6; color:var(--ink); margin-top:8px;}
-  .channels-list h5{margin:8px 0 4px; font-size:12px; color:var(--red-dark); text-transform:uppercase; letter-spacing:.3px;}
+  .channels-toggle summary::before{content:"▸ "; font-size:10px; margin-right:3px;}
+  .channels-toggle[open] summary::before{content:"▾ ";}
+  .channels-list{font-size:11.5px; line-height:1.65; color:var(--ink-2); margin-top:8px;}
+  .channels-list h5{margin:8px 0 4px; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; font-weight:700;}
   .channels-list h5:first-child{margin-top:0;}
   .channels-list .channels-empty{color:var(--muted); font-style:italic;}
-  .chan-search{width:100%; box-sizing:border-box; padding:6px 10px; margin-bottom:8px; border:1px solid var(--line); border-radius:6px; font-size:12px; font-family:inherit; background:#fff;}
-  .chan-search:focus{outline:none; border-color:var(--red); box-shadow:0 0 0 2px rgba(213,43,30,.15);}
-  .chan-content{max-height:280px; overflow-y:auto; padding-right:8px;}
-  .chan{display:inline; color:var(--ink); cursor:pointer; padding:0 2px; border-radius:3px;}
-  .chan:hover{background:rgba(0,0,0,.06); color:var(--red-dark);}
-  .chan:not(:last-child)::after{content:" · "; color:var(--muted);}
+  .chan-search{width:100%; box-sizing:border-box; padding:6px 9px; margin-bottom:8px; border:1px solid var(--line);
+    border-radius:6px; font-size:12px; font-family:inherit; background:var(--card); color:var(--ink);}
+  .chan-search:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,94,255,.14);}
+  .chan-content{max-height:260px; overflow-y:auto; padding-right:6px;}
+  .chan{display:inline-block; padding:2px 7px; margin:0 3px 3px 0; background:var(--bg); border:1px solid var(--line-2);
+    border-radius:4px; color:var(--ink-2); cursor:pointer; font-size:11px; font-weight:500;}
+  .chan:hover{background:#EEF3FF; border-color:var(--accent); color:var(--accent-dark);}
+  .chan:not(:last-child)::after{content:"";}
   .chan[hidden]{display:none;}
-  .chan-selected{background:#e6f4ea; color:#1e7a3d; font-weight:700;}
+  .chan-selected{background:var(--green-bg); border-color:#B9DFCD; color:var(--green); font-weight:700;}
   .chan-selected::before{content:"✓ ";}
-  .chan-selected:hover{background:#cfe9d5;}
-  .tab-badge{display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 5px; margin-left:4px; background:var(--red); color:#fff; border-radius:20px; font-size:11px; font-weight:800;}
-  .tab-badge[hidden]{display:none !important;}
-  .card-actions{display:flex; flex-direction:column; gap:6px;}
-  .cmp-btn{padding:7px 10px; border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; text-align:center; white-space:nowrap; font-family:inherit;}
-  .cmp-btn:hover:not(:disabled){border-color:var(--ink); background:var(--paper);}
-  .cmp-btn.cmp-btn-added{background:#e6f4ea; color:#1e7a3d; border-color:#b3dcc0;}
-  .cmp-btn.cmp-btn-added:hover{background:#cfe9d5;}
-  .age-pill{background:#fef3c7; color:#78350f; font-weight:700;}
-  .price-history{display:flex; flex-direction:column; align-items:flex-end; margin-top:4px;}
-  .price-history svg{display:block; opacity:0.9;}
-  .price-history .ph-note{margin-top:1px; font-size:9px; color:var(--muted); letter-spacing:0.1px; text-align:right;}
-  .price-history .ph-point{cursor:pointer;}
-  #ph-tooltip{position:fixed; z-index:1000; background:var(--ink); color:#fff; padding:5px 10px; border-radius:6px; font-size:12px; font-weight:600; pointer-events:none; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,0.2); font-family:inherit;}
-  #ph-tooltip[hidden]{display:none;}
-  .cmp-btn:disabled{opacity:.35; cursor:not-allowed; background:#f4f0ea;}
-  .cmp-table{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:16px;}
-  .cmp-table th, .cmp-table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--line); font-size:13px; vertical-align:top;}
-  .cmp-table thead th{background:var(--ink); color:#fff; font-size:12px; text-transform:uppercase; letter-spacing:.4px;}
-  .cmp-table tbody th{background:var(--paper); color:var(--muted); font-weight:600; font-size:12px; width:180px;}
-  .cmp-table tbody tr:last-child td, .cmp-table tbody tr:last-child th{border-bottom:none;}
-  .cmp-table td.cmp-best{background:#e6f4ea; font-weight:700; color:#1e7a3d;}
-  .cmp-col-remove{background:none; border:none; color:#fff; opacity:.7; font-size:16px; cursor:pointer; margin-left:6px; padding:0;}
-  .cmp-col-remove:hover{opacity:1; color:#ffb3ac;}
-  .cmp-empty{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:32px 24px; text-align:center; color:var(--muted); font-size:14px;}
-  .cmp-header-bar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin:16px 0 4px; font-size:13px; color:var(--muted);}
-  .cmp-clear-btn{background:var(--card); border:1px solid var(--line); color:var(--red-dark); padding:6px 12px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;}
-  .cmp-clear-btn:hover{background:var(--paper); border-color:var(--red);}
-  .cmp-table td .offer-btn{padding:6px 10px; font-size:11px;}
-  .cmp-section-header th{background:var(--paper) !important; color:var(--ink) !important; text-transform:none !important; letter-spacing:0 !important; font-size:14px !important; font-weight:700; padding-top:16px !important;}
-  .cmp-exclusive{vertical-align:top;}
-  .cmp-exclusive .cmp-excl-count{font-weight:700; margin-bottom:6px; color:#1e7a3d; font-size:12px;}
-  .cmp-exclusive .chan-group{line-height:1.7;}
-  .cmp-nolist{color:var(--muted); font-style:italic; font-size:12px;}
-  .cmp-noexcl{color:var(--muted); font-size:12px;}
-  .cmp-common-summary{cursor:pointer; font-weight:700; color:var(--muted); font-size:13px; list-style:none;}
-  .cmp-common-summary::-webkit-details-marker{display:none;}
-  .cmp-common-summary::before{content:"▶ "; font-size:9px; margin-right:4px;}
-  details[open] > .cmp-common-summary::before{content:"▼ ";}
-  .cmp-common-list{margin-top:10px; max-height:220px; overflow-y:auto; padding:8px 10px; background:var(--paper); border-radius:6px; line-height:1.7;}
-  .cmp-excl-more{cursor:pointer; font-size:11px; color:var(--red-dark); list-style:none; margin-top:8px; font-weight:600;}
-  .cmp-excl-more::-webkit-details-marker{display:none;}
-  .cmp-excl-more::before{content:"▶ "; font-size:9px; margin-right:3px;}
-  details[open] > .cmp-excl-more::before{content:"▼ ";}
-  @media(max-width:720px){
-    .cmp-table{font-size:12px;}
-    .cmp-table th, .cmp-table td{padding:7px 8px;}
-    .cmp-table tbody th{width:110px; font-size:11px;}
-  }
-  .chan-nomatch{margin-top:8px; padding:8px 10px; background:#fff7ed; border-left:3px solid #d59a2b; color:#7a5a1e; font-size:12px; border-radius:0 4px 4px 0;}
-  .chan-tag{display:inline-flex; align-items:center; gap:6px; padding:4px 4px 4px 10px; background:var(--ink); color:#fff; border-radius:20px; font-size:12px; font-weight:600;}
-  .chan-tag button{background:rgba(255,255,255,.2); color:#fff; border:none; width:18px; height:18px; border-radius:50%; font-size:14px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
-  .chan-tag button:hover{background:var(--red);}
-  #tv-channel-add:hover{background:var(--red-dark) !important; border-color:var(--red-dark) !important;}
-  .chan-suggestions{position:absolute; top:100%; left:0; right:0; margin-top:2px; background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.08); max-height:220px; overflow-y:auto; z-index:20;}
-  .chan-suggestion{padding:6px 12px; font-size:13px; cursor:pointer; border-bottom:1px solid #f4f0ea;}
+  .chan-nomatch{margin-top:8px; padding:7px 10px; background:var(--amber-bg); border-left:3px solid var(--amber);
+    color:#6B4E06; font-size:11.5px; border-radius:0 4px 4px 0;}
+  .chan-tag{display:inline-flex; align-items:center; gap:5px; padding:3px 3px 3px 9px; background:var(--ink);
+    color:#fff; border-radius:5px; font-size:11.5px; font-weight:600;}
+  .chan-tag button{background:rgba(255,255,255,.22); color:#fff; border:none; width:16px; height:16px;
+    border-radius:3px; font-size:13px; line-height:1; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; padding:0;}
+  .chan-tag button:hover{background:var(--accent);}
+  #tv-channel-add:hover{background:var(--accent-dark) !important; border-color:var(--accent-dark) !important;}
+  .chan-suggestions{position:absolute; top:100%; left:0; right:0; margin-top:2px; background:var(--card);
+    border:1px solid var(--line); border-radius:6px; box-shadow:0 4px 14px rgba(20,22,26,.1); max-height:220px; overflow-y:auto; z-index:20;}
+  .chan-suggestion{padding:6px 11px; font-size:12.5px; cursor:pointer; border-bottom:1px solid var(--line-2);}
   .chan-suggestion:last-child{border-bottom:none;}
-  .chan-suggestion:hover, .chan-suggestion.active{background:var(--paper); color:var(--red-dark);}
-  .chan-suggestion mark{background:#ffe89a; color:inherit; padding:0 1px; border-radius:2px;}
-  .offer-btn:hover{background:var(--red-dark);}
-  footer{max-width:1080px; margin:40px auto 0; padding:20px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);}
-  footer a{color:var(--red-dark);}
+  .chan-suggestion:hover, .chan-suggestion.active{background:var(--bg); color:var(--accent-dark);}
+  .chan-suggestion mark{background:#FFF0B3; color:inherit; padding:0 1px; border-radius:2px;}
+
+  /* ---------- Comparateur ---------- */
+  .cmp-table{width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; overflow:hidden; margin-top:14px;}
+  .cmp-table th, .cmp-table td{padding:9px 11px; text-align:left; border-bottom:1px solid var(--line-2); font-size:12.5px; vertical-align:top;}
+  .cmp-table thead th{background:var(--ink); color:#fff; font-size:11px; text-transform:uppercase; letter-spacing:.5px; font-weight:700;}
+  .cmp-table tbody th{background:var(--bg); color:var(--muted); font-weight:600; font-size:11px; width:170px;}
+  .cmp-table tbody tr:last-child td, .cmp-table tbody tr:last-child th{border-bottom:none;}
+  .cmp-table td.cmp-best{background:var(--green-bg); font-weight:700; color:var(--green);}
+  .cmp-col-remove{background:none; border:none; color:#fff; opacity:.7; font-size:15px; cursor:pointer; margin-left:5px; padding:0;}
+  .cmp-col-remove:hover{opacity:1;}
+  .cmp-empty{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:30px 22px; text-align:center; color:var(--muted); font-size:13px;}
+  .cmp-header-bar{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin:14px 0 4px; font-size:12.5px; color:var(--muted);}
+  .cmp-clear-btn{background:var(--card); border:1px solid var(--line); color:var(--accent); padding:6px 11px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .cmp-clear-btn:hover{background:var(--bg); border-color:var(--accent);}
+  .cmp-table td .offer-btn{padding:5px 9px; font-size:11px;}
+  .cmp-section-header th{background:var(--bg) !important; color:var(--ink) !important; text-transform:none !important; letter-spacing:0 !important; font-size:13px !important; font-weight:700; padding-top:14px !important;}
+  .cmp-exclusive{vertical-align:top;}
+  .cmp-exclusive .cmp-excl-count{font-weight:700; margin-bottom:5px; color:var(--green); font-size:11.5px;}
+  .cmp-exclusive .chan-group{line-height:1.7;}
+  .cmp-nolist{color:var(--muted); font-style:italic; font-size:11.5px;}
+  .cmp-noexcl{color:var(--muted); font-size:11.5px;}
+  .cmp-common-summary{cursor:pointer; font-weight:700; color:var(--muted); font-size:12.5px; list-style:none;}
+  .cmp-common-summary::-webkit-details-marker{display:none;}
+  .cmp-common-summary::before{content:"▸ "; font-size:10px; margin-right:3px;}
+  details[open] > .cmp-common-summary::before{content:"▾ ";}
+  .cmp-common-list{margin-top:9px; max-height:220px; overflow-y:auto; padding:8px 10px; background:var(--bg); border-radius:5px; line-height:1.7;}
+  .cmp-excl-more{cursor:pointer; font-size:11px; color:var(--accent); list-style:none; margin-top:7px; font-weight:600;}
+  .cmp-excl-more::-webkit-details-marker{display:none;}
+  .cmp-excl-more::before{content:"▸ "; font-size:9px; margin-right:3px;}
+  details[open] > .cmp-excl-more::before{content:"▾ ";}
+  .tab-badge{display:inline-flex; align-items:center; justify-content:center; min-width:17px; height:17px; padding:0 5px;
+    margin-left:4px; background:var(--accent); color:#fff; border-radius:20px; font-size:10.5px; font-weight:700;}
+  .tab-badge[hidden]{display:none !important;}
+
+  /* ---------- Divers ---------- */
+  .notice{background:var(--amber-bg); border:1px solid #F0E2B8; color:#6B4E06; font-size:12px;
+    padding:9px 13px; border-radius:8px; margin:0 0 10px; width:auto;}
+  footer{max-width:1180px; margin:36px auto 0; padding:18px 20px; font-size:11.5px; color:var(--muted); border-top:1px solid var(--line);}
+  footer a{color:var(--accent);}
   .hidden{display:none !important;}
-  .empty{padding:30px; text-align:center; color:var(--muted); font-size:14px;}
-  .reset-link{font-size:12px; color:var(--red-dark); cursor:pointer; text-decoration:underline; white-space:nowrap;}
-  .promo-card{grid-template-columns:150px minmax(0,1.4fr) minmax(0,1fr) auto;}
+  .empty{padding:28px; text-align:center; color:var(--muted); font-size:13px;}
+  .promo-card{}
+
+  /* ---------- Responsive ---------- */
+  @media(max-width:900px){
+    .shell{grid-template-columns:minmax(0,1fr); gap:12px;}
+    .shell-side{position:static;}
+    .controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px;}
+    .controls .section-title{grid-column:1/-1;}
+  }
   @media(max-width:720px){
-    header{padding:28px 20px 22px;}
-    header::after{font-size:130px; right:0; top:-10px;}
-    header h1{font-size:22px;}
-    header p{font-size:13px;}
-    .tabs{gap:6px;}
-    .tab{padding:8px 12px; font-size:13px;}
-    .controls{grid-template-columns:1fr; padding:14px;}
-    .card{grid-template-columns:1fr; text-align:left; padding:14px;}
-    .promo-card{grid-template-columns:1fr;}
-    .price{text-align:left; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
-    .price .per{margin-top:0;}
-    .offer-btn{width:100%; padding:12px 14px;}
-    .net-tag{margin-bottom:2px;}
+    header{padding:22px 18px 18px;}
+    header h1{font-size:20px;}
+    .tabs{gap:3px; padding:12px 14px 0;}
+    .tab{padding:7px 10px; font-size:12px;}
+    .shell{padding:14px 14px 0;}
+    .row{grid-template-columns:minmax(0,18px) minmax(0,1fr) minmax(0,100px); gap:8px; padding:10px;}
+    .row-data, .row-net{display:none;}
+    .row-go{grid-column:2/-1; justify-self:start; margin-top:6px;}
+    .row-detail{padding-left:14px;}
+    .cmp-table{font-size:11.5px;}
+    .cmp-table th, .cmp-table td{padding:7px 8px;}
+    .cmp-table tbody th{width:105px; font-size:10.5px;}
   }
   @media(max-width:400px){
-    header h1{font-size:20px;}
-    .tab{font-size:12px; padding:7px 10px;}
+    header h1{font-size:18px;}
+    .tab{font-size:11.5px; padding:6px 8px;}
   }
 </style>
 
@@ -412,6 +557,8 @@ function gtag_report_conversion(url) {
   <div class="tab" data-tab="compare">⚖️ Comparaison <span id="compare-count-badge" class="tab-badge" hidden>0</span></div>
 </div>
 
+<div class="shell">
+<aside class="shell-side">
 <div class="controls" id="mobile-controls">
   <div class="ctrl-group">
     <label>Réseau</label>
@@ -495,9 +642,6 @@ function gtag_report_conversion(url) {
   </div>
 </div>
 
-<div class="count" id="mobile-count"><span></span><span class="reset-link" onclick="resetMobile()">Réinitialiser les filtres</span></div>
-<div class="grid" id="mobile-grid"></div>
-
 <div class="hidden" id="prepaid-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
   <b>📶 Mobile prépayé</b> — offres à prix fixe par période (pas d'abonnement mensuel classique). Le prix affiché correspond à la durée totale du pass, pas à un mois. Comparateur croisé indisponible pour ces offres (unité de facturation incompatible).
 </div>
@@ -511,9 +655,6 @@ function gtag_report_conversion(url) {
     </div>
   </div>
 </div>
-
-<div class="count hidden" id="prepaid-count"><span></span><span class="reset-link" onclick="resetPrepaid()">Réinitialiser les filtres</span></div>
-<div class="grid hidden" id="prepaid-grid" style="margin-top:0;"></div>
 
 <div class="controls hidden" id="internet-controls">
   <div class="ctrl-group">
@@ -552,9 +693,6 @@ function gtag_report_conversion(url) {
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="internet-combo" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Combiné avec TV (voir onglet Internet + TV)</label>
   </div>
 </div>
-
-<div class="count hidden" id="internet-count"><span></span><span class="reset-link" onclick="resetInternet()">Réinitialiser les filtres</span></div>
-<div class="grid hidden" id="internet-grid"></div>
 
 <div class="hidden" id="dataonly-notice" style="max-width:1080px; margin:16px auto 0; padding:14px 20px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
   <b>📶 SIM Data only</b> — cartes SIM data seule pour appareils connectés (tablettes, routeurs, hotspots, IoT, montres). Pas d'appels ni de SMS. À ne pas confondre avec l'internet fixe maison (voir onglet Internet) ni avec les abonnements mobile classiques (voir onglet Mobile). Prix affiché par période (30 j, 365 j ou mois selon l'opérateur). Comparateur croisé indisponible pour ces offres (unité de facturation variable).
@@ -606,9 +744,6 @@ function gtag_report_conversion(url) {
     <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink); cursor:pointer;"><input type="checkbox" id="dataonly-router-only" style="width:16px; height:16px; accent-color:var(--red); cursor:pointer;"> Uniquement les offres explicitement autorisées pour routeur / hotspot / passerelle office</label>
   </div>
 </div>
-
-<div class="count hidden" id="dataonly-count"><span></span><span class="reset-link" onclick="resetDataOnly()">Réinitialiser les filtres</span></div>
-<div class="grid hidden" id="dataonly-grid" style="margin-top:0;"></div>
 
 <div class="controls hidden" id="tv-controls">
   <div class="ctrl-group">
@@ -675,10 +810,6 @@ function gtag_report_conversion(url) {
   </div>
 </div>
 
-<div class="count hidden" id="tv-count"><span></span><span class="reset-link" onclick="resetTV()">Réinitialiser les filtres</span></div>
-<div class="count hidden" id="tv-unverified-note" style="margin-top:-4px; font-style:italic;"></div>
-<div class="grid hidden" id="tv-grid"></div>
-
 <div class="notice hidden" id="combo-notice">📦 <b>Abonnements Internet + TV</b> — internet + TV, parfois + mobile et ligne fixe, dans un seul forfait. En général CHF 5 à 20/mois moins cher que de prendre les services séparément.</div>
 <div class="controls hidden" id="combo-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
@@ -732,9 +863,6 @@ function gtag_report_conversion(url) {
     </select>
   </div>
 </div>
-<div class="count hidden" id="combo-count"><span></span><span class="reset-link" onclick="resetCombo()">Réinitialiser les filtres</span></div>
-<div class="grid hidden" id="combo-grid" style="margin-top:0;"></div>
-
 <div class="notice hidden" id="promo-notice">🗓️ <b>Les promotions sont limitées dans le temps</b> — certaines expirent dans les prochains jours (voir statut sur chaque carte). Vérifie toujours la date sur le site de l'opérateur avant de souscrire, ces fenêtres promo bougent souvent.</div>
 <div class="controls hidden" id="promo-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
@@ -757,11 +885,34 @@ function gtag_report_conversion(url) {
     </div>
   </div>
 </div>
+<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie via le bouton « + Comparer » sur chaque carte, puis reviens ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
+</aside>
+<div class="shell-main">
+<div class="count" id="mobile-count"><span></span><span class="reset-link" onclick="resetMobile()">Réinitialiser les filtres</span></div>
+<div class="grid" id="mobile-grid"></div>
+
+<div class="count hidden" id="prepaid-count"><span></span><span class="reset-link" onclick="resetPrepaid()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="prepaid-grid" style="margin-top:0;"></div>
+
+<div class="count hidden" id="internet-count"><span></span><span class="reset-link" onclick="resetInternet()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="internet-grid"></div>
+
+<div class="count hidden" id="dataonly-count"><span></span><span class="reset-link" onclick="resetDataOnly()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="dataonly-grid" style="margin-top:0;"></div>
+
+<div class="count hidden" id="tv-count"><span></span><span class="reset-link" onclick="resetTV()">Réinitialiser les filtres</span></div>
+<div class="count hidden" id="tv-unverified-note" style="margin-top:-4px; font-style:italic;"></div>
+<div class="grid hidden" id="tv-grid"></div>
+
+<div class="count hidden" id="combo-count"><span></span><span class="reset-link" onclick="resetCombo()">Réinitialiser les filtres</span></div>
+<div class="grid hidden" id="combo-grid" style="margin-top:0;"></div>
+
 <div class="count hidden" id="promo-count"><span></span><span class="reset-link" onclick="resetPromo()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="promo-grid" style="margin-top:0;"></div>
 
-<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie via le bouton « + Comparer » sur chaque carte, puis reviens ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
 <div class="hidden" id="compare-container" style="max-width:1080px; margin:0 auto; padding:0 20px;"></div>
+</div>
+</div>
 
 
 <script>
@@ -776,6 +927,227 @@ const WINGO_RED_UNAVAILABLE_TITLE = "Listé au catalogue mais indisponible à la
 // Un `warningTitle` optionnel override le titre de la version repliée ; sinon on
 // prend la première portion avant le premier " : " ou ". " (heuristique correcte
 // sur nos textes actuels, à surveiller si on écrit des warnings très différents).
+/* ============================================================
+   TERMINAL — moteur de rendu en lignes compactes + accordéon.
+   Une seule fabrique de ligne pour les sept catégories : la
+   différence entre onglets tient dans la config passée, pas dans
+   sept fonctions parallèles à maintenir.
+   ============================================================ */
+
+function toggleRow(el){
+  const card = el.closest('.card');
+  if (card) card.classList.toggle('open');
+}
+
+function frDate(iso){
+  if (!iso) return '—';
+  const [y,m,d] = String(iso).split('-');
+  return `${d}.${m}.${y}`;
+}
+
+function goGB(v){
+  if (v === Infinity) return 'illimitée';
+  if (typeof v !== 'number') return '—';
+  return v >= 1 ? `${v} Go` : `${Math.round(v*1000)} Mo`;
+}
+
+function speedTxt(s){
+  if (typeof s !== 'number') return '—';
+  return s >= 1000 ? `${s/1000} Gbit/s` : `${s} Mbit/s`;
+}
+
+/* Cellule clé/valeur du panneau de détail */
+function rdCell(k, v){
+  if (v === undefined || v === null || v === '') return '';
+  return `<div class="rd-cell"><div class="rd-k">${k}</div><div class="rd-v">${v}</div></div>`;
+}
+function rdGrid(cells){
+  const inner = cells.filter(Boolean).join('');
+  return inner ? `<div class="rd-grid">${inner}</div>` : '';
+}
+
+/* Bloc prix de la ligne : prix courant, ancien prix barré, % de rabais */
+function rowPrice(item, per){
+  // `price` vaut null sur les entrées qui décrivent une remise sans tarif propre
+  // (Rabais Multi-Mobile, bundles Quickline…) : ne jamais appeler toFixed dessus.
+  const hasPrice = typeof item.price === "number";
+  const hasBefore = typeof item.beforePrice === "number";
+  const pct = (hasPrice && hasBefore && item.beforePrice > item.price)
+    ? Math.round((1 - item.price / item.beforePrice) * 100)
+    : null;
+  const was = (hasPrice && hasBefore && item.beforePrice > item.price)
+    ? `<span class="row-was">${item.beforePrice.toFixed(2)}</span>`
+    : '';
+  const off = pct ? `<span class="row-off">−${pct}%</span>` : '';
+  const main = !hasPrice
+    ? `<span class="row-chf" style="font-size:11.5px; line-height:1.3;">${item.discount || 'Voir détail'}</span>`
+    : item.price === 0
+      ? `<span class="row-chf">Inclus</span>`
+      : `<span class="row-chf"><span class="cur">CHF</span>${item.price.toFixed(2)}</span>`;
+  const sub = (was || off) ? `<div>${was}${off}</div>` : '';
+  return `<div class="row-price">${main}${hasPrice ? `<div class="row-per">${per}</div>` : ''}${sub}</div>`;
+}
+
+/* Fabrique de ligne commune */
+function rowCard(o){
+  const it = o.item;
+  const net = it.network || 'regional';
+  const banner = o.banner !== undefined ? o.banner : bannerForOffer(it);
+  const go = `<a class="row-go" href="${offerUrl(it)}" target="_blank" rel="${offerRel(it)}" onclick="event.stopPropagation(); gtag_report_conversion(); return true;">Voir →</a>`;
+  const netTag = o.netTag !== undefined ? o.netTag
+    : `<span class="net-tag net-${net}">${netLabel(net)}</span>`;
+  return `<div class="card">
+    ${banner}
+    <div class="row" onclick="toggleRow(this)">
+      <span class="row-dot dot-${net}"></span>
+      <div class="row-id">
+        <div class="row-name">${it.name}<span class="row-caret">▶</span></div>
+        <div class="row-sub">${o.sub || ''}</div>
+      </div>
+      <div class="row-data">${o.data || ''}</div>
+      <div class="row-net">${netTag}</div>
+      ${rowPrice(it, o.per || '/mois')}
+      ${go}
+    </div>
+    <div class="row-detail">
+      ${renderWarning(it)}
+      ${o.grid || ''}
+      ${o.note ? `<div class="rd-note">${o.note}</div>` : ''}
+      <div class="rd-actions">${o.actions || ''}${affiliatePill(it)}</div>
+      ${renderPriceHistory(it)}
+      ${o.extra || ''}
+    </div>
+  </div>`;
+}
+
+function renderMobileCard(item){
+  const country = document.getElementById("mobile-country").value;
+  const rc = item.callsRoaming;
+  const roamCalls = (country !== "all" && item.roaming)
+    ? (rc === Infinity ? 'illimités' : (typeof rc === "number" && rc > 0) ? `${rc} min` : 'non inclus')
+    : null;
+  const data = `${item.chUnlimited ? '<b>Illim</b> CH' : goGB(item.chDataGB) + ' CH'}`
+    + ` · <em>${item.roaming ? goGB(item.roamDataGB) + ' étr.' : 'CH seul'}</em>`;
+  const grid = rdGrid([
+    rdCell('Data Suisse', item.chUnlimited ? 'Illimitée' : goGB(item.chDataGB)),
+    rdCell('Data à l\'étranger', item.roaming ? item.roamData : 'Non incluse'),
+    rdCell('Appels 🇨🇭→🇨🇭', callsCHLabel(item)),
+    rdCell('Appels 🇨🇭→🌍', callsToLabel(item)),
+    rdCell('Appels 🌍→🌍', roamCalls || callsRoamingLabel(item)),
+    rdCell('Pays couverts', countriesLabel(item)),
+    rdCell('Réseau', netLabel(item.network)),
+    rdCell('Vérifié le', frDate(item.verifiedAt)),
+  ]);
+  const pills = [
+    item.networkChoice ? '<span class="roaming-pill roaming-yes" title="Cet abonnement te laisse choisir sur quel réseau il tourne, à la souscription, sans surcoût.">🔀 Choix Salt ou Swisscom</span>' : '',
+    item.ageRestriction ? `<span class="roaming-pill age-pill" title="Réservé aux moins de ${item.ageRestriction} ans.">🔞 Moins de ${item.ageRestriction}</span>` : '',
+    !chCallsIllim(item) ? '<span class="roaming-pill roaming-no">⚠ Appels CH non illimités</span>' : '',
+  ].filter(Boolean).join(' ');
+  return rowCard({
+    item, data, sub: item.promoNote || '',
+    grid,
+    note: item.details + (pills ? '<div style="margin-top:8px;">' + pills + '</div>' : ''),
+    actions: compareBtn(item, "mobile"),
+  });
+}
+
+function renderInternetCard(item){
+  const grid = rdGrid([
+    rdCell('Débit', speedTxt(item.speed)),
+    rdCell('Type de connexion', (item.connectionType || []).join(' · ') || '—'),
+    rdCell('Routeur perso', item.ownRouterAllowed ? 'Autorisé' : 'Imposé par l\'opérateur'),
+    rdCell('Réseau', netLabel(item.network)),
+    rdCell('Vérifié le', frDate(item.verifiedAt)),
+  ]);
+  return rowCard({
+    item, data: `<b>${speedTxt(item.speed)}</b>`, sub: item.promoNote || '',
+    grid, note: item.details, actions: compareBtn(item, "internet"),
+  });
+}
+
+function renderTVCard(item){
+  const net = item.network || 'regional';
+  const grid = rdGrid([
+    rdCell('Chaînes', item.channels ? item.channels + '+' : '—'),
+    rdCell('Replay', item.replayDays ? item.replayDays + ' jours' : 'Non inclus'),
+    rdCell('Enregistrement', item.recordingHours ? item.recordingHours + ' h' : 'Non inclus'),
+    rdCell('Streaming pur', item.streaming ? 'Oui (sans box)' : 'Box requise'),
+    rdCell('Opérateur', item.operator || netLabel(net)),
+    rdCell('Vérifié le', frDate(item.verifiedAt)),
+  ]);
+  return rowCard({
+    item,
+    data: `<b>${item.channels || '—'}+</b> ch. · <em>${item.replayDays ? item.replayDays + 'j replay' : 'sans replay'}</em>`,
+    sub: item.operator || '',
+    netTag: `<span class="net-tag net-${net}">${item.operator || netLabel(net)}</span>`,
+    grid, note: item.details,
+    actions: compareBtn(item, "tv"),
+    extra: renderChannels(item),
+  });
+}
+
+function renderComboCard(c){
+  const net = c.network || 'regional';
+  const grid = rdGrid([
+    rdCell('Débit', speedTxt(c.speed)),
+    rdCell('Chaînes TV', c.channels ? c.channels + '+' : '—'),
+    rdCell('Replay', c.replayDays ? c.replayDays + ' jours' : 'Non inclus'),
+    rdCell('Enregistrement', c.recordingHours ? c.recordingHours + ' h' : 'Non inclus'),
+    rdCell('Type de connexion', (c.connectionType || []).join(' · ') || '—'),
+    rdCell('Opérateur', c.operator || netLabel(net)),
+    rdCell('Vérifié le', frDate(c.verifiedAt)),
+  ]);
+  return rowCard({
+    item: c,
+    data: `<b>${speedTxt(c.speed)}</b> · <em>${c.channels ? c.channels + '+ ch.' : 'TV incl.'}</em>`,
+    sub: c.operator || '',
+    netTag: `<span class="net-tag net-${net}">${c.operator || netLabel(net)}</span>`,
+    grid, note: c.details,
+    actions: compareBtn(c, "combo"),
+    extra: renderChannels(c),
+  });
+}
+
+function renderPrepaidCard(item){
+  const grid = rdGrid([
+    rdCell('Data Suisse', item.chUnlimited ? 'Illimitée' : goGB(item.chDataGB)),
+    rdCell('Data à l\'étranger', item.roaming ? (item.roamData || 'Incluse') : 'Non incluse'),
+    rdCell('Réseau', netLabel(item.network)),
+    rdCell('Vérifié le', frDate(item.verifiedAt)),
+  ]);
+  return rowCard({
+    item,
+    data: item.chUnlimited ? '<b>Illim</b> CH' : goGB(item.chDataGB) + ' CH',
+    sub: item.promoNote || '',
+    per: item.periodDays ? `/ ${item.periodDays} j` : '/mois',
+    grid, note: item.details,
+  });
+}
+
+function renderDataOnlyCard(item){
+  const periodLabel = item.periodDays ? `/ ${item.periodDays} j` : '/mois';
+  const dataV = (typeof item.chDataGB === "number") ? goGB(item.chDataGB)
+    : item.chDataUnlimited ? `Illimitée · plafond ${item.speedMbit}/${item.uploadMbit || "?"} Mbit/s`
+    : '—';
+  const grid = rdGrid([
+    rdCell('Data Suisse', dataV),
+    rdCell('Période', item.periodDays ? item.periodDays + ' jours' : 'Mensuel'),
+    rdCell('Routeur / hotspot', item.routerAllowed === true ? 'Autorisé'
+      : item.routerAllowed === false ? 'Non autorisé' : 'Non précisé'),
+    rdCell('Opérateur', item.operator || netLabel(item.network)),
+    rdCell('Réseau', netLabel(item.network)),
+    rdCell('Vérifié le', frDate(item.verifiedAt)),
+  ]);
+  const yearNote = item.priceYear
+    ? `<br><b>Ou CHF ${item.priceYear.toFixed(2)}</b> pour 365 jours (économie CHF ${(item.price * 12 - item.priceYear).toFixed(2)} vs 12 × 30 j).`
+    : '';
+  return rowCard({
+    item, data: dataV.length > 22 ? '<b>Illim</b>' : `<b>${dataV}</b>`,
+    sub: item.operator || '', per: periodLabel,
+    grid, note: item.details + yearNote,
+  });
+}
+
 function renderWarning(item){
   if (!item || !item.warning) return '';
   const w = item.warning;
@@ -1357,23 +1729,7 @@ function renderCompareView(){
     </div>`;
 }
 
-function renderComboCard(c){
-  const priceBlock = c.price
-    ? `<div class="price"><div class="chf">CHF ${c.price.toFixed(2)}</div><div class="per">/mois</div></div>`
-    : `<div class="price"><div class="chf" style="font-size:14px;">Rabais combiné</div></div>`;
-  const hasTV = (c.replayDays !== undefined) || /\bTV\b/i.test(c.name);
-  return `<div class="card">
-    ${bannerForOffer(c)}
-    <div>
-      <span class="net-tag net-${c.network}">${c.operator}</span>
-      <div class="op-name">${c.name}</div>
-    </div>
-    <div class="details">${c.details} ${affiliatePill(c)}${renderWarning(c)}</div>
-    ${priceBlock}
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(c)}" target="_blank" rel="${offerRel(c)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(c, "combo")}</div>
-    ${hasTV ? renderChannels(c) : ""}
-  </div>`;
-}
+/* renderComboCard → moteur TERMINAL (voir rowCard) */
 
 function refreshCombo(){
   clampDualRange("combo-speed", "combo-speed-max");
@@ -1618,26 +1974,39 @@ function bannerForOffer(item){
 }
 
 function renderPromoCard(p){
-  const banner = promoBanner(p);
-  const codeLine = p.code ? `<div class="std-price">Code promo : <b>${p.code}</b></div>` : '';
-  const beforeLine = p.beforePrice
-    ? `<div class="std-price">au lieu de <s>CHF ${p.beforePrice.toFixed(2)}</s></div>`
-    : '';
-  const priceBlock = p.price
-    ? `<div class="price"><div class="chf">🔥 CHF ${p.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}</div>`
-    : `<div class="price"><div class="chf" style="font-size:15px; line-height:1.2;">🔥 ${p.discount}</div></div>`;
   const catLabel = {mobile:"📶 Mobile", internet:"🌐 Internet", tv:"📺 TV", combo:"📦 Internet + TV"}[p.category] || p.category;
+  const grid = rdGrid([
+    rdCell('Catégorie', catLabel),
+    rdCell('Opérateur', p.operator),
+    rdCell('Réseau', netLabel(p.network)),
+    rdCell('Code promo', p.code ? '<b>' + p.code + '</b>' : 'Aucun'),
+    rdCell('Fenêtre', (p.from ? frDate(String(p.from).slice(0,10)) : '—') + ' → ' + (p.to ? frDate(String(p.to).slice(0,10)) : '—')),
+  ]);
+  const data = p.discount ? p.discount : (p.beforePrice ? 'au lieu de CHF ' + p.beforePrice.toFixed(2) : '');
+  const priceCell = p.price
+    ? rowPrice(p, '/mois')
+    : '<div class="row-price"><span class="row-chf" style="font-size:12px; line-height:1.3;">' + (p.discount || 'Promo') + '</span></div>';
+  const go = '<a class="row-go" href="' + offerUrl(p) + '" target="_blank" rel="' + offerRel(p) + '" onclick="event.stopPropagation(); gtag_report_conversion(); return true;">Voir →</a>';
+  const net = p.network || 'regional';
   return `<div class="card">
-    ${banner}
-    <div>
-      <span class="net-tag net-${p.network}">${p.operator}</span>
-      <span class="cat-tag" title="Catégorie d'origine de l'offre">${catLabel}</span>
-      <div class="op-name">${p.name}</div>
-      ${codeLine}
+    ${promoBanner(p)}
+    <div class="row" onclick="toggleRow(this)">
+      <span class="row-dot dot-${net}"></span>
+      <div class="row-id">
+        <div class="row-name">${p.name}<span class="cat-tag">${catLabel}</span><span class="row-caret">▶</span></div>
+        <div class="row-sub">${p.operator}${p.code ? ' · code ' + p.code : ''}</div>
+      </div>
+      <div class="row-data">${data}</div>
+      <div class="row-net"><span class="net-tag net-${net}">${p.operator}</span></div>
+      ${priceCell}
+      ${go}
     </div>
-    <div class="details"><b>Ce qui est inclus :</b><br>${p.details}${renderWarning(p)}<div class="std-price" style="margin-top:6px;">${affiliatePill(p)}</div></div>
-    ${priceBlock}
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(p)}" target="_blank" rel="${offerRel(p)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(p, p.category)}</div>
+    <div class="row-detail">
+      ${renderWarning(p)}
+      ${grid}
+      <div class="rd-note"><b>Ce qui est inclus :</b><br>${p.details}</div>
+      <div class="rd-actions">${compareBtn(p, p.category)}${affiliatePill(p)}</div>
+    </div>
   </div>`;
 }
 
@@ -1959,31 +2328,7 @@ function filterChannelsIn(container){
   if (nm) nm.hidden = true;
 }
 
-function renderTVCard(item){
-  const flame = item.promo ? '🔥 ' : '';
-  const beforeLine = item.beforePrice
-    ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
-    : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : '');
-  const streamPill = item.streaming
-    ? '<span class="roaming-pill roaming-yes">✓ Streaming pur</span>'
-    : '<span class="roaming-pill roaming-no">Requiert TV-Box</span>';
-  const replayTxt = item.replayDays ? `${item.replayDays} j de replay` : (item.replayDays === 0 ? "replay 30h" : "replay non doc");
-  const recTxt = item.recordingHours ? `${item.recordingHours}h enregistrement` : (item.recordingHours === 0 ? "sans enregistrement" : "enreg. non doc");
-  const priceBlock = item.price === 0
-    ? `<div class="chf" style="font-size:22px;">Inclus</div><div class="per">avec l'abo internet</div>`
-    : `<div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>`;
-  return `<div class="card">
-    ${bannerForOffer(item)}
-    <div>
-      <span class="net-tag net-${item.network}">${item.operator}</span>
-      <div class="op-name">${item.name}</div>
-    </div>
-    <div class="details">${item.details}<span class="roaming-pill roaming-yes">${item.channels}+ chaînes</span>${streamPill}<div class="std-price"><b>Fonctionnalités :</b> ${replayTxt} · ${recTxt}</div> ${affiliatePill(item)}${renderWarning(item)}</div>
-    <div class="price">${priceBlock}${beforeLine}${renderPriceHistory(item)}</div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(item, "tv")}</div>
-    ${renderChannels(item)}
-  </div>`;
-}
+/* renderTVCard → moteur TERMINAL (voir rowCard) */
 
 // Renvoie true si l'offre `d` contient au moins une chaîne matchant `q` (déjà normalisé)
 function tvMatchesChannel(d, q){
@@ -2201,163 +2546,18 @@ function callsRoamingLabel(item){
   return "aucun";
 }
 
-function renderMobileCard(item){
-  const chPill = item.chUnlimited
-    ? '<span class="roaming-pill roaming-yes">♾️ Data Suisse illimitée</span>'
-    : '<span class="roaming-pill roaming-no">Data Suisse limitée</span>';
-  const pill = item.roaming
-    ? '<span class="roaming-pill roaming-yes">✓ Data à l\'étranger incluse</span>'
-    : '<span class="roaming-pill roaming-no">Suisse uniquement</span>';
-  const callsChPill = !chCallsIllim(item)
-    ? '<span class="roaming-pill roaming-no" title="Cette offre n\'inclut pas d\'appels illimités en Suisse — voir les détails de l\'offre.">⚠ Appels CH non illimités</span>'
-    : '';
-  const country = document.getElementById("mobile-country").value;
-  const rc = item.callsRoaming;
-  const roamCallsPill = (country !== "all" && item.roaming)
-    ? (rc === Infinity
-        ? '<span class="roaming-pill roaming-yes">📞 Appels 🌍→🌍 illimités</span>'
-        : (typeof rc === "number" && rc > 0)
-          ? `<span class="roaming-pill roaming-yes">📞 Appels 🌍→🌍 : ${rc} min</span>`
-          : '<span class="roaming-pill roaming-no">📞 Appels 🌍→🌍 non inclus</span>')
-    : '';
-  const flame = item.promo ? '🔥 ' : '';
-  const beforeLine = item.promo
-    ? (item.beforePrice
-        ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
-        : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : ''))
-    : '';
-  const choicePill = item.networkChoice
-    ? '<span class="roaming-pill roaming-yes" title="Cet abonnement te laisse choisir sur quel réseau il tourne, à la souscription, sans surcoût — une particularité rare sur le marché suisse.">🔀 Choix Salt ou Swisscom</span>'
-    : '';
-  const agePill = item.ageRestriction
-    ? `<span class="roaming-pill age-pill" title="Cette offre est réservée aux clients de moins de ${item.ageRestriction} ans. Passé cet âge, l'opérateur bascule automatiquement vers un plan adulte plus cher.">🔞 Réservé aux moins de ${item.ageRestriction}</span>`
-    : '';
-  return `<div class="card">
-    ${bannerForOffer(item)}
-    <div>
-      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
-      <div class="op-name">${item.name}</div>
-    </div>
-    <div class="details">${item.details}${chPill}${pill}${callsChPill}${roamCallsPill}${choicePill}${agePill}${affiliatePill(item)}<div class="std-price"><b>Data à l'étranger :</b> ${item.roamData}</div><div class="std-price"><b>Appels :</b> 🇨🇭→🇨🇭 ${callsCHLabel(item)} · 🇨🇭→🌍 ${callsToLabel(item)} · 🌍→🌍 ${callsRoamingLabel(item)}</div>${renderWarning(item)}</div>
-    <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}${renderPriceHistory(item)}</div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(item, "mobile")}</div>
-  </div>`;
-}
+/* renderMobileCard → moteur TERMINAL (voir rowCard) */
 
-function renderInternetCard(item){
-  const speedLabel = item.speed >= 1000 ? (item.speed/1000)+" Gbit/s" : item.speed+" Mbit/s";
-  const flame = item.promo ? '🔥 ' : '';
-  const beforeLine = item.promo
-    ? (item.beforePrice
-        ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
-        : (item.promoNote ? `<div class="std-price">${item.promoNote}</div>` : ''))
-    : '';
-  return `<div class="card">
-    ${bannerForOffer(item)}
-    <div>
-      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
-      <div class="op-name">${item.name}</div>
-    </div>
-    <div class="details">${item.details}<span class="roaming-pill roaming-no">Jusqu'à ${speedLabel}</span>${item.ownRouterAllowed ? '<span class="roaming-pill roaming-yes" title="Ce fournisseur autorise l\'utilisation de votre propre routeur/matériel, pas obligé de prendre le sien.">🔧 Routeur perso autorisé</span>' : ''} ${affiliatePill(item)}${renderWarning(item)}</div>
-    <div class="price"><div class="chf">${flame}CHF ${item.price.toFixed(2)}</div><div class="per">/mois</div>${beforeLine}${renderPriceHistory(item)}</div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a>${compareBtn(item, "internet")}</div>
-  </div>`;
-}
+/* renderInternetCard → moteur TERMINAL (voir rowCard) */
 
 // === Renderers pour les 2 nouveaux onglets prepaid et data-only ===
 // Ces catégories utilisent des prix par PÉRIODE (7j/30j/365j) et non par mois. Elles
 // sont volontairement EXCLUES du comparateur croisé (unité de facturation incompatible
 // avec les abonnements mensuels classiques) : pas de compareBtn dans le rendu.
 
-function renderPrepaidCard(item){
-  const roamingPill = item.roaming
-    ? '<span class="roaming-pill roaming-yes">✓ Roaming disponible (voir détails)</span>'
-    : '<span class="roaming-pill roaming-no">Suisse uniquement (recharge séparée pour l\'étranger)</span>';
+/* renderPrepaidCard → moteur TERMINAL (voir rowCard) */
 
-  let priceBlock, typePill, renewPill = '';
-  if (item.prepaidType === "credit") {
-    // SIM + crédit initial + tarif à la carte
-    typePill = '<span class="roaming-pill roaming-no" title="Modèle carte SIM avec crédit initial : pas de coût mensuel fixe, tu paies à l\'usage selon les tarifs indiqués dans les détails.">💳 Crédit rechargeable</span>';
-    const simPrice = item.price === 0 ? "SIM gratuite" : `SIM CHF ${item.price.toFixed(2)}`;
-    const creditLine = item.initialCreditCHF > 0
-      ? `<div class="std-price">+ CHF ${item.initialCreditCHF.toFixed(2)} de crédit initial offert</div>`
-      : (item.price === 0 ? '<div class="std-price">Sans crédit initial (paiement à l\'usage)</div>' : '');
-    priceBlock = `
-      <div class="chf">${simPrice}</div>
-      <div class="per">à l'achat, puis tarif à la carte</div>
-      ${creditLine}`;
-  } else {
-    // Flat : durée fixe + prix unique
-    typePill = '<span class="roaming-pill roaming-yes" title="Pack durée fixe : prix payé d\'un coup pour X jours d\'utilisation.">📆 Pack durée fixe</span>';
-    renewPill = item.autoRenew === true
-      ? '<span class="roaming-pill roaming-no" title="Le pass se réactive automatiquement à échéance. Désactivable dans le portail client.">🔁 Renouvellement automatique</span>'
-      : item.autoRenew === false
-        ? '<span class="roaming-pill roaming-yes" title="Aucun renouvellement automatique — extension manuelle requise à l\'échéance.">✋ Sans renouvellement auto</span>'
-        : '';
-    const d = item.periodDays;
-    const periodLabel = d === 7 ? "7 jours"
-      : d === 28 ? "28 jours"
-      : d === 30 ? "30 jours"
-      : d === 90 ? "90 jours (3 mois)"
-      : d === 180 ? "180 jours (6 mois)"
-      : d === 365 ? "365 jours (1 an)"
-      : `${d} jours`;
-    const beforeLine = item.promo && item.beforePrice
-      ? `<div class="std-price">au lieu de <s>CHF ${item.beforePrice.toFixed(2)}</s>${item.promoNote ? " · " + item.promoNote : ""}</div>`
-      : '';
-    priceBlock = `
-      <div class="chf">${item.promo ? "🔥 " : ""}CHF ${item.price.toFixed(2)}</div>
-      <div class="per">/ ${periodLabel}</div>
-      ${beforeLine}`;
-  }
-
-  return `<div class="card">
-    <div>
-      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
-      <div class="op-name">${item.name}</div>
-    </div>
-    <div class="details">${item.details}${typePill}${roamingPill}${renewPill}${affiliatePill(item)}</div>
-    <div class="price">
-      ${priceBlock}
-      ${renderPriceHistory(item)}
-    </div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a></div>
-  </div>`;
-}
-
-function renderDataOnlyCard(item){
-  const periodLabel = item.periodDays === 30 ? "/ 30 j"
-    : item.periodDays === 365 ? "/ 365 j"
-    : `/ ${item.periodDays} j`;
-  // Prix annuel affiché en second si dispo (ex : Digital Republic 30j + 365j)
-  const yearLine = item.priceYear
-    ? `<div class="std-price">ou <b>CHF ${item.priceYear.toFixed(2)}</b> pour 365 jours (économie CHF ${(item.price * 12 - item.priceYear).toFixed(2)} vs 12 × 30 j)</div>`
-    : '';
-  const routerPill = item.routerAllowed === true
-    ? '<span class="roaming-pill roaming-yes" title="Cette SIM peut être utilisée dans un routeur mobile, un hotspot, ou une passerelle office.">🔧 Autorisée pour routeur / hotspot</span>'
-    : item.routerAllowed === false
-      ? '<span class="roaming-pill roaming-no" title="Cette SIM n\'est PAS autorisée pour un routeur mobile ou une passerelle. Réservée aux appareils individuels (tablette, tracker, wearable).">📵 Non autorisée pour routeur</span>'
-      : '';
-  const dataLine = (typeof item.chDataGB === "number")
-    ? `<div class="std-price"><b>Data Suisse :</b> ${item.chDataGB} Go</div>`
-    : item.chDataUnlimited && item.speedMbit
-      ? `<div class="std-price"><b>Data Suisse :</b> illimitée · plafond vitesse ${item.speedMbit}/${item.uploadMbit || "?"} Mbit/s</div>`
-      : '';
-  return `<div class="card">
-    <div>
-      <span class="net-tag net-${item.network}">${netLabel(item.network)}</span>
-      <div class="op-name">${item.name}</div>
-    </div>
-    <div class="details">${item.details}${dataLine}${routerPill}${affiliatePill(item)}</div>
-    <div class="price">
-      <div class="chf">CHF ${item.price.toFixed(2)}</div>
-      <div class="per">${periodLabel}</div>
-      ${yearLine}
-      ${renderPriceHistory(item)}
-    </div>
-    <div class="card-actions"><a class="offer-btn" href="${offerUrl(item)}" target="_blank" rel="${offerRel(item)}" onclick="gtag_report_conversion(); return true;">Voir l'offre →</a></div>
-  </div>`;
-}
+/* renderDataOnlyCard → moteur TERMINAL (voir rowCard) */
 
 function refreshPrepaid(){
   const selectedNets = [...document.querySelectorAll('#prepaid-network input:checked')].map(i => i.dataset.net);
