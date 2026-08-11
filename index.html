@@ -891,7 +891,7 @@ function gtag_report_conversion(url) {
     </div>
   </div>
 </div>
-<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie via le bouton « + Comparer » sur chaque carte, puis reviens ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
+<div class="notice hidden" id="compare-notice">⚖️ <b>Comparaison côte à côte</b> — sélectionne jusqu'à 4 offres d'une même catégorie : clique une ligne pour la déplier, puis « + Comparer » dans le détail. Reviens ensuite ici pour les comparer ligne par ligne. Les meilleurs valeurs de chaque critère sont surlignées en vert.</div>
 </aside>
 <div class="shell-main">
 <div class="count" id="mobile-count"><span></span><span class="reset-link" onclick="resetMobile()">Réinitialiser les filtres</span></div>
@@ -973,7 +973,7 @@ function rdGrid(cells){
 }
 
 /* Bloc prix de la ligne : prix courant, ancien prix barré, % de rabais */
-function rowPrice(item, per){
+function rowPrice(item, per, zeroLabel){
   // `price` vaut null sur les entrées qui décrivent une remise sans tarif propre
   // (Rabais Multi-Mobile, bundles Quickline…) : ne jamais appeler toFixed dessus.
   const hasPrice = typeof item.price === "number";
@@ -988,20 +988,23 @@ function rowPrice(item, per){
   const main = !hasPrice
     ? `<span class="row-chf" style="font-size:11.5px; line-height:1.3;">${item.discount || 'Voir détail'}</span>`
     : item.price === 0
-      ? `<span class="row-chf">Inclus</span>`
+      ? `<span class="row-chf">${zeroLabel || "Inclus"}</span>`
       : `<span class="row-chf"><span class="cur">CHF</span>${item.price.toFixed(2)}</span>`;
   const sub = (was || off) ? `<div>${was}${off}</div>` : '';
-  return `<div class="row-price">${main}${hasPrice ? `<div class="row-per">${per}</div>` : ''}${sub}</div>`;
+  return `<div class="row-price">${main}${hasPrice && item.price !== 0 ? `<div class="row-per">${per}</div>` : ''}${sub}</div>`;
 }
 
 /* Fabrique de ligne commune */
 function rowCard(o){
   const it = o.item;
-  const net = it.network || 'regional';
+  const multi = Array.isArray(it.networkChoice) && it.networkChoice.length > 1;
+  const net = multi ? 'choice' : (it.network || 'regional');
   const banner = o.banner !== undefined ? o.banner : bannerForOffer(it);
   const go = `<a class="row-go" href="${offerUrl(it)}" target="_blank" rel="${offerRel(it)}" onclick="event.stopPropagation(); gtag_report_conversion(); return true;">Voir →</a>`;
   const netTag = o.netTag !== undefined ? o.netTag
-    : `<span class="net-tag net-${net}">${netShort(net)}</span>`;
+    : multi
+      ? `<span class="net-tag net-choice" title="Souscriptible au choix sur ${it.networkChoice.map(netShort).join(' ou ')}">${it.networkChoice.map(netShort).join('/')}</span>`
+      : `<span class="net-tag net-${net}">${netShort(net)}</span>`;
   return `<div class="card">
     ${banner}
     <div class="row" onclick="toggleRow(this)">
@@ -1012,7 +1015,7 @@ function rowCard(o){
       </div>
       <div class="row-data">${o.data || ''}</div>
       <div class="row-net">${netTag}</div>
-      ${rowPrice(it, o.per || '/mois')}
+      ${rowPrice(it, o.per || '/mois', o.zeroLabel)}
       ${go}
     </div>
     <div class="row-detail">
@@ -1126,6 +1129,9 @@ function renderPrepaidCard(item){
     data: item.chUnlimited ? '<b>Illim</b> CH' : goGB(item.chDataGB) + ' CH',
     sub: item.promoNote || '',
     per: item.periodDays ? `/ ${item.periodDays} j` : '/mois',
+    // « Inclus » vaut pour la TV fournie avec un abo internet ; une SIM prépayée
+    // à 0.- est gratuite, pas incluse dans autre chose.
+    zeroLabel: 'SIM gratuite',
     grid, note: item.details,
   });
 }
