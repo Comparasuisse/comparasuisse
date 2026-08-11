@@ -269,13 +269,13 @@
   .net-chip:has(input:checked){background:var(--ink); color:#fff; border-color:var(--ink);}
 
   /* interrupteurs on/off */
-  .sw-row{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:5px 0; cursor:pointer;}
-  .sw-row span{font-size:12px; font-weight:500; color:var(--ink-2); text-transform:none; letter-spacing:0;}
-  .sw{position:relative; width:32px; height:18px; flex:0 0 32px; background:var(--line); border-radius:20px; transition:background .15s;}
-  .sw::after{content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; background:#fff; border-radius:50%; transition:transform .15s; box-shadow:0 1px 2px rgba(0,0,0,.2);}
-  .sw-row input{position:absolute; opacity:0; width:0; height:0;}
-  .sw-row input:checked + .sw{background:var(--accent);}
-  .sw-row input:checked + .sw::after{transform:translateX(14px);}
+  .ctrl-group label.sw-row{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:5px 0; cursor:pointer;}
+  .ctrl-group label.sw-row span{font-size:12px; font-weight:500; color:var(--ink-2); text-transform:none; letter-spacing:0;}
+  .sw{display:block; flex:0 0 32px; position:relative; width:32px; height:18px; flex:0 0 32px; background:var(--line); border-radius:20px; transition:background .15s;}
+  .sw::after{content:""; position:absolute; top:2px; left:2px; width:14px; height:14px; background:#fff; border-radius:50%; transition:transform .15s; box-shadow:0 1px 2px rgba(0,0,0,.2); transform:var(--knob,translateX(0));}
+  .ctrl-group label.sw-row input{position:absolute; opacity:0; width:0; height:0;}
+  .ctrl-group label.sw-row .sw.on{background:var(--accent);}
+  .ctrl-group label.sw-row .sw.on::after{transform:translateX(14px);}
 
   /* ---------- Barre de compte ---------- */
   .count{font-size:12px; color:var(--muted); margin:0 0 8px; padding:0; display:flex;
@@ -560,6 +560,12 @@ function gtag_report_conversion(url) {
 <div class="shell">
 <aside class="shell-side">
 <div class="controls" id="mobile-controls">
+  <div class="ctrl-group">
+    <label>Filtres rapides</label>
+    <label class="sw-row"><span>Data à l’étranger incluse</span><input type="checkbox" id="mobile-sw-roam"><i class="sw"></i></label>
+    <label class="sw-row"><span>Appels vers l’étranger inclus</span><input type="checkbox" id="mobile-sw-callsto"><i class="sw"></i></label>
+    <label class="sw-row"><span>Roaming illimité</span><input type="checkbox" id="mobile-sw-roamunl"><i class="sw"></i></label>
+  </div>
   <div class="ctrl-group">
     <label>Réseau</label>
     <div class="net-checks" id="mobile-network">
@@ -995,7 +1001,7 @@ function rowCard(o){
   const banner = o.banner !== undefined ? o.banner : bannerForOffer(it);
   const go = `<a class="row-go" href="${offerUrl(it)}" target="_blank" rel="${offerRel(it)}" onclick="event.stopPropagation(); gtag_report_conversion(); return true;">Voir →</a>`;
   const netTag = o.netTag !== undefined ? o.netTag
-    : `<span class="net-tag net-${net}">${netLabel(net)}</span>`;
+    : `<span class="net-tag net-${net}">${netShort(net)}</span>`;
   return `<div class="card">
     ${banner}
     <div class="row" onclick="toggleRow(this)">
@@ -2208,7 +2214,7 @@ function renderChannels(item){
     <div class="chan-filter-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
     <div style="position:relative; margin-bottom:8px;" onclick="event.stopPropagation()">
       <div style="display:flex; gap:6px;">
-        <input class="chan-search" type="search" autocomplete="off" placeholder="Chercher parmi ${totalChannels} chaînes (clique une suggestion ou Entrée)" onkeydown="onChanCardKey(event, this)" oninput="updateChanCardSuggestions(this)" onfocus="updateChanCardSuggestions(this)" onblur="setTimeout(()=>{const d=this.closest('div').querySelector('.chan-suggestions'); if(d) d.hidden=true;}, 180)" style="flex:1;">
+        <input class="chan-search" type="search" autocomplete="off" placeholder="Chercher parmi ${totalChannels} chaînes (clique une suggestion ou Entrée)" onkeydown="onChanCardKey(event, this)" oninput="updateChanCardSuggestions(this); filterChannelsIn(this.closest('.channels-list'))" onfocus="updateChanCardSuggestions(this)" onblur="setTimeout(()=>{const d=this.closest('div').querySelector('.chan-suggestions'); if(d) d.hidden=true;}, 180)" style="flex:1;">
         <button type="button" class="chan-add" onclick="addChanFilterTag(this)" style="padding:6px 12px; border:1px solid var(--line); border-radius:6px; background:var(--ink); color:#fff; font-size:12px; font-weight:700; cursor:pointer;" title="Ajouter la chaîne comme filtre">+</button>
       </div>
       <div class="chan-suggestions" hidden></div>
@@ -2316,16 +2322,31 @@ function removeChanFilterTag(btn){
 // tag actif sont surlignées (classe .chan-selected). Aucune chaîne n'est cachée.
 function filterChannelsIn(container){
   const queries = [...container.querySelectorAll(".chan-filter-tags .chan-tag")].map(t => t.dataset.q);
+  // Frappe en cours : la saisie libre masque en direct les chaînes qui ne matchent
+  // pas, en plus du mécanisme de tags validés. Les tags restent la sélection
+  // persistante (pastille verte) ; la frappe n'est qu'un filtre d'affichage.
+  const input = container.querySelector(".chan-search");
+  const live = input ? normChannelSearch(input.value || "") : "";
+  let shown = 0;
   for (const s of container.querySelectorAll(".chan")) {
     const isSelected = queries.some(q => s.dataset.n.includes(q));
     s.classList.toggle("chan-selected", isSelected);
-    s.hidden = false;
+    s.hidden = live ? !s.dataset.n.includes(live) : false;
+    if (!s.hidden) shown++;
   }
-  // Tous les groupes et titres restent visibles
-  for (const g of container.querySelectorAll(".chan-group")) g.hidden = false;
-  for (const h5 of container.querySelectorAll("h5")) h5.hidden = false;
+  // Un groupe dont toutes les chaînes sont masquées disparaît avec son titre,
+  // sinon la liste se retrouve pleine d'en-têtes vides pendant la frappe.
+  for (const g of container.querySelectorAll(".chan-group")) {
+    const anyVisible = [...g.querySelectorAll(".chan")].some(c => !c.hidden);
+    g.hidden = !anyVisible;
+    const h5 = g.previousElementSibling;
+    if (h5 && h5.tagName === "H5") h5.hidden = !anyVisible;
+  }
   const nm = container.querySelector(".chan-nomatch");
-  if (nm) nm.hidden = true;
+  if (nm) {
+    nm.hidden = !(live && shown === 0);
+    if (!nm.hidden) nm.textContent = `Aucune chaîne ne correspond à « ${input.value.trim()} » dans cette offre.`;
+  }
 }
 
 /* renderTVCard → moteur TERMINAL (voir rowCard) */
@@ -2443,6 +2464,12 @@ function resetTV(){
 
 function netLabel(n){
   return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)", regional:"Câble régional", choice:"Choix réseau"}[n];
+}
+// Forme courte pour le tag de la ligne : la colonne fait 92px, « Réseau Swisscom »
+// y déborde et force une deuxième ligne. Le mot « Réseau » est porté par l'en-tête
+// de colonne et par la pastille de couleur, il est redondant ici.
+function netShort(n){
+  return {swisscom:"Swisscom", sunrise:"Sunrise", salt:"Salt", init7:"Init7", regional:"Régional", choice:"Au choix"}[n] || n;
 }
 
 // Sparkline SVG pour historique de prix.
@@ -2692,6 +2719,9 @@ function refreshMobile(){
   clampDualRange("mobile-calls-roam", "mobile-calls-roam-max");
 
   const selectedNets = [...document.querySelectorAll('#mobile-network input:checked')].map(i => i.dataset.net);
+  const swRoam = document.getElementById("mobile-sw-roam").checked;
+  const swCallsTo = document.getElementById("mobile-sw-callsto").checked;
+  const swRoamUnl = document.getElementById("mobile-sw-roamunl").checked;
   const hideAgeRestricted = document.getElementById("mobile-hide-age").checked;
   const onlyYoung = document.getElementById("mobile-only-young").checked;
   const chVal = parseInt(document.getElementById("mobile-ch-unlimited").value);
@@ -2731,6 +2761,9 @@ function refreshMobile(){
   let filtered = mobileData.filter(d => {
     const nets = d.networkChoice || [d.network];
     if (!nets.some(n => selectedNets.includes(n))) return false;
+    if (swRoam && !d.roaming) return false;
+    if (swCallsTo && !(d.callsToAbroad === Infinity || (typeof d.callsToAbroad === "number" && d.callsToAbroad > 0))) return false;
+    if (swRoamUnl && !d.roamUnlimited) return false;
     if (hideAgeRestricted && d.ageRestriction) return false;
     if (onlyYoung && !d.ageRestriction) return false;
     if (!passesThreshold(d.chDataGB, chVal, DATA_THRESHOLDS)) return false;
@@ -2818,6 +2851,7 @@ function refreshInternet(){
 
 function resetMobile(){
   document.querySelectorAll('#mobile-network input').forEach(i => i.checked = true);
+  ["mobile-sw-roam","mobile-sw-callsto","mobile-sw-roamunl"].forEach(id => { const e = document.getElementById(id); if (e) { e.checked = false; if (e.nextElementSibling) e.nextElementSibling.classList.remove("on"); } });
   document.getElementById("mobile-ch-unlimited").value = 0;
   document.getElementById("mobile-ch-max").value = 4;
   document.getElementById("mobile-roaming").value = 0;
@@ -2847,6 +2881,24 @@ function resetInternet(){
   document.getElementById(id).addEventListener("input", refreshMobile);
 });
 document.querySelectorAll('#mobile-network input').forEach(i => i.addEventListener("change", refreshMobile));
+["mobile-sw-roam","mobile-sw-callsto","mobile-sw-roamunl"].forEach(id => {
+  const e = document.getElementById(id); if (!e) return;
+  const pill = e.nextElementSibling;
+  const sync = () => {
+    if (!pill) return;
+    pill.classList.toggle("on", e.checked);
+    pill.style.background = e.checked ? "var(--accent)" : "var(--line)";
+    const knob = e.checked ? "translateX(14px)" : "translateX(0)";
+    pill.style.setProperty("--knob", knob);
+  };
+  e.addEventListener("change", () => { sync(); refreshMobile(); });
+  // Le label enveloppant ne relayait pas le clic vers la case (input à 0×0,
+  // hors flux) : on bascule nous-mêmes depuis la pastille.
+  if (pill) pill.addEventListener("click", (ev) => {
+    ev.preventDefault(); e.checked = !e.checked; sync(); refreshMobile();
+  });
+  sync();
+});
 // Les 2 checkboxes âge sont mutuellement exclusives : cocher l'une décoche l'autre
 document.getElementById("mobile-hide-age").addEventListener("change", (e) => {
   if (e.target.checked) document.getElementById("mobile-only-young").checked = false;
