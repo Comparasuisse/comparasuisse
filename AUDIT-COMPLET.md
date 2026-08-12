@@ -140,6 +140,36 @@ pwsh -File scripts\install-daily-audit-task.ps1 -Uninstall
   une nouvelle `const NAME = …` référencée dans les data arrays qui n'est
   pas dans `HELPER_CONST_NAMES` de `audit-lib.mjs`. L'ajouter là.
 
+### 6 bis. Les 13 flags structurels récurrents (état au 12.08.2026)
+
+Après la passe exhaustive du 12.08.2026, le scan quotidien sort
+`OK=202, ÉCART=11, URL_MORTE=2`. **Les treize cas flagués ont tous été
+vérifiés à la main ce jour-là et sont tous corrects.** Ils reviendront
+pourtant identiques demain matin, parce que leur cause est structurelle.
+
+| Cas | Pourquoi le scan échoue | Comment vérifier |
+|---|---|---|
+| Wingo Red Swiss / Red / Red Pro | page produit affiche « Abo actuellement indisponible », sans prix | `expand-probe.mjs` sur `/fr/mobile`, cliquer « Afficher tous les produits » |
+| Wingo Internet Smart / Pro / Ultra | prix repliés derrière « Tous les abos Internet » | idem sur `/fr/internet` |
+| Salt Swiss XXL / Travel Max | HTTP 429 sur salt.ch, y compris depuis Playwright | navigateur réel (browser MCP) |
+| Mucho Swiss (+ sa promo) | seul 49.90 est écrit ; le prix remisé n'est nulle part en texte | badge « -70% » et « économisez CHF 420 par an » : 49.90 − 35 = 14.90 |
+| Green Internet Home | 25.00 vit dans un widget que `extractPrices` ne lit pas | `audit-probe.mjs`, lire le widget `promotiontimer` |
+| Teleboy Internet 1 Gbit/s + TV | 56.80 n'est le prix de personne : c'est 44.90 + 11.90 | vérifier les deux composants séparément |
+| Sunrise Swiss Travel | SPA : le scan capte 220.00 avant le rendu des cards | `audit-probe.mjs` trouve « dès 29.90 » |
+
+**Ne PAS les mettre en whitelist NON_VÉRIFIABLE.** La tentation est forte —
+treize flags quotidiens qu'on sait faux entraînent à survoler le rapport. Mais
+c'est exactement le mécanisme qui a laissé Salt Travel Max périmé dix jours :
+un cas classé « faux positif connu » cesse d'être lu, et le jour où le prix
+change vraiment, personne ne le voit. La whitelist n'est légitime que quand la
+page ne peut structurellement **jamais** livrer son prix — les prix dessinés
+en typographie de Galaxus, par exemple. Ici, le prix existe et reste
+vérifiable : c'est le scan qui n'y accède pas, pas l'information qui manque.
+
+Le bon usage de ce tableau : à chaque passe, retrouver ces treize lignes dans
+le rapport, appliquer la méthode indiquée, et **s'alarmer de tout flag qui ne
+figure pas ici** — c'est celui-là qui mérite l'attention.
+
 ### 7. Garde-fous de robustesse (post-incident 03.08.2026)
 
 Trois protections ont été ajoutées après un premier déploiement pathologique
