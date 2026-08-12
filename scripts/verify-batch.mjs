@@ -66,7 +66,15 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe",
   headless: true,
 });
-const ctx = await browser.newContext({ userAgent: UA, locale: "fr-CH", timezoneId: "Europe/Zurich" });
+// accept-language explicite : sans lui, certains sites servent une variante
+// régionale au contenu tarifaire différent (Talk Talk prepaid rendait une
+// grille 10/15/20/25/30 au lieu de la grille suisse 19.95/44.95/79.95/149.95).
+const ctx = await browser.newContext({
+  userAgent: UA,
+  locale: "fr-CH",
+  timezoneId: "Europe/Zurich",
+  extraHTTPHeaders: { "accept-language": "fr-CH,fr;q=0.9,en;q=0.5" },
+});
 
 const okEntries = [];
 const stats = { OK: 0, "ÉCART": 0, VIDE: 0, ERR: 0 };
@@ -86,6 +94,10 @@ for (const [url, group] of byUrl) {
             .forEach((e) => (e.style.display = "none"));
         })
         .catch(() => {});
+      // Sans attendre networkidle, les pages qui peuplent leurs tarifs en JS après
+      // le premier rendu sortaient en faux ÉCART : les 4 prepaid Talk Talk
+      // (19.95/44.95/79.95/149.95) sont bien affichés, mais après ce délai.
+      await page.waitForLoadState("networkidle", { timeout: 9000 }).catch(() => {});
       await page.waitForTimeout(2600);
       const txt = await page.evaluate(() => document.body.innerText || "");
       prices = extractPrices(txt);
