@@ -41,12 +41,27 @@ for (const [cat, arr] of Object.entries(data)) {
     // traitées portant cette même signature (constaté le 11.08.2026, faux
     // positif de clé dupliquée sur Swype Surf).
     const esc = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const sig = `${it.name}|${it.url || ""}`;
+    // Le compteur d'occurrences doit être tenu SÉPARÉMENT pour les promos et pour
+    // les offres, puisque l'appariement ci-dessous filtre déjà sur ce critère.
+    // Sans ça, « Teleboy TV » côté promo héritait de k=1 et n'avait aucune
+    // seconde ligne promo à trouver : l'entrée sortait du contrôle sans un mot.
+    const sig = `${cat === "promo" ? "P" : "O"}|${it.name}|${it.url || ""}`;
     const k = (seen.get(sig) || 0);
     seen.set(sig, k + 1);
-    const re = new RegExp(`name:"${esc(it.name)}"`, "g");
-    let m = null;
-    for (let j = 0; j <= k; j++) m = re.exec(html);
+    // « Teleboy TV » existe dans tvData ET dans promoData, avec le même nom et la
+    // même url. Prendre la k-ième occurrence dans l'ordre du fichier ne suffit pas :
+    // l'entrée promoData précède l'entrée tvData dans index.html alors que loadData
+    // renvoie tv avant promo, si bien que chaque entrée était comparée à la ligne de
+    // l'autre et sortait en faux positif (12.08.2026). Le champ `category` n'existe
+    // que sur promoData : il départage sans ambiguïté.
+    const veutPromo = cat === "promo";
+    const re = new RegExp(`name:"${esc(it.name)}"[^\n]*`, "g");
+    let m = null, vus = 0, cand;
+    while ((cand = re.exec(html)) !== null) {
+      const estPromo = /category:"/.test(cand[0]);
+      if (estPromo !== veutPromo) continue;
+      if (vus++ === k) { m = cand; break; }
+    }
     if (!m) continue;
     // Borner le segment à l'objet courant par appariement d'accolades, en
     // ignorant celles qui vivent dans une chaîne. Une fenêtre de taille fixe

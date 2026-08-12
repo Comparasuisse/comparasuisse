@@ -115,8 +115,13 @@ if (APPLY && okEntries.length) {
   // entrée et laissait l'homonyme silencieusement non vérifié (11.08.2026).
   const used = new Set();
   for (const { name: nm, url: u } of okEntries) {
-    let i = L.findIndex((l, k) => !used.has(k) && l.includes(`name:"${nm}"`) && l.includes(`url:"${u}"`));
-    if (i < 0) i = L.findIndex((l, k) => !used.has(k) && l.includes(`name:"${nm}"`));
+    // Une entrée promoData peut partager nom ET url avec une offre (« Teleboy TV »
+    // existe dans tvData et dans promoData). Sans ce garde-fou, --apply datait la
+    // promo à la place de l offre, et le contrôle de clés dupliquées sortait rouge
+    // (12.08.2026). Le champ  n existe que sur promoData : on l exclut.
+    const estPromo = (l) => /category:"/.test(l);
+    let i = L.findIndex((l, k) => !used.has(k) && !estPromo(l) && l.includes(`name:"${nm}"`) && l.includes(`url:"${u}"`));
+    if (i < 0) i = L.findIndex((l, k) => !used.has(k) && !estPromo(l) && l.includes(`name:"${nm}"`));
     if (i < 0) continue;
     used.add(i);
     L[i] = /verifiedAt:/.test(L[i])
