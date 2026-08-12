@@ -879,6 +879,20 @@ Pour chaque URL retournée :
   - Une page archive/historique (à ignorer)
   - Une variante géo/appareil-ciblée (à documenter)
 
+**Cas concret, 12.08.2026 — le meilleur prix GoMo était sur une page
+orpheline.** `go-mo.ch/fr/gomo-unlimited` vend le forfait GoMo Suisse
+(illimité CH, 100 Go pleine vitesse, sans engagement, prix à vie) à **9.95
+au lieu des 12.95** affichés sur `/fr/gomo-12-95`, activation offerte en
+prime. La navigation du site ne propose que « GoMo » et « GoMo Europe » :
+aucun lien interne ne mène à cette page, elle est donc structurellement
+invisible au crawl comme au sitemap. Seule la recherche indexée l'a fait
+apparaître. La même passe a révélé `gomo-plus` (14.95), les deux forfaits
+CHmobile manquants (Start, Flat) et toute la gamme prépayée Mucho.
+
+Corollaire : quand une page orpheline est ajoutée au catalogue, l'assortir
+d'un avertissement. Une page que l'opérateur ne lie nulle part peut
+disparaître sans préavis, et le visiteur doit savoir vers quoi se rabattre.
+
 **Limite honnête à assumer** : même avec cette recherche élargie, il
 reste un risque résiduel de pages promo :
 
