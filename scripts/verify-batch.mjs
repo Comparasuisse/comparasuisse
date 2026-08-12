@@ -27,6 +27,13 @@ const HOST = arg("host");
 const STALE = parseInt(arg("stale") || "0", 10);
 const NAMES = arg("names");
 const APPLY = process.argv.includes("--apply");
+// Une passe AUDIT COMPLET doit repasser sur TOUTES les offres, y compris celles
+// déjà datées du jour par un scan antérieur : « vérifiée ce matin » ne vaut pas
+// « vérifiée pendant cette passe ». Sans --all, le filtre d âge les escamote.
+const ALL = process.argv.includes("--all");
+// Les entrées promoData portent elles aussi un prix et une url : les exclure
+// laissait 41 lignes du rapport de couverture éternellement en « JAMAIS ».
+const WITH_PROMO = process.argv.includes("--with-promo");
 
 function todayLocalISO() {
   const d = new Date();
@@ -38,10 +45,10 @@ const age = (v) => (!v ? Infinity : Math.round((new Date(TODAY) - new Date(v)) /
 const data = await loadData();
 let offers = [];
 for (const [cat, arr] of Object.entries(data)) {
-  if (cat === "promo") continue;
+  if (cat === "promo" && !WITH_PROMO) continue;
   for (const it of arr) if (it.url) offers.push({ cat, name: String(it.name), price: it.price, url: it.url, verifiedAt: it.verifiedAt });
 }
-offers = offers.filter((o) => age(o.verifiedAt) > 0);
+if (!ALL) offers = offers.filter((o) => age(o.verifiedAt) > 0);
 if (HOST) offers = offers.filter((o) => o.url.includes(HOST));
 if (STALE) offers = offers.filter((o) => age(o.verifiedAt) >= STALE);
 if (NAMES) offers = offers.filter((o) => o.name.includes(NAMES));
@@ -96,7 +103,7 @@ for (const [url, group] of byUrl) {
     else if (p === null) verdict = "OK"; // price:null volontaire (remise décrite)
     else verdict = prices.includes(p) ? "OK" : "ÉCART";
     stats[verdict]++;
-    if (verdict === "OK") okEntries.push({ name: o.name, url: o.url });
+    if (verdict === "OK") okEntries.push({ name: o.name, url: o.url, cat: o.cat });
     const detail =
       verdict === "OK" ? "" : verdict === "ERR" ? `  ${err}` : `  stocké ${p} · rendus ${prices.slice(0, 7).join(", ") || "(aucun)"}`;
     console.log(`  ${verdict.padEnd(6)} [${o.cat}] ${o.name.slice(0, 40).padEnd(41)} ${age(o.verifiedAt) === Infinity ? "∞" : age(o.verifiedAt) + "j"}${detail}`);
@@ -114,14 +121,16 @@ if (APPLY && okEntries.length) {
   // catégories. Chercher par le seul nom mettait à jour deux fois la première
   // entrée et laissait l'homonyme silencieusement non vérifié (11.08.2026).
   const used = new Set();
-  for (const { name: nm, url: u } of okEntries) {
+  for (const { name: nm, url: u, cat } of okEntries) {
     // Une entrée promoData peut partager nom ET url avec une offre (« Teleboy TV »
     // existe dans tvData et dans promoData). Sans ce garde-fou, --apply datait la
     // promo à la place de l offre, et le contrôle de clés dupliquées sortait rouge
-    // (12.08.2026). Le champ  n existe que sur promoData : on l exclut.
+    // (12.08.2026). Le champ category n existe que sur promoData : on s en sert
+    // pour viser le bon bloc, dans un sens comme dans l autre depuis --with-promo.
     const estPromo = (l) => /category:"/.test(l);
-    let i = L.findIndex((l, k) => !used.has(k) && !estPromo(l) && l.includes(`name:"${nm}"`) && l.includes(`url:"${u}"`));
-    if (i < 0) i = L.findIndex((l, k) => !used.has(k) && !estPromo(l) && l.includes(`name:"${nm}"`));
+    const bonBloc = cat === "promo" ? estPromo : (l) => !estPromo(l);
+    let i = L.findIndex((l, k) => !used.has(k) && bonBloc(l) && l.includes(`name:"${nm}"`) && l.includes(`url:"${u}"`));
+    if (i < 0) i = L.findIndex((l, k) => !used.has(k) && bonBloc(l) && l.includes(`name:"${nm}"`));
     if (i < 0) continue;
     used.add(i);
     L[i] = /verifiedAt:/.test(L[i])
