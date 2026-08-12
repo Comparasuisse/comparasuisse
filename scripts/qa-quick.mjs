@@ -79,7 +79,46 @@ const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août"
   }
 }
 
-// ── 4 & 5. Navigateur
+// ── 4. Prix affirmés en prose vs prix du catalogue
+// La FAQ et les textes éditoriaux citent des tarifs en dur. Ils ne bougent pas
+// quand une promo se termine, et personne ne pense à les relire. Le 12.08.2026,
+// la réponse « internet + TV sous 40 CHF ? » vantait yallo Home Cable M + TV à
+// 19.90 « -74% pour toujours » alors que la fiche de cette même offre disait le
+// contraire : promo terminée, 90.-/mois. Le visiteur lisait 19.90 puis cliquait
+// sur une carte à 90. Deux autres réponses citaient des classements faux.
+{
+  // Deux zones de prose, et il faut les deux : le JSON-LD des rich snippets se
+  // trouve AVANT les tableaux de données, la FAQ visible après. Une première
+  // version ne regardait que la seconde et laissait passer une régression
+  // injectée dans le JSON-LD — or c'est cette copie-là que lisent les moteurs.
+  const debutData = html.indexOf("const mobileData = [");
+  const prose = html.slice(0, debutData > 0 ? debutData : 0) + "\n" + html.slice(html.lastIndexOf("];"));
+  const claims = [
+    ...prose.matchAll(/([A-ZÉ][\w+\-]*(?:\s+[A-Za-zÉé0-9+\-']+){0,3}?)\s+à\s+<?b?>?(\d{1,3}[.,]\d{2})/g),
+  ].map((m) => ({ nom: m[1].replace(/<[^>]*>/g, "").trim(), prix: parseFloat(m[2].replace(",", ".")) }));
+  const uniq = [...new Map(claims.map((c) => [c.nom + "|" + c.prix, c])).values()];
+
+  const d0 = await loadData();
+  const prix = new Map();
+  for (const arr of Object.values(d0)) for (const it of arr) if (it.name != null) prix.set(String(it.name), it.price);
+
+  const suspects = [];
+  for (const c of uniq) {
+    // Rapprochement exact d abord ; sinon nom de catalogue commençant par le
+    // libellé cité (« yallo Home Supermax + TV » cité comme « Home Supermax + TV »).
+    let reel = prix.get(c.nom);
+    if (reel === undefined) {
+      const cles = [...prix.keys()].filter((k) => k === c.nom || k.endsWith(" " + c.nom) || k.startsWith(c.nom));
+      if (cles.length === 1) reel = prix.get(cles[0]);
+      else continue; // ambigu ou introuvable : on ne crie pas au loup
+    }
+    if (typeof reel === "number" && Math.abs(reel - c.prix) > 0.005) suspects.push(`« ${c.nom} à ${c.prix} » mais le catalogue dit ${reel}`);
+  }
+  if (suspects.length) ko(`prix cité en prose ≠ catalogue :\n     ` + suspects.join("\n     "));
+  else ok(`prix cités en prose : ${uniq.length} affirmations, toutes conformes au catalogue`);
+}
+
+// ── 5 & 6. Navigateur
 const data = await loadData();
 const expected = {
   mobile: data.mobile.length,
