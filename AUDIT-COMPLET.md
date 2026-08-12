@@ -808,11 +808,27 @@ pages produit individuelles). Les cas historiques déjà découverts :
    - Si les offres sont **distinctes** (ex. Salt Start Max + Salt
      Travel + Salt Europe Max tous vers `/fr/mobile`) → URL suspecte,
      à vérifier
-3. **Pour chaque URL suspecte** : tester avec `curl -sL -o /dev/null
-   -w "%{http_code}"` les variantes `/{plan-slug}`, `/{plan-slug}.html`,
-   `/abo/{plan-slug}`, `/plans/{plan-slug}`, `/produit/{plan-slug}` sur
-   le domaine de l'opérateur. Si un 200 est trouvé → URL individuelle
-   existe.
+3. **Pour chaque URL suspecte** : tester les variantes `/{plan-slug}`,
+   `/{plan-slug}.html`, `/abo/{plan-slug}`, `/plans/{plan-slug}`,
+   `/produit/{plan-slug}` sur le domaine de l'opérateur.
+
+   ⚠️ **Un HTTP 200 ne prouve PAS que la page existe.** Ne jamais conclure
+   depuis `curl -sL -o /dev/null -w "%{http_code}"` seul : `-L` suit les
+   redirections, donc une URL morte qui redirige vers une page « 404 »
+   maison renvoie 200, et un SPA renvoie 200 avant même de savoir quoi
+   afficher. Deux faux positifs le 12.08.2026 :
+   - `mtel.ch/fr/apercu-des-abonnements-mobiles` → 200, mais la page rend
+     « Error 404. Ooops! Page introuvable ». Trois de nos offres pointaient
+     dessus, et le scan quotidien voyait une URL vivante.
+   - `chmobile.ch/fr/{start,flat,plus,europe}` → 200 les quatre, mais toutes
+     redirigent vers `/fr/not-found`. Le corps faisait 743 caractères,
+     identique pour les quatre — l'indice qui met la puce à l'oreille.
+
+   **Le test qui tranche** : charger la page et vérifier (a) l'URL finale
+   après redirection, (b) la longueur du texte rendu, (c) la présence du
+   prix attendu. `node scripts/audit-probe.mjs <url>` donne les trois d'un
+   coup. Des tailles identiques sur plusieurs URLs différentes signalent
+   une page générique.
 4. **Vérifier avec browser MCP** que la page trouvée présente bien
    l'offre spécifique (nom, prix correspondant, pas juste un redirect
    silencieux vers la landing).
