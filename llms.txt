@@ -2,27 +2,30 @@
 
 > Comparateur indépendant des abonnements mobile, internet et TV en Suisse. Prix vérifiés manuellement sur les sites officiels des opérateurs, classement neutre par prix croissant, financé par affiliation sans impact sur le prix payé par le client.
 
-Le site compare 92 offres mobile, 32 offres internet fixe, 24 offres TV, 8 offres combinées Internet + TV et 12 promotions actives, couvrant tous les opérateurs suisses : les trois opérateurs de réseau (Swisscom, Sunrise, Salt), leurs marques secondaires (Wingo, Yallo, GoMo, M-Budget, Migros Mobile, Coop Mobile, Post Mobile, etc.), les câblo-opérateurs régionaux (Netplus, Quickline), et les MVNO indépendants (Digital Republic, Talk Talk, Aldi Mobile, Lidl Connect, Mucho Mobile, Spusu, Mtel, VTX, etc.).
+Le site compare 344 offres au total : 150 abonnements mobile, 28 forfaits prépayés, 54 offres internet fixe, 28 offres data-only (SIM data et routeurs), 27 offres TV, 16 offres combinées Internet + TV et 41 promotions actives, couvrant tous les opérateurs suisses : les trois opérateurs de réseau (Swisscom, Sunrise, Salt), leurs marques secondaires (Wingo, Yallo, GoMo, M-Budget, Migros Mobile, Coop Mobile, Post Mobile, etc.), les câblo-opérateurs régionaux (Netplus, Quickline), et les MVNO indépendants (Digital Republic, Talk Talk, Aldi Mobile, Lidl Connect, Mucho Mobile, Spusu, Mtel, VTX, etc.).
 
 ## Pages principales
 
 - [Comparateur mobile / internet / TV](https://comparasuisse.ch/): interface interactive avec filtres par réseau, prix max, quotas data Suisse et roaming, appels illimités, restriction d'âge, débit internet, nombre de chaînes TV, replay et enregistrement TV, recherche par chaîne spécifique
 - [Mentions légales et transparence](https://comparasuisse.ch/mentions-legales.html): éditeur du site, modèle économique par affiliation, garantie de neutralité du classement, mention des offres privées SMS/email, données personnelles (conforme nLPD suisse)
-- [FAQ](https://comparasuisse.ch/#faq): 18 questions et réponses détaillées sur les opérateurs suisses, les MVNO, le roaming, la portabilité du numéro, les rabais à vie, les offres jeunes, et le fonctionnement du comparateur
+- [FAQ](https://comparasuisse.ch/#faq): 20 questions et réponses détaillées sur les opérateurs suisses, les MVNO, le roaming, la portabilité du numéro, les rabais à vie, les offres jeunes, et le fonctionnement du comparateur
 
 ## Contenu comparé
 
-- **Mobile** : 92 offres réparties sur les 3 réseaux suisses (Swisscom, Sunrise, Salt) — abonnements traditionnels, MVNO low-cost (Mucho Nano 4.50, Spusu 1 4.80, Quickline Mobile L 9.-), offres jeunes avec restriction d'âge (Sunrise Young < 27 ans), offres à rabais à vie
-- **Internet fixe** : 32 offres — fibre jusqu'à 10 Gbit/s, DSL, câble régional (Netplus/Quickline), internet mobile 4G/5G résidentiel (Digital Republic, Talk Talk Home)
-- **TV** : 24 offres — streaming pur (Zattoo, Teleboy, Sky), TV via box (blue TV, Wingo TV, Sunrise TV), offres régionales (Netplus TV, iWay TV via Wilmaa, Init7 TV7 gratuit avec Fiber7), plateformes internationales (CANAL+ Suisse)
-- **Internet + TV combiné** : 8 offres — bundles économiques (yallo Home Supermax + TV dès 37.90)
-- **Promotions actives** : 12 offres à durée limitée mises à jour à chaque revérification manuelle
+- **Mobile** : 150 offres réparties sur les 3 réseaux suisses (Swisscom, Sunrise, Salt) — abonnements traditionnels, MVNO low-cost (Mucho Nano 3.90, spusu 1 4.80, Quickline Mobile L 9.-), offres jeunes avec restriction d'âge (Sunrise Young < 27 ans), offres à rabais ou prix garanti à vie chez une quinzaine d'opérateurs
+- **Prépayé** : 28 forfaits — cartes à crédit rechargeable et packs à durée fixe (Wingo Flat Pass, packs DUO Mucho, Lycamobile Hello Swiss)
+- **Internet fixe** : 54 offres — fibre jusqu'à 10 Gbit/s, DSL, câble régional (Netplus/Quickline), internet mobile 4G/5G résidentiel (Digital Republic, Talk Talk Home)
+- **TV** : 27 offres — streaming pur (Zattoo, Teleboy, Sky), TV via box (blue TV, Wingo TV, Sunrise TV), offres régionales (Netplus TV, iWay TV via Wilmaa, Init7 TV7 gratuit avec Fiber7), plateformes internationales (CANAL+ Suisse)
+- **Internet + TV combiné** : 16 offres — bundles économiques (yallo Home Supermax + TV dès 37.90)
+- **Data-only** : 28 offres — SIM data et abonnements routeur 4G/5G (Digital Republic, Salt Surf Unlimited, packs data Mucho, Mtel Flow)
+- **Promotions actives** : 41 offres à durée limitée, avec compte à rebours temps réel quand l’opérateur affiche une échéance
 
 ## Méthodologie de vérification
 
 - Prix vérifiés directement sur les sites officiels des opérateurs via fetch web et navigation Playwright
 - Chaque entrée porte deux champs de traçabilité : `sourceType` (factsheet-pdf, product-page, third-party ou assumption) et `verifiedAt` (date ISO de dernière vérification)
-- Audit périodique manuel sur échantillon aléatoire via un script Node dédié (`scripts/audit-random.mjs`) qui compare les prix affichés avec les prix sur les pages officielles
+- Scan automatisé quotidien de la totalité du catalogue (`scripts/_audit-catalog.mjs`, Playwright headless) : chaque URL est rechargée et le prix rendu comparé au prix stocké. Le scan ne corrige rien, il signale — écarts, pages illisibles, mots-clés promotionnels.
+- Passes de vérification manuelle exhaustives, offre par offre sur sa propre page produit, avec inventaire de couverture publié (`scripts/coverage-report.mjs`). Un statut non concluant — HTTP 429, timeout, page vide — ne vaut jamais confirmation de prix : ces cas sont repris à la main ou listés comme non couverts.
 - Extraction automatisée des listes de chaînes TV depuis les PDFs officiels des opérateurs (Wingo, Netplus) et pages HTML (Teleboy, Zattoo, Init7)
 - Aucun rabais spécial pour les partenaires affiliés — classement strictement par prix mensuel croissant, quelle que soit la source de revenu
 
