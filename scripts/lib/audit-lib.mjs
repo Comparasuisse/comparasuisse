@@ -91,6 +91,14 @@ export function extractPrices(text) {
 // polluer le rapport quotidien avec des flags manuels inutiles. À revérifier
 // manuellement en cas de doute, mais elles ne sont plus signalées automatiquement.
 export const NON_VERIFIABLE_EXACT_URLS = new Set([
+  // Galaxus : les trois prix de chaque gamme sont dessinés en typographie
+  // décorative (glyphes vectoriels), pas écrits en texte. Aucune lecture du
+  // DOM ne peut les rendre — seul un screenshot les donne. Vérifiés ainsi le
+  // 12.08.2026 : mobile 12/19/29, internet 27/34/39, tous conformes. Sans
+  // cette entrée, ces 5 offres ressortaient en ÉCART à chaque passage, avec
+  // des « prix rendus » qui n'étaient que des coordonnées de tracé SVG.
+  "https://abos.galaxus.ch/fr/mobile",
+  "https://abos.galaxus.ch/fr/internet",
   // SPA Sunrise (les cards ne rendent pas le prix mensuel côté innerText)
   "https://www.sunrise.ch/fr/mobile/young",
   "https://www.sunrise.ch/fr/mobile/swiss-travel-plus",
