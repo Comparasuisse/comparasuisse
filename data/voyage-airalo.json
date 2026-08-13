@@ -1001,12 +1001,138 @@
  },
  {
   "provider": "Airalo",
-  "slug": "global",
-  "url": "https://www.airalo.com/global-esim",
-  "plans": [],
+  "slug": "discover",
+  "url": "https://www.airalo.com/discover-esim",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 7.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 1 | GB | 7.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 2,
+    "unlimited": false,
+    "price": 14,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 2 | GB | 14.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 20,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 20.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 20,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 3 | GB | 20.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 29.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 29.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 60,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 29.5,
+    "currency": "CHF",
+    "horsPerimetre": true,
+    "brut": "60 days | 5 | GB | 29.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 37.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 37.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 180,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 47.5,
+    "currency": "CHF",
+    "horsPerimetre": true,
+    "brut": "180 days | 10 | GB | 47.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 53.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 53.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 365,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 55,
+    "currency": "CHF",
+    "horsPerimetre": true,
+    "brut": "365 days | 20 | GB | 55.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 80,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 80.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 132.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 132.50 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
   "meta": {
-   "couverture": null,
-   "onglets": []
+   "couverture": 170,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
   }
  }
 ]
