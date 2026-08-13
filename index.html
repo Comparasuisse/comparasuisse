@@ -280,9 +280,10 @@
   .net-chip input{cursor:pointer; width:13px; height:13px; margin:0;}
   .net-chip input:checked{box-shadow:none;}
   .net-chip:has(input:checked){background:var(--card); color:var(--accent-dark); border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,94,255,.20);}
-  /* Sélection groupée — injectée par initBulkToggles() sur les groupes de 5 chips
-     et plus. Volontairement plus discrète que les chips : c'est une commande, pas
-     un filtre, et elle ne doit pas se lire comme une case cochable de plus. */
+  /* Sélection groupée — injectée par initBulkToggles() sur tous les groupes de
+     cases à cocher. Volontairement plus discrète que les chips : c'est une
+     commande, pas un filtre, et elle ne doit pas se lire comme une case cochable
+     de plus. */
   .net-bulk{display:inline-flex; align-items:center; gap:4px; margin-right:2px;}
   .net-bulk button{font-family:inherit; font-size:10.5px; font-weight:700; letter-spacing:.3px;
     text-transform:uppercase; padding:4px 7px; border:1px dashed var(--line); border-radius:5px;
@@ -3204,18 +3205,42 @@ document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListen
 // === Sélection groupée des cases à cocher ===
 // Douze opérateurs à décocher un par un pour n'en garder qu'un, c'est douze clics
 // et autant de rendus. Les deux boutons sont injectés ici plutôt qu'écrits dans
-// le HTML : les groupes évoluent (Init7 est arrivé en combo ce matin, parti de TV),
+// le HTML : les groupes évoluent (Init7 est arrivé en combo le 13.08, parti de TV),
 // et une injection pilotée par le DOM ne peut pas se désynchroniser des groupes.
-// Seuil à 5 chips : en dessous, deux boutons pèsent plus lourd que le geste qu'ils
-// remplacent.
-const BULK_MIN_CHIPS = 5;
+//
+// Seuil à 2 : tous les groupes en bénéficient, y compris ceux de trois réseaux.
+// Un premier jet réservait les boutons aux groupes de cinq cases et plus, au motif
+// qu'en dessous ils pesaient plus lourd que le geste remplacé. C'était raisonner
+// en nombre de clics épargnés ; à l'usage, ce qui compte est la régularité — on
+// s'attend à retrouver la même commande au même endroit d'un onglet à l'autre,
+// et un groupe qui en est dépourvu se lit comme une anomalie. Sur trois réseaux,
+// « Aucun » puis un clic reste d'ailleurs plus rapide que deux décochages.
+const BULK_MIN_CHIPS = 2;
+
+// Libellés lisibles pour les infobulles et l'accessibilité. Depuis que chaque
+// groupe reçoit ses boutons, plusieurs paires coexistent sur un même onglet
+// (Internet a réseau + type de raccordement, Data-only réseau + opérateur) :
+// « internet connection type » ne suffisait plus à les distinguer à l'oreille.
+const BULK_LABELS = {
+  'mobile-network': 'les réseaux mobile',
+  'prepaid-network': 'les réseaux prépayé',
+  'internet-network': 'les réseaux internet',
+  'internet-connection-type': 'les types de raccordement internet',
+  'dataonly-network': 'les réseaux data-only',
+  'dataonly-operator': 'les opérateurs data-only',
+  'tv-operator': 'les opérateurs TV',
+  'combo-operator': 'les opérateurs Internet + TV',
+  'combo-connection-type': 'les types de raccordement Internet + TV',
+  'promo-category': 'les catégories de promotions',
+  'promo-network': 'les réseaux des promotions',
+};
 
 function initBulkToggles(){
   document.querySelectorAll('.net-checks').forEach(groupe => {
     const cases = [...groupe.querySelectorAll('input[type="checkbox"]')];
     if (cases.length < BULK_MIN_CHIPS || groupe.querySelector('.net-bulk')) return;
 
-    const libelle = (groupe.id || 'ce groupe').replace(/-/g, ' ');
+    const libelle = BULK_LABELS[groupe.id] || (groupe.id || 'ce groupe').replace(/-/g, ' ');
     const bloc = document.createElement('span');
     bloc.className = 'net-bulk';
 
