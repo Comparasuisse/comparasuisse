@@ -298,3 +298,50 @@ temps, avec un champ disant que la SIM est à acquérir.
 Le champ `countries` conditionne la recherche de destination demandée pour
 l'onglet : c'est lui qui permet de taper « Portugal » et de voir remonter les
 forfaits Europe qui le couvrent, sans imposer 190 cases à cocher.
+
+## 8. L'onglet — comment il est câblé, et comment le rafraîchir
+
+L'onglet Voyage est en ligne avec ses 348 offres. La chaîne va des collecteurs
+au HTML sans saisie manuelle nulle part :
+
+```
+scripts/collect-<fournisseur>.mjs  →  data/voyage-<fournisseur>.json
+                                   ↓
+                    scripts/build-travel-data.mjs
+                                   ↓
+        const TRAVEL_FX + const travelData  dans index.html
+```
+
+**Pour revérifier les prix**, relancer les six collecteurs, rafraîchir les taux
+en tête de `build-travel-data.mjs`, puis :
+
+```
+node scripts/build-travel-data.mjs --inject
+node scripts/qa-quick.mjs
+```
+
+`--inject` ne remplace que le bloc délimité par le commentaire « Généré par
+scripts/build-travel-data.mjs » et le `];` qui ferme `travelData`. Le rendu,
+les filtres et la recherche vivent dans `index.html` et s'éditent normalement.
+Le générateur refuse d'écrire si un contrôle échoue : prix nul, durée hors
+périmètre, URL manquante, conversion non appliquée, ou plus de deux offres d'un
+même fournisseur sur une même destination au prix identique — le symptôme
+Holafly, transformé en garde-fou permanent.
+
+**Ce qui a été mutualisé plutôt que dupliqué** : `rowCard`, `rowPrice`,
+`rdGrid`, `frDate`, `goGB`, `passesThreshold`, `clampDualRange`,
+`updateDualFill` et `initBulkToggles` sont ceux du reste du comparateur.
+`rowPrice` a été ouvert au multi-devises — il codait « CHF » en dur — et affiche
+désormais la devise réellement débitée avec la conversion en francs en dessous.
+Ce changement touche tous les onglets, mais reste sans effet ailleurs : une
+offre sans champ `currency` retombe sur « CHF ».
+
+**Ce que l'onglet ne fait pas**, et pourquoi :
+
+- **pas de comparateur croisé.** Comme le prépayé et le data-only, l'unité de
+  facturation est incompatible avec les abonnements mensuels.
+- **pas de `priceHistory`.** Il en faudrait deux points ; la première passe date
+  d'aujourd'hui. La deuxième revérification pourra l'amorcer.
+- **pas d'entrée dans le total d'offres du bandeau.** Ces forfaits ne sont pas
+  des abonnements suisses ; les compter dans « plus de 300 offres suisses »
+  serait faux.

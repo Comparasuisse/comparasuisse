@@ -128,6 +128,7 @@ const expected = {
   tv: data.tv.length,
   combo: data.combo.length,
   promo: data.promo.length,
+  travel: data.travel.length,
 };
 
 const browser = await chromium.launch({

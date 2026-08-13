@@ -271,6 +271,13 @@ export function loadData() {
     // différents (periodDays, prepaidType) — les inclure aussi.
     prepaid: (() => { try { return extract("prepaidData"); } catch { return []; } })(),
     dataOnly: (() => { try { return extract("dataOnlyData"); } catch { return []; } })(),
+    // travelData n'a ni network ni price mensuel : ce sont des eSIM de voyage,
+    // facturées à la durée et parfois en USD ou en EUR (cf. VOYAGE-ESIM.md).
+    // Le tableau est généré par scripts/build-travel-data.mjs, pas édité à la
+    // main — un audit qui le corrigerait sur place serait écrasé au prochain
+    // build. Il est exposé ici pour les contrôles de cohérence, pas pour les
+    // passes de revérification de prix.
+    travel: (() => { try { return extract("travelData"); } catch { return []; } })(),
   };
 }
 
