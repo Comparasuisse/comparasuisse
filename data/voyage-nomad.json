@@ -1,0 +1,554 @@
+[
+ {
+  "provider": "Nomad",
+  "slug": "europe",
+  "url": "https://www.getnomad.app/en/europe-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4.45,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 9.7,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 14.15,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.36,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 18.6,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 21.83,
+    "beforePrice": 29.92,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 27.49,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 28.3,
+    "beforePrice": 38.81,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 35,
+   "nomadPassPresent": true
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "united-kingdom",
+  "url": "https://www.getnomad.app/en/united-kingdom-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.64,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.28,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 8.89,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.7,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14.15,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.55,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 20.21,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 20.21,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 26.68,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 36,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "united-states",
+  "url": "https://www.getnomad.app/en/united-states-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4.04,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.47,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 8.89,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.7,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 12.94,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16.17,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 18.6,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 25.88,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 27.49,
+    "beforePrice": 30.73,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 33.15,
+    "beforePrice": 42.05,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 35.58,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 42.05,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 180,
+    "dataGB": 75,
+    "unlimited": false,
+    "price": 71.97,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": true
+   },
+   {
+    "days": 365,
+    "dataGB": 100,
+    "unlimited": false,
+    "price": 97.03,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": true
+   }
+  ],
+  "meta": {
+   "couverture": 123,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "canada",
+  "url": "https://www.getnomad.app/en/canada-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 5.66,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.47,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 10.51,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13.75,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.55,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 20.21,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 24.26,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 25.07,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.3,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 55.79,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 123,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "turkey",
+  "url": "https://www.getnomad.app/en/turkey-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.23,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 4.85,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 7.28,
+    "beforePrice": 12.13,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 10.51,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 13.75,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 16.17,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.64,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 25.07,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 12,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "global",
+  "url": "https://www.getnomad.app/en/global-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 9.7,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 20.21,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 32.34,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 50.13,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 83.29,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "nomadPassPresent": false
+  }
+ }
+]
