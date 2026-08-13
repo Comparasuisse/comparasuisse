@@ -236,6 +236,42 @@ Yesim, et les abonnements reconductibles — Nomad Pass et les plans `monthly`
 d'Ubigi. Tous sont relevés et marqués `horsPerimetre`, pas jetés : si le
 périmètre change un jour, la donnée est là.
 
+## 6 bis. Les prépayés voyage suisses — ce qu'on cherchait n'existe pas
+
+Reconnaissance du 13.08.2026 sur Swisscom, Sunrise et Salt, à la recherche
+d'un équivalent suisse et courte durée des eSIM ci-dessus. **Il n'y en a pas**,
+et la raison est structurelle plutôt qu'anecdotique.
+
+Ce que ces trois opérateurs vendent pour le voyage, ce ne sont pas des produits
+autonomes mais des **options greffées sur une ligne suisse déjà existante** :
+
+- **Sunrise** : « paquets et options de roaming », activés dans le Cockpit,
+  choisis en croisant une destination et *un abonnement Sunrise*. Sans ligne
+  Sunrise, la page ne propose rien.
+- **Salt** : le **Data DayPass** s'active « automatiquement sur votre
+  abonnement » et n'est facturé qu'à l'usage ; les « roaming packs » se
+  souscrivent de la même façon.
+- **Swisscom** : ses packs de données roaming se réservent dans le Cockpit.
+
+La différence avec une eSIM de voyage n'est pas de degré. Une eSIM Airalo à
+23 CHF est un prix complet : n'importe qui l'achète, s'en sert, et c'est fini.
+Un pack de roaming à 5.90 CHF n'est un prix complet pour personne — il
+présuppose un abonnement suisse à 30 ou 60 CHF par mois. Les afficher dans la
+même liste triée par prix ferait passer l'option pour cinq fois moins chère
+que l'eSIM, ce qui est faux pour tout visiteur qui n'est pas déjà client.
+
+**Décision** : ces options n'entrent pas dans `travelData`. Ce sont des
+suppléments d'abonnement mobile, leur place est dans l'onglet Mobile s'ils
+doivent figurer quelque part. L'onglet Voyage garde une définition qui se
+tient : ce qu'un voyageur peut acheter seul, sans ligne suisse préalable.
+
+Restent à évaluer, eux vraiment autonomes et achetables par tous : les cartes
+**prépayées** suisses (Sunrise go, Salt Prepaid, Swisscom Prepaid, Lebara)
+et leurs passes journaliers de roaming — Sunrise annonce 2.50 CHF par jour.
+Elles supposent l'achat d'une carte SIM physique, ce qui les distingue encore
+des eSIM, mais elles se comparent honnêtement. À collecter dans un second
+temps, avec un champ disant que la SIM est à acquérir.
+
 ## 7. Modèle de données proposé
 
 ```js
