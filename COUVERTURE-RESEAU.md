@@ -198,3 +198,49 @@ Trois requêtes par adresse, toutes depuis le navigateur, toutes en CORS ouvert
 ```
 
 Testé de bout en bout sur Berne, Genève et Zurich. Environ une seconde.
+
+## 11. L'onglet — ce qui a été construit
+
+En ligne. Tout tient dans `index.html`, sans donnée hébergée : le préfixe `cov`
+identifie l'ensemble (`covGeocode`, `covInterroge`, `covAffiche`, `covCache`).
+
+**Ce qui protège le quota**, dans l'ordre d'efficacité :
+
+1. **Une requête WMS par adresse**, les seize couches ensemble.
+2. **La couverture n'est interrogée qu'à la sélection d'une adresse**, jamais à
+   la frappe. Seul le géocodage suit la saisie, temporisé à 450 ms, et il tape
+   l'API REST (40 req/min) et non le WMS (20 req/min).
+3. **Cache par cellule de 100 m.** Le cahier des charges disait 250 m ; on a
+   pris 100 m, la maille du mobile. À 250 m, deux adresses distantes de 200 m
+   partageraient une valeur mobile relevée deux cellules plus loin — le gain de
+   cache ne valait pas cette approximation. Vérifié : deux points à 40 m ne
+   déclenchent qu'un appel, deux points à 300 m en déclenchent deux.
+4. **Un garde-fou de cadence** (`covPeutInterroger`) plafonne à 15 appels par
+   minute glissante et affiche un message clair plutôt que de laisser
+   l'infrastructure fédérale répondre par un refus.
+
+**Ce que l'affichage garantit** :
+
+- **Aucune couleur seule.** Chaque pastille est suivie de ce qu'elle compte et
+  sur quelle maille — « > 90 – 100 % » puis « des bâtiments dans ce secteur de
+  250 m », qui se lisent comme une phrase. Un premier jet répétait le
+  pourcentage deux fois, dans la pastille puis dans le contexte ; corrigé.
+- **Les noms d'opérateurs ont leur propre couleur.** Ils portaient d'abord le
+  vert des « > 90 – 100 % », ce qui se lisait trois panneaux plus bas comme un
+  jugement sur le fournisseur.
+- **L'avertissement est permanent**, au-dessus des résultats, pas replié.
+- **La TV a son panneau**, qui dit qu'elle n'est pas couverte et pourquoi on ne
+  la déduit pas des fournisseurs fixes.
+- **Absence de donnée ≠ absence de couverture** : hors zone bâtie, le panneau
+  dit « l'atlas ne recense aucun bâtiment desservi dans ce secteur — ce n'est
+  pas la preuve qu'aucun raccordement n'est possible ».
+
+**Cas limites vérifiés en navigateur** : saisie sans correspondance, localité
+sans numéro (« Zermatt » est écarté par le filtre `origin === "address"`, avec
+un message qui demande une rue et un numéro), point alpin sans cellule fixe,
+et rejeu de la même adresse depuis le cache.
+
+**Ce que l'onglet ne fait pas** : pas d'antennes (§ 7), pas de carte — le
+visiteur cherche une réponse sur son adresse, pas une carte de la Suisse — et
+aucun compteur d'offres dans la barre d'onglets, puisqu'il n'y a pas de
+catalogue à compter.

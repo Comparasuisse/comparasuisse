@@ -491,6 +491,46 @@
   footer a{color:var(--accent);}
   .hidden{display:none !important;}
   .empty{padding:28px; text-align:center; color:var(--muted); font-size:13px;}
+
+  /* ── Onglet Couverture réseau ─────────────────────────────────────────────
+     Les pastilles ne portent jamais l'information seules : chaque .cov-pill est
+     suivie du pourcentage et de la taille de la cellule. La couleur hiérarchise,
+     le texte informe — un daltonien comme un visiteur pressé lisent la même
+     chose. */
+  .cov-panel{background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:16px 18px; margin:0 0 12px;}
+  .cov-panel h3{margin:0 0 12px; font-size:13px; font-weight:700; color:var(--ink);
+    text-transform:uppercase; letter-spacing:.4px;}
+  .cov-addr{font-size:15px; font-weight:700; color:var(--ink); margin:0 0 2px;}
+  .cov-addr-sub{font-size:11.5px; color:var(--muted); margin:0 0 14px;}
+  .cov-line{display:flex; align-items:baseline; gap:10px; padding:7px 0;
+    border-bottom:1px solid var(--line-2); flex-wrap:wrap;}
+  .cov-line:last-child{border-bottom:none;}
+  .cov-label{flex:0 0 132px; font-size:12.5px; font-weight:600; color:var(--ink-2);}
+  .cov-pill{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700;
+    padding:3px 9px; border-radius:20px; white-space:nowrap;}
+  .cov-pill::before{content:""; width:7px; height:7px; border-radius:50%; background:currentColor;}
+  .cov-4{background:var(--green-bg); color:var(--green);}
+  .cov-3{background:#EAF5F0; color:#1F6B4A;}
+  .cov-2{background:var(--amber-bg); color:var(--amber);}
+  .cov-1{background:#FBEDE4; color:#A4551C;}
+  .cov-0{background:var(--line-2); color:var(--muted);}
+  .cov-ctx{font-size:11.5px; color:var(--muted); flex:1 1 240px;}
+  /* Un nom d'opérateur n'est pas une classe de couverture : il lui faut sa
+     propre couleur, sinon le vert de « > 90 – 100 % » se lit trois panneaux
+     plus bas comme un jugement sur le fournisseur. */
+  .cov-name{background:var(--ink); color:#fff;}
+  .cov-prov{display:flex; align-items:center; gap:8px; padding:6px 0; flex-wrap:wrap;}
+  .cov-prov a{font-size:12px;}
+  .cov-sugg{border:1px solid var(--line); border-radius:8px; background:var(--card);
+    margin-top:6px; overflow:hidden;}
+  .cov-sugg button{display:block; width:100%; text-align:left; background:none; border:none;
+    padding:8px 11px; font-size:12.5px; color:var(--ink); cursor:pointer; font-family:inherit;
+    border-bottom:1px solid var(--line-2);}
+  .cov-sugg button:last-child{border-bottom:none;}
+  .cov-sugg button:hover, .cov-sugg button:focus-visible{background:var(--bg); outline:none;}
+  .cov-warn{background:var(--amber-bg); border:1px solid #F0E2B8; color:#6B4E06;
+    font-size:12px; padding:10px 13px; border-radius:8px; margin:0 0 12px; line-height:1.55;}
   .promo-card{}
 
   /* ---------- Densité renforcée : panneau Mobile uniquement ----------
@@ -621,6 +661,7 @@ function gtag_report_conversion(url) {
   <div class="tab" data-tab="combo">📦 Internet + TV <span class="tab-total" id="tab-total-combo"></span></div>
   <div class="tab" data-tab="promo">🔥 Promotions <span class="tab-total" id="tab-total-promo"></span></div>
   <div class="tab" data-tab="travel">✈️ Voyage <span class="tab-total" id="tab-total-travel"></span></div>
+  <div class="tab" data-tab="coverage">📡 Couverture réseau</div>
   <div class="tab" data-tab="compare">⚖️ Comparaison <span id="compare-count-badge" class="tab-badge" hidden>0</span></div>
 </div>
 
@@ -953,6 +994,18 @@ function gtag_report_conversion(url) {
     </div>
   </div>
 </div>
+<div class="controls hidden" id="coverage-controls">
+  <div class="ctrl-group" style="grid-column:1 / -1;">
+    <label for="coverage-search">Votre adresse</label>
+    <input type="search" id="coverage-search" placeholder="Rue et numéro, localité" autocomplete="off"
+      aria-describedby="coverage-search-hint"
+      style="width:100%; padding:9px 11px; font-size:13px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink);">
+    <div id="coverage-suggestions" class="cov-sugg" hidden></div>
+    <div id="coverage-search-hint" style="font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.5;">
+      Tapez au moins quatre caractères, puis choisissez une adresse dans la liste.
+    </div>
+  </div>
+</div>
 <div class="controls hidden" id="travel-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
     <label for="travel-search">Destination — tapez un pays (ex. Portugal, Japon)</label>
@@ -1009,6 +1062,9 @@ function gtag_report_conversion(url) {
   <b>📶 SIM Data only</b> — cartes SIM data seule pour appareils connectés (tablettes, routeurs, hotspots, IoT, montres). Pas d'appels ni de SMS. À ne pas confondre avec l'internet fixe maison (voir onglet Internet) ni avec les abonnements mobile classiques (voir onglet Mobile). Prix affiché par période (30 j, 365 j ou mois selon l'opérateur). Comparateur croisé indisponible pour ces offres (unité de facturation variable).
 </div>
 
+<div class="hidden" id="coverage-notice" style="padding:12px 16px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
+  <b>📡 Couverture réseau</b> — ce que les réseaux fixes et mobiles desservent à votre adresse, d'après l'<a href="https://www.bakom.admin.ch/bakom/fr/page-daccueil/suisse-numerique-et-internet/infrastructure-numerique/atlas-large-bande.html" target="_blank" rel="noopener">Atlas de la large bande de l'OFCOM</a> (données au 30.04.2026). Interrogation en direct : rien n'est stocké chez nous.
+</div>
 <div class="hidden" id="travel-notice" style="padding:12px 16px; background:#f6f2ea; border-left:3px solid var(--red-dark); border-radius:0 8px 8px 0; font-size:13px; line-height:1.55;">
   <b>✈️ eSIM de voyage</b> — forfaits data à acheter avant de partir, sans abonnement ni engagement, pour un séjour de 1 à 31 jours. <b>Aucune des offres de cette liste n'inclut d'appels ni de SMS</b> : votre numéro suisse reste sur votre carte habituelle, prévoyez WhatsApp pour la voix. Saily et Nomad vendent des numéros à part, jamais compris dans les forfaits ci-dessous. Ubigi facture en dollars et Yesim en euros : le montant en francs est une conversion indicative, le prix payé est celui de la devise d'origine. La couverture varie d'un fournisseur à l'autre pour une même zone — vérifiez la liste des pays sur la page de l'offre.
 </div>
@@ -1036,6 +1092,13 @@ function gtag_report_conversion(url) {
 
 <div class="count hidden" id="promo-count"><span></span><span class="reset-link" onclick="resetPromo()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="promo-grid" style="margin-top:0;"></div>
+
+<div class="hidden" id="coverage-results" style="max-width:1080px;">
+  <div class="cov-warn">
+    ⚠️ <b>Données prédictives, pas une garantie.</b> L'OFCOM calcule ces couvertures par modélisation : elles peuvent ne pas correspondre à la desserte réelle de votre logement. Le fixe est agrégé par secteur de <b>250 m</b> et le mobile par secteur de <b>100 m</b> — un immeuble raccordé et son voisin qui ne l'est pas partagent la même valeur. La couverture mobile indiquée vaut <b>en extérieur uniquement</b>. Seul l'opérateur peut confirmer : chaque fournisseur trouvé ci-dessous est accompagné du lien vers son vérificateur officiel.
+  </div>
+  <div id="coverage-body"></div>
+</div>
 
 <div class="count hidden" id="travel-count"><span></span><span class="reset-link" onclick="resetTravel()">Réinitialiser les filtres</span></div>
 <div class="count hidden" id="travel-fx-note" style="margin-top:-4px; font-style:italic;"></div>
@@ -3625,6 +3688,220 @@ function resetTravel(){
 document.getElementById("travel-search").addEventListener("input", refreshTravel);
 document.querySelectorAll('#travel-provider input, #travel-destination input').forEach(i => i.addEventListener("change", refreshTravel));
 
+/* ═══ Onglet Couverture réseau ════════════════════════════════════════════
+   Source : Atlas de la large bande de l'OFCOM, servi par l'infrastructure
+   fédérale de géodonnées. Tout est interrogé en direct depuis le navigateur du
+   visiteur ; rien n'est hébergé ici. Voir COUVERTURE-RESEAU.md pour la
+   reconnaissance complète — notamment pourquoi l'endpoint identify échoue sur
+   ces couches et pourquoi text/plain est le seul format qui accepte le
+   multi-couches.
+
+   La contrainte qui commande ce code : swisstopo plafonne le WMS à 20 requêtes
+   par minute au titre du « fair use ». D'où trois choix — une seule requête
+   pour les seize couches, un cache par cellule, et une requête de couverture
+   qui ne part qu'à la sélection d'une adresse, jamais à la frappe. Les appels
+   partent du navigateur de chaque visiteur : un proxy centralisé plafonnerait
+   tout le site à vingt consultations par minute. */
+
+const COV_FIXE = ["anschlussart-glasfaser", "anschlussart-koaxialkabel", "anschlussart-kupferdraht"];
+const COV_DOWN = ["downlink10", "downlink30", "downlink100", "downlink300", "downlink500", "downlink1000"];
+const COV_UP   = ["uplink1", "uplink10", "uplink100", "uplink1000"];
+const COV_MOB  = ["mobilnetz-3g", "mobilnetz-4g", "mobilnetz-5g"];
+const COV_TOUTES = [...COV_FIXE, ...COV_DOWN, ...COV_UP, ...COV_MOB].map(x => "ch.bakom." + x);
+
+const COV_LIBELLE = {
+  "anschlussart-glasfaser": "Fibre optique", "anschlussart-koaxialkabel": "Câble coaxial",
+  "anschlussart-kupferdraht": "Cuivre (DSL)",
+  downlink10: "≥ 10 Mbit/s", downlink30: "≥ 30 Mbit/s", downlink100: "≥ 100 Mbit/s",
+  downlink300: "≥ 300 Mbit/s", downlink500: "≥ 500 Mbit/s", downlink1000: "≥ 1 Gbit/s",
+  uplink1: "≥ 1 Mbit/s", uplink10: "≥ 10 Mbit/s", uplink100: "≥ 100 Mbit/s", uplink1000: "≥ 1 Gbit/s",
+  "mobilnetz-3g": "3G (UMTS / HSPA)", "mobilnetz-4g": "4G (LTE / LTE-A)", "mobilnetz-5g": "5G (NR)",
+};
+
+// Classes de la légende officielle. Le pourcentage est la donnée : la couleur
+// ne fait que la hiérarchiser, elle ne la remplace jamais.
+const COV_PCT = { 1: "> 0 – 10 %", 2: "> 10 – 50 %", 3: "> 50 – 90 %", 4: "> 90 – 100 %" };
+
+// Cache par cellule de 100 m — la maille du mobile, plus fine que les 250 m du
+// fixe. Prendre 250 m servirait une valeur mobile relevée jusqu'à deux cellules
+// plus loin ; le gain de cache ne vaut pas cette approximation.
+const covCache = new Map();
+const covCle = (E, N) => Math.floor(E / 100) + "_" + Math.floor(N / 100);
+
+// Garde-fou de débit : on compte nos propres appels WMS pour ne pas s'approcher
+// du plafond, même si un visiteur s'acharne sur le champ.
+const covAppels = [];
+function covPeutInterroger(){
+  const t = Date.now();
+  while (covAppels.length && t - covAppels[0] > 60000) covAppels.shift();
+  return covAppels.length < 15;
+}
+
+const covEchappe = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function covPastille(v, mobile){
+  if (!v) return `<span class="cov-pill cov-0">Pas de donnée</span>`;
+  if (mobile) {
+    const cls = v >= 3 ? "cov-4" : "cov-2";
+    return `<span class="cov-pill ${cls}">${v >= 3 ? "3 opérateurs" : "moins de 3 opérateurs"}</span>`;
+  }
+  return `<span class="cov-pill cov-${v}">${COV_PCT[v] || "?"}</span>`;
+}
+
+function covLigne(cle, v, mobile){
+  const ctx = !v
+    ? (mobile ? "Aucune donnée pour ce secteur de 100 m." : "Aucune donnée pour ce secteur de 250 m — souvent parce qu'il n'y a pas de bâtiment recensé.")
+    : mobile
+      ? `couvrent ce secteur de 100 m, en extérieur.`
+      // La pastille porte déjà le pourcentage : le contexte dit ce qu'il compte
+      // et sur quelle maille, sans répéter le chiffre. Les deux se lisent comme
+      // une seule phrase — « > 90 – 100 % des bâtiments dans ce secteur de 250 m ».
+      : `des bâtiments dans ce secteur de 250 m.`;
+  return `<div class="cov-line"><span class="cov-label">${COV_LIBELLE[cle] || cle}</span>`
+    + covPastille(v, mobile) + `<span class="cov-ctx">${ctx}</span></div>`;
+}
+
+// ── Géocodage ───────────────────────────────────────────────────────────────
+// SearchServer mélange adresses et lieux-dits : « Bahnhofstrasse 1 Zurich »
+// remonte d'abord un quartier entier. Sans le filtre sur origin, on interrogerait
+// le centre du quartier au lieu de l'adresse demandée.
+async function covGeocode(terme){
+  const u = `https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=${encodeURIComponent(terme)}&type=locations&sr=2056&limit=12`;
+  const j = await (await fetch(u)).json();
+  return (j.results || [])
+    .filter(r => r.attrs && r.attrs.origin === "address")
+    .slice(0, 6)
+    .map(r => ({ label: String(r.attrs.label).replace(/<[^>]+>/g, ""), E: r.attrs.y, N: r.attrs.x }));
+}
+
+// ── Interrogation de la couverture ──────────────────────────────────────────
+async function covInterroge(E, N){
+  const cle = covCle(E, N);
+  if (covCache.has(cle)) return covCache.get(cle);
+  if (!covPeutInterroger()) throw new Error("cadence");
+  covAppels.push(Date.now());
+
+  const d = 125, L = COV_TOUTES.join(",");
+  // text/plain, et non application/json : le JSON échoue dès qu'on demande
+  // plusieurs couches à la fois (msOGRWriteFromQuery / OGR_DS_CreateLayer).
+  const wms = `https://wms.geo.admin.ch/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo`
+    + `&LAYERS=${L}&QUERY_LAYERS=${L}&CRS=EPSG:2056&BBOX=${E - d},${N - d},${E + d},${N + d}`
+    + `&WIDTH=101&HEIGHT=101&I=50&J=50&INFO_FORMAT=text/plain&LANG=fr`;
+  const idf = `https://api3.geo.admin.ch/rest/services/all/MapServer/identify?geometry=${E},${N}`
+    + `&geometryType=esriGeometryPoint&layers=all:ch.bakom.anbieter-eigenes_festnetz`
+    + `&mapExtent=${E - 50},${N - 50},${E + 50},${N + 50}&imageDisplay=100,100,96&tolerance=5&sr=2056&lang=fr`;
+
+  const [txt, ident] = await Promise.all([
+    fetch(wms).then(r => r.text()),
+    fetch(idf).then(r => r.json()).catch(() => ({})),
+  ]);
+
+  const valeurs = {};
+  for (const m of txt.matchAll(/ch\.bakom\.([\w-]+)\.value_0\.name = '(\d+)'/g)) valeurs[m[1]] = +m[2];
+
+  const at = ((ident.results || [])[0] || {}).attributes || {};
+  const noms = (at.alias || "").split(";").map(s => s.trim()).filter(Boolean);
+  const liens = (at.fdaurl || "").split(";").map(s => s.trim());
+  const fournisseurs = noms.map((nom, i) => ({ nom, url: /^https?:\/\//.test(liens[i] || "") ? liens[i] : null }));
+
+  const res = { valeurs, fournisseurs };
+  covCache.set(cle, res);
+  return res;
+}
+
+// ── Rendu ───────────────────────────────────────────────────────────────────
+function covAffiche(adresse, res){
+  const v = res.valeurs;
+  const bloc = (titre, lignes) => `<div class="cov-panel"><h3>${titre}</h3>${lignes}</div>`;
+  const aucune = (cles) => cles.every(c => !v[c]);
+
+  const fixe = aucune([...COV_FIXE, ...COV_DOWN])
+    ? `<div class="cov-line"><span class="cov-ctx">L'atlas ne recense aucun bâtiment desservi dans ce secteur. Cela arrive hors des zones habitées — ce n'est pas la preuve qu'aucun raccordement n'est possible.</span></div>`
+    : COV_FIXE.map(c => covLigne(c, v[c], false)).join("");
+
+  const down = COV_DOWN.filter(c => v[c]).map(c => covLigne(c, v[c], false)).join("")
+    || `<div class="cov-line"><span class="cov-ctx">Aucun débit descendant recensé dans ce secteur.</span></div>`;
+  const up = COV_UP.filter(c => v[c]).map(c => covLigne(c, v[c], false)).join("")
+    || `<div class="cov-line"><span class="cov-ctx">Aucun débit montant recensé dans ce secteur.</span></div>`;
+
+  const mob = COV_MOB.map(c => covLigne(c, v[c], true)).join("");
+
+  const prov = res.fournisseurs.length
+    ? res.fournisseurs.map(f => `<div class="cov-prov"><span class="cov-pill cov-name">${covEchappe(f.nom)}</span>`
+        + (f.url ? `<a href="${covEchappe(f.url)}" target="_blank" rel="noopener">Vérifier chez ${covEchappe(f.nom)} →</a>`
+                 : `<span class="cov-ctx">Cet opérateur ne publie pas de vérificateur d'adresse.</span>`)
+        + `</div>`).join("")
+      + `<div class="cov-ctx" style="margin-top:10px;">Liste des entreprises susceptibles de fournir un service à cette adresse, sur leur propre raccordement ou en gros. Elle n'est pas toujours exhaustive, et la présence d'un opérateur ne garantit pas qu'il vous accepte comme client — d'où les liens de vérification.</div>`
+    : `<div class="cov-ctx">L'atlas ne liste aucun fournisseur pour ce secteur.</div>`;
+
+  document.getElementById("coverage-body").innerHTML =
+    `<div class="cov-panel"><div class="cov-addr">${covEchappe(adresse.label)}</div>`
+    + `<div class="cov-addr-sub">Coordonnées suisses LV95 : ${Math.round(adresse.E)} / ${Math.round(adresse.N)}</div>`
+    + `<div class="cov-ctx">Source : Atlas de la large bande, Office fédéral de la communication (OFCOM), données au 30.04.2026.</div></div>`
+    + bloc("Type de raccordement", fixe)
+    + bloc("Débits descendants", down)
+    + bloc("Débits montants", up)
+    + bloc("Réseau mobile", mob)
+    + bloc("Fournisseurs fixes à cette adresse", prov)
+    + bloc("Télévision", `<div class="cov-line"><span class="cov-label">Disponibilité TV</span>`
+        + `<span class="cov-pill cov-0">Non couverte par cet outil</span>`
+        + `<span class="cov-ctx">L'atlas de l'OFCOM ne publie pas la disponibilité TV par opérateur. On pourrait la deviner à partir des fournisseurs fixes ci-dessus, mais ce serait une déduction et non une donnée vérifiée — on préfère le dire. Consultez le vérificateur de l'opérateur qui vous intéresse.</span></div>`);
+
+  document.getElementById("coverage-results").classList.remove("hidden");
+}
+
+// ── Câblage du champ ────────────────────────────────────────────────────────
+let covTimer = null, covSugg = [];
+const covInput = document.getElementById("coverage-search");
+const covBoite = document.getElementById("coverage-suggestions");
+const covHint = document.getElementById("coverage-search-hint");
+
+function covMessage(t){ covHint.textContent = t; }
+
+function covMontreSuggestions(){
+  if (!covSugg.length) { covBoite.hidden = true; covBoite.innerHTML = ""; return; }
+  covBoite.innerHTML = covSugg.map((s, i) => `<button type="button" data-i="${i}">${covEchappe(s.label)}</button>`).join("");
+  covBoite.hidden = false;
+}
+
+covBoite.addEventListener("click", async (e) => {
+  const b = e.target.closest("button[data-i]");
+  if (!b) return;
+  const choix = covSugg[+b.dataset.i];
+  covInput.value = choix.label;
+  covBoite.hidden = true;
+  covMessage("Interrogation de l'atlas…");
+  try {
+    covAffiche(choix, await covInterroge(choix.E, choix.N));
+    covMessage("Adresse trouvée. Tapez-en une autre pour comparer.");
+  } catch (err) {
+    covMessage(err.message === "cadence"
+      ? "Trop de recherches en une minute. L'atlas fédéral limite les interrogations : patientez quelques instants."
+      : "L'atlas fédéral n'a pas répondu. Réessayez dans un instant.");
+  }
+});
+
+covInput.addEventListener("input", () => {
+  clearTimeout(covTimer);
+  const t = covInput.value.trim();
+  if (t.length < 4) { covBoite.hidden = true; covMessage("Tapez au moins quatre caractères, puis choisissez une adresse dans la liste."); return; }
+  // Temporisation : le géocodage ne part qu'une fois la frappe retombée. La
+  // couverture, elle, n'est interrogée qu'à la sélection d'une adresse.
+  covTimer = setTimeout(async () => {
+    try {
+      covSugg = await covGeocode(t);
+      covMontreSuggestions();
+      covMessage(covSugg.length ? "Choisissez votre adresse ci-dessus." : "Aucune adresse ne correspond. Essayez « rue numéro, localité ».");
+    } catch { covMessage("Recherche d'adresse indisponible pour le moment."); }
+  }, 450);
+});
+
+covInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && covSugg.length) { e.preventDefault(); covBoite.querySelector("button").click(); }
+  if (e.key === "Escape") covBoite.hidden = true;
+});
+
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click", ()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
@@ -3660,6 +3937,12 @@ document.querySelectorAll(".tab").forEach(tab=>{
   document.getElementById("travel-count").classList.toggle("hidden", target!=="travel");
   document.getElementById("travel-fx-note").classList.toggle("hidden", target!=="travel");
   document.getElementById("travel-grid").classList.toggle("hidden", target!=="travel");
+  document.getElementById("coverage-notice").classList.toggle("hidden", target!=="coverage");
+  document.getElementById("coverage-controls").classList.toggle("hidden", target!=="coverage");
+  // Le panneau de résultats ne s'ouvre qu'une fois une adresse choisie : on ne
+  // le montre en quittant l'onglet que s'il porte déjà quelque chose.
+  document.getElementById("coverage-results").classList.toggle("hidden",
+    target!=="coverage" || !document.getElementById("coverage-body").innerHTML);
     document.getElementById("compare-notice").classList.toggle("hidden", target!=="compare");
     document.getElementById("compare-container").classList.toggle("hidden", target!=="compare");
     if (target === "compare") renderCompareView();
