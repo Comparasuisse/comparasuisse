@@ -39,7 +39,7 @@ suisse (locale fr-CH, fuseau Europe/Zurich) :
 | Airalo | **CHF** |
 | Saily | **CHF** (et interface en français) |
 | Nomad | **CHF** |
-| Holafly | à confirmer |
+| Holafly | **CHF** — confirmé le 13.08, sélecteur « FR - CHF (Fr) » |
 | Ubigi | **USD** — « US$23 », aucune localisation |
 | Yesim | **EUR** |
 
@@ -77,6 +77,31 @@ n'inclut d'appels ni de SMS. Si les deux derniers confirment, l'onglet devra
 le dire une fois clairement plutôt que de répéter « appels : non » sur chaque
 carte — l'information utile devient alors « aucune eSIM voyage ne remplace
 votre numéro, prévoyez WhatsApp ».
+
+## 3 ter. Holafly — faits établis, prix encore à relever
+
+Relevés le 13.08.2026 sur `esim.holafly.com/fr/esim-europe/`, une fois les
+88 nœuds de la bannière de consentement retirés du DOM :
+
+- **Devise CHF**, sélecteur « FR - CHF (Fr) ».
+- **Un seul produit par destination** : données illimitées. Il n'y a pas de
+  grille de volumes, seulement un prix qui dépend de la durée.
+- **61 durées vendues**, de 1 à 60 jours. C'est une singularité réelle — aucun
+  autre fournisseur ne vend la journée à la carte — mais enregistrer 31 lignes
+  par destination remplirait le comparateur de quasi-doublons. Le collecteur
+  retient huit durées de référence (1, 3, 5, 7, 10, 15, 20, 30) et la
+  granularité au jour près sera dite dans la description de l'offre.
+- **Partage de connexion : oui, mais plafonné à 1 Go par jour** — « Partagez
+  1 Go de données par jour avec votre famille […] un forfait de 7 jours
+  comprend 7 Go ». Sur un produit vendu comme illimité, la nuance compte.
+- **Always On** : 1 Go/mois de données de secours une fois l'illimité épuisé,
+  ce qui confirme au passage que l'illimité est régulé.
+
+**Ce qui manque** : les prix. Le sélecteur de durée est un composant maison ;
+les boutons numérotés atteignables au clic ne pilotent pas la sélection, qui
+reste sur 1 jour, et le seul montant lisible est le « à partir de 3,50 »
+affiché en tête de page. `scripts/collect-holafly.mjs` est écrit et fonctionne
+pour tout le reste — il ne lui manque que la bonne poignée sur ce sélecteur.
 
 ## 3 bis. Partage de connexion
 
