@@ -83,13 +83,29 @@ for (const slug of slugs) {
     );
 
     for (const j of DUREES) {
+      // Deux gestes, pas un. Le nombre de jours vit derrière #calendarTrigger
+      // (data-qa="numberOfDaysInput") : tant qu'il n'est pas ouvert, les seuls
+      // boutons numérotés atteignables sont le déclencheur lui-même, qui affiche
+      // la valeur courante. Cliquer dessus ne change donc rien — et toutes les
+      // durées ressortaient au même prix, celui du « à partir de » de l'en-tête.
       const clique = await page.evaluate((n) => {
-        const b = [...document.querySelectorAll("button")].find(
-          (e) => !e.children.length && e.textContent.trim() === String(n)
+        const trig = document.querySelector("#calendarTrigger");
+        if (!trig) return false;
+        trig.click();
+        return new Promise((r) =>
+          setTimeout(() => {
+            const jour = [...document.querySelectorAll("button")].find(
+              (e) =>
+                e !== trig &&
+                !trig.contains(e) &&
+                e.offsetParent !== null &&
+                e.textContent.trim() === String(n)
+            );
+            if (!jour) return r(false);
+            jour.click();
+            r(true);
+          }, 900)
         );
-        if (!b) return false;
-        b.click();
-        return true;
       }, j);
       if (!clique) continue;
       await page.waitForTimeout(1800);

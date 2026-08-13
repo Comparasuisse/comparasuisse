@@ -97,11 +97,33 @@ Relevés le 13.08.2026 sur `esim.holafly.com/fr/esim-europe/`, une fois les
 - **Always On** : 1 Go/mois de données de secours une fois l'illimité épuisé,
   ce qui confirme au passage que l'illimité est régulé.
 
-**Ce qui manque** : les prix. Le sélecteur de durée est un composant maison ;
-les boutons numérotés atteignables au clic ne pilotent pas la sélection, qui
-reste sur 1 jour, et le seul montant lisible est le « à partir de 3,50 »
-affiché en tête de page. `scripts/collect-holafly.mjs` est écrit et fonctionne
-pour tout le reste — il ne lui manque que la bonne poignée sur ce sélecteur.
+**Ce qui manque** : les prix. Diagnostic précis au 13.08.2026, trois pistes
+épuisées — à ne pas refaire.
+
+Le compteur de jours vit derrière `button#calendarTrigger`
+(`data-qa="numberOfDaysInput"`), qui affiche la valeur courante. Tant qu'il
+n'est pas ouvert, les seuls boutons numérotés du DOM sont le déclencheur
+lui-même : c'est ce qui faisait sortir les huit durées au même prix, celui du
+« à partir de 3,50 » de l'en-tête. Une fois ouvert, le panneau expose bien
+61 boutons de jours en `button.cursor-pointer`.
+
+Ce qui a été essayé sans succès, le déclencheur restant obstinément sur « 1 » :
+
+1. **Clic programmatique** sur le bouton du jour voulu, déclencheur ouvert.
+2. **Sélection par plage** — hypothèse d'un vrai calendrier où l'on pose une
+   date de début puis une date de fin : clic sur 20 puis sur 26. Sans effet.
+3. **Clic natif Playwright** sur `button.cursor-pointer` filtré sur « 7 » :
+   les deux éléments existent mais `locator.click()` part en timeout, ils ne
+   sont pas jugés actionnables.
+
+La piste restante est donc la simulation d'évènements de pointeur complets
+(`pointerdown` / `pointerup` / `mouseup`) sur la cellule, ou l'inspection du
+composant pour trouver l'état applicatif à piloter directement. Vérifier
+d'abord que le déclencheur passe de « 1 » à « 7 » : c'est le seul signal fiable
+que la sélection a pris.
+
+**Contrôle de non-régression obligatoire** : si toutes les durées ressortent au
+même prix, la collecte est fausse. Ne jamais commiter un tel résultat.
 
 ## 3 bis. Partage de connexion
 
