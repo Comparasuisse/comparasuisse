@@ -1,0 +1,316 @@
+[
+ {
+  "provider": "Saily",
+  "slug": "esim-europe",
+  "url": "https://saily.com/esim-europe/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 10.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 15.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 29.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 90,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 79.49,
+    "currency": "CHF",
+    "horsPerimetre": true
+   }
+  ],
+  "meta": {
+   "couverture": 35,
+   "dureesIllimite": []
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-united-kingdom",
+  "url": "https://saily.com/esim-united-kingdom/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 10.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 25.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": []
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-united-states",
+  "url": "https://saily.com/esim-united-states/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 11.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 18.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 30.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": []
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-canada",
+  "url": "https://saily.com/esim-canada/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 10.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 14.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 25.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 36.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": []
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-turkey",
+  "url": "https://saily.com/esim-turkey/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 18.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": []
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-global",
+  "url": "https://saily.com/esim-global/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 7.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": 2,
+    "unlimited": false,
+    "price": 13.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 60,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 27.99,
+    "currency": "CHF",
+    "horsPerimetre": true
+   },
+   {
+    "days": 180,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 47.49,
+    "currency": "CHF",
+    "horsPerimetre": true
+   },
+   {
+    "days": 365,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 55.49,
+    "currency": "CHF",
+    "horsPerimetre": true
+   },
+   {
+    "days": 365,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 107.99,
+    "currency": "CHF",
+    "horsPerimetre": true
+   }
+  ],
+  "meta": {
+   "couverture": 121,
+   "dureesIllimite": []
+  }
+ }
+]
