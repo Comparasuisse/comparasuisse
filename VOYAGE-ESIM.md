@@ -70,13 +70,33 @@ exceptions, d'où le champ `callsIncluded` (`oui` / `non` / `option`).
   réponses — l'exemple même du chiffre qu'on aurait eu tort de supposer.
 - **Airalo : non** pour les forfaits collectés. La page qualifie sa gamme de
   « data only » dans le libellé de son onglet Data.
-- **Saily, Nomad, Ubigi** : à confirmer sur leurs pages produit.
+- **Nomad : non** pour les forfaits collectés, mais la réponse méritait d'être
+  cherchée. Sa FAQ dit d'abord l'inverse de ce qu'on attendait : « Some of
+  Nomad's eSIMs include a local phone number. Check the plan details. » La
+  fiche de chaque forfait, elle, tranche sans ambiguïté — elle porte
+  « Service : Data Only » et « Local Number : No ». Nomad vend donc des eSIM
+  avec numéro, mais aucune parmi celles du lot 1.
+- **Ubigi : non.** Sa fiche produit décrit « one-time unlimited eSIM **data**
+  plan » et ne mentionne ni voix ni SMS nulle part. C'est une conclusion par
+  absence, mais cohérente de bout en bout : le catalogue entier s'intitule
+  « data plans ».
+- **Saily : option.** Ses forfaits de voyage sont data-only, mais Saily vend
+  séparément un numéro américain à ajouter dans l'application
+  (`saily.com/fr/esim-phone-number/`). C'est le seul `option` du lot.
 
-**Constat qui se dessine** : sur les quatre fournisseurs vérifiés, aucun
-n'inclut d'appels ni de SMS. Si les deux derniers confirment, l'onglet devra
-le dire une fois clairement plutôt que de répéter « appels : non » sur chaque
-carte — l'information utile devient alors « aucune eSIM voyage ne remplace
-votre numéro, prévoyez WhatsApp ».
+**Constat définitif** : **aucun des 348 forfaits collectés n'inclut appels ni
+SMS.** L'onglet doit le dire une fois, en tête, plutôt que de répéter
+« appels : non » sur chaque carte — l'information utile est « aucune eSIM
+voyage ne remplace votre numéro, prévoyez WhatsApp », avec la nuance que Saily
+et Nomad vendent des numéros à part.
+
+⚠️ **Un piège rencontré, à ne pas rejouer.** La page Saily porte une table
+« Saily vs. les autres services eSIM » dont une ligne s'intitule « Numéro de
+téléphone (SMS et appels) », cochée pour Saily et Airalo, décochée pour
+Holafly, Nomad et Ubigi. C'est tentant, c'est structuré, et c'est un
+argumentaire concurrentiel écrit par un des comparés — exactement la source
+secondaire que ce chantier s'interdit. Elle contredit d'ailleurs la fiche
+produit de Nomad sur son propre catalogue. Aucune ligne n'en a été tirée.
 
 ## 3 ter. Holafly — faits établis, prix encore à relever
 
@@ -152,6 +172,10 @@ l'en-tête. Le collecteur refuse désormais d'écrire son fichier dans ce cas.
 
 - **Yesim : oui**, confirmé par sa FAQ : le partage est « enabled by default »
   et sans frais supplémentaire.
+- **Nomad : oui**, la fiche de chaque forfait porte « Hotspot : Yes ».
+- **Ubigi : oui**, « Data sharing allowed » sur la fiche produit, assorti d'un
+  « Fair Use Policy may apply ».
+- **Holafly : oui mais plafonné** à 1 Go par jour (cf. § 3 ter).
 - **Airalo** : rien sur les pages de forfaits. Reste à `null` — non vérifié
   n'est pas la même chose que non autorisé.
 
@@ -159,6 +183,10 @@ l'en-tête. Le collecteur refuse désormais d'écrire son fichier dans ce cas.
 
 - **Saily** : son « illimité » est bridé — 3 Go/jour à pleine vitesse, puis
   1 Mb/s. Annoncer « illimité » sans cette nuance induirait en erreur.
+- **Nomad** : son illimité l'est tout autant, et la fiche produit le chiffre —
+  « 2GB/day at 4G/5G. 1 Mbps after 2GB ». Le bridage n'est donc pas une
+  particularité de Saily : c'est la règle du secteur, et le champ `dataNote`
+  doit être renseigné partout où le fournisseur le publie.
 - **Airalo** : la page Europe couvre **41 pays**, celle de Saily **35**. Les
   périmètres régionaux diffèrent d'un fournisseur à l'autre : la couverture
   doit être stockée par offre, jamais déduite du mot « Europe ».
@@ -186,18 +214,27 @@ l'en-tête. Le collecteur refuse désormais d'écrire son fichier dans ce cas.
 Estimation pour le lot 1 — Europe, Royaume-Uni, USA, Canada, Turquie et
 forfaits mondiaux, soit 6 zones × 6 fournisseurs :
 
-| Fournisseur | Forfaits Europe constatés | Estimation lot 1 |
-|---|---|---|
-| Airalo | ~14 (3 onglets) | ~70 |
-| Saily | ~12 (configurateur) | ~60 |
-| Holafly | ~8 | ~45 |
-| Nomad | ~10 | ~55 |
-| Ubigi | ~8 courts | ~45 |
-| Yesim | ~10 | ~55 |
-| **Total** | | **~330 offres** |
+Le lot 1 — Europe, Royaume-Uni, USA, Canada, Turquie et mondial — est
+**collecté**. Décompte au 13.08.2026, données dans `data/voyage-*.json` :
 
-Ces volumes justifient l'approche par lots demandée : une zone à la fois,
-commit à chaque lot.
+| Fournisseur | Lus | Dans le périmètre | Devise |
+|---|---|---|---|
+| Airalo | 104 | **99** | CHF |
+| Saily | 65 | **60** | CHF |
+| Nomad | 54 | **52** | CHF |
+| Ubigi | 78 | **51** | USD |
+| Holafly | 48 | **48** | CHF |
+| Yesim | 41 | **38** | EUR |
+| **Total** | 390 | **348** | |
+
+L'estimation initiale tablait sur ~330 : elle se tenait. L'écart tient surtout
+à Airalo, dont les trois onglets rendent plus que prévu.
+
+**Ce qui reste hors périmètre** (42 forfaits) : les formules à 12 mois d'Ubigi,
+ses forfaits mondiaux de 90 à 360 jours, les 90/180/365 jours de Saily et de
+Yesim, et les abonnements reconductibles — Nomad Pass et les plans `monthly`
+d'Ubigi. Tous sont relevés et marqués `horsPerimetre`, pas jetés : si le
+périmètre change un jour, la donnée est là.
 
 ## 7. Modèle de données proposé
 
