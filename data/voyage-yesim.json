@@ -1,0 +1,429 @@
+[
+ {
+  "provider": "Yesim",
+  "slug": "regions/europe",
+  "url": "https://yesim.app/regions/europe/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": 0.5,
+    "unlimited": false,
+    "price": 0.45,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 2.5,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "(défaut)",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.6,
+    "beforePrice": 12.5,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16,
+    "beforePrice": 25,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 21,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "(défaut)",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 22,
+    "beforePrice": 50,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 30,
+    "unlimited": false,
+    "price": 28,
+    "beforePrice": 75,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 33,
+    "beforePrice": 45,
+    "currency": "EUR",
+    "onglet": "(défaut)",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 56,
+    "beforePrice": 90,
+    "currency": "EUR",
+    "onglet": "(défaut)",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 33,
+   "devise": "EUR",
+   "onglet_Prepaid plans": "cliqué",
+   "onglet_Unlimited plans": "cliqué"
+  }
+ },
+ {
+  "provider": "Yesim",
+  "slug": "country/united-kingdom",
+  "url": "https://yesim.app/country/united-kingdom/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": 0.5,
+    "unlimited": false,
+    "price": 0.45,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 2.5,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.6,
+    "beforePrice": 12.5,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16,
+    "beforePrice": 25,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 22,
+    "beforePrice": 50,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 30,
+    "unlimited": false,
+    "price": 28,
+    "beforePrice": 75,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "devise": "EUR",
+   "onglet_Prepaid plans": "cliqué",
+   "onglet_Unlimited plans": "cliqué"
+  }
+ },
+ {
+  "provider": "Yesim",
+  "slug": "country/united-states",
+  "url": "https://yesim.app/country/united-states/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": 0.5,
+    "unlimited": false,
+    "price": 0.45,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.1,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9,
+    "beforePrice": 15.5,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14,
+    "beforePrice": 31,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 21,
+    "beforePrice": 62,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 30,
+    "unlimited": false,
+    "price": 26.6,
+    "beforePrice": 93,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "devise": "EUR",
+   "onglet_Prepaid plans": "cliqué",
+   "onglet_Unlimited plans": "cliqué"
+  }
+ },
+ {
+  "provider": "Yesim",
+  "slug": "country/canada",
+  "url": "https://yesim.app/country/canada/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": 0.2,
+    "unlimited": false,
+    "price": 0.45,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4.5,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 9,
+    "beforePrice": 13.5,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 12.5,
+    "beforePrice": 22.5,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 22,
+    "beforePrice": 45,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 33,
+    "beforePrice": 90,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "devise": "EUR",
+   "onglet_Prepaid plans": "cliqué",
+   "onglet_Unlimited plans": "cliqué"
+  }
+ },
+ {
+  "provider": "Yesim",
+  "slug": "country/turkey",
+  "url": "https://yesim.app/country/turkey/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": 0.5,
+    "unlimited": false,
+    "price": 0.5,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 2,
+    "beforePrice": null,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9,
+    "beforePrice": 10,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14,
+    "beforePrice": 20,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 21,
+    "beforePrice": 40,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 30,
+    "unlimited": false,
+    "price": 26.6,
+    "beforePrice": 60,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 36,
+    "beforePrice": 100,
+    "currency": "EUR",
+    "onglet": "Prepaid plans",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "devise": "EUR",
+   "onglet_Prepaid plans": "cliqué",
+   "onglet_Unlimited plans": "cliqué"
+  }
+ },
+ {
+  "provider": "Yesim",
+  "slug": "regions/global",
+  "url": "https://yesim.app/regions/global/",
+  "plans": [],
+  "meta": {
+   "couverture": null,
+   "devise": "EUR",
+   "onglet_Prepaid plans": "introuvable",
+   "onglet_Unlimited plans": "introuvable"
+  }
+ }
+]
