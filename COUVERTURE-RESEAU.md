@@ -240,7 +240,75 @@ sans numéro (« Zermatt » est écarté par le filtre `origin === "address"`, a
 un message qui demande une rue et un numéro), point alpin sans cellule fixe,
 et rejeu de la même adresse depuis le cache.
 
-**Ce que l'onglet ne fait pas** : pas d'antennes (§ 7), pas de carte — le
-visiteur cherche une réponse sur son adresse, pas une carte de la Suisse — et
-aucun compteur d'offres dans la barre d'onglets, puisqu'il n'y a pas de
-catalogue à compter.
+**Ce que l'onglet ne fait pas** : pas d'antennes (§ 7) et aucun compteur
+d'offres dans la barre d'onglets, puisqu'il n'y a pas de catalogue à compter.
+
+## 12. La carte — WMTS, et pourquoi ça change tout
+
+Ajoutée après coup, et elle n'aurait pas été possible sur l'architecture du
+§ 10. La fiche par adresse tape le **WMS**, plafonné à 20 requêtes par minute :
+une carte librement déplaçable l'aurait épuisé en quelques glissements.
+
+Les mêmes couches sont aussi servies en **WMTS** — des tuiles pré-calculées,
+distribuées par CDN — et le plafond n'a rien à voir :
+
+| Service | Par minute | Par an |
+|---|---|---|
+| WMS `wms.geo.admin.ch` | 20 | 10,5 M |
+| **WMTS `wmts.geo.admin.ch`** | **1 200** | **631 M** |
+
+Soixante fois plus. Une vue consomme une quarantaine de tuiles, fond compris :
+un visiteur peut enchaîner une trentaine de déplacements par minute sans
+approcher la limite. C'est ce que fait le géoportail officiel lui-même.
+
+Patron d'URL, en **EPSG:3857 nativement** — donc Leaflet sans reprojection :
+
+```
+https://wmts.geo.admin.ch/1.0.0/{couche}/default/current/3857/{z}/{x}/{y}.{png|jpeg}
+```
+
+Tuiles en CORS ouvert, `cache-control: public, max-age=3600,
+s-maxage=31556952`. Fond de carte : `ch.swisstopo.pixelkarte-farbe` en jpeg,
+surimpression en png à l'opacité 0.75 — celle qu'emploie le géoportail.
+
+### Les plafonds de zoom, relevés couche par couche
+
+Vérifiés sur Berne **et** Lausanne, niveaux 10 à 20, pour ne rien supposer :
+
+| Couches | Zoom max servi | Au-delà |
+|---|---|---|
+| Fond `pixelkarte-farbe` | 19 | HTTP 400 |
+| Les 15 couches de l'atlas… | **18** | HTTP 400 |
+| …sauf `mobilnetz-5g` | **14** | HTTP 400 |
+
+La 5G est la seule exception, et l'écart est large : au zoom 14 on voit une
+ville, pas une rue. `maxNativeZoom` règle le cas — Leaflet cesse de demander
+des tuiles inexistantes et agrandit la dernière disponible. **Le flou est le
+comportement souhaité** : la donnée mobile est maillée à 100 m, il n'y a rien
+de plus fin à montrer. Un message sous la carte le dit en toutes lettres dès
+qu'on dépasse le natif de la couche affichée.
+
+### Choix d'implémentation
+
+- **Leaflet 1.9.4 depuis CDN**, avec empreintes SRI vérifiées, en `defer`.
+  Seule dépendance externe du site. Aucune CSP à débloquer : le projet n'a ni
+  `netlify.toml` ni `_headers`.
+- **Initialisation différée** à la première ouverture de l'onglet. Leaflet
+  dimensionne ses tuiles à la construction : dans un conteneur masqué, il
+  calcule sur une hauteur nulle et n'affiche rien. `invalidateSize()` aux
+  ouvertures suivantes.
+- **La légende est l'image officielle** de `api3.geo.admin.ch/static/images/
+  legends/`, pas une recopie de couleurs. Si l'OFCOM change sa palette, on ne
+  se retrouve pas à mentir sur la sienne.
+- **Le marqueur** vient des champs `lat`/`lon` que `SearchServer` rend en même
+  temps que le LV95 : aucune reprojection à écrire. La carte se recentre avant
+  la fiche textuelle, puisqu'elle ne dépend pas du WMS.
+
+### Un piège de test, pas de code
+
+Une première campagne enchaînait les `setView` animés en boucle ; la carte
+finissait bloquée, ignorant les changements de zoom, et l'avertissement
+paraissait défaillant. Reproduit proprement avec `{animate:false}` et des
+attentes suffisantes, tout se comporte correctement. **Le symptôme venait du
+harnais de test, pas du produit** — vérifier avant de « corriger » un bug qui
+n'existe pas.

@@ -531,6 +531,23 @@
   .cov-sugg button:hover, .cov-sugg button:focus-visible{background:var(--bg); outline:none;}
   .cov-warn{background:var(--amber-bg); border:1px solid #F0E2B8; color:#6B4E06;
     font-size:12px; padding:10px 13px; border-radius:8px; margin:0 0 12px; line-height:1.55;}
+
+  /* Carte. Hauteur fixe plutôt qu'un ratio : Leaflet a besoin d'un conteneur
+     dimensionné avant son initialisation, sinon il calcule ses tuiles sur une
+     hauteur nulle. */
+  .cov-map-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 10px;}
+  .cov-map-head label{font-size:12px; font-weight:600; color:var(--ink-2);}
+  .cov-map-head select{padding:7px 10px; font-size:12.5px; border:1px solid var(--line);
+    border-radius:8px; background:#fff; color:var(--ink); font-family:inherit; cursor:pointer;}
+  #coverage-map{height:460px; border-radius:10px; border:1px solid var(--line); background:var(--line-2);}
+  @media (max-width:640px){ #coverage-map{height:340px;} }
+  .cov-legend{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:10px;}
+  .cov-legend-item{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-2);}
+  .cov-legend-swatch{width:14px; height:14px; border-radius:3px; border:1px solid rgba(0,0,0,.15);}
+  .cov-zoomwarn{font-size:11.5px; color:var(--amber); margin-top:8px; min-height:16px;}
+  /* Leaflet pose ses propres z-index très haut ; on le contient pour qu'il ne
+     passe pas au-dessus de la barre d'onglets. */
+  .leaflet-container{z-index:1;}
   .promo-card{}
 
   /* ---------- Densité renforcée : panneau Mobile uniquement ----------
@@ -629,6 +646,15 @@ function gtag_report_conversion(url) {
   return false;
 }
 </script>
+<!-- Leaflet, pour la carte de l'onglet Couverture réseau. Seule dépendance
+     externe du site : chargée depuis un CDN, avec empreinte SRI vérifiée le
+     13.08.2026, et en `defer` pour ne pas retarder le rendu du comparateur —
+     la carte n'est construite qu'à l'ouverture de son onglet. -->
+<link rel="preconnect" href="https://wmts.geo.admin.ch">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -1092,6 +1118,44 @@ function gtag_report_conversion(url) {
 
 <div class="count hidden" id="promo-count"><span></span><span class="reset-link" onclick="resetPromo()">Réinitialiser les filtres</span></div>
 <div class="grid hidden" id="promo-grid" style="margin-top:0;"></div>
+
+<div class="hidden" id="coverage-map-wrap" style="max-width:1080px; margin:0 0 14px;">
+  <div class="cov-panel">
+    <div class="cov-map-head">
+      <label for="coverage-layer">Couche affichée</label>
+      <select id="coverage-layer">
+        <optgroup label="Réseau mobile">
+          <option value="ch.bakom.mobilnetz-5g" selected>5G — NR</option>
+          <option value="ch.bakom.mobilnetz-4g">4G — LTE / LTE-A</option>
+          <option value="ch.bakom.mobilnetz-3g">3G — UMTS / HSPA</option>
+        </optgroup>
+        <optgroup label="Type de raccordement fixe">
+          <option value="ch.bakom.anschlussart-glasfaser">Fibre optique FTTB/FTTH</option>
+          <option value="ch.bakom.anschlussart-koaxialkabel">Câble coaxial</option>
+          <option value="ch.bakom.anschlussart-kupferdraht">Cuivre (DSL)</option>
+        </optgroup>
+        <optgroup label="Débit descendant">
+          <option value="ch.bakom.downlink10">≥ 10 Mbit/s</option>
+          <option value="ch.bakom.downlink30">≥ 30 Mbit/s</option>
+          <option value="ch.bakom.downlink100">≥ 100 Mbit/s</option>
+          <option value="ch.bakom.downlink300">≥ 300 Mbit/s</option>
+          <option value="ch.bakom.downlink500">≥ 500 Mbit/s</option>
+          <option value="ch.bakom.downlink1000">≥ 1 Gbit/s</option>
+        </optgroup>
+        <optgroup label="Débit montant">
+          <option value="ch.bakom.uplink1">≥ 1 Mbit/s</option>
+          <option value="ch.bakom.uplink10">≥ 10 Mbit/s</option>
+          <option value="ch.bakom.uplink100">≥ 100 Mbit/s</option>
+          <option value="ch.bakom.uplink1000">≥ 1 Gbit/s</option>
+        </optgroup>
+      </select>
+      <span id="coverage-map-hint" style="font-size:11.5px; color:var(--muted);"></span>
+    </div>
+    <div id="coverage-map"></div>
+    <div class="cov-legend" id="coverage-legend"></div>
+    <div class="cov-zoomwarn" id="coverage-zoomwarn"></div>
+  </div>
+</div>
 
 <div class="hidden" id="coverage-results" style="max-width:1080px;">
   <div class="cov-warn">
@@ -3772,7 +3836,10 @@ async function covGeocode(terme){
   return (j.results || [])
     .filter(r => r.attrs && r.attrs.origin === "address")
     .slice(0, 6)
-    .map(r => ({ label: String(r.attrs.label).replace(/<[^>]+>/g, ""), E: r.attrs.y, N: r.attrs.x }));
+    // E/N en LV95 pour interroger l'atlas, lat/lon en WGS84 pour la carte :
+    // SearchServer rend les deux, aucune reprojection à faire nous-mêmes.
+    .map(r => ({ label: String(r.attrs.label).replace(/<[^>]+>/g, ""), E: r.attrs.y, N: r.attrs.x,
+                 lat: r.attrs.lat, lon: r.attrs.lon }));
 }
 
 // ── Interrogation de la couverture ──────────────────────────────────────────
@@ -3872,6 +3939,9 @@ covBoite.addEventListener("click", async (e) => {
   covInput.value = choix.label;
   covBoite.hidden = true;
   covMessage("Interrogation de l'atlas…");
+  // La carte se recentre tout de suite : elle ne dépend pas du WMS, inutile de
+  // la faire attendre la fiche textuelle.
+  covCentre(choix);
   try {
     covAffiche(choix, await covInterroge(choix.E, choix.N));
     covMessage("Adresse trouvée. Tapez-en une autre pour comparer.");
@@ -3896,6 +3966,87 @@ covInput.addEventListener("input", () => {
     } catch { covMessage("Recherche d'adresse indisponible pour le moment."); }
   }, 450);
 });
+
+/* ── Carte ──────────────────────────────────────────────────────────────────
+   Elle ne consomme que du WMTS — des tuiles pré-calculées, servies par CDN,
+   plafonnées à 1200 requêtes/minute contre 20 pour le WMS dynamique. C'est ce
+   qui rend le zoom et le déplacement libres possibles : une carte bâtie sur le
+   WMS épuiserait le quota fédéral en quelques déplacements. Le WMS reste
+   réservé à la fiche textuelle par adresse, une requête à la sélection.
+
+   Plafonds de zoom relevés couche par couche le 13.08.2026, sur Berne et
+   Lausanne : toutes s'arrêtent au niveau 18, sauf la 5G au niveau 14. Au-delà,
+   le serveur répond 400. On ne le laisse pas arriver — maxNativeZoom fait
+   agrandir la dernière tuile disponible plutôt que d'en demander d'inexistantes.
+   L'image devient floue, ce qui est plus honnête que l'inverse : la donnée
+   mobile est maillée à 100 m, il n'y a rien à voir de plus fin. */
+
+const COV_ZOOM_NATIF = { "ch.bakom.mobilnetz-5g": 14 }; // les autres : 18
+const COV_ZOOM_DEFAUT = 18;
+const COV_TUILES = (id, ext) => `https://wmts.geo.admin.ch/1.0.0/${id}/default/current/3857/{z}/{x}/{y}.${ext}`;
+
+let covCarte = null, covSurcouche = null, covMarqueur = null;
+
+function covMajLegende(id){
+  // On affiche la légende officielle plutôt que d'en recopier les couleurs :
+  // si l'OFCOM change sa palette, on ne se retrouve pas à mentir sur la sienne.
+  document.getElementById("coverage-legend").innerHTML =
+    `<img src="https://api3.geo.admin.ch/static/images/legends/${encodeURIComponent(id)}_fr.png"`
+    + ` alt="Légende officielle de la couche affichée" style="max-width:100%; height:auto;"`
+    + ` onerror="this.replaceWith(Object.assign(document.createElement('span'),`
+    + `{className:'cov-ctx',textContent:'Légende indisponible pour le moment.'}))">`;
+}
+
+function covMajAvertissementZoom(){
+  if (!covCarte || !covSurcouche) return;
+  const natif = covSurcouche.options.maxNativeZoom;
+  const z = covCarte.getZoom();
+  document.getElementById("coverage-zoomwarn").textContent = z > natif
+    ? `Zoom ${z} : la couche affichée n'existe pas au-delà du niveau ${natif}. L'image est agrandie, pas plus précise — la donnée reste maillée à ${natif === 14 ? "100 m" : "250 m"}.`
+    : "";
+}
+
+function covChangeCouche(id){
+  if (!covCarte) return;
+  if (covSurcouche) covCarte.removeLayer(covSurcouche);
+  covSurcouche = L.tileLayer(COV_TUILES(id, "png"), {
+    maxNativeZoom: COV_ZOOM_NATIF[id] || COV_ZOOM_DEFAUT,
+    maxZoom: 19,
+    opacity: 0.75, // l'opacité qu'emploie le géoportail officiel
+    attribution: '&copy; <a href="https://www.bakom.admin.ch/" target="_blank" rel="noopener">OFCOM</a>',
+  }).addTo(covCarte);
+  covMajLegende(id);
+  covMajAvertissementZoom();
+}
+
+function covCarteInit(){
+  if (covCarte || typeof L === "undefined") return;
+  covCarte = L.map("coverage-map", {
+    center: [46.80, 8.23], zoom: 8, minZoom: 7, maxZoom: 19, scrollWheelZoom: true,
+  });
+  L.tileLayer(COV_TUILES("ch.swisstopo.pixelkarte-farbe", "jpeg"), {
+    maxNativeZoom: 19, maxZoom: 19,
+    attribution: '&copy; <a href="https://www.swisstopo.admin.ch/" target="_blank" rel="noopener">swisstopo</a>',
+  }).addTo(covCarte);
+  covCarte.on("zoomend", covMajAvertissementZoom);
+  covChangeCouche(document.getElementById("coverage-layer").value);
+  document.getElementById("coverage-map-hint").textContent =
+    "Zoomez et déplacez-vous librement. Tuiles officielles swisstopo et OFCOM.";
+}
+
+document.getElementById("coverage-layer").addEventListener("change", (e) => covChangeCouche(e.target.value));
+
+function covCentre(adresse){
+  if (!covCarte) return;
+  const p = [adresse.lat, adresse.lon];
+  // Zoom 16 : on voit la rue, tout en restant au-delà du natif des couches
+  // mobiles — l'avertissement de zoom prend alors le relais et le dit.
+  covCarte.setView(p, 16);
+  if (covMarqueur) covMarqueur.setLatLng(p);
+  else covMarqueur = L.marker(p).addTo(covCarte);
+  covMarqueur.bindPopup(covEchappe(adresse.label)).openPopup();
+  covMajAvertissementZoom();
+}
 
 covInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && covSugg.length) { e.preventDefault(); covBoite.querySelector("button").click(); }
@@ -3939,6 +4090,15 @@ document.querySelectorAll(".tab").forEach(tab=>{
   document.getElementById("travel-grid").classList.toggle("hidden", target!=="travel");
   document.getElementById("coverage-notice").classList.toggle("hidden", target!=="coverage");
   document.getElementById("coverage-controls").classList.toggle("hidden", target!=="coverage");
+  document.getElementById("coverage-map-wrap").classList.toggle("hidden", target!=="coverage");
+  if (target === "coverage") {
+    // Leaflet dimensionne ses tuiles à l'initialisation : construit dans un
+    // conteneur caché, il calcule sur une hauteur nulle et n'affiche rien. D'où
+    // l'initialisation différée à la première ouverture de l'onglet, et
+    // l'invalidateSize aux suivantes, l'onglet ayant pu changer de largeur.
+    covCarteInit();
+    if (covCarte) setTimeout(() => covCarte.invalidateSize(), 60);
+  }
   // Le panneau de résultats ne s'ouvre qu'une fois une adresse choisie : on ne
   // le montre en quittant l'onglet que s'il porte déjà quelque chose.
   document.getElementById("coverage-results").classList.toggle("hidden",
