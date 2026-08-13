@@ -45,6 +45,18 @@ for (const slug of slugs) {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
     await page.waitForTimeout(4500);
 
+    // Saily sert par moments un interstitiel Cloudflare (« Vérification de
+    // sécurité en cours ») qui se résout tout seul en quelques secondes. On lui
+    // laisse le temps plutôt que de conclure à une page vide.
+    for (let i = 0; i < 6; i++) {
+      const bloque = await page.evaluate(() =>
+        /Vérification de sécurité|Just a moment|Ray ID/i.test(document.body.innerText || "")
+      );
+      if (!bloque) break;
+      rec.meta.attenteCloudflare = (i + 1) * 3;
+      await page.waitForTimeout(3000);
+    }
+
     const txt = await page.evaluate(() => document.body.innerText || "");
 
     // Couverture : « Voir la liste des pays (35) ».
@@ -73,23 +85,36 @@ for (const slug of slugs) {
       });
     }
 
-    // Illimité : une puce de durée par valeur, le prix suit la sélection.
-    const durees = await page.evaluate(() =>
-      [...document.querySelectorAll("button,label,li,div,span")]
-        .filter((e) => !e.children.length && /^\s*\d+\s*jours?\s*$/i.test(e.textContent || ""))
-        .map((e) => parseInt(e.textContent.trim(), 10))
-    );
-    rec.meta.dureesIllimite = [...new Set(durees)].sort((a, b) => a - b);
+    // Illimité : la durée se choisit dans un <select> natif dont chaque option
+    // porte l'UUID du forfait en valeur ; le prix suit la sélection.
+    //
+    // Un premier jet cherchait des puces cliquables parmi button/label/li/div/
+    // span et n'en trouvait aucune — d'où les six durées illimitées manquantes
+    // sur chaque destination. Ce n'étaient pas des puces, et <option> ne
+    // figurait pas dans la liste des sélecteurs interrogés.
+    const durees = await page.evaluate(() => {
+      const sel = [...document.querySelectorAll("select")].find((s) =>
+        [...s.options].some((o) => /jours?\s*$/i.test(o.textContent || ""))
+      );
+      if (!sel) return [];
+      return [...sel.options]
+        .map((o) => ({ jours: parseInt(o.textContent, 10), valeur: o.value }))
+        .filter((x) => Number.isFinite(x.jours));
+    });
+    rec.meta.dureesIllimite = durees.map((d) => d.jours).sort((a, b) => a - b);
 
-    for (const d of rec.meta.dureesIllimite) {
-      const clique = await page.evaluate((jours) => {
-        const cible = [...document.querySelectorAll("button,label,li,div,span")].find(
-          (e) => !e.children.length && new RegExp(`^\\s*${jours}\\s*jours?\\s*$`, "i").test(e.textContent || "")
+    for (const { jours: d, valeur } of durees) {
+      // React n'écoute pas l'affectation de .value : il faut passer par le
+      // setter natif puis émettre le change que le composant attend.
+      const clique = await page.evaluate((v) => {
+        const sel = [...document.querySelectorAll("select")].find((s) =>
+          [...s.options].some((o) => /jours?\s*$/i.test(o.textContent || ""))
         );
-        if (!cible) return false;
-        (cible.closest("button,label,li") || cible).click();
+        if (!sel) return false;
+        Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, "value").set.call(sel, v);
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
         return true;
-      }, d);
+      }, valeur);
       if (!clique) continue;
       await page.waitForTimeout(1600);
       // Le prix de l'illimité est celui affiché dans le bloc récapitulatif,

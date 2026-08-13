@@ -29,11 +29,65 @@
     "horsPerimetre": false
    },
    {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
     "price": 29.99,
     "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 29.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 41.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
     "horsPerimetre": false
    },
    {
@@ -47,7 +101,14 @@
   ],
   "meta": {
    "couverture": 35,
-   "dureesIllimite": []
+   "dureesIllimite": [
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
   }
  },
  {
@@ -88,17 +149,88 @@
     "horsPerimetre": false
    },
    {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
     "price": 25.49,
     "currency": "CHF",
     "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
    }
   ],
   "meta": {
    "couverture": null,
-   "dureesIllimite": []
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
   }
  },
  {
@@ -131,11 +263,38 @@
     "horsPerimetre": false
    },
    {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
     "price": 18.99,
     "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 20.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 27.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
     "horsPerimetre": false
    },
    {
@@ -145,11 +304,55 @@
     "price": 30.49,
     "currency": "CHF",
     "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 37.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 47.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 56.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
    }
   ],
   "meta": {
    "couverture": null,
-   "dureesIllimite": []
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
   }
  },
  {
@@ -182,11 +385,38 @@
     "horsPerimetre": false
    },
    {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 16.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
     "price": 25.49,
     "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 27.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
     "horsPerimetre": false
    },
    {
@@ -196,11 +426,55 @@
     "price": 36.49,
     "currency": "CHF",
     "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 36.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 47.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 60.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 71.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
    }
   ],
   "meta": {
    "couverture": null,
-   "dureesIllimite": []
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
   }
  },
  {
@@ -241,17 +515,88 @@
     "horsPerimetre": false
    },
    {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
     "price": 18.99,
     "currency": "CHF",
     "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
    }
   ],
   "meta": {
    "couverture": null,
-   "dureesIllimite": []
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
   }
  },
  {
