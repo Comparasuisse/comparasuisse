@@ -97,33 +97,56 @@ Relevés le 13.08.2026 sur `esim.holafly.com/fr/esim-europe/`, une fois les
 - **Always On** : 1 Go/mois de données de secours une fois l'illimité épuisé,
   ce qui confirme au passage que l'illimité est régulé.
 
-**Ce qui manque** : les prix. Diagnostic précis au 13.08.2026, trois pistes
-épuisées — à ne pas refaire.
+**Les prix sont relevés depuis le 13.08.2026** — mais pas par où on les
+cherchait. Le détour vaut d'être noté, il resservira.
 
-Le compteur de jours vit derrière `button#calendarTrigger`
-(`data-qa="numberOfDaysInput"`), qui affiche la valeur courante. Tant qu'il
-n'est pas ouvert, les seuls boutons numérotés du DOM sont le déclencheur
-lui-même : c'est ce qui faisait sortir les huit durées au même prix, celui du
-« à partir de 3,50 » de l'en-tête. Une fois ouvert, le panneau expose bien
-61 boutons de jours en `button.cursor-pointer`.
+Trois tentatives de pilotage du sélecteur avaient échoué, le déclencheur
+`button#calendarTrigger` restant obstinément sur « 1 » : clic programmatique
+sur le jour voulu, sélection par plage, clic natif Playwright — ce dernier en
+timeout, les cellules n'étant pas jugées actionnables. Le navigateur réel a
+montré pourquoi ces pistes ne pouvaient pas aboutir telles quelles : **le
+panneau n'est pas une liste de durées mais un vrai calendrier de dates**
+(« Choisissez la date de début du forfait »), où l'on pose une date d'arrivée
+puis une date de retour. Les « 61 boutons de jours » comptés dans le DOM
+étaient les cases des mois affichés, pas des durées.
 
-Ce qui a été essayé sans succès, le déclencheur restant obstinément sur « 1 » :
+Piloter ce calendrier au clic pour 8 durées × 6 destinations aurait été long et
+fragile. Il n'y en a pas besoin : **le site est un Astro, et Astro sérialise
+les props de ses îlots dans le DOM**. L'élément
 
-1. **Clic programmatique** sur le bouton du jour voulu, déclencheur ouvert.
-2. **Sélection par plage** — hypothèse d'un vrai calendrier où l'on pose une
-   date de début puis une date de fin : clic sur 20 puis sur 26. Sans effet.
-3. **Clic natif Playwright** sur `button.cursor-pointer` filtré sur « 7 » :
-   les deux éléments existent mais `locator.click()` part en timeout, ils ne
-   sont pas jugés actionnables.
+```
+<astro-island component-url="/_astro/ProductPricing.…js" props="…">
+```
 
-La piste restante est donc la simulation d'évènements de pointeur complets
-(`pointerdown` / `pointerup` / `mouseup`) sur la cellule, ou l'inspection du
-composant pour trouver l'état applicatif à piloter directement. Vérifier
-d'abord que le déclencheur passe de « 1 » à « 7 » : c'est le seul signal fiable
-que la sélection a pris.
+porte les **90 variantes du produit, de 1 à 90 jours**, chacune avec son prix
+dans une vingtaine de devises, CHF compris. C'est la source dont le composant
+se sert lui-même pour afficher son total : on la lit, sans toucher au
+calendrier. Le format encode chaque valeur en `[type, valeur]`, d'où le
+dépaquetage récursif du collecteur.
+
+Deux vérifications qui valident la lecture :
+
+- la variante à 1 jour donne **3.50 CHF**, exactement le « Total 3,50 Fr »
+  affiché à l'écran dans le navigateur réel ;
+- les six destinations donnent **quatre grilles distinctes** (Europe, UK et
+  Turquie partagent la même ; USA, Canada et Monde ont chacune la leur), avec
+  des prix strictement croissants avec la durée.
+
+Le même îlot voisin `CountriesModal` porte la **couverture réelle en ISO-3** —
+33 pays pour l'Europe, 142 pour le forfait mondial. À utiliser plutôt que le
+texte de la page : le « 200+ destinations » qu'on y lit est l'argumentaire de
+Holafly sur tout son catalogue, pas le périmètre du forfait affiché. Un premier
+jet l'avait pris pour la couverture et annonçait 200 pays sur chaque offre.
+
+**Leçon générale** : sur un site rendu par un framework à îlots (Astro, mais la
+même idée vaut pour les `props` de Next ou de Nuxt), l'état sérialisé du
+composant est une source plus sûre, plus complète et plus rapide que le
+pilotage de son interface. Le chercher **avant** de se battre avec l'UI.
 
 **Contrôle de non-régression obligatoire** : si toutes les durées ressortent au
-même prix, la collecte est fausse. Ne jamais commiter un tel résultat.
+même prix, la collecte est fausse — c'est le symptôme exact qu'ont produit les
+trois tentatives infructueuses, toutes bloquées sur le « à partir de 3,50 » de
+l'en-tête. Le collecteur refuse désormais d'écrire son fichier dans ce cas.
 
 ## 3 bis. Partage de connexion
 

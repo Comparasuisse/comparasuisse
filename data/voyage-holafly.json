@@ -1,0 +1,671 @@
+[
+ {
+  "provider": "Holafly",
+  "slug": "esim-europe",
+  "url": "https://esim.holafly.com/fr/esim-europe/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-europe",
+   "nom": "Europe",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [
+    "DEU",
+    "AND",
+    "AUT",
+    "BEL",
+    "BGR",
+    "CYP",
+    "HRV",
+    "DNK",
+    "ESP",
+    "EST",
+    "FIN",
+    "FRA",
+    "GRC",
+    "HUN",
+    "IRL",
+    "ISL",
+    "ITA",
+    "LVA",
+    "LIE",
+    "LTU",
+    "LUX",
+    "MLT",
+    "NOR",
+    "NLD",
+    "POL",
+    "PRT",
+    "CZE",
+    "ROU",
+    "GBR",
+    "SVK",
+    "SVN",
+    "SWE",
+    "CHE"
+   ],
+   "couverture": 33
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-royaume-uni",
+  "url": "https://esim.holafly.com/fr/esim-royaume-uni/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-united-kingdom",
+   "nom": "United Kingdom",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-usa",
+  "url": "https://esim.holafly.com/fr/esim-usa/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 21.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 30.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 50.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-united-states",
+   "nom": "USA",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-canada",
+  "url": "https://esim.holafly.com/fr/esim-canada/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 5.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 21.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 30.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 38.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 74.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-canada",
+   "nom": "Canada",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-turquie",
+  "url": "https://esim.holafly.com/fr/esim-turquie/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-turkey",
+   "nom": "Turkey",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-le-monde",
+  "url": "https://esim.holafly.com/fr/esim-le-monde/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 7.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 21.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 56.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 84.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 95.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 140.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-world",
+   "nom": "Global",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [
+    "ZAF",
+    "ALB",
+    "DZA",
+    "DEU",
+    "ATG",
+    "SAU",
+    "ARG",
+    "ARM",
+    "ABW",
+    "AUS",
+    "AUT",
+    "AZE",
+    "BGD",
+    "BEL",
+    "BIH",
+    "BWA",
+    "BRA",
+    "BRN",
+    "BGR",
+    "KHM",
+    "CAN",
+    "CHL",
+    "CHN",
+    "CYP",
+    "COL",
+    "KOR",
+    "CRI",
+    "CIV",
+    "HRV",
+    "DNK",
+    "DMA",
+    "EGY",
+    "ARE",
+    "ESP",
+    "EST",
+    "SWZ",
+    "USA",
+    "FJI",
+    "FIN",
+    "FRA",
+    "GAB",
+    "GEO",
+    "GHA",
+    "GIB",
+    "GRC",
+    "GRD",
+    "GLP",
+    "GUM",
+    "GTM",
+    "GGY",
+    "GNB",
+    "GUF",
+    "ZZE",
+    "HND",
+    "HKG",
+    "HUN",
+    "IMN",
+    "VGB",
+    "IND",
+    "IDN",
+    "IRL",
+    "ISL",
+    "ISR",
+    "ITA",
+    "JPN",
+    "JEY",
+    "JOR",
+    "KAZ",
+    "KEN",
+    "KGZ",
+    "REU",
+    "LAO",
+    "LVA",
+    "LBR",
+    "LIE",
+    "LTU",
+    "LUX",
+    "MAC",
+    "MKD",
+    "MDG",
+    "MYS",
+    "MWI",
+    "MLI",
+    "MLT",
+    "MAR",
+    "MTQ",
+    "MEX",
+    "MDA",
+    "MNG",
+    "MNE",
+    "MOZ",
+    "NIC",
+    "NOR",
+    "NZL",
+    "OMN",
+    "UGA",
+    "UZB",
+    "PAK",
+    "PAN",
+    "PNG",
+    "PRY",
+    "NLD",
+    "PER",
+    "PHL",
+    "POL",
+    "PRI",
+    "PRT",
+    "QAT",
+    "CAF",
+    "COD",
+    "DOM",
+    "COG",
+    "CZE",
+    "ROU",
+    "GBR",
+    "RUS",
+    "RWA",
+    "KNA",
+    "VCT",
+    "LCA",
+    "SRB",
+    "SYC",
+    "SGP",
+    "SVK",
+    "SVN",
+    "LKA",
+    "SWE",
+    "CHE",
+    "SUR",
+    "TJK",
+    "TWN",
+    "TZA",
+    "TCD",
+    "THA",
+    "TON",
+    "TCA",
+    "TUR",
+    "UKR",
+    "URY",
+    "VUT",
+    "VNM",
+    "ZMB"
+   ],
+   "couverture": 142
+  }
+ }
+]
