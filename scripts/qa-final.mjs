@@ -131,14 +131,30 @@ else {
   // Saisie via l'événement plutôt que fill() : le champ vit dans une carte de
   // grille que Playwright ne considère pas « visible », alors que le filtre
   // qu'on veut tester, lui, écoute bien oninput.
-  const aChamp = await page.evaluate(() => {
+  //
+  // Le terme cherché est tiré de la liste elle-même, au lieu d'un « BBC » écrit
+  // en dur. Un terme absent du bouquet donne 0 résultat, et l'assertion
+  // « après < avant » passe alors même si le filtre masquait tout par erreur —
+  // un test qui ne peut pas échouer ne teste rien. Ici on exige 0 < après < avant.
+  const terme = await page.evaluate(() => {
+    const d = [...document.querySelectorAll("#tv-grid details")].find((x) => x.open);
+    const liste = d.querySelector(".channels-list") || d;
+    const noms = [...liste.querySelectorAll(".chan")]
+      .map((e) => (e.textContent || "").trim())
+      .filter((t) => t.length > 3);
+    if (!noms.length) return null;
+    // Un nom du milieu de liste, tronqué : assez précis pour filtrer, assez
+    // court pour matcher au moins son propre porteur.
+    return noms[Math.floor(noms.length / 2)].slice(0, 4);
+  });
+  const aChamp = await page.evaluate((t) => {
     const d = [...document.querySelectorAll("#tv-grid details")].find((x) => x.open);
     const c = d && d.querySelector(".chan-search");
-    if (!c) return false;
-    c.value = "BBC";
+    if (!c || !t) return false;
+    c.value = t;
     c.dispatchEvent(new Event("input", { bubbles: true }));
     return true;
-  });
+  }, terme);
   if (!aChamp) ko("pas de champ de recherche dans l'accordéon");
   else {
     await page.waitForTimeout(900);
@@ -149,9 +165,13 @@ else {
         (e) => getComputedStyle(e).display !== "none"
       ).length;
     });
-    apresRech < chan.visibles
-      ? ok(`recherche « BBC » : ${chan.visibles} → ${apresRech} chaînes visibles`)
-      : ko(`recherche « BBC » sans effet (${chan.visibles} → ${apresRech})`);
+    apresRech > 0 && apresRech < chan.visibles
+      ? ok(`recherche « ${terme} » : ${chan.visibles} → ${apresRech} chaînes visibles`)
+      : ko(
+          apresRech === 0
+            ? `recherche « ${terme} » : 0 chaîne visible alors que le terme vient de la liste — le filtre masque tout`
+            : `recherche « ${terme} » sans effet (${chan.visibles} → ${apresRech})`
+        );
   }
 }
 

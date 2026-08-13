@@ -280,6 +280,16 @@
   .net-chip input{cursor:pointer; width:13px; height:13px; margin:0;}
   .net-chip input:checked{box-shadow:none;}
   .net-chip:has(input:checked){background:var(--card); color:var(--accent-dark); border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,94,255,.20);}
+  /* Sélection groupée — injectée par initBulkToggles() sur les groupes de 5 chips
+     et plus. Volontairement plus discrète que les chips : c'est une commande, pas
+     un filtre, et elle ne doit pas se lire comme une case cochable de plus. */
+  .net-bulk{display:inline-flex; align-items:center; gap:4px; margin-right:2px;}
+  .net-bulk button{font-family:inherit; font-size:10.5px; font-weight:700; letter-spacing:.3px;
+    text-transform:uppercase; padding:4px 7px; border:1px dashed var(--line); border-radius:5px;
+    background:transparent; color:var(--muted); cursor:pointer; line-height:1.1;}
+  .net-bulk button:hover{border-style:solid; border-color:var(--accent); color:var(--accent-dark);}
+  .net-bulk button:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+  .net-bulk .net-bulk-sep{color:var(--line); font-size:11px;}
 
   /* interrupteurs on/off */
   .ctrl-group label.sw-row{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:5px 0; cursor:pointer;}
@@ -3190,6 +3200,55 @@ document.getElementById("tv-channel-search").addEventListener("keydown", (e) => 
 document.getElementById("tv-channel-add").addEventListener("click", addChannelSearchTag);
 document.querySelectorAll('#tv-operator input').forEach(i => i.addEventListener("change", refreshTV));
 document.querySelectorAll('#combo-operator input').forEach(i => i.addEventListener("change", refreshCombo));
+
+// === Sélection groupée des cases à cocher ===
+// Douze opérateurs à décocher un par un pour n'en garder qu'un, c'est douze clics
+// et autant de rendus. Les deux boutons sont injectés ici plutôt qu'écrits dans
+// le HTML : les groupes évoluent (Init7 est arrivé en combo ce matin, parti de TV),
+// et une injection pilotée par le DOM ne peut pas se désynchroniser des groupes.
+// Seuil à 5 chips : en dessous, deux boutons pèsent plus lourd que le geste qu'ils
+// remplacent.
+const BULK_MIN_CHIPS = 5;
+
+function initBulkToggles(){
+  document.querySelectorAll('.net-checks').forEach(groupe => {
+    const cases = [...groupe.querySelectorAll('input[type="checkbox"]')];
+    if (cases.length < BULK_MIN_CHIPS || groupe.querySelector('.net-bulk')) return;
+
+    const libelle = (groupe.id || 'ce groupe').replace(/-/g, ' ');
+    const bloc = document.createElement('span');
+    bloc.className = 'net-bulk';
+
+    const faire = (etat) => {
+      // On force l'état puis on ne déclenche qu'un seul évènement : les listeners
+      // relisent de toute façon l'ensemble des cases cochées. En émettre un par
+      // case rejouerait le rendu douze fois pour un résultat identique.
+      let bouge = false;
+      cases.forEach(c => { if (c.checked !== etat) { c.checked = etat; bouge = true; } });
+      if (bouge) cases[0].dispatchEvent(new Event('change', { bubbles: true }));
+    };
+
+    const bouton = (texte, titre, etat) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = texte;
+      b.title = titre;
+      b.setAttribute('aria-label', titre);
+      b.addEventListener('click', () => faire(etat));
+      return b;
+    };
+
+    bloc.appendChild(bouton('Tout', 'Tout sélectionner — ' + libelle, true));
+    const sep = document.createElement('span');
+    sep.className = 'net-bulk-sep';
+    sep.textContent = '·';
+    bloc.appendChild(sep);
+    bloc.appendChild(bouton('Aucun', 'Tout désélectionner — ' + libelle, false));
+
+    groupe.insertBefore(bloc, groupe.firstChild);
+  });
+}
+initBulkToggles();
 document.querySelectorAll('#combo-connection-type input').forEach(i => i.addEventListener("change", refreshCombo));
 ["combo-replay","combo-recording","combo-speed","combo-speed-max"].forEach(id => document.getElementById(id).addEventListener("input", refreshCombo));
 document.querySelectorAll('#promo-network input, #promo-category input').forEach(i => i.addEventListener("change", refreshPromo));
