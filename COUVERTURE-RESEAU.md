@@ -145,12 +145,51 @@ quelle chaîne locale est diffusée où. Rien à voir avec « puis-je souscrire
 blue TV, Sunrise TV ou Quickline ici ». Aucune couche de l'atlas ne donne la
 disponibilité TV par opérateur.
 
-**Décision : la TV reste hors de cet outil, et l'onglet le dit.** On aurait pu
-l'inférer de la liste des fournisseurs fixes — un opérateur présent en fixe
-vend en général la TV — mais ce serait une déduction non vérifiée, exactement ce
-que ce comparateur s'interdit partout ailleurs. Le silence serait pire encore :
-un visiteur qui ne voit pas la TV conclurait qu'elle est indisponible. L'onglet
-affiche donc « Disponibilité TV : non couverte par cet outil ».
+**Décision : la TV reste hors de cet outil, et l'interface n'en parle pas.** On
+aurait pu l'inférer de la liste des fournisseurs fixes — un opérateur présent en
+fixe vend en général la TV — mais ce serait une déduction non vérifiée,
+exactement ce que ce comparateur s'interdit partout ailleurs.
+
+Une première version affichait un panneau « Disponibilité TV : non couverte par
+cet outil ». Retiré le 14.08.2026 : un encart qui n'apporte aucune donnée
+occupe la place et la charge mentale d'un encart qui en apporterait une. Le
+visiteur venu chercher la couverture réseau n'a pas besoin qu'on lui énumère ce
+qu'on ne sait pas. L'onglet TV du comparateur existe par ailleurs, c'est là que
+se pose la question de la télévision.
+
+## 6 bis. Le mobile ne se nomme pas — limite de la source, pas du code
+
+Le fixe rend la liste nominative des fournisseurs ; le mobile, non. Vérifié le
+14.08.2026 avant de conclure que c'était structurel :
+
+- **Aucune couche par opérateur sur geo.admin.ch.** Le catalogue ne contient
+  que trois couches mobiles agrégées (`mobilnetz-3g/4g/5g`), et rien qui porte
+  un nom d'opérateur hors `anbieter-eigenes_festnetz`, qui est du fixe.
+- **Rien non plus sur opendata.swiss.** Les seuls jeux OFCOM nommant un
+  opérateur sont les emplacements d'antennes — une position d'antenne n'est pas
+  une couverture, et cette couche est écartée par ailleurs (§ 7).
+- **L'agrégation est délibérée.** La légende officielle le formule ainsi : « on
+  peut voir le **nombre** d'opérateurs fournissant théoriquement une connexion
+  5G à l'extérieur ». Combien, jamais lesquels.
+
+**Décision : on l'explique dans l'interface plutôt que de deviner.** Le panneau
+mobile porte une phrase disant que l'OFCOM publie ce chiffre de façon agrégée,
+suivie des liens vers les cartes des trois opérateurs.
+
+Ces trois URL ne sont pas devinées : **ce sont celles que l'OFCOM publie
+lui-même** dans la légende de ses couches mobiles, sous « La situation effective
+peut être demandée aux fournisseurs ».
+
+| Opérateur | Carte de couverture |
+|---|---|
+| Swisscom | `scmplc.begasoft.ch/plcapp/pages/gis/netzabdeckung.jsf` |
+| Sunrise | `sunrise.mapplus.ch` |
+| Salt | `salt.ch/en/mobile/coverage` |
+
+Les trois répondent 200. À ne pas « embellir » : les variantes francophones
+plausibles essayées à la main (`salt.ch/fr/mobile/couverture`, une page d'aide
+Swisscom) répondent 404. L'adresse laide et officielle vaut mieux que la jolie
+et inventée.
 
 ## 7. Les antennes : disponibles, écartées
 
@@ -229,8 +268,10 @@ identifie l'ensemble (`covGeocode`, `covInterroge`, `covAffiche`, `covCache`).
   vert des « > 90 – 100 % », ce qui se lisait trois panneaux plus bas comme un
   jugement sur le fournisseur.
 - **L'avertissement est permanent**, au-dessus des résultats, pas replié.
-- **La TV a son panneau**, qui dit qu'elle n'est pas couverte et pourquoi on ne
-  la déduit pas des fournisseurs fixes.
+- **La TV n'apparaît plus du tout** : un encart qui n'apporte aucune donnée
+  prend la place d'un encart qui en apporterait une (§ 6).
+- **Le panneau mobile explique son agrégation** et renvoie vers les cartes des
+  trois opérateurs, aux URL que l'OFCOM publie lui-même (§ 6 bis).
 - **Absence de donnée ≠ absence de couverture** : hors zone bâtie, le panneau
   dit « l'atlas ne recense aucun bâtiment desservi dans ce secteur — ce n'est
   pas la preuve qu'aucun raccordement n'est possible ».

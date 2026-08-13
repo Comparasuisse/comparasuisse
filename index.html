@@ -3791,6 +3791,17 @@ const COV_LIBELLE = {
 // ne fait que la hiérarchiser, elle ne la remplace jamais.
 const COV_PCT = { 1: "> 0 – 10 %", 2: "> 10 – 50 %", 3: "> 50 – 90 %", 4: "> 90 – 100 %" };
 
+// Cartes de couverture des trois opérateurs de réseau mobile suisses. Ces URL
+// sont celles que l'OFCOM publie dans la légende de ses propres couches
+// mobiles — vérifiées le 14.08.2026, les trois répondent. Ne pas les remplacer
+// par des adresses « plus jolies » devinées à la main : les variantes
+// francophones essayées répondaient 404.
+const COV_OPERATEURS = [
+  { nom: "Swisscom", url: "https://scmplc.begasoft.ch/plcapp/pages/gis/netzabdeckung.jsf" },
+  { nom: "Sunrise", url: "https://sunrise.mapplus.ch/" },
+  { nom: "Salt", url: "https://www.salt.ch/en/mobile/coverage" },
+];
+
 // Cache par cellule de 100 m — la maille du mobile, plus fine que les 250 m du
 // fixe. Prendre 250 m servirait une valeur mobile relevée jusqu'à deux cellules
 // plus loin ; le gain de cache ne vaut pas cette approximation.
@@ -3897,7 +3908,17 @@ function covAffiche(adresse, res){
   const up = COV_UP.filter(c => v[c]).map(c => covLigne(c, v[c], false)).join("")
     || `<div class="cov-line"><span class="cov-ctx">Aucun débit montant recensé dans ce secteur.</span></div>`;
 
-  const mob = COV_MOB.map(c => covLigne(c, v[c], true)).join("");
+  // Le mobile ne se nomme pas, contrairement au fixe. Ce n'est pas un manque de
+  // notre côté : l'OFCOM ne publie qu'un décompte agrégé, sans dire lequel des
+  // trois opérateurs couvre la cellule. Aucune couche par opérateur n'existe sur
+  // geo.admin.ch ni sur opendata.swiss — vérifié. Plutôt que de deviner depuis
+  // une source non officielle, on l'explique et on renvoie vers les trois
+  // vérificateurs. Ces URL sont celles que l'OFCOM publie lui-même dans la
+  // légende de ses couches mobiles, pas des URL devinées.
+  const mob = COV_MOB.map(c => covLigne(c, v[c], true)).join("")
+    + `<div class="cov-ctx" style="margin-top:10px;">L'OFCOM publie ce chiffre de façon agrégée : il indique <b>combien</b> d'opérateurs couvrent le secteur, jamais <b>lesquels</b>. Seul le nombre est disponible publiquement. Pour savoir si votre opérateur passe chez vous, consultez sa propre carte : `
+    + COV_OPERATEURS.map(o => `<a href="${o.url}" target="_blank" rel="noopener">${o.nom}</a>`).join(" · ")
+    + `.</div>`;
 
   const prov = res.fournisseurs.length
     ? res.fournisseurs.map(f => `<div class="cov-prov"><span class="cov-pill cov-name">${covEchappe(f.nom)}</span>`
@@ -3915,10 +3936,7 @@ function covAffiche(adresse, res){
     + bloc("Débits descendants", down)
     + bloc("Débits montants", up)
     + bloc("Réseau mobile", mob)
-    + bloc("Fournisseurs fixes à cette adresse", prov)
-    + bloc("Télévision", `<div class="cov-line"><span class="cov-label">Disponibilité TV</span>`
-        + `<span class="cov-pill cov-0">Non couverte par cet outil</span>`
-        + `<span class="cov-ctx">L'atlas de l'OFCOM ne publie pas la disponibilité TV par opérateur. On pourrait la deviner à partir des fournisseurs fixes ci-dessus, mais ce serait une déduction et non une donnée vérifiée — on préfère le dire. Consultez le vérificateur de l'opérateur qui vous intéresse.</span></div>`);
+    + bloc("Fournisseurs fixes à cette adresse", prov);
 
   document.getElementById("coverage-results").classList.remove("hidden");
 }
