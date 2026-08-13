@@ -180,8 +180,14 @@ for (const [arr, sec] of [["tv", "tv-operator"], ["combo", "combo-operator"], ["
   const ops = [...new Set(data[arr].map((x) => x.operator).filter(Boolean))];
   const have = declared[sec] || [];
   const missing = ops.filter((o) => !have.includes(o));
+  // Le sens inverse compte aussi : une checkbox sans offre correspondante propose
+  // au visiteur un filtre qui ne peut que vider la liste. Cas vécu le 13.08.2026 —
+  // Init7 TV7 déplacé de tvData vers comboData, sa checkbox restée dans
+  // #tv-operator. Le contrôle ne regardait que « operator → checkbox ».
+  const orphans = have.filter((o) => !ops.includes(o));
   if (missing.length) ko(`checkbox operator manquante dans #${sec} : ${missing.join(", ")}`);
-  else ok(`checkboxes #${sec} : ${ops.length} operators tous déclarés`);
+  else if (orphans.length) ko(`checkbox operator orpheline dans #${sec} (aucune offre) : ${orphans.join(", ")}`);
+  else ok(`checkboxes #${sec} : ${ops.length} operators, aucun manquant ni orphelin`);
 }
 
 await browser.close();
