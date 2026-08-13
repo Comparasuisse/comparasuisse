@@ -62,12 +62,28 @@ exceptions, d'où le champ `callsIncluded` (`oui` / `non` / `option`).
 - **Holafly Europe : non.** Réponse officielle de leur FAQ produit :
   « L'eSIM l'Europe vous offre uniquement des données mobiles, sans numéro
   local pour appels ou SMS. » Ils renvoient vers WhatsApp.
-- **Yesim : à vérifier de près.** Sa page d'accueil mentionne explicitement
-  `calls`, `SMS` et `Hotspot` — c'est le candidat le plus probable à un
-  `oui` ou un `option`.
-- **Airalo, Saily, Nomad, Ubigi** : à confirmer forfait par forfait. Airalo
-  commercialise par ailleurs une option voix distincte, à ne pas confondre
-  avec les forfaits data.
+- **Yesim : non**, malgré les apparences. Sa page d'accueil affiche les mots
+  `calls`, `SMS` et `Hotspot`, ce qui en faisait le candidat le plus sérieux
+  à un `oui`. Sa FAQ, une fois dépliée, tranche l'inverse : « Our prepaid
+  eSIM phone plans are designed for data-only solutions and do not come with
+  a mobile phone number. » Les mots étaient ceux des questions, pas des
+  réponses — l'exemple même du chiffre qu'on aurait eu tort de supposer.
+- **Airalo : non** pour les forfaits collectés. La page qualifie sa gamme de
+  « data only » dans le libellé de son onglet Data.
+- **Saily, Nomad, Ubigi** : à confirmer sur leurs pages produit.
+
+**Constat qui se dessine** : sur les quatre fournisseurs vérifiés, aucun
+n'inclut d'appels ni de SMS. Si les deux derniers confirment, l'onglet devra
+le dire une fois clairement plutôt que de répéter « appels : non » sur chaque
+carte — l'information utile devient alors « aucune eSIM voyage ne remplace
+votre numéro, prévoyez WhatsApp ».
+
+## 3 bis. Partage de connexion
+
+- **Yesim : oui**, confirmé par sa FAQ : le partage est « enabled by default »
+  et sans frais supplémentaire.
+- **Airalo** : rien sur les pages de forfaits. Reste à `null` — non vérifié
+  n'est pas la même chose que non autorisé.
 
 ## 4. Particularités relevées, à refléter dans les données
 
