@@ -1149,6 +1149,11 @@ function gtag_report_conversion(url) {
           <option value="ch.bakom.uplink1000">≥ 1 Gbit/s</option>
         </optgroup>
       </select>
+      <label for="coverage-opacity" style="margin-left:auto;">Opacité <span class="range-val" id="coverage-opacity-label">75 %</span></label>
+      <input type="range" id="coverage-opacity" min="0" max="100" step="5" value="75"
+        style="width:130px;" aria-describedby="coverage-opacity-label">
+    </div>
+    <div class="cov-map-head" style="margin-top:-4px;">
       <span id="coverage-map-hint" style="font-size:11.5px; color:var(--muted);"></span>
     </div>
     <div id="coverage-map"></div>
@@ -3987,6 +3992,13 @@ const COV_TUILES = (id, ext) => `https://wmts.geo.admin.ch/1.0.0/${id}/default/c
 
 let covCarte = null, covSurcouche = null, covMarqueur = null;
 
+// Opacité de la surimpression. 0.75 par défaut, comme le géoportail officiel,
+// mais réglable : à l'échelle du pays la teinte se lit très bien, au zoom rue
+// elle noie le fond de carte et on ne retrouve plus sa rue sous la couleur.
+// Retenue entre deux changements de couche — un réglage qu'il faudrait refaire
+// à chaque bascule ne servirait à rien.
+let covOpacite = 0.75;
+
 function covMajLegende(id){
   // On affiche la légende officielle plutôt que d'en recopier les couleurs :
   // si l'OFCOM change sa palette, on ne se retrouve pas à mentir sur la sienne.
@@ -4012,7 +4024,7 @@ function covChangeCouche(id){
   covSurcouche = L.tileLayer(COV_TUILES(id, "png"), {
     maxNativeZoom: COV_ZOOM_NATIF[id] || COV_ZOOM_DEFAUT,
     maxZoom: 19,
-    opacity: 0.75, // l'opacité qu'emploie le géoportail officiel
+    opacity: covOpacite,
     attribution: '&copy; <a href="https://www.bakom.admin.ch/" target="_blank" rel="noopener">OFCOM</a>',
   }).addTo(covCarte);
   covMajLegende(id);
@@ -4035,6 +4047,12 @@ function covCarteInit(){
 }
 
 document.getElementById("coverage-layer").addEventListener("change", (e) => covChangeCouche(e.target.value));
+
+document.getElementById("coverage-opacity").addEventListener("input", (e) => {
+  covOpacite = +e.target.value / 100;
+  document.getElementById("coverage-opacity-label").textContent = e.target.value + " %";
+  if (covSurcouche) covSurcouche.setOpacity(covOpacite);
+});
 
 function covCentre(adresse){
   if (!covCarte) return;

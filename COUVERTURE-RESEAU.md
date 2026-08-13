@@ -269,7 +269,15 @@ https://wmts.geo.admin.ch/1.0.0/{couche}/default/current/3857/{z}/{x}/{y}.{png|j
 
 Tuiles en CORS ouvert, `cache-control: public, max-age=3600,
 s-maxage=31556952`. Fond de carte : `ch.swisstopo.pixelkarte-farbe` en jpeg,
-surimpression en png à l'opacité 0.75 — celle qu'emploie le géoportail.
+surimpression en png.
+
+**L'opacité est réglable**, à 0.75 par défaut — la valeur du géoportail
+officiel, qui a lui aussi son curseur. La raison est concrète : à l'échelle du
+pays, 0.75 se lit très bien ; au zoom rue, la teinte noie le fond et on ne
+retrouve plus sa rue sous la couleur. Vers 35 %, les rues et les cours d'eau
+redeviennent lisibles sans que la couverture disparaisse. Le réglage est
+conservé d'une couche à l'autre — un curseur qu'il faudrait rejouer à chaque
+bascule ne servirait à rien.
 
 ### Les plafonds de zoom, relevés couche par couche
 
