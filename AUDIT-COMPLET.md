@@ -10,6 +10,14 @@ Ce document capture noir sur blanc la méthode validée pendant la campagne
 Ex1-Ex5 du 01-02 août 2026. Ne raccourcis jamais cette méthode pour aller
 plus vite.
 
+**Documents liés à lire selon le cas** :
+- `CHECKLIST-OFFRE.md` — les 8 points obligatoires à chaque ajout/modif d'offre
+- `TELEPHONIE-FIXE.md` — arbre de décision pour classer un opérateur qui vend
+  de la **téléphonie fixe** (entrée dédiée / `fixedLineIncluded` dans
+  `internetData` / `comboData`). **Obligatoire** avant d'intégrer tout nouvel
+  opérateur proposant une ligne fixe.
+- `COUVERTURE-RESEAU.md`, `VOYAGE-ESIM.md` — chantiers d'onglets spécifiques
+
 ---
 
 ## ⚙️ Architecture hybride (processus standard depuis le 03.08.2026)

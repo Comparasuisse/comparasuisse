@@ -801,7 +801,7 @@ function gtag_report_conversion(url) {
       <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise</span></label>
       <label class="net-chip"><input type="checkbox" data-net="salt" checked><span>Salt</span></label>
       <label class="net-chip"><input type="checkbox" data-net="init7" checked><span>Init7 (indépendant)</span></label>
-      <label class="net-chip"><input type="checkbox" data-net="regional" checked><span>Câble régional (Netplus, Quickline)</span></label>
+      <label class="net-chip"><input type="checkbox" data-net="regional" checked><span>Câble/fibre régional (Netplus, Quickline, K-Sys)</span></label>
     </div>
   </div>
   <div class="ctrl-group">
@@ -1185,6 +1185,11 @@ const WINGO_MIGRATION_WARNING = "Migration Wingo 1-18 sept 2026 : +CHF 1.-/mois 
 const WINGO_MIGRATION_TITLE = "Migration Wingo prévue 1-18 sept 2026";
 const WINGO_RED_UNAVAILABLE_WARNING = "⚠️ Listé au catalogue mais INDISPONIBLE à la souscription. Le prix est bien affiché par Wingo : le tableau comparatif de wingo.ch/fr/mobile liste les trois Red avec leur tarif, mais seulement après un clic sur le bouton « Afficher tous les produits » qui les replie par défaut. En revanche la ligne du tableau ne mène qu'à la page produit, laquelle affiche « Abo actuellement indisponible — Ce produit n'est malheureusement pas disponible pour le moment » sans prix ni bouton de commande, et aucun lien online-shop.wingo.ch n'existe pour ces plans. Pause commerciale probable dans le cadre de la migration Wingo prévue 1-18 sept 2026. Ne pas commander avant retour à la disponibilité — vérifier directement sur wingo.ch.";
 const WINGO_RED_UNAVAILABLE_TITLE = "Listé au catalogue mais indisponible à la souscription";
+// K-Sys ne dessert QUE le réseau FTTH des Services Industriels Genevois : hors
+// canton de Genève, aucune de ces quatre offres n'est souscriptible. Le prix est
+// donc incomparable à celui d'un opérateur national tant qu'on n'est pas éligible.
+const KSYS_GENEVA_TITLE = "Canton de Genève uniquement (réseau FTTH des SIG)";
+const KSYS_GENEVA_WARNING = "Offre disponible UNIQUEMENT sur le réseau fibre optique FTTH des Services Industriels Genevois (SIG), avec lesquels K-SYS a signé une convention de services de télécommunication. Aucune couverture hors canton de Genève, et même à Genève l'adresse doit être raccordée au FTTH SIG. Vérifier l'éligibilité sur k-sys.ch/eligibilite-k-sys.html avant toute démarche.";
 
 // Rendu warning : court → inline ; long ( > 90 caractères) → repliable via <details>.
 // Un `warningTitle` optionnel override le titre de la version repliée ; sinon on
@@ -1327,9 +1332,16 @@ function renderMobileCard(item){
 }
 
 function renderInternetCard(item){
+  // `fixedLineIncluded` est un booléen 3 états (cf. CHECKLIST-OFFRE.md) : il décrit
+  // une téléphonie fixe INSÉPARABLE de l'abo internet (incluse d'office, sans prix
+  // propre et non souscriptible seule). `null`/absent = pas de donnée → rien affiché.
+  const fixedLine = item.fixedLineIncluded === true ? (item.fixedLineNote || 'Incluse dans l\'abonnement')
+    : item.fixedLineIncluded === false ? 'Non incluse'
+    : null;
   const grid = rdGrid([
     rdCell('Débit', speedTxt(item.speed)),
     rdCell('Type de connexion', (item.connectionType || []).join(' · ') || '—'),
+    rdCell('Téléphonie fixe', fixedLine),
     rdCell('Routeur perso', item.ownRouterAllowed ? 'Autorisé' : 'Imposé par l\'opérateur'),
     rdCell('Réseau', netLabel(item.network)),
     rdCell('Vérifié le', frDate(item.verifiedAt)),
@@ -1667,6 +1679,27 @@ const internetData = [
   {name:"Netplus Internet 200", network:"regional", price:49.00, speed:200, details:"200 Mbit/s sur le réseau câble/fibre régional Netplus (consortium bli bla blo — 11 câblo-opérateurs locaux).", sourceType:"product-page", verifiedAt:"2026-08-12", priceHistory:[{date:"2026-07-26",price:49.00}], connectionType:["cable","fibre"], warning:"Disponibilité uniquement en Valais, Vaud et Fribourg via un opérateur membre du consortium (SEIC, SEFA, esr, Sinergy, Oiken…).", url:"https://www.netplus.ch/fr/offres-combo/"},
   {name:"Netplus Internet 400", network:"regional", price:69.00, speed:400, details:"400 Mbit/s sur le réseau câble/fibre régional Netplus (consortium bli bla blo).", sourceType:"product-page", verifiedAt:"2026-08-12", priceHistory:[{date:"2026-07-26",price:69.00}], connectionType:["cable","fibre"], warning:"Disponibilité uniquement en Valais, Vaud et Fribourg via un opérateur membre du consortium (SEIC, SEFA, esr, Sinergy, Oiken…).", url:"https://www.netplus.ch/fr/offres-combo/"},
   {name:"Netplus Internet 10 Gbit/s", network:"regional", price:79.00, speed:10000, details:"10 Gbit/s sur le réseau fibre régional Netplus — top de gamme du consortium bli bla blo.", sourceType:"product-page", verifiedAt:"2026-08-12", priceHistory:[{date:"2026-07-26",price:79.00}], connectionType:["fibre"], warning:"Disponibilité uniquement en Valais, Vaud et Fribourg via un opérateur membre du consortium (SEIC, SEFA, esr, Sinergy, Oiken…).", url:"https://www.netplus.ch/fr/offres-combo/"},
+
+  // === K-SYS (Meyrin/GE) — 4 paliers, vérifiés live le 2026-08-14 ===
+  // Structure commerciale confirmée sur le FORMULAIRE D'ABONNEMENT (source la plus
+  // contraignante : c'est l'acte de vente réel, pas la page marketing) —
+  // k-sys.ch/formulaire-abonnement.html :
+  //   · « Choix de l'offre * » est un champ OBLIGATOIRE dont la liste ne contient
+  //     que les 4 paliers internet → impossible de souscrire quoi que ce soit
+  //     sans prendre un abonnement internet.
+  //   · « Téléphonie illimitée 50 pays (option gratuite) * » → incluse, sans prix
+  //     propre, non souscriptible seule ⇒ `fixedLineIncluded: true`, PAS une
+  //     entrée à part et PAS un combo.
+  //   · « Box TV HD * » → location 5.-/mois OU caution 150.- OU rien : c'est du
+  //     matériel optionnel qui s'ajoute par simple addition au prix internet.
+  //     Aucune remise combo ⇒ pas d'entrée `comboData` (cf. CHECKLIST-OFFRE.md).
+  // Il n'existe donc AUCUN triple-play figé chez K-Sys : le prix est toujours
+  // « palier internet (+ 5.- si box TV) », décomposable ligne à ligne.
+  // Voir TELEPHONIE-FIXE.md pour la règle de classification générale.
+  {name:"K-Sys Allegro", network:"regional", price:39.99, beforePrice:49.99, promo:true, promoNote:"offre spéciale 12 mois, puis 49.99", speed:50, details:"50 Mbit/s sur la fibre FTTH des SIG (Genève) — sans durée d'engagement. Téléphonie fixe illimitée vers les fixes suisses + 50 destinations INCLUSE (nécessite un téléphone VoIP ou l'adaptateur K-Sys : location 3.-/mois ou caution 50.-). Routeur KBox v1, location offerte. Box TV HD 60+ chaînes en option (5.-/mois ou caution 150.-). Installation Solo 50.- ou Sérénité 150.-. Le tableau d'offres annonce un débit symétrique, mais la page « Internet » précise « même vitesse upload &amp; download (sauf offre Allegro) » — contradiction non levée côté K-Sys, l'upload de l'Allegro est donc à confirmer auprès du service client.", connectionType:["fibre"], fixedLineIncluded:true, fixedLineNote:"Incluse (illim. fixes CH + 50 destinations)", warningTitle: KSYS_GENEVA_TITLE, warning: KSYS_GENEVA_WARNING, sourceType:"product-page", verifiedAt:"2026-08-14", priceHistory:[{date:"2026-08-14",price:39.99}], url:"https://www.k-sys.ch/les-offres-k-sys.html"},
+  {name:"K-Sys Vivace", network:"regional", price:45.00, beforePrice:59.99, promo:true, promoNote:"offre spéciale 12 mois, puis 59.99", speed:100, details:"100 Mbit/s symétrique (upload = download) sur la fibre FTTH des SIG (Genève) — sans durée d'engagement. Téléphonie fixe illimitée vers les fixes suisses + 50 destinations INCLUSE (nécessite un téléphone VoIP ou l'adaptateur K-Sys : location 3.-/mois ou caution 50.-). Routeur KBox v1, location offerte ; KBox v2 en option (5.-/mois ou caution 149.-). Box TV HD 60+ chaînes en option (5.-/mois ou caution 150.-). Installation Solo 50.- ou Sérénité 150.-. À prix identique, le palier Presto offre le double de débit — Vivace n'a d'intérêt que si Presto n'est pas proposé à l'adresse.", connectionType:["fibre"], fixedLineIncluded:true, fixedLineNote:"Incluse (illim. fixes CH + 50 destinations)", warningTitle: KSYS_GENEVA_TITLE, warning: KSYS_GENEVA_WARNING, sourceType:"product-page", verifiedAt:"2026-08-14", priceHistory:[{date:"2026-08-14",price:45.00}], url:"https://www.k-sys.ch/les-offres-k-sys.html"},
+  {name:"K-Sys Presto", network:"regional", price:45.00, beforePrice:59.99, promo:true, promoNote:"offre spéciale 12 mois, puis 59.99", speed:200, details:"200 Mbit/s symétrique (upload = download) sur la fibre FTTH des SIG (Genève) — sans durée d'engagement. Téléphonie fixe illimitée vers les fixes suisses + 50 destinations INCLUSE, et la KBox v2 fournie intègre l'adaptateur téléphonique (branchement direct d'un téléphone analogique ou VoIP). Caution KBox v2 149.- ou location 5.-/mois. Box TV HD 60+ chaînes en option (5.-/mois ou caution 150.-). Installation Solo 50.- ou Sérénité 150.-. Même prix que le Vivace pour le double du débit.", connectionType:["fibre"], fixedLineIncluded:true, fixedLineNote:"Incluse (illim. fixes CH + 50 destinations)", warningTitle: KSYS_GENEVA_TITLE, warning: KSYS_GENEVA_WARNING, sourceType:"product-page", verifiedAt:"2026-08-14", priceHistory:[{date:"2026-08-14",price:45.00}], url:"https://www.k-sys.ch/les-offres-k-sys.html"},
+  {name:"K-Sys Prestissimo", network:"regional", price:45.00, beforePrice:69.99, promo:true, promoNote:"offre spéciale 12 mois, puis 69.99", speed:1000, details:"1 Gbit/s symétrique (upload = download) sur la fibre FTTH des SIG (Genève) — sans durée d'engagement, le meilleur rapport débit/prix du catalogue K-Sys pendant les 12 mois de promo (même tarif que Vivace et Presto). Téléphonie fixe illimitée vers les fixes suisses + 50 destinations INCLUSE, KBox v2 avec adaptateur téléphonique intégré (caution 149.- ou location 5.-/mois). IP fixe non partagée, 100 Go de sauvegarde et hébergement 100 Mo inclus. Box TV HD 60+ chaînes en option (5.-/mois ou caution 150.-). Installation Solo 50.- ou Sérénité 150.-.", connectionType:["fibre"], fixedLineIncluded:true, fixedLineNote:"Incluse (illim. fixes CH + 50 destinations)", warningTitle: KSYS_GENEVA_TITLE, warning: KSYS_GENEVA_WARNING, sourceType:"product-page", verifiedAt:"2026-08-14", priceHistory:[{date:"2026-08-14",price:45.00}], url:"https://www.k-sys.ch/les-offres-k-sys.html"},
 ];
 
 // Ajouter un champ optionnel `affiliateUrl` à un item pour activer le tracking Awin.
@@ -2773,7 +2806,7 @@ function resetTV(){
 }
 
 function netLabel(n){
-  return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)", regional:"Câble régional", choice:"Choix réseau"}[n];
+  return {swisscom:"Réseau Swisscom", sunrise:"Réseau Sunrise", salt:"Réseau Salt", init7:"Init7 (indépendant)", regional:"Câble/fibre régional", choice:"Choix réseau"}[n];
 }
 // Forme courte pour le tag de la ligne : la colonne fait 92px, « Réseau Swisscom »
 // y déborde et force une deuxième ligne. Le mot « Réseau » est porté par l'en-tête
@@ -4543,7 +4576,7 @@ buildStructuredData();
 <footer>
   Comparateur indépendant. <a href="mentions-legales.html">Mentions légales →</a> · <a href="#faq">Questions fréquentes</a> · <a href="mailto:contact@comparasuisse.ch">Contact</a>.<br>
   <!-- ↓ À MODIFIER À LA MAIN lors de chaque revérification manuelle des offres ↓ -->
-  <span style="opacity:.7;">Prix vérifiés le 13 août 2026</span>
+  <span style="opacity:.7;">Prix vérifiés le 14 août 2026</span>
 </footer>
 
 </body>

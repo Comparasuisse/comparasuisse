@@ -233,6 +233,21 @@ d'activation offerts, pas à un rabais mensuel — donc pas un vrai combo.
 
 ---
 
+## ☎️ Opérateur qui vend de la téléphonie fixe → lire `TELEPHONIE-FIXE.md`
+
+Avant d'intégrer un opérateur proposant une **ligne fixe**, appliquer
+l'arbre de décision de `TELEPHONIE-FIXE.md`. Trois structures commerciales,
+trois destinations différentes — à trancher **cas par cas sur le formulaire
+de commande de l'opérateur**, jamais par analogie avec un opérateur voisin :
+
+1. Téléphonie souscriptible **seule** → catégorie/entrée dédiée
+2. Téléphonie **inséparable** de l'internet → `fixedLineIncluded: true`
+   dans `internetData` (booléen 3 états, `null` par défaut)
+3. **Forfait multi-services figé** à prix unique → `comboData`, et
+   seulement s'il passe le test de remise combo ci-dessous
+
+Premier cas tranché : **K-Sys** (14.08.2026) = cas 2.
+
 ## 📈 Historique de prix (`priceHistory`) — ajout automatique
 
 Chaque offre peut porter un tableau `priceHistory: [{date:"YYYY-MM-DD", price:X.XX}, …]`
