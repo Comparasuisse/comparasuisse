@@ -4643,10 +4643,41 @@ function activerOngletSansHistorique(tab){
   return true;
 }
 
+// La racine a sa propre identité : titre générique, canonical vers elle-même,
+// priority 1.0 au sitemap. Elle ne doit donc jamais se réécrire en /mobile/.
+// On mémorise son <head> tel que servi, pour le rétablir si l'utilisateur y
+// revient par le bouton Précédent. Sur une page prérendue (/tv/…), le <head>
+// servi est celui de la route : il n'y a pas d'état racine à mémoriser, et il
+// n'y a pas non plus moyen d'atteindre / par pushState puisqu'on ne pousse
+// jamais la racine.
+const surRacine = routageActif && location.pathname.replace(/\/+$/, "") === "";
+const metaRacine = surRacine ? {
+  titre: document.title,
+  desc: (document.querySelector('meta[name="description"]') || {}).content || "",
+  ogTitre: (document.querySelector('meta[property="og:title"]') || {}).content || "",
+  ogDesc: (document.querySelector('meta[property="og:description"]') || {}).content || "",
+  url: (document.querySelector('link[rel="canonical"]') || {}).href || "https://comparasuisse.ch/",
+} : null;
+
+function appliquerMetaRacine(){
+  if (!metaRacine) return;
+  const poser = (sel, attr, val) => { const e = document.querySelector(sel); if (e) e.setAttribute(attr, val); };
+  document.title = metaRacine.titre;
+  poser('meta[name="description"]', "content", metaRacine.desc);
+  poser('meta[property="og:title"]', "content", metaRacine.ogTitre);
+  poser('meta[property="og:description"]', "content", metaRacine.ogDesc);
+  poser('meta[property="og:url"]', "content", metaRacine.url);
+  poser('link[rel="canonical"]', "href", metaRacine.url);
+}
+
 window.addEventListener("popstate", (ev) => {
   const seg = location.pathname.replace(/^\/+|\/+$/g, "");
-  const tab = (ev.state && ev.state.tab) || ROUTE_TABS[seg] || "mobile";
+  const routeConnue = ROUTE_TABS[seg];
+  const tab = routeConnue || (ev.state && ev.state.tab) || "mobile";
   activerOngletSansHistorique(tab);
+  // Revenir sur / doit rendre à la page son titre et son canonical d'origine,
+  // pas laisser ceux du dernier onglet visité.
+  if (routeConnue) appliquerMetaOnglet(tab); else appliquerMetaRacine();
 });
 
 document.querySelectorAll(".tab").forEach(tab=>{
@@ -4704,12 +4735,17 @@ document.querySelectorAll(".tab").forEach(tab=>{
     if (target === "compare") renderCompareView();
     // Adresse partageable. replaceState plutôt que pushState quand on est déjà
     // sur la route visée : recliquer l'onglet actif ne doit pas créer d'entrée.
-    const route = TAB_ROUTES[target];
-    if (route && !routageSilencieux) {
-      const chemin = "/" + route + "/";
-      ecrireHistorique(location.pathname !== chemin ? "pushState" : "replaceState", {tab: target}, chemin);
+    // Tout ceci est réservé aux vraies interactions : une activation
+    // programmatique (arrivée sur une route, retour arrière) gère elle-même son
+    // URL et son <head>, et ne doit surtout pas en déclencher une seconde.
+    if (!routageSilencieux) {
+      const route = TAB_ROUTES[target];
+      if (route) {
+        const chemin = "/" + route + "/";
+        ecrireHistorique(location.pathname !== chemin ? "pushState" : "replaceState", {tab: target}, chemin);
+      }
+      appliquerMetaOnglet(target);
     }
-    appliquerMetaOnglet(target);
   });
 });
 
@@ -4717,8 +4753,18 @@ document.querySelectorAll(".tab").forEach(tab=>{
 // retombe sur Mobile sans rien casser — Netlify a déjà servi index.html.
 (function ongletDepuisURL(){
   const seg = routageActif ? location.pathname.replace(/^\/+|\/+$/g, "") : "";
-  const tab = ROUTE_TABS[seg] || "mobile";
+  const tab = ROUTE_TABS[seg];
+  if (!tab) {
+    // Racine, ou chemin inconnu : on ouvre Mobile par défaut mais on ne touche
+    // NI à l'URL NI au <head>. La racine garde son adresse, son titre générique
+    // et son canonical vers elle-même. La réécriture d'URL est réservée aux
+    // clics de l'utilisateur.
+    activerOngletSansHistorique("mobile");
+    return;
+  }
   activerOngletSansHistorique(tab);
+  // Sur une route, replaceState normalise seulement la forme (/tv → /tv/) sans
+  // ajouter d'entrée d'historique.
   ecrireHistorique("replaceState", {tab}, "/" + TAB_ROUTES[tab] + "/");
   appliquerMetaOnglet(tab);
 })();
