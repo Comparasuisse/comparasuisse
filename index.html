@@ -2330,7 +2330,7 @@ function bannerForOffer(item){
 }
 
 function renderPromoCard(p){
-  const catLabel = {mobile:"📶 Mobile", internet:"🌐 Internet", tv:"📺 TV", combo:"📦 Internet + TV"}[p.category] || p.category;
+  const catLabel = {mobile:"Mobile", internet:"Internet", tv:"TV", combo:"Internet + TV"}[p.category] || p.category;
   const grid = rdGrid([
     rdCell('Catégorie', catLabel),
     rdCell('Opérateur', p.operator),
