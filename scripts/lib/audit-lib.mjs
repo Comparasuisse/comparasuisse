@@ -273,10 +273,14 @@ export function loadData() {
     dataOnly: (() => { try { return extract("dataOnlyData"); } catch { return []; } })(),
     // travelData n'a ni network ni price mensuel : ce sont des eSIM de voyage,
     // facturées à la durée et parfois en USD ou en EUR (cf. VOYAGE-ESIM.md).
+    // `price` est exprimé dans la devise native du fournisseur, celle-là même
+    // qui est affichée sur sa page — la comparaison au prix extrait reste donc
+    // valide ; `priceCHF` est la conversion, elle n'apparaît sur aucune page.
     // Le tableau est généré par scripts/build-travel-data.mjs, pas édité à la
-    // main — un audit qui le corrigerait sur place serait écrasé au prochain
-    // build. Il est exposé ici pour les contrôles de cohérence, pas pour les
-    // passes de revérification de prix.
+    // main : une dérive détectée ici se corrige en régénérant (`--inject`),
+    // jamais en patchant index.html, sinon le prochain build l'écrase.
+    // Scanné quotidiennement au même titre que les autres catégories depuis le
+    // 17.08.2026 (348 offres pour 81 URLs uniques).
     travel: (() => { try { return extract("travelData"); } catch { return []; } })(),
   };
 }

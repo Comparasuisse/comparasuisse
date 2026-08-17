@@ -133,7 +133,7 @@ if (flag("mark-full-pass")) {
 }
 
 const LIMIT = parseInt(argVal("limit") || "0", 10);
-const CATEGORY = argVal("category"); // "mobile" | "internet" | "tv" | "combo" | "promo"
+const CATEGORY = argVal("category"); // mobile | internet | tv | combo | promo | prepaid | dataOnly | travel
 const DRY = flag("dry-run");
 
 // Acquiert le verrou avant tout autre traitement lourd. `--dry-run` peut
@@ -162,7 +162,16 @@ if (!DRY) {
 
 // === Chargement des offres ===
 const data = loadData();
-const CATS = CATEGORY ? [CATEGORY] : ["mobile", "internet", "tv", "combo", "promo"];
+// Toutes les catégories renvoyées par loadData(), sans exception. La liste était
+// figée sur mobile+internet+tv+combo+promo, ce qui laissait 404 offres — les 348
+// eSIM Voyage, les 28 prépayées et les 28 SIM Data — hors du scan quotidien :
+// 292 offres scannées sur 696, sans que ni le rapport ni le verdict « catalogue
+// stable » ne le signalent. C'est très exactement l'angle mort décrit par la
+// règle 8 (cas Salt Travel Max) : ce qui n'est jamais lu ne peut jamais être
+// flagué. Dériver la liste des données plutôt que la coder en dur garantit
+// qu'une future catégorie soit couverte le jour de sa création.
+const ALL_CATS = Object.keys(data);
+const CATS = CATEGORY ? [CATEGORY] : ALL_CATS;
 const pool = [];
 for (const cat of CATS) {
   if (!data[cat]) continue;

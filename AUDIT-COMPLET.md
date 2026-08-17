@@ -32,8 +32,18 @@ Le script **`scripts/_audit-catalog.mjs`** est planifié par le Task Scheduler
 Windows (voir **`scripts/install-daily-audit-task.ps1`** pour l'installer,
 défaut : 07:00, rattrapage si PC éteint). À chaque run il :
 
-1. Parcourt **toutes les offres** du catalogue qui ont une `url` (277 offres,
-   ~175 URLs uniques au 03.08.2026).
+1. Parcourt **toutes les offres** du catalogue qui ont une `url` (696 offres,
+   311 URLs uniques au 17.08.2026). La liste des catégories est **dérivée de
+   `loadData()`**, jamais codée en dur : toute catégorie ajoutée au catalogue
+   est scannée dès sa création.
+
+   ⚠️ **Régression corrigée le 17.08.2026** : la liste était figée sur
+   `mobile+internet+tv+combo+promo`, laissant **404 offres hors scan** — les
+   348 eSIM Voyage, les 28 prépayées et les 28 SIM Data. Le rapport annonçait
+   « catalogue stable » en n'ayant lu que 292 offres sur 696, sans jamais
+   signaler l'omission. Même mécanisme que le cas Salt Travel Max de la
+   règle 8 : ce qui n'est jamais lu ne peut jamais être flagué. Si tu ajoutes
+   une catégorie de données, ne recode jamais cette liste en dur.
 2. Charge chaque URL via Playwright headless (Chrome local).
 3. Extrait les prix visibles avec la même regex que `audit-random.mjs`
    (les fragments sont recollés — voir `scripts/lib/audit-lib.mjs`).
