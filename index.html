@@ -1034,9 +1034,14 @@ function gtag_report_conversion(url) {
 </div>
 <div class="controls hidden" id="travel-controls">
   <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label for="travel-search">Destination — tapez un pays (ex. Portugal, Japon)</label>
-    <input type="search" id="travel-search" placeholder="Tous les pays" autocomplete="off"
-      style="width:100%; padding:8px 11px; font-size:13px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink);">
+    <label for="travel-search">🔍 Destinations <span style="font-weight:400; color:var(--muted); font-size:12px;">— tapez un pays et appuyez sur Entrée. Ajoutez-en plusieurs : seules les offres couvrant <b>toutes</b> les destinations listées restent affichées (utile pour un circuit multi-pays).</span></label>
+    <div id="travel-dest-tags" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;"></div>
+    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+      <input type="search" id="travel-search" list="travel-countries" placeholder="Ex : Espagne, Thaïlande…" autocomplete="off"
+        style="flex:1 1 130px; min-width:0; box-sizing:border-box; padding:8px 11px; font-size:13px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink);">
+      <datalist id="travel-countries"></datalist>
+      <button type="button" id="travel-dest-add" style="flex:0 0 auto; padding:8px 12px; border:1px solid var(--line); border-radius:8px; background:var(--ink); color:#fff; font-size:13px; font-weight:700; cursor:pointer;" title="Ajouter cette destination">Ajouter</button>
+    </div>
     <div id="travel-search-hint" style="font-size:11.5px; color:var(--muted); margin-top:5px; min-height:15px;"></div>
   </div>
   <div class="ctrl-group">
@@ -3732,6 +3737,42 @@ function renderTravelCard(item){
   });
 }
 
+// Étiquettes de destination — même mécanique que la recherche de chaînes TV
+// (getChannelSearchTags/addChannelSearchTag), y compris la classe CSS .chan-tag
+// pour que les deux onglets soient visuellement identiques.
+//
+// La logique est un ET, comme pour les chaînes : deux destinations taguées ne
+// gardent que les offres qui couvrent les DEUX. Concrètement « Espagne » seule
+// laisse passer les forfaits Europe et Monde ; ajouter « Thaïlande », absente
+// de la zone Europe, ne laisse survivre que les forfaits Monde. C'est le
+// résultat voulu — l'intersection réelle, pas l'union.
+function getTravelDestTags(){
+  return [...document.querySelectorAll("#travel-dest-tags .chan-tag")]
+    .map(t => ({label: t.dataset.label, q: t.dataset.q}));
+}
+function addTravelDestTag(){
+  const input = document.getElementById("travel-search");
+  const raw = input.value.trim();
+  if (!raw) return;
+  const q = travelNorm(raw);
+  if (!q) return;
+  if (getTravelDestTags().some(t => t.q === q)) { input.value = ""; input.focus(); return; }
+  const tag = document.createElement("span");
+  tag.className = "chan-tag";
+  tag.dataset.q = q;
+  tag.dataset.label = raw;
+  tag.innerHTML = '<span>' + raw.replace(/[<>&]/g, c => ({"<":"&lt;",">":"&gt;","&":"&amp;"}[c])) +
+    '</span><button type="button" aria-label="Retirer" onclick="removeTravelDestTag(this)">×</button>';
+  document.getElementById("travel-dest-tags").appendChild(tag);
+  input.value = "";
+  input.focus();
+  refreshTravel();
+}
+function removeTravelDestTag(btn){
+  btn.closest(".chan-tag").remove();
+  refreshTravel();
+}
+
 function refreshTravel(){
   clampDualRange("travel-days", "travel-days-max");
   updateDualFill("travel-days-fill", "travel-days", "travel-days-max", 31);
@@ -3742,7 +3783,7 @@ function refreshTravel(){
   const daysMin = parseInt(document.getElementById("travel-days").value);
   const daysMax = parseInt(document.getElementById("travel-days-max").value);
   const dataMin = parseInt(document.getElementById("travel-data").value);
-  const terme = document.getElementById("travel-search").value.trim();
+  const destTags = getTravelDestTags();
 
   document.getElementById("travel-price-label").textContent = "CHF " + maxPrice;
   document.getElementById("travel-days-label").textContent = daysMin + (daysMin > 1 ? " jours" : " jour");
@@ -3755,7 +3796,7 @@ function refreshTravel(){
     if (item.priceCHF > maxPrice) return false;
     if (item.days < daysMin || item.days > daysMax) return false;
     if (!passesThreshold(item.dataGB, dataMin, TRAVEL_DATA_THRESHOLDS)) return false;
-    if (!travelMatchesSearch(item, terme)) return false;
+    if (!destTags.every(t => travelMatchesSearch(item, t.q))) return false;
     return true;
   });
 
@@ -3764,11 +3805,12 @@ function refreshTravel(){
   const sorted = filtered.sort((a, b) => a.priceCHF - b.priceCHF || a.days - b.days);
 
   const hint = document.getElementById("travel-search-hint");
-  if (terme) {
+  if (destTags.length) {
+    const libelles = destTags.map(t => `« ${t.label} »`).join(destTags.length > 1 ? " ET " : "");
     const zones = [...new Set(sorted.map(o => o.destination))];
     hint.textContent = zones.length
-      ? `« ${terme} » → ${zones.join(", ")}`
-      : `Aucune zone du catalogue ne couvre « ${terme} ».`;
+      ? `${libelles} → ${zones.join(", ")}`
+      : `Aucune offre ne couvre ${destTags.length > 1 ? "à la fois " : ""}${libelles}.`;
   } else {
     hint.textContent = "";
   }
@@ -3785,6 +3827,7 @@ function refreshTravel(){
 function resetTravel(){
   document.querySelectorAll('#travel-provider input, #travel-destination input').forEach(i => i.checked = true);
   document.getElementById("travel-search").value = "";
+  document.getElementById("travel-dest-tags").innerHTML = "";
   document.getElementById("travel-price").value = 145;
   document.getElementById("travel-days").value = 1;
   document.getElementById("travel-days-max").value = 31;
@@ -3795,7 +3838,27 @@ function resetTravel(){
 ["travel-price", "travel-days", "travel-days-max", "travel-data"].forEach(id => {
   document.getElementById(id).addEventListener("input", refreshTravel);
 });
-document.getElementById("travel-search").addEventListener("input", refreshTravel);
+// Le champ ne filtre plus à la frappe : il alimente des étiquettes, comme la
+// recherche de chaînes. Entrée ou le bouton « Ajouter » valident la saisie.
+document.getElementById("travel-dest-add").addEventListener("click", addTravelDestTag);
+document.getElementById("travel-search").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { e.preventDefault(); addTravelDestTag(); }
+});
+// Vocabulaire de suggestions natif (datalist) : les pays que l'index sait
+// router, plus les six zones. Les libellés de TRAVEL_ZONE_COUNTRIES sont écrits
+// sans accents ; la recherche étant insensible aux accents, taper « Grèce »
+// fonctionne tout autant.
+(function remplirSuggestionsVoyage(){
+  const dl = document.getElementById("travel-countries");
+  if (!dl) return;
+  const noms = new Set(["Monde"]);
+  for (const [zone, pays] of Object.entries(TRAVEL_ZONE_COUNTRIES)) {
+    noms.add(zone);
+    for (const p of pays) noms.add(p);
+  }
+  dl.innerHTML = [...noms].sort((a, b) => a.localeCompare(b, "fr"))
+    .map(n => '<option value="' + n.replace(/"/g, "&quot;") + '"></option>').join("");
+})();
 document.querySelectorAll('#travel-provider input, #travel-destination input').forEach(i => i.addEventListener("change", refreshTravel));
 
 /* ═══ Onglet Couverture réseau ════════════════════════════════════════════
