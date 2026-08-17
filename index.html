@@ -1316,7 +1316,6 @@ function renderMobileCard(item){
     rdCell('Appels 🌍→🌍', roamCalls || callsRoamingLabel(item)),
     rdCell('Pays couverts', countriesLabel(item)),
     rdCell('Réseau', netLabel(item.network)),
-    rdCell('Vérifié le', frDate(item.verifiedAt)),
   ]);
   const pills = [
     item.networkChoice ? '<span class="roaming-pill roaming-yes" title="Cet abonnement te laisse choisir sur quel réseau il tourne, à la souscription, sans surcoût.">🔀 Choix Salt ou Swisscom</span>' : '',
@@ -1344,7 +1343,6 @@ function renderInternetCard(item){
     rdCell('Téléphonie fixe', fixedLine),
     rdCell('Routeur perso', item.ownRouterAllowed ? 'Autorisé' : 'Imposé par l\'opérateur'),
     rdCell('Réseau', netLabel(item.network)),
-    rdCell('Vérifié le', frDate(item.verifiedAt)),
   ]);
   return rowCard({
     item, data: `<b>${speedTxt(item.speed)}</b>`, sub: item.promoNote || '',
@@ -1360,7 +1358,6 @@ function renderTVCard(item){
     rdCell('Enregistrement', item.recordingHours ? item.recordingHours + ' h' : 'Non inclus'),
     rdCell('Streaming pur', item.streaming ? 'Oui (sans box)' : 'Box requise'),
     rdCell('Opérateur', item.operator || netLabel(net)),
-    rdCell('Vérifié le', frDate(item.verifiedAt)),
   ]);
   return rowCard({
     item,
@@ -1382,7 +1379,6 @@ function renderComboCard(c){
     rdCell('Enregistrement', c.recordingHours ? c.recordingHours + ' h' : 'Non inclus'),
     rdCell('Type de connexion', (c.connectionType || []).join(' · ') || '—'),
     rdCell('Opérateur', c.operator || netLabel(net)),
-    rdCell('Vérifié le', frDate(c.verifiedAt)),
   ]);
   return rowCard({
     item: c,
@@ -1400,7 +1396,6 @@ function renderPrepaidCard(item){
     rdCell('Data Suisse', item.chUnlimited ? 'Illimitée' : goGB(item.chDataGB)),
     rdCell('Data à l\'étranger', item.roaming ? (item.roamData || 'Incluse') : 'Non incluse'),
     rdCell('Réseau', netLabel(item.network)),
-    rdCell('Vérifié le', frDate(item.verifiedAt)),
   ]);
   return rowCard({
     item,
@@ -1426,7 +1421,6 @@ function renderDataOnlyCard(item){
       : item.routerAllowed === false ? 'Non autorisé' : 'Non précisé'),
     rdCell('Opérateur', item.operator || netLabel(item.network)),
     rdCell('Réseau', netLabel(item.network)),
-    rdCell('Vérifié le', frDate(item.verifiedAt)),
   ]);
   const yearNote = item.priceYear
     ? `<br><b>Ou CHF ${item.priceYear.toFixed(2)}</b> pour 365 jours (économie CHF ${(item.price * 12 - item.priceYear).toFixed(2)} vs 12 × 30 j).`
@@ -3719,7 +3713,6 @@ function renderTravelCard(item){
       : item.hotspot === false ? 'Non' : 'Non précisé'),
     rdCell('Prix payé', item.currency + ' ' + item.price.toFixed(2)
       + (item.currency === "CHF" ? '' : ' (≈ CHF ' + item.priceCHF.toFixed(2) + ')')),
-    rdCell('Vérifié le', frDate(item.verifiedAt)),
   ]);
   const note = `Forfait de données seul, sans appels ni SMS. `
     + (item.countryCount
