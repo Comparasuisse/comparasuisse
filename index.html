@@ -4193,6 +4193,81 @@ covInput.addEventListener("keydown", (e) => {
   if (e.key === "Escape") covBoite.hidden = true;
 });
 
+/* === Routage par onglet ======================================================
+   Chaque onglet a son URL partageable. Le site reste une page unique : on ne
+   recharge rien, on réécrit seulement l'adresse via l'API History, et Netlify
+   sert index.html sur toutes les routes (voir le fichier _redirects).
+
+   Limite à connaître avant de compter dessus : le <title> et les balises og:
+   sont mis à jour EN JAVASCRIPT. Les navigateurs et l'historique en profitent,
+   mais les robots d'aperçu des réseaux sociaux et des messageries ne rendent
+   pas le JS — ils liront donc toujours les balises statiques du <head>. Pour
+   un aperçu vraiment différent par onglet, il faudrait du prérendu côté
+   Netlify, ce qui est un autre chantier. */
+const TAB_ROUTES = {mobile:"mobile", prepaid:"prepaid", internet:"internet", dataonly:"dataonly", tv:"tv", combo:"combo", promo:"promotions", travel:"voyage", coverage:"couverture-reseau", compare:"comparateur"};
+const ROUTE_TABS = Object.fromEntries(Object.entries(TAB_ROUTES).map(([t, r]) => [r, t]));
+
+const TAB_META = {
+  mobile:   ["Comparateur d'abonnements mobiles en Suisse — Comparasuisse", "Comparez les abonnements mobiles suisses : Swisscom, Sunrise, Salt, Wingo, yallo et les MVNO. Filtrez par prix, data, roaming et réseau."],
+  prepaid:  ["Cartes prépayées mobiles en Suisse — Comparasuisse", "Comparez les offres mobiles prépayées suisses : prix par période, data incluse et réseau porteur, sans abonnement ni engagement."],
+  internet: ["Comparateur d'abonnements internet en Suisse — Comparasuisse", "Comparez les abonnements internet fixe suisses : fibre, câble, DSL et 5G. Débits, engagement, routeur et réseau porteur."],
+  dataonly: ["SIM data only en Suisse — Comparasuisse", "Comparez les cartes SIM data seule pour tablettes, routeurs et objets connectés : volume, période et réseau."],
+  tv:       ["Comparateur d'abonnements TV en Suisse — Comparasuisse", "Comparez les offres TV suisses : nombre de chaînes, replay, enregistrement et streaming. Cherchez une chaîne précise."],
+  combo:    ["Offres combinées Internet + TV en Suisse — Comparasuisse", "Comparez les packs Internet + TV suisses et leurs vraies remises combinées, débit et bouquet de chaînes inclus."],
+  promo:    ["Promotions télécom en Suisse — Comparasuisse", "Toutes les promotions mobile, internet et TV en cours en Suisse, avec leur date de fin et le compte à rebours quand elle est connue."],
+  travel:   ["eSIM de voyage — Comparasuisse", "Comparez les eSIM de voyage : Airalo, Saily, Nomad, Ubigi, Yesim et Holafly. Prix par destination, durée et volume de données."],
+  coverage: ["Couverture réseau en Suisse — Comparasuisse", "Vérifiez la couverture mobile et fixe à votre adresse, d'après les données officielles de l'OFCOM."],
+  compare:  ["Comparaison côte à côte — Comparasuisse", "Comparez jusqu'à quatre offres télécom suisses ligne par ligne : prix, réseau, data, roaming et chaînes."],
+};
+
+// Vrai pendant une navigation déclenchée par le code (retour arrière, arrivée
+// directe sur une route) : le clic simulé ne doit alors PAS réempiler une
+// entrée d'historique, sans quoi le bouton « Précédent » ne remonterait jamais.
+let routageSilencieux = false;
+
+// Le routage suppose une origine réelle. Ouvert en file:// (tests locaux,
+// mini-QA), le document a une origine opaque : toute écriture d'historique y
+// lève une SecurityError, qui interrompait l'initialisation et laissait la
+// page sans aucun onglet fonctionnel. On neutralise proprement plutôt que de
+// laisser une exception décider du sort du reste du script.
+// Nom volontairement en minuscules : extractTopLevelConstants() (audit-lib.mjs)
+// capte toute const EN MAJUSCULES et l'évalue dans Node, où location n'existe
+// pas. Les majuscules sont réservées aux constantes référencées par les données.
+const routageActif = location.protocol === "http:" || location.protocol === "https:";
+function ecrireHistorique(methode, etat, url){
+  if (!routageActif) return;
+  try { history[methode](etat, "", url); } catch (e) { /* origine refusée : on n'insiste pas */ }
+}
+
+function appliquerMetaOnglet(tab){
+  const m = TAB_META[tab];
+  if (!m) return;
+  const [titre, desc] = m;
+  document.title = titre;
+  const poser = (sel, attr, val) => { const e = document.querySelector(sel); if (e) e.setAttribute(attr, val); };
+  poser('meta[name="description"]', "content", desc);
+  poser('meta[property="og:title"]', "content", titre);
+  poser('meta[property="og:description"]', "content", desc);
+  const url = "https://comparasuisse.ch/" + (TAB_ROUTES[tab] || "");
+  poser('meta[property="og:url"]', "content", url);
+  poser('link[rel="canonical"]', "href", url);
+}
+
+function activerOngletSansHistorique(tab){
+  const el = document.querySelector('.tab[data-tab="' + tab + '"]');
+  if (!el) return false;
+  routageSilencieux = true;
+  el.click();
+  routageSilencieux = false;
+  return true;
+}
+
+window.addEventListener("popstate", (ev) => {
+  const seg = location.pathname.replace(/^\/+|\/+$/g, "");
+  const tab = (ev.state && ev.state.tab) || ROUTE_TABS[seg] || "mobile";
+  activerOngletSansHistorique(tab);
+});
+
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.addEventListener("click", ()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
@@ -4246,7 +4321,38 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("compare-notice").classList.toggle("hidden", target!=="compare");
     document.getElementById("compare-container").classList.toggle("hidden", target!=="compare");
     if (target === "compare") renderCompareView();
+    // Adresse partageable. replaceState plutôt que pushState quand on est déjà
+    // sur la route visée : recliquer l'onglet actif ne doit pas créer d'entrée.
+    const route = TAB_ROUTES[target];
+    if (route && !routageSilencieux) {
+      const chemin = "/" + route;
+      ecrireHistorique(location.pathname !== chemin ? "pushState" : "replaceState", {tab: target}, chemin);
+    }
+    appliquerMetaOnglet(target);
   });
+});
+
+// Route d'arrivée : /tv ouvre l'onglet TV directement. Un chemin inconnu
+// retombe sur Mobile sans rien casser — Netlify a déjà servi index.html.
+(function ongletDepuisURL(){
+  const seg = routageActif ? location.pathname.replace(/^\/+|\/+$/g, "") : "";
+  const tab = ROUTE_TABS[seg] || "mobile";
+  activerOngletSansHistorique(tab);
+  ecrireHistorique("replaceState", {tab}, "/" + TAB_ROUTES[tab]);
+  appliquerMetaOnglet(tab);
+})();
+
+// Arriver DIRECTEMENT sur /couverture-reseau active l'onglet pendant l'analyse
+// du script, alors que Leaflet est chargé en defer : covCarteInit() sort en
+// silence sur son garde de disponibilité de L, et la carte ne se construit
+// jamais. Un clic humain, lui, arrive toujours après. On repasse donc une fois
+// la page complètement chargée, uniquement si l'onglet est actif et la carte
+// encore absente.
+window.addEventListener("load", () => {
+  const actif = document.querySelector(".tab.active");
+  if (!actif || actif.dataset.tab !== "coverage") return;
+  covCarteInit();
+  if (covCarte) setTimeout(() => covCarte.invalidateSize(), 60);
 });
 
 // Date de référence pour l'affichage du statut des promos (utilisée par refreshPromo).

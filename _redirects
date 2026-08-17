@@ -1,0 +1,15 @@
+# Netlify — routage SPA.
+#
+# Chaque onglet a son URL propre (/tv, /voyage, /promotions…), mais le site
+# reste une page unique : c'est du JavaScript qui bascule d'onglet. Sans cette
+# règle, arriver DIRECTEMENT sur comparasuisse.ch/tv renverrait un 404, puisque
+# aucun fichier tv.html n'existe.
+#
+# La règle sert index.html avec un code 200 (réécriture, pas redirection) :
+# l'URL demandée reste affichée dans la barre d'adresse, et le script lit
+# location.pathname au chargement pour ouvrir le bon onglet.
+#
+# Les fichiers réellement présents (sitemap.xml, robots.txt, mentions-legales.html,
+# favicon, img/, data/…) sont servis en priorité par Netlify : cette règle ne
+# s'applique qu'aux chemins qui ne correspondent à aucun fichier.
+/*  /index.html  200
