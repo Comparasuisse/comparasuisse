@@ -296,6 +296,16 @@ for (const item of subset) {
       verdict = { status: "NON_VÉRIFIABLE", pricesOnPage: snap.pricesOnPage };
     } else if (snap.pricesOnPage?.includes(expected)) {
       verdict = { status: "OK", expected, pricesOnPage: snap.pricesOnPage.slice(0, 15) };
+    } else if (!snap.pricesOnPage || snap.pricesOnPage.length === 0) {
+      // Aucun prix extractible sur la page. Ce n'est PAS un écart : un écart
+      // suppose qu'on a lu un autre prix (c'est le contrat écrit dans
+      // audit-lib.mjs — « prix stocké absent de la page MAIS d'autres prix
+      // présents »). Ici on n'a rien lu du tout, donc le verdict honnête est
+      // « prix inconnu ». Les classer ÉCART, c'était coder dans le script la
+      // confusion que la règle 9 interdit explicitement, et noyer les vrais
+      // écarts : au 17.08.2026, 282 des 348 offres Voyage sortaient en ÉCART
+      // alors que les pages Yesim et Ubigi ne livrent simplement aucun prix.
+      verdict = { status: "NON_VÉRIFIABLE", expected, raison: "aucun prix extractible sur la page — prix inconnu, pas prix faux", inconclusive: true };
     } else {
       const near = (snap.pricesOnPage || [])
         .map(p => ({ p, diff: Math.abs(parseFloat(p) - parseFloat(expected)) }))
@@ -329,6 +339,13 @@ const flagged = results.filter(r =>
   r.verdict.status === "ERREUR" ||
   (r.verdict.keywords?.length > 0)
 );
+// Règle 9 : « un statut non concluant n'est PAS une vérification ». Ces offres
+// ont un prix stocké que le scan n'a pas réussi à lire — elles ne sont ni
+// correctes ni fausses, elles sont NON COUVERTES, et le récap doit le dire.
+// Sans cette liste, reclasser en NON_VÉRIFIABLE les aurait fait disparaître du
+// rapport, ce qui aurait été pire que de les laisser en faux ÉCART : une offre
+// invisible ne se fait jamais rattraper (c'est l'histoire de Salt Travel Max).
+const inconclusive = results.filter(r => r.verdict.inconclusive);
 
 // === Trigger logic ===
 // Date locale (fuseau Europe/Zurich) — évite le drift UTC en fin de journée qui
@@ -346,7 +363,10 @@ const daysSinceFullPass = state.lastFullPassDate
   ? Math.floor((new Date(today) - new Date(state.lastFullPassDate)) / 86400000)
   : null;
 const overdue = daysSinceFullPass === null || daysSinceFullPass >= DAYS_BEFORE_FORCED_FULL_PASS;
-const triggerManual = flagged.length > 0 || overdue;
+// Les non concluants comptent dans le trigger : reclasser un faux ÉCART en
+// « prix inconnu » ne doit pas rendre le catalogue « stable » par magie. Une
+// offre illisible reste une offre à vérifier à la main.
+const triggerManual = flagged.length > 0 || inconclusive.length > 0 || overdue;
 
 // === Rapport markdown ===
 const lines = [];
@@ -385,6 +405,7 @@ lines.push("");
 if (triggerManual) {
   const reasons = [];
   if (flagged.length > 0) reasons.push(`${flagged.length} offre(s) flaguée(s) (écart/illisible/mots-clés)`);
+  if (inconclusive.length > 0) reasons.push(`${inconclusive.length} offre(s) non concluante(s) (prix illisible — règle 9)`);
   if (overdue) reasons.push(daysSinceFullPass === null
     ? `aucune passe complète manuelle enregistrée à ce jour`
     : `${daysSinceFullPass}j depuis dernière passe complète (seuil : ${DAYS_BEFORE_FORCED_FULL_PASS}j)`);
@@ -399,6 +420,27 @@ if (triggerManual) {
   lines.push("");
 }
 
+// Section « non concluants » (règle 9) : prix stocké non lisible sur la page.
+// Volontairement placée AVANT les écarts : ce sont les offres dont on ne sait
+// rien, et ne rien savoir mérite plus d'attention qu'un écart déjà caractérisé.
+if (inconclusive.length) {
+  lines.push(`### NON CONCLUANTS — prix inconnu, offres NON COUVERTES (${inconclusive.length})`);
+  lines.push("");
+  lines.push(`> Règle 9 : ces offres ne sont ni confirmées ni infirmées. Le scan n'a extrait`);
+  lines.push(`> aucun prix de leur page. Elles doivent être revérifiées à la main (browser MCP`);
+  lines.push(`> ou \`audit-probe.mjs\`) ou listées comme non couvertes dans le récap final.`);
+  lines.push(`> Ne jamais les compter comme vérifiées.`);
+  lines.push("");
+  const parCat = {};
+  for (const { item } of inconclusive) (parCat[item.__cat] ||= []).push(item);
+  for (const [cat, items] of Object.entries(parCat)) {
+    lines.push(`- **${cat}** : ${items.length} offre(s) — ${[...new Set(items.map(i => i.url))].length} URL(s) distincte(s)`);
+    for (const i of items.slice(0, 12)) lines.push(`  - ${i.operator ? i.operator + " — " : ""}${i.name} (${i.currency || "CHF"} ${i.price}) → ${i.url}`);
+    if (items.length > 12) lines.push(`  - … et ${items.length - 12} autre(s) dans la même catégorie`);
+  }
+  lines.push("");
+}
+
 // Section par verdict problématique
 const groupBy = (verdict) => results.filter(r => r.verdict.status === verdict);
 for (const v of ["ÉCART", "URL_MORTE", "PAGE_VIDE", "TIMEOUT", "ERREUR"]) {
@@ -408,7 +450,11 @@ for (const v of ["ÉCART", "URL_MORTE", "PAGE_VIDE", "TIMEOUT", "ERREUR"]) {
   for (const { item, verdict } of g) {
     lines.push(`- **[${item.__cat}] ${item.operator ? item.operator + " — " : ""}${item.name}**`);
     lines.push(`  - URL : ${item.url}`);
-    if (verdict.expected) lines.push(`  - Prix stocké : CHF ${verdict.expected}`);
+    // La devise vient de l'offre : travelData facture en USD chez Ubigi et en
+    // EUR chez Yesim. Écrire « CHF » en dur affichait « CHF 0.45 » pour un
+    // prix qui est en réalité de 0.45 EUR — un rapport de vérification qui se
+    // trompe lui-même d'unité.
+    if (verdict.expected) lines.push(`  - Prix stocké : ${item.currency || "CHF"} ${verdict.expected}`);
     if (verdict.pricesOnPage?.length) lines.push(`  - Prix trouvés : ${verdict.pricesOnPage.join(", ")}`);
     if (verdict.near?.length) lines.push(`  - Prix proches (±15%) : ${verdict.near.join(", ")}`);
     if (verdict.httpStatus) lines.push(`  - HTTP : ${verdict.httpStatus}`);
