@@ -4625,7 +4625,11 @@ function appliquerMetaOnglet(tab){
   poser('meta[name="description"]', "content", desc);
   poser('meta[property="og:title"]', "content", titre);
   poser('meta[property="og:description"]', "content", desc);
-  const url = "https://comparasuisse.ch/" + (TAB_ROUTES[tab] || "");
+  // Barre finale obligatoire : Netlify canonicalise /tv en 301 vers /tv/.
+  // Annoncer /tv en canonical ferait pointer la balise vers une redirection,
+  // exactement le signal ambigu que le prérendu devait supprimer (vérifié en
+  // production le 17.08.2026 : les dix routes renvoient 301 sans la barre).
+  const url = "https://comparasuisse.ch/" + (TAB_ROUTES[tab] || "") + "/";
   poser('meta[property="og:url"]', "content", url);
   poser('link[rel="canonical"]', "href", url);
 }
@@ -4702,7 +4706,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
     // sur la route visée : recliquer l'onglet actif ne doit pas créer d'entrée.
     const route = TAB_ROUTES[target];
     if (route && !routageSilencieux) {
-      const chemin = "/" + route;
+      const chemin = "/" + route + "/";
       ecrireHistorique(location.pathname !== chemin ? "pushState" : "replaceState", {tab: target}, chemin);
     }
     appliquerMetaOnglet(target);
@@ -4715,7 +4719,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
   const seg = routageActif ? location.pathname.replace(/^\/+|\/+$/g, "") : "";
   const tab = ROUTE_TABS[seg] || "mobile";
   activerOngletSansHistorique(tab);
-  ecrireHistorique("replaceState", {tab}, "/" + TAB_ROUTES[tab]);
+  ecrireHistorique("replaceState", {tab}, "/" + TAB_ROUTES[tab] + "/");
   appliquerMetaOnglet(tab);
 })();
 

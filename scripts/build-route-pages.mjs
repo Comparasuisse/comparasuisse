@@ -76,7 +76,8 @@ function tetePour(tab, route) {
   const meta = TAB_META[tab];
   if (!meta) throw new Error(`TAB_META ne décrit pas l'onglet « ${tab} ».`);
   const [titre, desc] = meta;
-  const url = `${SITE}/${route}`;
+  // Avec barre finale : c'est la forme que Netlify sert (301 depuis /tv vers /tv/).
+  const url = `${SITE}/${route}/`;
   let t = TETE;
   const remplacer = (motif, valeur, quoi) => {
     if (!motif.test(t)) throw new Error(`balise ${quoi} introuvable dans le <head> pour /${route}`);
