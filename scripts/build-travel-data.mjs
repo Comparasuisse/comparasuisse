@@ -42,8 +42,14 @@ import fs from "fs";
 // Taux BCE relevés le 13.08.2026 via api.frankfurter.dev (1 CHF = 1.2306 USD,
 // 1 CHF = 1.0669 EUR). À rafraîchir en même temps que les collectes.
 const TAUX = { CHF: 1, USD: 0.8126, EUR: 0.9373 };
+// TAUX_DATE et VERIFIED_AT sont deux faits distincts et ne se bumpent pas
+// ensemble : le premier date le relevé de change, le second la dernière
+// collecte des prix chez les fournisseurs. Le 17.08.2026 les six collecteurs
+// ont été relancés (sortie identique au bit près, donc prix confirmés) sans
+// que les taux soient re-relevés — bumper TAUX_DATE aurait fait passer pour
+// frais un taux vieux de quatre jours, alors que l'onglet l'affiche au visiteur.
 const TAUX_DATE = "2026-08-13";
-const VERIFIED_AT = "2026-08-13";
+const VERIFIED_AT = "2026-08-17";
 
 // Chaque collecteur nomme ses destinations à sa façon. Table unique de
 // correspondance vers les six libellés de l'onglet.
