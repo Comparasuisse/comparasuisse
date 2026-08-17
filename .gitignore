@@ -26,3 +26,18 @@ scripts/daily-audit.lock
 
 # Logs générés par les scripts de vérification (full-run-verify.log, etc.)
 scripts/*.log
+
+# Prérendu par route — généré au déploiement par scripts/build-route-pages.mjs
+# (cf. netlify.toml). Non commité : ~8.7 Mo de copies d'index.html qui seraient
+# réécrites à chaque passe d'audit, avec le risque de servir des prix périmés
+# aux robots le jour où on oublierait de régénérer.
+/mobile/
+/prepaid/
+/internet/
+/dataonly/
+/tv/
+/combo/
+/promotions/
+/voyage/
+/couverture-reseau/
+/comparateur/

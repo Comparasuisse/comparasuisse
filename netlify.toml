@@ -1,0 +1,24 @@
+# Le site reste statique. La seule étape de build est le prérendu par route :
+# scripts/build-route-pages.mjs écrit tv/index.html, voyage/index.html, etc.,
+# copies d'index.html dont seules six balises du <head> changent (title,
+# description, canonical, og:title, og:description, og:url + les deux twitter:).
+#
+# Pourquoi au déploiement plutôt qu'en commit : index.html pèse ~900 Ko, dix
+# copies font 8.7 Mo, et il change à chaque passe d'audit. Les commiter ferait
+# gonfler le dépôt à chaque correction de prix, et surtout ferait servir des
+# prix périmés aux robots le jour où on oublierait de régénérer. Généré ici,
+# c'est toujours en phase avec index.html par construction.
+#
+# Si cette étape échoue, aucun dossier de route n'est produit et la règle
+# `/*  /index.html  200` de _redirects reprend la main : le site fonctionne
+# comme avant ce chantier. On perd le prérendu, jamais le site.
+
+[build]
+  command = "node scripts/build-route-pages.mjs"
+  publish = "."
+
+[build.environment]
+  # Le générateur n'utilise que `fs` et `path`. Les devDependencies
+  # (playwright-core, pdfjs-dist) ne servent qu'aux outils d'audit en local :
+  # les installer à chaque déploiement serait du temps de build pour rien.
+  NPM_FLAGS = "--omit=dev"
