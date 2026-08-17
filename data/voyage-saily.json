@@ -657,5 +657,737 @@
    "couverture": 121,
    "dureesIllimite": []
   }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-thailand",
+  "url": "https://saily.com/esim-thailand/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 2.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 4.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 6.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 8.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 12.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 16.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 25.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 32.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 36.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 39.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-japan",
+  "url": "https://saily.com/esim-japan/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 20.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-indonesia",
+  "url": "https://saily.com/esim-indonesia/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 11.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 18.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 29.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-vietnam",
+  "url": "https://saily.com/esim-vietnam/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 23.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-singapore",
+  "url": "https://saily.com/esim-singapore/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 18.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  }
+ },
+ {
+  "provider": "Saily",
+  "slug": "esim-united-arab-emirates",
+  "url": "https://saily.com/esim-united-arab-emirates/",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 7.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 8.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16.49,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 27.99,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.49,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 25,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59.99,
+    "currency": "CHF",
+    "dataNote": "3 Go/jour à pleine vitesse, puis 1 Mb/s",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "dureesIllimite": [
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    30
+   ]
+  }
  }
 ]

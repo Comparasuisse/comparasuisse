@@ -83,6 +83,42 @@ const DESTINATIONS = {
   "esim-le-monde": "Monde",
   "global/global-plus-package-esim": "Monde",
   WORLD: "Monde",
+
+  // ── Lot 2 (17.08.2026) : destinations asiatiques et Golfe ────────────────
+  // Slugs vérifiés un par un en direct avant collecte : chaque page a été
+  // rendue dans un vrai Chrome et retenue seulement si elle affichait des prix
+  // ET des durées. Deux pièges à retenir : Holafly est en français (thailande,
+  // japon, indonesie, singapour) et vend les Émirats sous « dubai » ; Ubigi
+  // n'a pas d'URL par pays mais des libellés de grille, dont « UAE ».
+  thailand: "Thaïlande",
+  "esim-thailand": "Thaïlande",
+  "country/thailand": "Thaïlande",
+  "esim-thailande": "Thaïlande",
+  THAILAND: "Thaïlande",
+  japan: "Japon",
+  "esim-japan": "Japon",
+  "country/japan": "Japon",
+  "esim-japon": "Japon",
+  JAPAN: "Japon",
+  indonesia: "Indonésie",
+  "esim-indonesia": "Indonésie",
+  "country/indonesia": "Indonésie",
+  "esim-indonesie": "Indonésie",
+  INDONESIA: "Indonésie",
+  vietnam: "Vietnam",
+  "esim-vietnam": "Vietnam",
+  "country/vietnam": "Vietnam",
+  VIETNAM: "Vietnam",
+  singapore: "Singapour",
+  "esim-singapore": "Singapour",
+  "country/singapore": "Singapour",
+  "esim-singapour": "Singapour",
+  SINGAPORE: "Singapour",
+  "united-arab-emirates": "Émirats arabes unis",
+  "esim-united-arab-emirates": "Émirats arabes unis",
+  "country/united-arab-emirates": "Émirats arabes unis",
+  "esim-dubai": "Émirats arabes unis",
+  UAE: "Émirats arabes unis",
 };
 
 // Faits établis fournisseur par fournisseur (cf. VOYAGE-ESIM.md § 3 et 3 bis).
@@ -187,7 +223,8 @@ for (const nom of fichiers) {
 
 // Tri : destination, puis prix CHF croissant — l'ordre dans lequel l'onglet les
 // rendra par défaut.
-const ordreDest = ["Europe", "Royaume-Uni", "États-Unis", "Canada", "Turquie", "Monde"];
+// « Monde » reste en dernier : c'est le repli, pas une destination qu'on choisit.
+const ordreDest = ["Europe", "Royaume-Uni", "États-Unis", "Canada", "Turquie", "Thaïlande", "Japon", "Indonésie", "Vietnam", "Singapour", "Émirats arabes unis", "Monde"];
 offres.sort(
   (a, b) =>
     ordreDest.indexOf(a.destination) - ordreDest.indexOf(b.destination) ||

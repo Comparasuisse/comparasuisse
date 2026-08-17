@@ -98,10 +98,10 @@
     "days": 7,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 22.5,
+    "price": 23,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | Unlimited | GB | 22.50 | CHF",
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
     "onglet": "(défaut)"
    },
    {
@@ -148,10 +148,10 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 40,
+    "price": 40.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 20 | GB | 40.00 | CHF",
+    "brut": "30 days | 20 | GB | 40.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -168,10 +168,10 @@
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 58.5,
+    "price": 59,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 50 | GB | 58.50 | CHF",
+    "brut": "30 days | 50 | GB | 59.00 | CHF",
     "onglet": "Standard"
    },
    {
@@ -188,20 +188,20 @@
     "days": 90,
     "dataGB": 50,
     "unlimited": false,
-    "price": 83.5,
+    "price": 84,
     "currency": "CHF",
     "horsPerimetre": true,
-    "brut": "90 days | 50 | GB | 83.50 | CHF",
+    "brut": "90 days | 50 | GB | 84.00 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 180,
     "dataGB": 100,
     "unlimited": false,
-    "price": 154.5,
+    "price": 155,
     "currency": "CHF",
     "horsPerimetre": true,
-    "brut": "180 days | 100 | GB | 154.50 | CHF",
+    "brut": "180 days | 100 | GB | 155.00 | CHF",
     "onglet": "Standard"
    }
   ],
@@ -244,10 +244,10 @@
     "days": 7,
     "dataGB": 3,
     "unlimited": false,
-    "price": 7.5,
+    "price": 8,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | 3 | GB | 7.50 | CHF",
+    "brut": "7 days | 3 | GB | 8.00 | CHF",
     "onglet": "Standard"
    },
    {
@@ -291,16 +291,6 @@
     "onglet": "Standard"
    },
    {
-    "days": 7,
-    "dataGB": 10,
-    "unlimited": false,
-    "price": 15,
-    "currency": "CHF",
-    "horsPerimetre": false,
-    "brut": "7 days | 10 | GB | 15.00 | CHF",
-    "onglet": "Standard"
-   },
-   {
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
@@ -309,6 +299,16 @@
     "horsPerimetre": false,
     "brut": "5 days | Unlimited | GB | 15.50 | CHF",
     "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 15.50 | CHF",
+    "onglet": "Standard"
    },
    {
     "days": 15,
@@ -334,20 +334,20 @@
     "days": 7,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 22.5,
+    "price": 23,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | Unlimited | GB | 22.50 | CHF",
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 15,
     "dataGB": 20,
     "unlimited": false,
-    "price": 25,
+    "price": 25.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | 20 | GB | 25.00 | CHF",
+    "brut": "15 days | 20 | GB | 25.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -374,30 +374,30 @@
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 32.5,
+    "price": 33,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 50 | GB | 32.50 | CHF",
+    "brut": "30 days | 50 | GB | 33.00 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 15,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 40,
+    "price": 40.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | Unlimited | GB | 40.00 | CHF",
+    "brut": "15 days | Unlimited | GB | 40.50 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 30,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 57.5,
+    "price": 58,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | Unlimited | GB | 57.50 | CHF",
+    "brut": "30 days | Unlimited | GB | 58.00 | CHF",
     "onglet": "(défaut)"
    }
   ],
@@ -440,10 +440,10 @@
     "days": 7,
     "dataGB": 3,
     "unlimited": false,
-    "price": 7.5,
+    "price": 8,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | 3 | GB | 7.50 | CHF",
+    "brut": "7 days | 3 | GB | 8.00 | CHF",
     "onglet": "Standard"
    },
    {
@@ -550,30 +550,30 @@
     "days": 15,
     "dataGB": 20,
     "unlimited": false,
-    "price": 30,
+    "price": 30.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | 20 | GB | 30.00 | CHF",
+    "brut": "15 days | 20 | GB | 30.50 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 30.5,
+    "price": 31,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 20 | GB | 30.50 | CHF",
+    "brut": "30 days | 20 | GB | 31.00 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 35,
+    "price": 35.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 50 | GB | 35.00 | CHF",
+    "brut": "30 days | 50 | GB | 35.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -636,10 +636,10 @@
     "days": 7,
     "dataGB": 3,
     "unlimited": false,
-    "price": 7.5,
+    "price": 8,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | 3 | GB | 7.50 | CHF",
+    "brut": "7 days | 3 | GB | 8.00 | CHF",
     "onglet": "Standard"
    },
    {
@@ -656,30 +656,30 @@
     "days": 15,
     "dataGB": 5,
     "unlimited": false,
-    "price": 12.5,
+    "price": 13,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | 5 | GB | 12.50 | CHF",
+    "brut": "15 days | 5 | GB | 13.00 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 7,
     "dataGB": 10,
     "unlimited": false,
-    "price": 15,
+    "price": 15.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | 10 | GB | 15.00 | CHF",
+    "brut": "7 days | 10 | GB | 15.50 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 15,
+    "price": 15.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 5 | GB | 15.00 | CHF",
+    "brut": "30 days | 5 | GB | 15.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -716,10 +716,10 @@
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 22.5,
+    "price": 23,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "5 days | Unlimited | GB | 22.50 | CHF",
+    "brut": "5 days | Unlimited | GB | 23.00 | CHF",
     "onglet": "(défaut)"
    },
    {
@@ -766,20 +766,20 @@
     "days": 15,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 37.5,
+    "price": 38,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | Unlimited | GB | 37.50 | CHF",
+    "brut": "15 days | Unlimited | GB | 38.00 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 70,
+    "price": 70.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 50 | GB | 70.00 | CHF",
+    "brut": "30 days | 50 | GB | 70.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -822,10 +822,10 @@
     "days": 3,
     "dataGB": 3,
     "unlimited": false,
-    "price": 5,
+    "price": 5.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "3 days | 3 | GB | 5.00 | CHF",
+    "brut": "3 days | 3 | GB | 5.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -842,10 +842,10 @@
     "days": 7,
     "dataGB": 5,
     "unlimited": false,
-    "price": 7.5,
+    "price": 8,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | 5 | GB | 7.50 | CHF",
+    "brut": "7 days | 5 | GB | 8.00 | CHF",
     "onglet": "Standard"
    },
    {
@@ -892,10 +892,10 @@
     "days": 15,
     "dataGB": 10,
     "unlimited": false,
-    "price": 12.5,
+    "price": 13,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | 10 | GB | 12.50 | CHF",
+    "brut": "15 days | 10 | GB | 13.00 | CHF",
     "onglet": "Standard"
    },
    {
@@ -972,20 +972,20 @@
     "days": 15,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 32.5,
+    "price": 33,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | Unlimited | GB | 32.50 | CHF",
+    "brut": "15 days | Unlimited | GB | 33.00 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 30,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 57.5,
+    "price": 58,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | Unlimited | GB | 57.50 | CHF",
+    "brut": "30 days | Unlimited | GB | 58.00 | CHF",
     "onglet": "(défaut)"
    }
   ],
@@ -1028,20 +1028,20 @@
     "days": 3,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 20,
+    "price": 20.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "3 days | Unlimited | GB | 20.00 | CHF",
+    "brut": "3 days | Unlimited | GB | 20.50 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 20,
+    "price": 20.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | 3 | GB | 20.00 | CHF",
+    "brut": "30 days | 3 | GB | 20.50 | CHF",
     "onglet": "Standard"
    },
    {
@@ -1068,65 +1068,1221 @@
     "days": 7,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 37.5,
+    "price": 38,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "7 days | Unlimited | GB | 37.50 | CHF",
+    "brut": "7 days | Unlimited | GB | 38.00 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 180,
     "dataGB": 10,
     "unlimited": false,
-    "price": 47.5,
+    "price": 48,
     "currency": "CHF",
     "horsPerimetre": true,
-    "brut": "180 days | 10 | GB | 47.50 | CHF",
+    "brut": "180 days | 10 | GB | 48.00 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 10,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 53.5,
+    "price": 54,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "10 days | Unlimited | GB | 53.50 | CHF",
+    "brut": "10 days | Unlimited | GB | 54.00 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 365,
     "dataGB": 20,
     "unlimited": false,
-    "price": 55,
+    "price": 55.5,
     "currency": "CHF",
     "horsPerimetre": true,
-    "brut": "365 days | 20 | GB | 55.00 | CHF",
+    "brut": "365 days | 20 | GB | 55.50 | CHF",
     "onglet": "Standard"
    },
    {
     "days": 15,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 80,
+    "price": 80.5,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "15 days | Unlimited | GB | 80.00 | CHF",
+    "brut": "15 days | Unlimited | GB | 80.50 | CHF",
     "onglet": "(défaut)"
    },
    {
     "days": 30,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 132.5,
+    "price": 133,
     "currency": "CHF",
     "horsPerimetre": false,
-    "brut": "30 days | Unlimited | GB | 132.50 | CHF",
+    "brut": "30 days | Unlimited | GB | 133.00 | CHF",
     "onglet": "(défaut)"
    }
   ],
   "meta": {
    "couverture": 170,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
+  }
+ },
+ {
+  "provider": "Airalo",
+  "slug": "thailand",
+  "url": "https://www.airalo.com/thailand-esim",
+  "plans": [
+   {
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 1 | GB | 3.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 3 | GB | 5.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 3 | GB | 5.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 6,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 5 | GB | 6.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 6.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 5 | GB | 6.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 7,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 5 | GB | 7.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 8,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 8.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 8.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 8.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 9,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 10 | GB | 9.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 9.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 10 | GB | 9.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 13,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 13.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 15,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 20 | GB | 15.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 20 | GB | 15.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 18,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 18.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 23,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 50 | GB | 23.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 26,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 26.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 33,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 33.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 41,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 41.00 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
+  }
+ },
+ {
+  "provider": "Airalo",
+  "slug": "japan",
+  "url": "https://www.airalo.com/japan-esim",
+  "plans": [
+   {
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 1 | GB | 3.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 3 | GB | 6.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 3 | GB | 7.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 5 | GB | 8.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 5 | GB | 9.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 5 | GB | 9.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 10.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 14.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 14.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 10 | GB | 15.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 10 | GB | 15.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 20.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 20 | GB | 20.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 21,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 20 | GB | 21.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 29,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 29.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 40.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 58,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 58.00 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
+  }
+ },
+ {
+  "provider": "Airalo",
+  "slug": "indonesia",
+  "url": "https://www.airalo.com/indonesia-esim",
+  "plans": [
+   {
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 1 | GB | 4.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 3 | GB | 7.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 3 | GB | 7.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 9.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 9.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 5 | GB | 10.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 11,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 5 | GB | 11.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 11.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 5 | GB | 11.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 16,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 16.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 16.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 17,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 10 | GB | 17.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 18,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 10 | GB | 18.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 28.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 28.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 28.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 20 | GB | 28.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 29.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 20 | GB | 29.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 40.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 41,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 50 | GB | 41.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 58,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 58.00 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
+  }
+ },
+ {
+  "provider": "Airalo",
+  "slug": "vietnam",
+  "url": "https://www.airalo.com/vietnam-esim",
+  "plans": [
+   {
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 1 | GB | 3.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 3 | GB | 6.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 3 | GB | 7.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 5 | GB | 8.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 5 | GB | 9.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 5 | GB | 9.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 10.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 14.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 10 | GB | 15.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 15.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 10 | GB | 15.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 23.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 20 | GB | 23.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 24.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 20 | GB | 24.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 29,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 29.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 40.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 41,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 50 | GB | 41.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 58,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 58.00 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
+  }
+ },
+ {
+  "provider": "Airalo",
+  "slug": "singapore",
+  "url": "https://www.airalo.com/singapore-esim",
+  "plans": [
+   {
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 1 | GB | 3.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 3 | GB | 5.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 3 | GB | 6.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 5 | GB | 8.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 5 | GB | 8.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 5 | GB | 8.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 10.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 13.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 10 | GB | 13.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 10 | GB | 13.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 15.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 18.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 20 | GB | 18.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 19.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 20 | GB | 19.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 29,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 29.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 40.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 40.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 50 | GB | 40.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 58,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 58.00 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
+  "meta": {
+   "couverture": null,
+   "onglets": [
+    "Unlimited",
+    "Standard"
+   ],
+   "onglet_Unlimited": "cliqué",
+   "onglet_Standard": "cliqué"
+  }
+ },
+ {
+  "provider": "Airalo",
+  "slug": "united-arab-emirates",
+  "url": "https://www.airalo.com/united-arab-emirates-esim",
+  "plans": [
+   {
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 1 | GB | 3.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | 3 | GB | 7.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 8,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 3 | GB | 8.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 5 | GB | 9.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 10,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 5 | GB | 10.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "3 days | Unlimited | GB | 10.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 5 | GB | 10.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | 10 | GB | 15.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 15,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 10 | GB | 16.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 17,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 10 | GB | 17.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "5 days | Unlimited | GB | 17.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "7 days | Unlimited | GB | 23.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 28,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | 20 | GB | 28.00 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 28.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | 20 | GB | 28.50 | CHF",
+    "onglet": "Standard"
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 29.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "10 days | Unlimited | GB | 29.50 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 41,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "15 days | Unlimited | GB | 41.00 | CHF",
+    "onglet": "(défaut)"
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 60.5,
+    "currency": "CHF",
+    "horsPerimetre": false,
+    "brut": "30 days | Unlimited | GB | 60.50 | CHF",
+    "onglet": "(défaut)"
+   }
+  ],
+  "meta": {
+   "couverture": null,
    "onglets": [
     "Unlimited",
     "Standard"

@@ -8,7 +8,7 @@
     "days": 7,
     "dataGB": 1,
     "unlimited": false,
-    "price": 4.45,
+    "price": 4.47,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -17,7 +17,7 @@
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 9.7,
+    "price": 9.76,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -26,7 +26,7 @@
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 14.15,
+    "price": 14.23,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -35,7 +35,7 @@
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 15.36,
+    "price": 15.45,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -44,7 +44,7 @@
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
-    "price": 18.6,
+    "price": 18.7,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -53,8 +53,8 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 21.83,
-    "beforePrice": 29.92,
+    "price": 21.95,
+    "beforePrice": 30.08,
     "currency": "CHF",
     "horsPerimetre": false
    },
@@ -62,7 +62,7 @@
     "days": 10,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 27.49,
+    "price": 27.64,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -71,8 +71,8 @@
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 28.3,
-    "beforePrice": 38.81,
+    "price": 28.45,
+    "beforePrice": 39.02,
     "currency": "CHF",
     "horsPerimetre": false
    }
@@ -91,7 +91,7 @@
     "days": 7,
     "dataGB": 1,
     "unlimited": false,
-    "price": 3.64,
+    "price": 3.66,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -100,7 +100,7 @@
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 7.28,
+    "price": 7.32,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -109,7 +109,7 @@
     "days": 3,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 8.89,
+    "price": 8.94,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -118,7 +118,7 @@
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 9.7,
+    "price": 9.76,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -127,7 +127,7 @@
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
-    "price": 14.15,
+    "price": 14.23,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -136,7 +136,7 @@
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 14.55,
+    "price": 14.63,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -145,7 +145,7 @@
     "days": 7,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 20.21,
+    "price": 20.32,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -154,7 +154,7 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 20.21,
+    "price": 20.32,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -163,7 +163,7 @@
     "days": 10,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 26.68,
+    "price": 26.83,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -183,7 +183,7 @@
     "days": 7,
     "dataGB": 1,
     "unlimited": false,
-    "price": 4.04,
+    "price": 4.07,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -192,7 +192,7 @@
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 6.47,
+    "price": 8.13,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -201,7 +201,7 @@
     "days": 3,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 8.89,
+    "price": 12.2,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -210,7 +210,7 @@
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 9.7,
+    "price": 13.01,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -219,7 +219,7 @@
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 12.94,
+    "price": 19.51,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -228,7 +228,7 @@
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
-    "price": 16.17,
+    "price": 20.32,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -237,16 +237,7 @@
     "days": 7,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 18.6,
-    "beforePrice": null,
-    "currency": "CHF",
-    "horsPerimetre": false
-   },
-   {
-    "days": 10,
-    "dataGB": "Infinity",
-    "unlimited": true,
-    "price": 25.88,
+    "price": 26.02,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -255,17 +246,17 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 27.49,
-    "beforePrice": 30.73,
+    "price": 29.27,
+    "beforePrice": 30.89,
     "currency": "CHF",
     "horsPerimetre": false
    },
    {
-    "days": 30,
-    "dataGB": 50,
-    "unlimited": false,
-    "price": 33.15,
-    "beforePrice": 42.05,
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 34.15,
+    "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
    },
@@ -273,8 +264,17 @@
     "days": 15,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 35.58,
+    "price": 44.72,
     "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 46.34,
+    "beforePrice": 48.78,
     "currency": "CHF",
     "horsPerimetre": false
    },
@@ -282,7 +282,7 @@
     "days": 20,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 42.05,
+    "price": 52.84,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -291,7 +291,7 @@
     "days": 180,
     "dataGB": 75,
     "unlimited": false,
-    "price": 71.97,
+    "price": 72.36,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": true
@@ -300,7 +300,7 @@
     "days": 365,
     "dataGB": 100,
     "unlimited": false,
-    "price": 97.03,
+    "price": 97.56,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": true
@@ -320,7 +320,7 @@
     "days": 7,
     "dataGB": 1,
     "unlimited": false,
-    "price": 5.66,
+    "price": 5.69,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -329,7 +329,7 @@
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 6.47,
+    "price": 6.5,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -338,7 +338,7 @@
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 10.51,
+    "price": 10.57,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -347,7 +347,7 @@
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
-    "price": 13.75,
+    "price": 13.82,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -356,7 +356,7 @@
     "days": 3,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 14.55,
+    "price": 14.63,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -365,7 +365,7 @@
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 20.21,
+    "price": 20.32,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -374,7 +374,7 @@
     "days": 7,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 24.26,
+    "price": 24.39,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -383,7 +383,7 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 25.07,
+    "price": 25.2,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -392,7 +392,7 @@
     "days": 10,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 28.3,
+    "price": 28.45,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -401,7 +401,7 @@
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 55.79,
+    "price": 56.1,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -421,7 +421,7 @@
     "days": 7,
     "dataGB": 1,
     "unlimited": false,
-    "price": 3.23,
+    "price": 3.25,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -430,7 +430,7 @@
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 4.85,
+    "price": 4.88,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -439,8 +439,8 @@
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 7.28,
-    "beforePrice": 12.13,
+    "price": 7.32,
+    "beforePrice": 12.2,
     "currency": "CHF",
     "horsPerimetre": false
    },
@@ -448,7 +448,7 @@
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
-    "price": 10.51,
+    "price": 10.57,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -457,7 +457,7 @@
     "days": 5,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 13.75,
+    "price": 13.82,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -466,7 +466,7 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 16.17,
+    "price": 16.26,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -475,7 +475,7 @@
     "days": 10,
     "dataGB": "Infinity",
     "unlimited": true,
-    "price": 22.64,
+    "price": 22.76,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -484,7 +484,7 @@
     "days": 30,
     "dataGB": 50,
     "unlimited": false,
-    "price": 25.07,
+    "price": 25.2,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -504,7 +504,7 @@
     "days": 7,
     "dataGB": 1,
     "unlimited": false,
-    "price": 9.7,
+    "price": 9.76,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -513,7 +513,7 @@
     "days": 30,
     "dataGB": 3,
     "unlimited": false,
-    "price": 20.21,
+    "price": 20.32,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -522,7 +522,7 @@
     "days": 30,
     "dataGB": 5,
     "unlimited": false,
-    "price": 32.34,
+    "price": 32.52,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -531,7 +531,7 @@
     "days": 30,
     "dataGB": 10,
     "unlimited": false,
-    "price": 50.13,
+    "price": 50.41,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -540,7 +540,7 @@
     "days": 30,
     "dataGB": 20,
     "unlimited": false,
-    "price": 83.29,
+    "price": 83.74,
     "beforePrice": null,
     "currency": "CHF",
     "horsPerimetre": false
@@ -548,6 +548,513 @@
   ],
   "meta": {
    "couverture": null,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "thailand",
+  "url": "https://www.getnomad.app/en/thailand-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4.07,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 4.88,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 6.5,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 8.13,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 9.76,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 13.01,
+    "beforePrice": 16.26,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.07,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 26.83,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 21,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "japan",
+  "url": "https://www.getnomad.app/en/japan-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.25,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5.69,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.13,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 8.94,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13.01,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 18.7,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 20.32,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 28.45,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 14,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 33.33,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 21,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 39.84,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 21,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "indonesia",
+  "url": "https://www.getnomad.app/en/indonesia-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.25,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.5,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 9.76,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.63,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.45,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 26.83,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 45,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 26.83,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": true
+   },
+   {
+    "days": 45,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 33.33,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": true
+   }
+  ],
+  "meta": {
+   "couverture": 21,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "vietnam",
+  "url": "https://www.getnomad.app/en/vietnam-eSIM",
+  "plans": [
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.5,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.13,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13.82,
+    "beforePrice": 15.45,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.63,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 26.83,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 31.71,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 21,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "singapore",
+  "url": "https://www.getnomad.app/en/singapore-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.25,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 5.28,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 7.32,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 11.38,
+    "beforePrice": 13.01,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.63,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 17.07,
+    "beforePrice": 20.32,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 21.95,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 25.2,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 14,
+   "nomadPassPresent": false
+  }
+ },
+ {
+  "provider": "Nomad",
+  "slug": "united-arab-emirates",
+  "url": "https://www.getnomad.app/en/united-arab-emirates-eSIM",
+  "plans": [
+   {
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.25,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.91,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 8.94,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 9.76,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 14.63,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 15.04,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 21.95,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": 20,
+    "unlimited": false,
+    "price": 23.58,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 27.64,
+    "beforePrice": null,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "couverture": 6,
    "nomadPassPresent": false
   }
  }

@@ -667,5 +667,489 @@
    ],
    "couverture": 142
   }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-thailande",
+  "url": "https://esim.holafly.com/fr/esim-thailande/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-thailand",
+   "nom": "Thailand",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-japon",
+  "url": "https://esim.holafly.com/fr/esim-japon/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-japan",
+   "nom": "Japan",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-indonesie",
+  "url": "https://esim.holafly.com/fr/esim-indonesie/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-indonesia",
+   "nom": "Indonesia",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-vietnam",
+  "url": "https://esim.holafly.com/fr/esim-vietnam/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-vietnam",
+   "nom": "Vietnam",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-singapour",
+  "url": "https://esim.holafly.com/fr/esim-singapour/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 3.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 64.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-singapore",
+   "nom": "Singapore",
+   "illimite": true,
+   "dureesDisponibles": 90,
+   "maxJours": 90,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Holafly",
+  "slug": "esim-dubai",
+  "url": "https://esim.holafly.com/fr/esim-dubai/",
+  "plans": [
+   {
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 5.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 3,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 10.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 5,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 17.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 23.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 10,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 31.5,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 43.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   },
+   {
+    "days": 20,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 52.9,
+    "currency": "CHF",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "CHF",
+   "sku": "esim-united-arab-emirates-dubai",
+   "nom": "Dubai",
+   "illimite": true,
+   "dureesDisponibles": 20,
+   "maxJours": 20,
+   "hotspotGoParJour": 1,
+   "countries": [],
+   "couverture": 1
+  }
  }
 ]

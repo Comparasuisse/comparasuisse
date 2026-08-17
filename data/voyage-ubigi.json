@@ -4516,5 +4516,1149 @@
    "lignesLues": 13,
    "couverture": 202
   }
+ },
+ {
+  "provider": "Ubigi",
+  "slug": "THAILAND",
+  "url": "https://cellulardata.ubigi.com/data-plans-and-coverage/ubigi-esim-data-plans/",
+  "plans": [
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.9,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-1gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 6,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-5gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.9,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-3gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 10,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-10gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 12,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-10gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 12,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-20gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 22,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-unlimited-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 24,
+    "unlimited": false,
+    "price": 22,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-2gb-month-x12/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 25,
+    "unlimited": false,
+    "price": 24.9,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-25gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 36,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-unlimited/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 39,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-unlimited-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "THAILAND",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 60,
+    "unlimited": false,
+    "price": 44,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-5gb-month-x12/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "THAILAND",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 55,
+    "currency": "USD",
+    "countries": [
+     "THA"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/thailand-data-plans/thailand-unlimited-30-days/",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "USD",
+   "lignesLues": 13,
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Ubigi",
+  "slug": "JAPAN",
+  "url": "https://cellulardata.ubigi.com/data-plans-and-coverage/ubigi-esim-data-plans/",
+  "plans": [
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 3,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3.5,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-1gb-3-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-1gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7.5,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-3gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 8,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-5gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 5,
+    "unlimited": false,
+    "price": 10,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-5gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16.5,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-10gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 18,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-20gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 8,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 25,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-unlimited-8-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 25,
+    "unlimited": false,
+    "price": 32,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-25gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 39,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-unlimited-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 45,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-unlimited/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 55,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-50gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "JAPAN",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 60,
+    "unlimited": false,
+    "price": 55,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-5gb-month-x12/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "JAPAN",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 65,
+    "currency": "USD",
+    "countries": [
+     "JPN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/japan-data-plans/japan-unlimited-30-days/",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "USD",
+   "lignesLues": 15,
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Ubigi",
+  "slug": "INDONESIA",
+  "url": "https://cellulardata.ubigi.com/data-plans-and-coverage/ubigi-esim-data-plans/",
+  "plans": [
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 4,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-1gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 7,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-3gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 14,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-10gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 16,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-10gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 24,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-unlimited-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 25,
+    "unlimited": false,
+    "price": 28,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-25gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 40,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-unlimited-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "INDONESIA",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 59,
+    "currency": "USD",
+    "countries": [
+     "IDN"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/indonesia-data-plans/indonesia-unlimited-30-days/",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "USD",
+   "lignesLues": 8,
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Ubigi",
+  "slug": "SINGAPORE",
+  "url": "https://cellulardata.ubigi.com/data-plans-and-coverage/ubigi-esim-data-plans/",
+  "plans": [
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 3,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-1gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-3gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 2,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 9,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-unlimited-2-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 11,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-10gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 13,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-10gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 16,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-20gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 19,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-unlimited-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 25,
+    "unlimited": false,
+    "price": 22,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-25gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 60,
+    "unlimited": false,
+    "price": 33,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-5gb-month-x12/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 35,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-unlimited-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "SINGAPORE",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 49,
+    "currency": "USD",
+    "countries": [
+     "SGP"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/singapore-data-plans/singapore-unlimited-30-days/",
+    "horsPerimetre": false
+   }
+  ],
+  "meta": {
+   "devise": "USD",
+   "lignesLues": 11,
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Ubigi",
+  "slug": "VIETNAM",
+  "url": "https://cellulardata.ubigi.com/data-plans-and-coverage/ubigi-esim-data-plans/",
+  "plans": [
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 6.9,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-3gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 10.9,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-10gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 12.9,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-10gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 18,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-20gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 24,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-unlimited-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 50,
+    "unlimited": false,
+    "price": 36.9,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-50gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 39.9,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-unlimited-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 54.9,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-unlimited-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "VIETNAM",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 240,
+    "unlimited": false,
+    "price": 180,
+    "currency": "USD",
+    "countries": [
+     "VNM"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/vietnam-data-plans/vietnam-20gb-month-x12/",
+    "horsPerimetre": true
+   }
+  ],
+  "meta": {
+   "devise": "USD",
+   "lignesLues": 9,
+   "couverture": 1
+  }
+ },
+ {
+  "provider": "Ubigi",
+  "slug": "UAE",
+  "url": "https://cellulardata.ubigi.com/data-plans-and-coverage/ubigi-esim-data-plans/",
+  "plans": [
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 1,
+    "unlimited": false,
+    "price": 5,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-1gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 9,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-5gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 15,
+    "dataGB": 3,
+    "unlimited": false,
+    "price": 10,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-3gb-15-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 1,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 12,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-unlimited-1-day/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 19,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": true,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-10gb-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 10,
+    "unlimited": false,
+    "price": 21,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-10gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "monthly",
+    "days": 1000,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 34,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-20gb/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 7,
+    "dataGB": "Infinity",
+    "unlimited": true,
+    "price": 36,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-unlimited-7-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "one-off",
+    "days": 30,
+    "dataGB": 25,
+    "unlimited": false,
+    "price": 49,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-25gb-30-days/",
+    "horsPerimetre": false
+   },
+   {
+    "destination": "UAE",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 24,
+    "unlimited": false,
+    "price": 49,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-2gb-month-x12/",
+    "horsPerimetre": true
+   },
+   {
+    "destination": "UAE",
+    "type": "annual",
+    "days": 365,
+    "dataGB": 60,
+    "unlimited": false,
+    "price": 88,
+    "currency": "USD",
+    "countries": [
+     "ARE"
+    ],
+    "countryCount": 1,
+    "bestseller": false,
+    "url": "https://cellulardata.ubigi.com/rates-and-coverage/uae-data-plans/uae-5gb-month-x12/",
+    "horsPerimetre": true
+   }
+  ],
+  "meta": {
+   "devise": "USD",
+   "lignesLues": 11,
+   "couverture": 1
+  }
  }
 ]
