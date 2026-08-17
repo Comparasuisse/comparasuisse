@@ -345,3 +345,37 @@ offre sans champ `currency` retombe sur « CHF ».
 - **pas d'entrée dans le total d'offres du bandeau.** Ces forfaits ne sont pas
   des abonnements suisses ; les compter dans « plus de 300 offres suisses »
   serait faux.
+
+---
+
+## 9. Airalo : prix qui diffèrent selon le contexte navigateur (17.08.2026)
+
+**Constat reproductible.** Sur `airalo.com/europe-esim`, trois forfaits sur
+dix-huit s'affichent 0.50 CHF plus cher dans le Chrome réel de l'utilisateur
+que dans le contexte Playwright neuf du collecteur :
+
+| Forfait Europe | Collecteur (contexte neuf) | Chrome réel (profil existant) |
+|---|---|---|
+| 7 j illimité | 22.50 | 23.00 |
+| 30 j / 20 Go | 40.00 | 40.50 |
+| 30 j / 50 Go | 58.50 | 59.00 |
+
+Les quinze autres concordent au centime. Observé deux fois à sept heures
+d'intervalle le 17.08.2026, avec `currency=CHF` dans les deux cas : ce n'est
+ni transitoire ni un problème de devise. L'hypothèse la plus plausible est un
+test A/B tarifaire côté Airalo, le bucket dépendant des cookies.
+
+**Décision : on publie les valeurs du collecteur.** Il tourne dans un contexte
+vierge, sans cookie ni compte — c'est-à-dire dans la situation d'un visiteur
+qui découvre Airalo, exactement notre audience. Le profil Chrome de
+développement, lui, a un historique qui ne représente personne.
+
+**Conséquence à assumer** : sur ces trois forfaits, un visiteur peut voir
+0.50 de plus que ce qu'on annonce. C'est en dessous du seuil où l'on
+afficherait un avertissement par offre, mais il faut le savoir avant de
+conclure « nos prix Airalo sont faux » à la prochaine remontée.
+
+**Ce qu'il ne faut PAS faire** : corriger `travelData` à la main dans
+`index.html`. Le tableau est généré ; le prochain `build-travel-data.mjs
+--inject` écraserait la correction sans prévenir. Si Airalo bouge vraiment,
+c'est le collecteur qui doit le voir.
