@@ -51,7 +51,17 @@ const LOCK_PATH = "scripts/daily-audit.lock";
 // bloqué le script 25h à cause d'une coupure réseau, sans que le
 // Promise.race interne ne libère le processus (le hard timeout logiciel
 // a bien fired mais le browser.close() final a hangé indéfiniment).
-const MAX_TOTAL_RUN_TIME_MS = 30 * 60 * 1000;
+// Relevé à 180 min le 17.08.2026 : le périmètre est passé de 193 à 311 URLs
+// uniques (ajout de travel/prepaid/dataOnly au scan). Mesuré sur le run du
+// 17.08 : ~10 s par offre à URL distincte, soit ~2 h pour le catalogue complet.
+// À 30 comme à 60 min, le watchdog coupait un run parfaitement sain aux deux
+// tiers — et comme les catégories sont parcourues dans l'ordre de loadData(),
+// c'est précisément travel/prepaid/dataOnly, en fin de liste, qui sautaient.
+// Un watchdog qui tronque un run sain rétablit exactement l'angle mort qu'on
+// venait de corriger, en pire : le rapport se termine normalement, sans rien
+// signaler. Cette borne est là pour les hangs pathologiques (incident yallo du
+// 07.08, 25 h bloqué), pas pour plafonner une durée légitime.
+const MAX_TOTAL_RUN_TIME_MS = 180 * 60 * 1000;
 // Seuil de failures consécutives (TIMEOUT/ERREUR/PAGE_VIDE) après lequel
 // on recycle le browser+context — évite qu'un contexte saturé/dégradé
 // pollue les URLs suivantes.
