@@ -169,14 +169,19 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // (AUDIT LIENS) : Talk Talk et VTX ont réorganisé leur arborescence, et
   // Lycamobile /fr/plans/ redirigeait vers la homepage ALLEMANDE.
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaye\/prepaid\.html$/i,
+  // MaxiConnect RETIRÉ de la whitelist le 18.08.2026. Le motif d'origine
+  // — « 8 montants pour 5 plans, attribution 1-vs-1 impossible » — était faux :
+  // chaque plan vit dans un .plan-card portant un .plan-name, prix compris. Ce
+  // n'est pas la page qui était illisible, c'est l'extraction à plat qui ne
+  // savait pas attribuer. Les 9 prix (5 MaxiMobile + 4 MaxiData) ont été relevés
+  // nom par nom et sont tous conformes. Cf. WHITELIST-INVESTIGATION.md.
+  // Ancien commentaire conservé pour mémoire :
   // MaxiConnect : sitemap de 441 URLs passé en revue le 09.08.2026, aucune page
   // par plan n'existe — seulement des pages catégorie. Les 5 MaxiMobile quittent
   // la racine pour /fr/mobile (qui rend bien les prix, mais 8 montants pour 5
   // plans : attribution 1-vs-1 impossible, d'où la whitelist).
   // /fr/television n'est PAS whitelistée : MaxiTV y est seule et son prix 13.90
   // est directement vérifiable.
-  /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/mobile\/?$/i,
-  /^https:\/\/(www\.)?maxiconnect\.ch\/fr\/maxidata\/?$/i,
   // Lycamobile : le site FR est quasi inexistant — /fr/plans/ redirige vers la
   // homepage ALLEMANDE, /fr/abonnements/ et /fr/plans-mobiles/ vers l'ANGLAISE,
   // et la racine du domaine vers /de/. Seul /fr/ répond en 200 sans redirection
