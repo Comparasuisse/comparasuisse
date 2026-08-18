@@ -49,7 +49,7 @@ const TAUX = { CHF: 1, USD: 0.8126, EUR: 0.9373 };
 // que les taux soient re-relevés — bumper TAUX_DATE aurait fait passer pour
 // frais un taux vieux de quatre jours, alors que l'onglet l'affiche au visiteur.
 const TAUX_DATE = "2026-08-13";
-const VERIFIED_AT = "2026-08-17";
+const VERIFIED_AT = "2026-08-18";
 
 // Chaque collecteur nomme ses destinations à sa façon. Table unique de
 // correspondance vers les six libellés de l'onglet.
