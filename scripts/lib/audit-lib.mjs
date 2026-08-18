@@ -9,8 +9,13 @@ import fs from "node:fs";
 // "CHF 39", "CHF 39.-", "39.-/mois", "39.-/m.", "Fr. 12.90", etc.
 // Décimales optionnelles. Le suffixe "/m." (Sunrise) est maintenant reconnu
 // en plus de "/mois" (documenté 06.08.2026 après faux positifs Sunrise).
+// Les abréviations ALÉMANIQUES du mois sont reconnues depuis le 18.08.2026 :
+// "/Mt.", "/Mte.", "/Monat". Un bon tiers du catalogue pointe sur des pages
+// germanophones, et "34.50/Mt." (Quickline Mobile XL) était le seul des quatre
+// prix de sa page à échapper à l'extracteur — pas parce qu'il était caché,
+// mais parce qu'on ne savait lire le mois qu'en français.
 export const PRICE_RE =
-  /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*m(?:ois|\.)|\/\s*m(?:ois|\.))/gi;
+  /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*m(?:ois|onat\.?|te?\.?|\.)|\/\s*m(?:ois|onat\.?|te?\.?|\.))/gi;
 
 // Normalise le texte AVANT extraction pour rejoindre les prix coupés par des
 // sauts de ligne. Patterns observés en prod :
@@ -30,7 +35,14 @@ export function normalizePriceFragments(text) {
     // "17. 95" → "17.95"
     .replace(/(\d{1,3})([.,])\s+(\d{2})\b/g, "$1$2$3")
     // "39\n.-" → "39.-"
-    .replace(/(\d{1,3})\s*\n\s*\.[-–]/g, "$1.-");
+    .replace(/(\d{1,3})\s*\n\s*\.[-–]/g, "$1.-")
+    // "CHF\n/Mt.25.50" → "CHF 25.50" : devise et montant séparés par la mention
+    // de périodicité, qui se glisse AVANT le nombre au lieu de le suivre.
+    // Constaté le 18.08.2026 sur iway.ch/tv/, où les trois abos s'écrivent
+    // "CHF / Mt. 15.–". Les deux premiers étaient captés grâce à leur "–"
+    // final ; TV Top 2.0, écrit "25.50" sans tiret, ne l'était pas — un prix
+    // invisible sur une page parfaitement lisible.
+    .replace(/\b(CHF|Fr\.)\s*\n*\s*\/\s*m(?:ois|onat|te?)?\.?\s*(?=\d)/gi, "$1 ");
 }
 
 // Certains opérateurs écrivent le libellé et le montant sur deux lignes, sans
@@ -53,6 +65,24 @@ const PRICE_LABEL_RE = /(?:prix|preis|price|tarif|mensuel|monatlich)\w*\b/gi;
 const BARE_AMOUNT_RE = /\b(\d{1,3}[.,]\d{2})\b/g;
 const LABEL_WINDOW = 48;
 
+// Le montant peut aussi n'être annoncé par AUCUN libellé, seulement suivi de son
+// bouton d'achat :
+//     Season 6 Months
+//     […]
+//     149.95
+//     AJOUTER AU PANIER
+// Aucun « CHF », aucun « /mois », et le seul mot de tarif de la page
+// (« Détails du tarif ») arrive APRÈS le nombre — la fenêtre de PRICE_LABEL_RE
+// regarde en avant, elle ne pouvait pas le voir. Constaté le 18.08.2026 sur les
+// quatre formules prépayées de Talk Talk, page dont on croyait qu'elle ne
+// livrait pas ses prix alors qu'elle les affiche en clair.
+// Un nombre à décimales posé juste avant un bouton d'achat est un prix : on le
+// lit en regardant EN ARRIÈRE depuis l'appel à l'action. Les entiers nus
+// (quantités, numéros d'étape) restent hors de portée puisque BARE_AMOUNT_RE
+// exige deux décimales.
+const CTA_RE = /(?:ajouter au panier|au panier|add to cart|in den warenkorb|zum warenkorb|jetzt (?:bestellen|kaufen)|commander maintenant|acheter maintenant|s['’]abonner|abonnieren|abbonarsi)/gi;
+const CTA_BACK_WINDOW = 40;
+
 export function extractPrices(text) {
   const normalized = normalizePriceFragments(text);
   const out = new Set();
@@ -70,6 +100,18 @@ export function extractPrices(text) {
     const amt = new RegExp(BARE_AMOUNT_RE.source, BARE_AMOUNT_RE.flags);
     let a;
     while ((a = amt.exec(win)) !== null) add(a[1]);
+  }
+
+  // Montant nu adossé à un bouton d'achat : on lit la fenêtre qui PRÉCÈDE
+  // l'appel à l'action et on ne retient que le dernier montant, celui qui
+  // touche le bouton — les autres appartiennent au descriptif de l'offre.
+  const cta = new RegExp(CTA_RE.source, CTA_RE.flags);
+  while ((m = cta.exec(normalized)) !== null) {
+    const win = normalized.slice(Math.max(0, m.index - CTA_BACK_WINDOW), m.index);
+    const amt = new RegExp(BARE_AMOUNT_RE.source, BARE_AMOUNT_RE.flags);
+    let a, last = null;
+    while ((a = amt.exec(win)) !== null) last = a[1];
+    if (last !== null) add(last);
   }
   return [...out].sort((a, b) => parseFloat(a) - parseFloat(b));
 }
@@ -106,23 +148,19 @@ export function extractPrices(text) {
 // tant qu'elle contient une page seulement « difficile », elle cache un prix
 // qui peut dériver sans que personne ne le voie.
 export const NON_VERIFIABLE_EXACT_URLS = new Set([
-  // Galaxus : les trois prix de chaque gamme sont dessinés en typographie
-  // décorative (glyphes vectoriels), pas écrits en texte. Aucune lecture du
-  // DOM ne peut les rendre — seul un screenshot les donne. Vérifiés ainsi le
-  // 12.08.2026 : mobile 12/19/29, internet 27/34/39, tous conformes. Sans
-  // cette entrée, ces 5 offres ressortaient en ÉCART à chaque passage, avec
-  // des « prix rendus » qui n'étaient que des coordonnées de tracé SVG.
-  "https://abos.galaxus.ch/fr/mobile",
-  "https://abos.galaxus.ch/fr/internet",
+  // Galaxus RETIRÉ le 18.08.2026. Le motif — « prix dessinés en glyphes
+  // vectoriels, seul un screenshot les donne » — décrivait bien le dessin,
+  // mais pas la page : chaque montant est une animation Lottie qui déclare son
+  // nombre dans l'id de son conteneur ET dans le fichier qu'elle télécharge.
+  // Les six prix se lisent donc sans OCR (cf. readLottieNumbers).
+  // Quickline RETIRÉ le 18.08.2026. Le motif — « landing multi-plans,
+  // attribution 1-vs-1 impossible » — ne tient plus : les quatre abos rendent
+  // chacun leur prix en clair (14.–/Mt., 24.– 12.–/Mt., 29.– 9.–/Mt.,
+  // 69.– 34.50/Mt.). Seul 34.50 échappait à l'extracteur, faute de savoir lire
+  // l'abréviation alémanique du mois.
   // SPA Sunrise (les cards ne rendent pas le prix mensuel côté innerText)
   "https://www.sunrise.ch/fr/mobile",
   "https://www.sunrise.ch/fr/mobile/roaming",
-  // Landings multi-plans où la comparaison 1-vs-1 casse (une page = plusieurs
-  // tiers, on ne peut pas savoir quel prix appartient à quel tier sans parsing
-  // structurel)
-  "https://www.quickline.ch/mobile",
-  "https://abos.galaxus.ch/mobile",
-  "https://abos.galaxus.ch/internet",
 ]);
 // URL prefix patterns for broader classes of non-verifiable pages.
 export const NON_VERIFIABLE_URL_PATTERNS = [
@@ -140,7 +178,10 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // extractibles.)
   /^https:\/\/www\.swisscom\.ch\/.*\/tv\//i,
   /^https:\/\/www\.netplus\.ch\/tv/i,
-  /^https:\/\/www\.iway\.ch\/tv\//i,
+  // iWay RETIRÉ le 18.08.2026 : les trois prix sont en clair dans le texte,
+  // écrits "CHF / Mt. 15.–". TV Classic et TV Premium étaient déjà lus ; seul
+  // TV Top 2.0 ("25.50", sans tiret final) manquait. Rien d'illisible ici,
+  // seulement une périodicité écrite en allemand.
   // Landings partagées documentées comme légitimes dans AUDIT-COMPLET.md §
   // "Cas légitimes de landing partagée" : plusieurs plans (parfois 5-8) pointent
   // sur une même URL landing car l'opérateur n'expose PAS de page produit
@@ -167,7 +208,10 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // Chemins réalignés le 09.08.2026 sur les cibles de redirection réelles
   // (AUDIT LIENS) : Talk Talk et VTX ont réorganisé leur arborescence, et
   // Lycamobile /fr/plans/ redirigeait vers la homepage ALLEMANDE.
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaye\/prepaid\.html$/i,
+  // Talk Talk prépayé RETIRÉ le 18.08.2026 : la page affiche ses quatre
+  // montants en clair (19.95 / 44.95 / 79.95 / 149.95), chacun collé à son
+  // bouton « AJOUTER AU PANIER ». Ce n'est pas la page qui cachait ses prix,
+  // c'est l'extracteur qui ne savait lire un montant que précédé d'un libellé.
   // MaxiConnect RETIRÉ de la whitelist le 18.08.2026. Le motif d'origine
   // — « 8 montants pour 5 plans, attribution 1-vs-1 impossible » — était faux :
   // chaque plan vit dans un .plan-card portant un .plan-name, prix compris. Ce
@@ -190,14 +234,12 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // été RETIRÉS le 09.08.2026. Le sitemap expose en réalité une page produit par
   // plan sous /fr/produit/<slug>/ — 9 offres y ont été rebasculées, chacune sur
   // sa fiche affichant son propre prix. Plus rien à court-circuiter ici.
-  // Sunrise /fr/internet-tv/abonnement-combine — vérifié 09.08.2026 : les
-  // cards de packs sont rendues avec des placeholders U+200C (zero-width
-  // non-joiner) à la place des libellés et des prix. Le seul nombre lisible
-  // est « 159.80 », qui est l'économie sur les FRAIS D'ACTIVATION, pas un
-  // prix mensuel — d'où un ÉCART quotidien garanti si on ne whiteliste pas.
-  // (La landing internet /fr/internet-tv/abonnement-internet, elle, rend
-  // correctement et reste vérifiée normalement.)
-  /^https:\/\/(www\.)?sunrise\.ch\/fr\/internet-tv\/abonnement-combine\/?$/i,
+  // Sunrise /fr/internet-tv/abonnement-combine RETIRÉ le 18.08.2026 au profit
+  // d'une recette de pré-clic (cf. PRE_CLICK_RECIPES). Les placeholders U+200C
+  // constatés le 09.08.2026 ont disparu : la page rend son texte, et le prix
+  // 85.60 apparaît dès qu'on bascule l'onglet « Avec TV ». Le nombre « 159.80 »
+  // qui trompait le scan est toujours là, mais il ne fait plus autorité
+  // puisqu'on trouve désormais le vrai prix.
   // Migros wireline (online-shop, éligibilité par adresse) : motif RETIRÉ le
   // 10.08.2026. Les 2 offres internet ont quitté le shop pour la page
   // marketing mobile.migros.ch/fr/internet-tv-et-telephonie-fixe/internet,
@@ -209,13 +251,11 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // Application TV — CHF 18.- », relevé le 10.08.2026, conforme à notre
   // valeur). Le court-circuit reste donc nécessaire pour cette URL.
   /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/la-box-tv/i,
-  // Galaxus abos — vérifié 10.08.2026 en browser : les cards affichent le nom
-  // du plan et ses caractéristiques, mais AUCUN montant n'apparaît dans le
-  // texte rendu, ni en FR ni en DE. Les valeurs 12/19/29 et 27/34/39 sont
-  // présentes dans le HTML brut mais hors innerText (image ou pseudo-élément
-  // CSS). Le scan remontait « 16.00, 34.00 » : ce sont des nombres captés
-  // ailleurs sur la page, pas des prix d'abonnement.
-  /^https:\/\/abos\.galaxus\.ch\/(fr|de|it|en)?\/?(mobile|internet|tv)\/?$/i,
+  // Galaxus abos — motif RETIRÉ le 18.08.2026. Le constat du 10.08 était juste
+  // (aucun montant dans le texte rendu, et « 16.00 / 34.00 » captés ailleurs
+  // sur la page sont les tarifs étudiants, pas les abos) mais la conclusion
+  // était trop courte : les montants sont des animations Lottie qui nomment
+  // leur nombre. Ils se lisent, cf. readLottieNumbers.
   // Spusu /fr/tariffs — même famille que /fr/spusu* déjà listé : tableau de
   // tarifs rendu en composants Vue dont les montants ne sortent pas au texte.
   /^https:\/\/(www\.)?spusu\.ch\/fr\/tariffs\/?$/i,
@@ -237,6 +277,91 @@ export function isNonVerifiableUrl(url) {
   if (!url) return false;
   if (NON_VERIFIABLE_EXACT_URLS.has(url)) return true;
   return NON_VERIFIABLE_URL_PATTERNS.some((re) => re.test(url));
+}
+
+// === Recettes de pré-clic ===
+// Certaines pages affichent bien leur prix, mais seulement après UNE action :
+// un onglet à basculer, un tableau à déplier. Jusqu'ici ces offres partaient en
+// whitelist, c'est-à-dire dans un angle mort — plus personne ne regardait leur
+// prix. Une recette de pré-clic est l'inverse d'un renoncement : on écrit une
+// fois le geste que fait un visiteur, et l'offre repasse sous surveillance
+// quotidienne.
+//
+// Trois règles pour qu'une recette reste honnête :
+//   1. le geste doit être celui d'un visiteur ordinaire (basculer un onglet,
+//      déplier une liste) — jamais franchir un paiement ou une authentification ;
+//   2. le clic ne doit RIEN changer au prix : il le révèle, il ne le négocie
+//      pas (pas de code promo, pas de durée d'engagement modifiée) ;
+//   3. l'échec du clic n'est pas fatal — on lit la page telle quelle et
+//      l'offre ressort en ÉCART, ce qui est le bon signal si la page a changé.
+export const PRE_CLICK_RECIPES = [
+  {
+    // Sunrise combiné : les trois packs s'affichent d'abord "Sans TV". Notre
+    // offre est la variante AVEC TV du pack Neighbors, dont le prix (85.60)
+    // n'apparaît qu'après avoir basculé l'onglet. Relevé le 18.08.2026 :
+    // sans TV 69.80 / 75.60 / 80.60, avec TV 79.80 / 85.60 / 90.60.
+    // Le motif de whitelist d'origine (placeholders U+200C à la place des
+    // libellés, 09.08.2026) ne s'observe plus : la page rend son texte.
+    pattern: /^https:\/\/(www\.)?sunrise\.ch\/fr\/internet-tv\/abonnement-combine\/?$/i,
+    texts: ["Avec TV"],
+  },
+];
+export function preClickRecipeFor(url) {
+  if (!url) return null;
+  return PRE_CLICK_RECIPES.find((r) => r.pattern.test(url)) || null;
+}
+
+// === Lecture des nombres dessinés en animation Lottie ===
+// Galaxus n'écrit pas ses prix : il les ANIME. Chaque montant est une animation
+// Lottie (After Effects exporté en JSON) rendue en tracés vectoriels — aucun
+// texte, donc rien à lire ni dans innerText ni dans le HTML servi. C'est le
+// motif qui justifiait leur whitelist depuis le 12.08.2026.
+//
+// Sauf que l'animation dit son nombre deux fois, ailleurs que dans son dessin :
+//   - le conteneur porte un id parlant : id="lottie-karotti-12-image" ;
+//   - le fichier chargé le répète : /assets/img/lottie/mobile/data-12.json,
+//     dont la racine JSON s'appelle "Zahl_12" (relevé le 18.08.2026).
+// On ne retient un nombre que s'il apparaît DANS LES DEUX — dans le DOM et dans
+// une ressource réellement téléchargée. Cette double confirmation est ce qui
+// rend la lecture sûre : un id parlant seul pourrait survivre à un changement
+// de prix, une ressource seule pourrait appartenir à une autre section. Les
+// deux ensemble signifient que la page a chargé, pour cette carte, l'animation
+// de ce nombre-là.
+export async function readLottieNumbers(page) {
+  const tokens = await page
+    .evaluate(() => {
+      const dom = [...document.querySelectorAll('[id*="lottie" i],[class*="lottie" i]')]
+        .map((e) => (e.id || "") + " " + (e.getAttribute("class") || ""))
+        .join(" ");
+      const res = performance
+        .getEntriesByType("resource")
+        .map((r) => r.name)
+        .filter((n) => /lottie/i.test(n))
+        .join(" ");
+      return { dom, res };
+    })
+    .catch(() => null);
+  if (!tokens) return [];
+  const nombres = (str) => {
+    // Le tiret bas fait partie des caractères de mot : sans cette normalisation,
+    // "data-19_neu.json" ne livre pas son 19, faute de frontière de mot après le
+    // nombre — et c'était exactement le fichier de Galaxus Mobile CH illimité.
+    // On ne relâche que ce séparateur-là : les empreintes du type
+    // "lottie-2cc95b689867ea4e9770cc1a6147d2d1.js" restent protégées par leurs
+    // lettres, et ne peuvent donc pas se faire passer pour des prix.
+    str = str.replace(/_/g, "-");
+    const out = new Set();
+    let m;
+    const re = /\b(\d{1,3}(?:[.,]\d{1,2})?)\b/g;
+    while ((m = re.exec(str)) !== null) {
+      const n = parseFloat(m[1].replace(",", "."));
+      if (!isNaN(n) && n >= 1 && n < 1000) out.add(n.toFixed(2));
+    }
+    return out;
+  };
+  const dom = nombres(tokens.dom);
+  const res = nombres(tokens.res);
+  return [...dom].filter((n) => res.has(n)).sort((a, b) => parseFloat(a) - parseFloat(b));
 }
 
 // === Chargement des données depuis index.html ===
@@ -321,7 +446,11 @@ export async function checkOffer(ctx, item, opts = {}) {
   // Hard timeout : borne TOTALE de la vérification. Nécessaire parce que
   // Playwright peut hanger sur page.evaluate ou page.close (constaté 03.08.2026
   // sur Sunrise Swiss Travel+ = 82 min, Lebara Relax S = 68 min, etc.).
-  const hardTimeout = opts.hardTimeout || 20000;
+  // Une recette de pré-clic ajoute une recherche d'élément et une attente de
+  // rendu : on lui alloue son propre budget plutôt que de la faire tenir dans
+  // celui d'une page ordinaire, sinon elle expirerait avant d'avoir lu.
+  const recette = preClickRecipeFor(item.url);
+  const hardTimeout = (opts.hardTimeout || 20000) + (recette ? 12000 : 0);
 
   const page = await ctx.newPage();
   // Timers Playwright internes courts pour ne pas dépendre du hardTimeout.
@@ -334,6 +463,15 @@ export async function checkOffer(ctx, item, opts = {}) {
     if (status < 200 || status >= 400) return { status: "URL_MORTE", httpStatus: status };
     await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(waitAfter);
+    // Pré-clic éventuel : on révèle ce qu'un visiteur révélerait, puis on laisse
+    // la page se redessiner. Un échec est silencieux par conception (cf. règle 3
+    // de PRE_CLICK_RECIPES) : mieux vaut un ÉCART visible qu'une erreur muette.
+    if (recette) {
+      for (const t of recette.texts) {
+        await page.getByText(t, { exact: true }).first().click({ timeout: 6000 }).catch(() => {});
+      }
+      await page.waitForTimeout(2500);
+    }
     const text = await page.evaluate(() => document.body.innerText).catch(() => "");
     if (!text || text.length < 100) return { status: "PAGE_VIDE", httpStatus: status, textLength: text.length };
     let pricesOnPage = extractPrices(text);
@@ -366,6 +504,13 @@ export async function checkOffer(ctx, item, opts = {}) {
       }
     }
     if (pricesOnPage.includes(expected)) return { status: "OK", expected, pricesOnPage: pricesOnPage.slice(0, 15), text };
+    // Dernier repli : les nombres dessinés en animation (cf. readLottieNumbers).
+    // Tenté seulement quand les deux lectures textuelles ont échoué, donc sans
+    // coût sur une page normale.
+    const lottie = await readLottieNumbers(page);
+    if (lottie.includes(expected)) {
+      return { status: "OK", expected, pricesOnPage: lottie, text, source: "lottie" };
+    }
     const near = pricesOnPage
       .map(p => ({ p, diff: Math.abs(parseFloat(p) - parseFloat(expected)) }))
       .filter(x => x.diff <= parseFloat(expected) * 0.15)
