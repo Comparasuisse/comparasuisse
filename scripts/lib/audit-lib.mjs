@@ -141,7 +141,6 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   /^https:\/\/www\.swisscom\.ch\/.*\/tv\//i,
   /^https:\/\/www\.netplus\.ch\/tv/i,
   /^https:\/\/www\.iway\.ch\/tv\//i,
-  /^https:\/\/www\.teleking\.ch\//i,
   // Landings partagées documentées comme légitimes dans AUDIT-COMPLET.md §
   // "Cas légitimes de landing partagée" : plusieurs plans (parfois 5-8) pointent
   // sur une même URL landing car l'opérateur n'expose PAS de page produit
@@ -337,9 +336,35 @@ export async function checkOffer(ctx, item, opts = {}) {
     await page.waitForTimeout(waitAfter);
     const text = await page.evaluate(() => document.body.innerText).catch(() => "");
     if (!text || text.length < 100) return { status: "PAGE_VIDE", httpStatus: status, textLength: text.length };
-    const pricesOnPage = extractPrices(text);
+    let pricesOnPage = extractPrices(text);
     const expected = typeof item.price === "number" ? item.price.toFixed(2) : null;
     if (!expected || item.price === 0) return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, text };
+    // Repli sur le HTML rendu quand innerText ne donne pas le prix attendu.
+    // Plusieurs sites servent bien le montant mais ne l'exposent pas en texte :
+    // il vit dans un attribut, un pseudo-élément, ou un noeud que le navigateur
+    // ne restitue pas via innerText tant qu'un consentement n'a pas été donné.
+    // Cas d'école teleking.ch/tv/angebote : innerText ne rend que le bandeau
+    // cookies, alors que le HTML porte 14.00, 19.00 et 23.00 — les trois prix
+    // KingTV, exacts. Le repli n'invente rien : il lit la même page autrement,
+    // et n'est tenté que si la lecture normale a échoué, donc sans coût quand
+    // elle suffit.
+    if (!pricesOnPage.includes(expected)) {
+      const html = await page.content().catch(() => "");
+      if (html) {
+        const htmlTexte = html
+          .replace(/<script[\s\S]*?<\/script>/g, " ")
+          .replace(/<style[\s\S]*?<\/style>/g, " ")
+          .replace(/<[^>]+>/g, " ")
+          .replace(/&nbsp;/g, " ");
+        const prixHtml = extractPrices(htmlTexte);
+        if (prixHtml.includes(expected)) {
+          return { status: "OK", expected, pricesOnPage: prixHtml.slice(0, 15), text, source: "html-rendu" };
+        }
+        // On garde l'union pour le rapport : plus le lecteur voit de montants
+        // réellement présents, mieux il juge un écart.
+        pricesOnPage = [...new Set([...pricesOnPage, ...prixHtml])].sort((a, b) => parseFloat(a) - parseFloat(b));
+      }
+    }
     if (pricesOnPage.includes(expected)) return { status: "OK", expected, pricesOnPage: pricesOnPage.slice(0, 15), text };
     const near = pricesOnPage
       .map(p => ({ p, diff: Math.abs(parseFloat(p) - parseFloat(expected)) }))

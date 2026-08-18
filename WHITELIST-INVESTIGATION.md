@@ -103,3 +103,67 @@ vectoriels — à re-challenger tout de même, notamment via le tunnel de
 commande. Pour Sunrise, le prix EST accessible mais derrière un basculeur
 « Avec TV » (documenté le 18.08) : reste à savoir si un robot sans clic peut
 l'atteindre.
+
+---
+
+## Session 2 — 18.08.2026
+
+### TeleKing `/tv/angebote/` (3 offres) — RÉSOLU
+
+**Motif d'origine** : « prix rendus dans badges/images/SVG non captés par
+innerText ». Faux, mais pour une raison plus intéressante.
+
+**Ce qui a été tenté** : chargement dans le navigateur réel de l'utilisateur
+(profil existant) → les trois prix s'affichent en clair, « CHF 14.-/
+monatlich » après Silber, 19 après Gold, 23 après Platin. Puis reproduction
+en Playwright, headless ET headed : les deux restent bloqués à 807
+caractères sur le bandeau cookies. Ce n'est donc pas une question de mode
+d'exécution mais d'**état de consentement** — le profil réel avait déjà
+accepté, pas le contexte neuf.
+
+Masquage de l'overlay sans l'accepter (règle privacy) : `innerText` tombe à
+647 caractères et ne rend toujours rien, **mais le HTML servi contient
+14.00, 19.00 et 23.00**. La page livre bien ses prix ; c'est `innerText` qui
+ne les restitue pas.
+
+**Résultat : RÉSOLU par amélioration de l'outil, pas par exception.**
+`checkOffer` se replie désormais sur le HTML rendu quand `innerText` ne
+donne pas le prix attendu. Vérifié : les trois KingTV remontent `OK
+(html-rendu)`, et les cas normaux (Wingo Swiss Mini, Sunrise Easy Internet,
+Wingo TV Max) restent `OK` par la voie normale, sans surcoût.
+
+Ce repli profite à tout le catalogue, pas seulement à cette entrée.
+
+### Mesure du repli HTML sur les 8 URLs restantes
+
+| URL | innerText | HTML rendu |
+|---|---|---|
+| quickline.ch/mobile | 3/4 | 3/4 |
+| abos.galaxus.ch/fr/mobile | 0/3 | 0/3 |
+| abos.galaxus.ch/fr/internet | 1/3 | 1/3 |
+| netplus.ch/…/la-box-tv-3921 | 0/1 | 0/1 |
+| iway.ch/tv/ | 2/3 | 2/3 |
+| **teleking.ch/tv/angebote/** | **0/3** | **3/3** ← résolu |
+| sunrise.ch/…/abonnement-combine | 0/1 | 0/1 |
+| talktalk.ch/…/prepaid.html | 0/4 | 0/4 |
+
+Le HTML rendu ne débloque que TeleKing. Pour les autres, le montant n'est
+réellement pas dans la page servie : le chercher autrement ne suffira pas,
+il faudra une interaction (clic, tunnel de commande) ou un rendu graphique.
+
+---
+
+## RESTANT — 19 offres sur 7 URLs
+
+État après les deux sessions. Chaque ligne indique ce qui est déjà écarté,
+pour ne pas re-tenter.
+
+| URL | Offres | Déjà tenté et écarté | Piste restante |
+|---|---|---|---|
+| `quickline.ch/mobile` | 4 | sitemap (aucune page par abo, aucune version FR), `/mobile/preise` (tarifs à la minute), ancre `#mobile-abos`, lazy-load, repli HTML | tunnel « Abo auswählen » |
+| `abos.galaxus.ch/fr/mobile` | 3 | repli HTML (0/3) | tunnel de commande ; confirmer le rendu en glyphes |
+| `abos.galaxus.ch/fr/internet` | 3 | repli HTML (1/3) | idem |
+| `iway.ch/tv/` | 3 | repli HTML (2/3) | trouver quel prix manque et pourquoi |
+| `talktalk.ch/…/prepaid.html` | 4 | repli HTML (0/4) | sitemap, pages produit par formule |
+| `netplus.ch/…/la-box-tv-3921` | 1 | repli HTML (0/1) ; page marketing sans prix | tunnel de commande, ou page tarifs du partenaire local |
+| `sunrise.ch/…/abonnement-combine` | 1 | repli HTML (0/1) | le prix 85.60 EXISTE mais derrière le basculeur « Avec TV » — sans clic, inaccessible. Probablement structurel pour un scan sans interaction. |
