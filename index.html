@@ -1015,7 +1015,7 @@ function gtag_report_conversion(url) {
     </div>
   </div>
   <div class="ctrl-group" style="grid-column:1 / -1;">
-    <label>Réseau <span style="font-weight:400; color:var(--muted); font-size:12px;">(Wingo, Coop Mobile et Migros Mobile utilisent le réseau Swisscom · yallo et Quickline sont sur Sunrise)</span></label>
+    <label>Réseau</label>
     <div class="net-checks" id="promo-network">
       <label class="net-chip"><input type="checkbox" data-net="swisscom" checked><span>Swisscom</span></label>
       <label class="net-chip"><input type="checkbox" data-net="sunrise" checked><span>Sunrise</span></label>
@@ -1322,8 +1322,11 @@ function renderMobileCard(item){
   const roamCalls = (country !== "all" && item.roaming)
     ? (rc === Infinity ? 'illimités' : (typeof rc === "number" && rc > 0) ? `${rc} min` : 'non inclus')
     : null;
-  const data = `${item.chUnlimited ? '<b>Illim</b> CH' : goGB(item.chDataGB) + ' CH'}`
-    + ` · <em>${item.roaming ? goGB(item.roamDataGB) + ' étr.' : 'CH seul'}</em>`;
+  // Colonne résumé retirée de la ligne compacte : « 1 Go CH · 100 Mo étr. »
+  // faisait deux informations tassées dans 116 px, alors que la même donnée est
+  // déjà lisible dans le panneau déplié (cellules Data Suisse / Data à
+  // l'étranger) et dans le comparateur. La ligne fermée garde badge réseau,
+  // nom, prix et boutons.
   const grid = rdGrid([
     rdCell('Data Suisse', item.chUnlimited ? 'Illimitée' : goGB(item.chDataGB)),
     rdCell('Data à l\'étranger', item.roaming ? item.roamData : 'Non incluse'),
@@ -1339,7 +1342,7 @@ function renderMobileCard(item){
     !chCallsIllim(item) ? '<span class="roaming-pill roaming-no">⚠ Appels CH non illimités</span>' : '',
   ].filter(Boolean).join(' ');
   return rowCard({
-    item, data, sub: item.promoNote || '',
+    item, sub: item.promoNote || '',
     grid,
     note: item.details + (pills ? '<div style="margin-top:8px;">' + pills + '</div>' : ''),
     actions: compareBtn(item, "mobile"),
