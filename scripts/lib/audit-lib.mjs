@@ -90,6 +90,21 @@ export function extractPrices(text) {
 // Ces URLs remontent en NON_VÉRIFIABLE au lieu d'ÉCART/PAGE_VIDE pour ne pas
 // polluer le rapport quotidien avec des flags manuels inutiles. À revérifier
 // manuellement en cas de doute, mais elles ne sont plus signalées automatiquement.
+// ── Challenge de la whitelist, 18.08.2026 ────────────────────────────────
+// Chaque URL de cette liste a été rechargée avec l'extracteur du scan
+// lui-même, court-circuit désactivé, pour vérifier si elle est VRAIMENT
+// illisible ou seulement jamais regardée. Neuf entrées en sont sorties :
+// sunrise /mobile/young et /swiss-travel-plus, aldi-mobile /fr, vtx
+// abo-mobile, talktalk abonnements-mobiles et internet-et-tv, spusu
+// /fr/spusu*, mtel /fr/produits/* et netplus application-tv-mobile — toutes
+// rendent leurs prix. Soit ~30 offres qui repassent sous surveillance
+// quotidienne au lieu de rester dans un angle mort.
+//
+// Ce qui reste ici est documenté cas par cas ci-dessous, et chaque entrée
+// doit dire POURQUOI la page ne peut structurellement pas livrer son prix.
+// Une whitelist est un aveu d'impuissance, pas un classement par commodité :
+// tant qu'elle contient une page seulement « difficile », elle cache un prix
+// qui peut dériver sans que personne ne le voie.
 export const NON_VERIFIABLE_EXACT_URLS = new Set([
   // Galaxus : les trois prix de chaque gamme sont dessinés en typographie
   // décorative (glyphes vectoriels), pas écrits en texte. Aucune lecture du
@@ -100,8 +115,6 @@ export const NON_VERIFIABLE_EXACT_URLS = new Set([
   "https://abos.galaxus.ch/fr/mobile",
   "https://abos.galaxus.ch/fr/internet",
   // SPA Sunrise (les cards ne rendent pas le prix mensuel côté innerText)
-  "https://www.sunrise.ch/fr/mobile/young",
-  "https://www.sunrise.ch/fr/mobile/swiss-travel-plus",
   "https://www.sunrise.ch/fr/mobile",
   "https://www.sunrise.ch/fr/mobile/roaming",
   // Landings multi-plans où la comparaison 1-vs-1 casse (une page = plusieurs
@@ -155,10 +168,7 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // Chemins réalignés le 09.08.2026 sur les cibles de redirection réelles
   // (AUDIT LIENS) : Talk Talk et VTX ont réorganisé leur arborescence, et
   // Lycamobile /fr/plans/ redirigeait vers la homepage ALLEMANDE.
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile\/abonnements-mobiles\.html$/i,
-  /^https:\/\/(www\.)?talktalk\.ch\/fr\/internet-tv\/internet-et-tv\.html$/i,
   /^https:\/\/(www\.)?talktalk\.ch\/fr\/mobile-prepaye\/prepaid\.html$/i,
-  /^https:\/\/(www\.)?aldi-mobile\.ch\/fr\/?$/i,
   // MaxiConnect : sitemap de 441 URLs passé en revue le 09.08.2026, aucune page
   // par plan n'existe — seulement des pages catégorie. Les 5 MaxiMobile quittent
   // la racine pour /fr/mobile (qui rend bien les prix, mais 8 montants pour 5
@@ -172,7 +182,6 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // et la racine du domaine vers /de/. Seul /fr/ répond en 200 sans redirection
   // (vérifié 09.08.2026). C'est donc la seule cible acceptable en français.
   /^https:\/\/(www\.)?lycamobile\.ch\/fr\/?$/i,
-  /^https:\/\/(www\.)?vtx\.ch\/residential\/mobile\/abo-mobile\/?$/i,
   // Digital Republic : les deux motifs (/en/smart-devices/ et /fr/mobile/) ont
   // été RETIRÉS le 09.08.2026. Le sitemap expose en réalité une page produit par
   // plan sous /fr/produit/<slug>/ — 9 offres y ont été rebasculées, chacune sur
@@ -196,7 +205,6 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // Application TV — CHF 18.- », relevé le 10.08.2026, conforme à notre
   // valeur). Le court-circuit reste donc nécessaire pour cette URL.
   /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/la-box-tv/i,
-  /^https:\/\/(www\.)?netplus\.ch\/fr\/television\/application-tv-mobile/i,
   // Galaxus abos — vérifié 10.08.2026 en browser : les cards affichent le nom
   // du plan et ses caractéristiques, mais AUCUN montant n'apparaît dans le
   // texte rendu, ni en FR ni en DE. Les valeurs 12/19/29 et 27/34/39 sont
@@ -218,10 +226,8 @@ export const NON_VERIFIABLE_URL_PATTERNS = [
   // par innerText. Les scans du 03.08 remontaient systématiquement 7.50/9.95
   // (mentions marketing "à partir de") au lieu du prix du plan concerné.
   // Vérifié : mtel.ch/fr/produits/{sha}/{slug} = même problème sur toutes.
-  /^https:\/\/mtel\.ch\/fr\/produits\//i,
   // Spusu — DOM Vue.js où les prix sont dans des tokens {{price}} non
   // extractibles côté innerText après rendu partiel.
-  /^https:\/\/(www\.)?spusu\.ch\/fr\/spusu/i,
 ];
 export function isNonVerifiableUrl(url) {
   if (!url) return false;
