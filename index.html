@@ -315,7 +315,7 @@
     padding:0; display:block; min-width:0;}
   .card:last-child{border-bottom:none;}
 
-  .row{display:grid; grid-template-columns:minmax(0,26px) minmax(0,1fr) minmax(0,116px) minmax(0,80px) minmax(0,124px) minmax(0,84px) minmax(0,76px);
+  .row{display:grid; grid-template-columns:minmax(0,26px) minmax(0,1fr) minmax(0,116px) minmax(0,80px) minmax(0,172px) minmax(0,84px) minmax(0,76px);
     gap:10px; align-items:center; padding:9px 12px; cursor:pointer; transition:background .1s;}
   .row:hover{background:#F7F9FC;}
   .card.open .row{background:#F4F7FF;}
@@ -336,7 +336,15 @@
     padding:2.5px 6px; border-radius:4px; width:fit-content; color:#fff; white-space:nowrap;}
   .net-swisscom{background:var(--swisscom);} .net-sunrise{background:var(--sunrise);} .net-salt{background:var(--salt);}
   .net-init7{background:var(--init7);} .net-regional{background:var(--regional);} .net-choice{background:var(--choice);}
-  .row-price{text-align:right; min-width:0;}
+  /* Prix sur une ligne, comme le reste du style Terminal. Il était en
+     display:block avec des enfants block — CHF 3.90 / /mois / 9.90 −61%
+     descendaient les uns sous les autres sur 53 px. Le bloc n en avait pas
+     la place : sa colonne faisait 124 px quand une ligne horizontale en
+     demande environ 170, d ou l empilement d origine. La colonne est
+     élargie juste en dessous. */
+  .row-price{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:flex-end;
+    gap:0 5px; text-align:right; min-width:0;}
+  .row-price > div{display:flex; align-items:baseline; gap:4px;}
   .row-chf{font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.4px; white-space:nowrap;}
   .row-chf .cur{font-size:10px; font-weight:600; color:var(--muted); margin-right:2px;}
   .row-was{font-size:10.5px; color:var(--muted); text-decoration:line-through; margin-right:4px;}
