@@ -327,7 +327,12 @@
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .row-sub{font-size:11px; color:var(--muted); font-weight:400; margin-top:1px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .row-data{font-size:11.5px; color:var(--ink-2); font-weight:500; min-width:0; line-height:1.35;}
+  .row-data{font-size:11.5px; color:var(--ink-2); font-weight:500; min-width:0; line-height:1.35;
+    overflow:hidden; text-overflow:ellipsis;}
+  /* Filet : la cellule prix est en nowrap, un texte long y déborderait sous les
+     boutons plutôt que de se couper. Constaté sur l'onglet Promotions avec le
+     champ libre `discount`. */
+  .row-price{overflow:hidden; text-overflow:ellipsis;}
   .row-data em{font-style:normal; color:var(--muted); font-weight:400;}
   .net-tag{font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.5px;
     padding:2.5px 6px; border-radius:4px; width:fit-content; color:#fff; white-space:nowrap;}
@@ -2338,10 +2343,19 @@ function renderPromoCard(p){
     rdCell('Code promo', p.code ? '<b>' + p.code + '</b>' : 'Aucun'),
     rdCell('Fenêtre', (p.from ? frDate(String(p.from).slice(0,10)) : '—') + ' → ' + (p.to ? frDate(String(p.to).slice(0,10)) : '—')),
   ]);
-  const data = p.discount ? p.discount : (p.beforePrice ? 'au lieu de CHF ' + p.beforePrice.toFixed(2) : '');
+  // La ligne fermée ne porte que du texte court et calibré : nom, opérateur,
+  // prix, boutons. `discount` est un champ libre qui monte à 300 caractères
+  // (Coop Box Trophée, action Aldi) ; il était injecté ici ET dans la cellule
+  // prix, deux colonnes de 116 et 124 px dont la seconde est en nowrap — le
+  // texte traversait la carte et passait sous les boutons. Il vit désormais
+  // uniquement dans le panneau déplié.
+  //
+  // Rien à afficher non plus pour beforePrice : rowPrice() rend déjà le prix
+  // barré et le pourcentage juste à côté, le répéter en toutes lettres était
+  // redondant.
   const priceCell = p.price
     ? rowPrice(p, '/mois')
-    : '<div class="row-price"><span class="row-chf" style="font-size:12px; line-height:1.3;">' + (p.discount || 'Promo') + '</span></div>';
+    : '<div class="row-price"><span class="row-chf" style="font-size:12px; line-height:1.3;">Promo</span></div>';
   const go = '<a class="row-go" href="' + offerUrl(p) + '" target="_blank" rel="' + offerRel(p) + '" onclick="event.stopPropagation(); gtag_report_conversion(); return true;">Voir →</a>';
   const net = p.network || 'regional';
   return `<div class="card">
@@ -2352,7 +2366,7 @@ function renderPromoCard(p){
         <div class="row-name">${p.name}<span class="cat-tag">${catLabel}</span><span class="row-caret">▶</span></div>
         <div class="row-sub">${p.operator}${p.code ? ' · code ' + p.code : ''}</div>
       </div>
-      <div class="row-data">${data}</div>
+      <div class="row-data"></div>
       <div class="row-net"><span class="net-tag net-${net}">${p.operator}</span></div>
       ${priceCell}
       <div class="row-cmp">${compareBtn(p, p.category)}</div>
@@ -2361,6 +2375,7 @@ function renderPromoCard(p){
     <div class="row-detail">
       ${renderWarning(p)}
       ${grid}
+      ${p.discount ? '<div class="rd-note"><b>La remise :</b><br>' + p.discount + '</div>' : ''}
       <div class="rd-note"><b>Ce qui est inclus :</b><br>${p.details}</div>
       <div class="rd-actions">${affiliatePill(p)}</div>
     </div>
