@@ -250,7 +250,7 @@ même chose :**
 
 ### 7. Garde-fous de robustesse (post-incident 03.08.2026)
 
-Trois protections ont été ajoutées après un premier déploiement pathologique
+Six protections, ajoutées après un premier déploiement pathologique
 où plusieurs runs se sont empilés parce que certaines pages « hanguaient »
 indéfiniment (Sunrise Swiss Travel+ 82 min, Lebara Relax S 68 min, Wingo
 Swiss Max 59 min avant erreur, etc.). Playwright peut caler dans
@@ -263,6 +263,9 @@ SPA garde une boucle JS active.
 | **Navigation timeout court** | `audit-lib.mjs` `setDefaultNavigationTimeout(15000)` | `page.goto` timeout à 15 s au lieu du défaut Playwright 30 s. |
 | **Lock file** | `scripts/daily-audit.lock` | Un nouveau run refuse de démarrer si un précédent tourne encore (PID vérifié). Exit code 75 (EX_TEMPFAIL, retry-friendly). Un lock de plus de 90 min est considéré zombie et écrasé. Libéré via `process.on("exit")`. |
 | **Historique borné** | `_audit-catalog.mjs` `MAX_RUNS_KEPT_IN_LOG=7` | Le rapport `daily-audit-log.md` ne garde que les 7 derniers blocs `# Daily audit — YYYY-MM-DD` — évite l'accumulation en cas de runs multi-quotidiens ou de tests répétés. |
+| **Plafond de durée totale** | `_audit-catalog.mjs` `MAX_TOTAL_RUN_TIME_MS = 180 min` | Kill du process (exit 124). **Volontairement haut** : le catalogue complet demande ~2 h. À 30 puis 60 min, ce plafond coupait des runs sains toujours au même endroit — travel/prepaid/dataOnly, en fin de liste — et le rapport se terminait normalement sans signaler l'amputation. Il est là pour les hangs pathologiques, pas pour plafonner une durée légitime. |
+| **Watchdog de progression** | `_audit-catalog.mjs` `MAX_STALL_MS = 6 min` (19.08.2026) | Kill du process (exit **125**, distinct du 124) si **aucune offre ne se termine** pendant 6 min. C'est le garde-fou qui manquait : un run peut être vivant et figé, donc invisible pour un plafond de durée. Le 19.08, un run est resté 39 min sur une seule offre — sous les 3 h, donc jamais coupé. « Ce run est long » n'est pas un défaut ; « ce run n'avance plus » en est un, et la plus lente des offres prend 30 s. |
+| **Création de page bornée** | `audit-lib.mjs` `ctx.newPage()` borné à 15 s (19.08.2026) | `newPage()` était la **seule** étape de `checkOffer` hors de toute borne : le `Promise.race` du hardTimeout n'est armé qu'après. Sur contexte saturé, Playwright peut ne jamais rendre la main là. Renvoie désormais `ERREUR`, ce qui laisse le recyclage de navigateur faire son travail. C'est l'endroit exact où le run du 19.08 s'était figé. |
 
 Si des runs zombies traînent malgré ces garde-fous :
 

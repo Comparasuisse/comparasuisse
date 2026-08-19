@@ -62,6 +62,20 @@ const LOCK_PATH = "scripts/daily-audit.lock";
 // signaler. Cette borne est là pour les hangs pathologiques (incident yallo du
 // 07.08, 25 h bloqué), pas pour plafonner une durée légitime.
 const MAX_TOTAL_RUN_TIME_MS = 180 * 60 * 1000;
+// Watchdog de PROGRESSION, ajouté le 19.08.2026. Le plafond ci-dessus borne la
+// durée TOTALE ; il ne dit rien d'un run vivant mais figé. Le 19.08, un run est
+// resté 39 minutes sur une seule offre : sous les 3 h, donc invisible pour le
+// plafond, et hors du hardTimeout de checkOffer parce que le blocage se
+// produisait dans ctx.newPage() — étape antérieure à l'armement du Promise.race
+// (corrigé par ailleurs, borné à 15 s).
+//
+// Baisser le plafond global ne serait PAS la bonne réponse : à 30 comme à
+// 60 min il tronquait des runs parfaitement sains, en coupant toujours les
+// mêmes catégories de fin de liste (travel/prepaid/dataOnly). Le bon signal
+// n'est pas « ce run est long » mais « ce run n'avance plus » : 6 minutes sans
+// qu'une seule offre se termine, alors que la plus lente en prend 30 s, ne
+// s'explique par aucun cas légitime.
+const MAX_STALL_MS = 6 * 60 * 1000;
 // Seuil de failures consécutives (TIMEOUT/ERREUR/PAGE_VIDE) après lequel
 // on recycle le browser+context — évite qu'un contexte saturé/dégradé
 // pollue les URLs suivantes.
@@ -169,6 +183,24 @@ if (!DRY) {
   // finit normalement avant le timeout (sinon Node attendrait 30 min).
   watchdog.unref();
 }
+
+// Armé ici, rearmé après chaque offre par touchProgress(). Si aucune offre ne
+// se termine pendant MAX_STALL_MS, le run est figé : on le tue.
+// exit 125 (distinct du 124 du plafond global) pour que le log dise LEQUEL des
+// deux garde-fous a parlé.
+let stallTimer = null;
+function touchProgress() {
+  if (DRY) return;
+  if (stallTimer) clearTimeout(stallTimer);
+  stallTimer = setTimeout(() => {
+    console.error(`\n⏰ WATCHDOG PROGRESSION : aucune offre terminée depuis ${MAX_STALL_MS / 60000} min — run figé, kill forcé.`);
+    console.error("   (cause typique : contexte Playwright saturé ; cf. commentaire de MAX_STALL_MS)");
+    try { fs.unlinkSync(LOCK_PATH); } catch {}
+    process.exit(125);
+  }, MAX_STALL_MS);
+  stallTimer.unref();
+}
+touchProgress();
 
 // === Chargement des offres ===
 const data = loadData();
@@ -397,7 +429,9 @@ for (const item of subset) {
   const kwFlag = keywords.length ? ` [kw:${keywords.length}]` : "";
   console.log(`${icon} ${verdict.status}${kwFlag} (${ms}ms)`);
   results.push({ item, verdict, ms });
+  touchProgress();
 }
+if (stallTimer) clearTimeout(stallTimer);
 
 await hardCloseBrowser(browser);
 
