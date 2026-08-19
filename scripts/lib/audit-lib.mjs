@@ -14,8 +14,15 @@ import fs from "node:fs";
 // germanophones, et "34.50/Mt." (Quickline Mobile XL) était le seul des quatre
 // prix de sa page à échapper à l'extracteur — pas parce qu'il était caché,
 // mais parce qu'on ne savait lire le mois qu'en français.
+// Le marqueur qui SUIT le montant est regardé sans être consommé (lookahead).
+// Consommé, il masquait le prix d'après : sur mucho.ch/fr/abo/muchoswiss, le
+// texte dit « …réseau mobile N°1 » juste avant « CHF 14.90 », et le « 1 » de
+// « N°1 » captait le « CHF » comme s'il était son suffixe. Le curseur repartait
+// après la devise, « 14.90 » se retrouvait sans marqueur, et le vrai prix de la
+// page devenait invisible — l'extracteur ne rendait que 1.00. Un ÉCART faux, et
+// pire : muet sur sa cause. Constaté le 19.08.2026.
 export const PRICE_RE =
-  /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*m(?:ois|onat\.?|te?\.?|\.)|\/\s*m(?:ois|onat\.?|te?\.?|\.))/gi;
+  /(?:CHF|Fr\.)\s*(\d{1,3}(?:['.,]\d{2})?)(?:\s*\.?[-–]?)|(\d{1,3}(?:['.,]\d{2})?)(?=\s*(?:CHF|Fr\.|\.[-–]|\.?[-–]\s*\/\s*m(?:ois|onat\.?|te?\.?|\.)|\/\s*m(?:ois|onat\.?|te?\.?|\.)))/gi;
 
 // Normalise le texte AVANT extraction pour rejoindre les prix coupés par des
 // sauts de ligne. Patterns observés en prod :
@@ -42,7 +49,13 @@ export function normalizePriceFragments(text) {
     // "CHF / Mt. 15.–". Les deux premiers étaient captés grâce à leur "–"
     // final ; TV Top 2.0, écrit "25.50" sans tiret, ne l'était pas — un prix
     // invisible sur une page parfaitement lisible.
-    .replace(/\b(CHF|Fr\.)\s*\n*\s*\/\s*m(?:ois|onat|te?)?\.?\s*(?=\d)/gi, "$1 ");
+    .replace(/\b(CHF|Fr\.)\s*\n*\s*\/\s*m(?:ois|onat|te?)?\.?\s*(?=\d)/gi, "$1 ")
+    // "70.\n \n \n/mois" → "70.-/mois" : le montant, ses centimes (souvent un
+    // élément vide) et la périodicité sont trois noeuds distincts, et innerText
+    // les sépare par des lignes blanches. Constaté le 19.08.2026 dans le
+    // tableau replié de wingo.ch/fr/internet, où Smart/Pro/Ultra s'écrivent
+    // « 70. », « 76. », « 80. » suivis de « /mois » quatre lignes plus bas.
+    .replace(/(\d{1,3})\.\s*(?:\n\s*)+\/\s*m(?:ois|onat|te?)?\.?/gi, "$1.-/mois");
 }
 
 // Certains opérateurs écrivent le libellé et le montant sur deux lignes, sans
@@ -305,6 +318,16 @@ export const PRE_CLICK_RECIPES = [
     pattern: /^https:\/\/(www\.)?sunrise\.ch\/fr\/internet-tv\/abonnement-combine\/?$/i,
     texts: ["Avec TV"],
   },
+  {
+    // Wingo replie son catalogue derrière « Afficher tous les produits » : la
+    // page ne montre que l'offre mise en avant, et les autres abos — dont les
+    // trois nôtres — n'existent dans le texte qu'une fois le tableau déplié.
+    // Relevé le 19.08.2026 après dépliage : Internet Smart 70.–, Pro 76.–,
+    // Ultra 80.–, conformes à nos valeurs. Sans ce clic, ces trois offres
+    // sortaient en ÉCART tous les matins depuis des semaines.
+    pattern: /^https:\/\/(www\.)?wingo\.ch\/fr\/internet(#.*)?$/i,
+    texts: ["Afficher tous les produits"],
+  },
 ];
 export function preClickRecipeFor(url) {
   if (!url) return null;
@@ -327,7 +350,40 @@ export function preClickRecipeFor(url) {
 // de prix, une ressource seule pourrait appartenir à une autre section. Les
 // deux ensemble signifient que la page a chargé, pour cette carte, l'animation
 // de ce nombre-là.
-export async function readLottieNumbers(page) {
+// Prix lus dans le HTML rendu plutôt que dans innerText. Même page, autre
+// lecture : le montant peut vivre dans un noeud que le navigateur ne restitue
+// pas au texte tant qu'un consentement n'a pas été donné (cas TeleKing).
+export async function readRenderedHtmlPrices(page) {
+  const html = await page.content().catch(() => "");
+  if (!html) return [];
+  const htmlTexte = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<style[\s\S]*?<\/style>/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ");
+  return extractPrices(htmlTexte);
+}
+
+// urlsObservees : les requêtes réellement parties, collectées par l'appelant
+// via page.on("request"). C'est la source FIABLE. L'API performance du
+// navigateur ne l'est pas : son tampon d'entrées est plafonné (250 par défaut
+// dans Chrome), et sur une page riche les ressources tardives en sont
+// silencieusement évincées. Symptôme observé le 19.08.2026 sur Galaxus : le
+// DOM annonçait 12/19/29, la liste des ressources ne rendait que le script de
+// la bibliothèque, et l'intersection tombait à vide — un faux ÉCART qui
+// n'apparaissait que sur certaines exécutions, ce qui est la pire espèce.
+// On garde tout de même la lecture performance en complément, pour les
+// appelants qui n'écoutent pas les requêtes.
+export async function readLottieNumbers(page, urlsObservees = []) {
+  for (let essai = 0; essai < 2; essai++) {
+    const trouve = await lireNombresLottie(page, urlsObservees);
+    if (trouve.length) return trouve;
+    if (essai === 0) await page.waitForTimeout(1500).catch(() => {});
+  }
+  return [];
+}
+
+async function lireNombresLottie(page, urlsObservees = []) {
   const tokens = await page
     .evaluate(() => {
       const dom = [...document.querySelectorAll('[id*="lottie" i],[class*="lottie" i]')]
@@ -360,7 +416,7 @@ export async function readLottieNumbers(page) {
     return out;
   };
   const dom = nombres(tokens.dom);
-  const res = nombres(tokens.res);
+  const res = nombres(tokens.res + " " + urlsObservees.filter((u) => /lottie/i.test(u)).join(" "));
   return [...dom].filter((n) => res.has(n)).sort((a, b) => parseFloat(a) - parseFloat(b));
 }
 
@@ -453,6 +509,13 @@ export async function checkOffer(ctx, item, opts = {}) {
   const hardTimeout = (opts.hardTimeout || 20000) + (recette ? 12000 : 0);
 
   const page = await ctx.newPage();
+  // Trace des ressources d'animation demandées par la page. Écoutée dès la
+  // création, donc complète et insensible au plafond du tampon performance.
+  const requetesLottie = [];
+  page.on("request", (r) => {
+    const u = r.url();
+    if (/lottie/i.test(u)) requetesLottie.push(u);
+  });
   // Timers Playwright internes courts pour ne pas dépendre du hardTimeout.
   page.setDefaultNavigationTimeout(navigationTimeout);
   page.setDefaultTimeout(navigationTimeout);
@@ -468,15 +531,53 @@ export async function checkOffer(ctx, item, opts = {}) {
     // de PRE_CLICK_RECIPES) : mieux vaut un ÉCART visible qu'une erreur muette.
     if (recette) {
       for (const t of recette.texts) {
-        await page.getByText(t, { exact: true }).first().click({ timeout: 6000 }).catch(() => {});
+        const cible = page.getByText(t, { exact: true }).first();
+        const clicOk = await cible.click({ timeout: 6000 }).then(() => true).catch(() => false);
+        // Repli en clic JS. Playwright refuse de cliquer ce qu'il juge non
+        // actionnable, et il a souvent raison — mais pas ici : sur
+        // wingo.ch/fr/internet, le libellé « Afficher tous les produits » vit
+        // dans un <span> à l'intérieur d'un <button>, et l'actionnabilité du
+        // span ne se résout jamais. Le geste reste celui d'un visiteur : on
+        // déclenche le bouton qui porte le libellé, rien d'autre.
+        if (!clicOk) {
+          await cible.evaluate((el) => (el.closest("button,a,[role=button]") || el).click()).catch(() => {});
+        }
       }
       await page.waitForTimeout(2500);
     }
-    const text = await page.evaluate(() => document.body.innerText).catch(() => "");
+    let text = await page.evaluate(() => document.body.innerText).catch(() => "");
+    // Seconde chance avant de déclarer la page vide. Les SPA lourdes rendent
+    // parfois après le networkidle : sunrise.ch/fr/mobile/abonnement-mobile est
+    // sorti PAGE_VIDE au scan du 19.08.2026, et rend ses six prix quand on lui
+    // laisse quelques secondes de plus. Déclarer vide une page qui ne l'est pas
+    // coûte une offre non surveillée ; l'attente, elle, n'est payée que dans le
+    // cas où la première lecture a échoué.
+    if (!text || text.length < 100) {
+      await page.waitForTimeout(4000);
+      text = await page.evaluate(() => document.body.innerText).catch(() => "");
+    }
     if (!text || text.length < 100) return { status: "PAGE_VIDE", httpStatus: status, textLength: text.length };
     let pricesOnPage = extractPrices(text);
     const expected = typeof item.price === "number" ? item.price.toFixed(2) : null;
-    if (!expected || item.price === 0) return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, text };
+    if (!expected || item.price === 0) {
+      // Le scan quotidien charge chaque URL UNE fois, sans prix attendu
+      // (_audit-catalog.mjs § getUrlSnapshot), puis compare hors ligne les
+      // offres qui partagent cette URL. Ce chemin sortait ici, donc AVANT les
+      // replis html-rendu et Lottie — qui ne se déclenchent qu'après un échec
+      // de comparaison. Résultat mesuré le 19.08.2026 : les 3 KingTV
+      // ressortaient « prix inconnu » et les 5 Galaxus en ÉCART, alors que les
+      // deux replis les lisent correctement depuis le 18.08. Les correctifs
+      // existaient, le chemin qui compte ne les empruntait pas.
+      // On collecte donc les deux lectures de repli pendant que la page est
+      // encore ouverte, à charge pour l'appelant de ne s'en servir qu'en
+      // dernier recours — l'ordre de préséance reste celui du chemin par offre.
+      if (opts.collectFallbacks) {
+        const pricesHtml = await readRenderedHtmlPrices(page);
+        const pricesLottie = await readLottieNumbers(page, requetesLottie);
+        return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, pricesHtml, pricesLottie, text };
+      }
+      return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, text };
+    }
     // Repli sur le HTML rendu quand innerText ne donne pas le prix attendu.
     // Plusieurs sites servent bien le montant mais ne l'exposent pas en texte :
     // il vit dans un attribut, un pseudo-élément, ou un noeud que le navigateur
@@ -487,14 +588,8 @@ export async function checkOffer(ctx, item, opts = {}) {
     // et n'est tenté que si la lecture normale a échoué, donc sans coût quand
     // elle suffit.
     if (!pricesOnPage.includes(expected)) {
-      const html = await page.content().catch(() => "");
-      if (html) {
-        const htmlTexte = html
-          .replace(/<script[\s\S]*?<\/script>/g, " ")
-          .replace(/<style[\s\S]*?<\/style>/g, " ")
-          .replace(/<[^>]+>/g, " ")
-          .replace(/&nbsp;/g, " ");
-        const prixHtml = extractPrices(htmlTexte);
+      const prixHtml = await readRenderedHtmlPrices(page);
+      if (prixHtml.length) {
         if (prixHtml.includes(expected)) {
           return { status: "OK", expected, pricesOnPage: prixHtml.slice(0, 15), text, source: "html-rendu" };
         }
@@ -504,10 +599,24 @@ export async function checkOffer(ctx, item, opts = {}) {
       }
     }
     if (pricesOnPage.includes(expected)) return { status: "OK", expected, pricesOnPage: pricesOnPage.slice(0, 15), text };
+    // Prix composé : certaines offres sont la SOMME de deux abonnements que le
+    // fournisseur facture ensemble sans jamais imprimer le total (Teleboy combo
+    // = Internet 44.90 + TV 11.90, chacun affiché de son côté). Le total est
+    // exact, il n'est simplement écrit nulle part. Plutôt que de renoncer à
+    // surveiller ces offres, on vérifie leurs COMPOSANTS : si chacun est sur la
+    // page, la somme l'est aussi. Et si le fournisseur bouge l'un des deux, le
+    // contrôle échoue — ce qui est précisément le signal qu'on veut.
+    if (Array.isArray(item.priceParts) && item.priceParts.length) {
+      const parts = item.priceParts.map((p) => Number(p).toFixed(2));
+      const somme = item.priceParts.reduce((a, b) => a + Number(b), 0).toFixed(2);
+      if (somme === expected && parts.every((p) => pricesOnPage.includes(p))) {
+        return { status: "OK", expected, pricesOnPage: parts, text, source: "somme-des-composants" };
+      }
+    }
     // Dernier repli : les nombres dessinés en animation (cf. readLottieNumbers).
     // Tenté seulement quand les deux lectures textuelles ont échoué, donc sans
     // coût sur une page normale.
-    const lottie = await readLottieNumbers(page);
+    const lottie = await readLottieNumbers(page, requetesLottie);
     if (lottie.includes(expected)) {
       return { status: "OK", expected, pricesOnPage: lottie, text, source: "lottie" };
     }

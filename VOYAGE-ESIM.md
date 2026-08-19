@@ -312,6 +312,16 @@ scripts/collect-<fournisseur>.mjs  →  data/voyage-<fournisseur>.json
         const TRAVEL_FX + const travelData  dans index.html
 ```
 
+**Le scan quotidien ne vérifie pas ces prix, et le dit.** Depuis le
+19.08.2026, toute offre Voyage qu'il ne retrouve pas sort en `NON_COMPARABLE`
+et non en `ÉCART` : une URL fournisseur porte 7 à 9 forfaits, sur des pages à
+onglets dont il ne lit qu'un volet. Le 19.08 il criait 280 écarts ; les six
+collecteurs rejoués le même jour sur 757 forfaits n'ont donné **aucune**
+différence. Ce que le scan surveille à la place, c'est l'**âge des fichiers
+`data/voyage-*.json`** : au-delà de 3 jours, il déclenche un audit. La
+fraîcheur de la collecte est donc devenue le garde-fou, à la place d'une
+comparaison que cet instrument ne sait pas faire.
+
 **Pour revérifier les prix**, relancer les six collecteurs, rafraîchir les taux
 en tête de `build-travel-data.mjs`, puis :
 

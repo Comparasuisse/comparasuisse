@@ -252,7 +252,13 @@ async function getUrlSnapshot(url) {
   if (urlCache.has(url)) return urlCache.get(url);
   // fabrique un "item stub" avec url + price=null pour forcer NON_VÉRIFIABLE
   // et récupérer text + pricesOnPage sans comparer.
-  const snap = await checkOffer(ctx, { url, price: null }, { waitAfter: 1500 });
+  // collectFallbacks : la page n'est ouverte qu'une fois, alors on lui demande
+  // aussi ses lectures de repli (HTML rendu, animations Lottie) tant qu'elle
+  // est là. Sans ça, le scan quotidien reste aveugle à deux des mécanismes de
+  // audit-lib.mjs, qui ne se déclenchent qu'après un échec de comparaison —
+  // comparaison que ce chemin fait hors ligne, plus tard. Cf. commentaire dans
+  // checkOffer.
+  const snap = await checkOffer(ctx, { url, price: null }, { waitAfter: 1500, collectFallbacks: true });
   urlCache.set(url, snap);
   return snap;
 }
@@ -296,7 +302,33 @@ for (const item of subset) {
       verdict = { status: "NON_VÉRIFIABLE", pricesOnPage: snap.pricesOnPage };
     } else if (snap.pricesOnPage?.includes(expected)) {
       verdict = { status: "OK", expected, pricesOnPage: snap.pricesOnPage.slice(0, 15) };
-    } else if (!snap.pricesOnPage || snap.pricesOnPage.length === 0) {
+    } else if (snap.pricesHtml?.includes(expected)) {
+      // Repli 1 : le montant est servi par la page mais pas restitué au texte.
+      verdict = { status: "OK", expected, pricesOnPage: snap.pricesHtml.slice(0, 15), source: "html-rendu" };
+    } else if (snap.pricesLottie?.includes(expected)) {
+      // Repli 2 : le montant est dessiné en animation, et l'animation le nomme.
+      verdict = { status: "OK", expected, pricesOnPage: snap.pricesLottie, source: "lottie" };
+    } else if (Array.isArray(item.priceParts) && item.priceParts.length
+      && item.priceParts.reduce((a, b) => a + Number(b), 0).toFixed(2) === expected
+      && item.priceParts.every((p) => snap.pricesOnPage?.includes(Number(p).toFixed(2)))) {
+      // Prix composé : le total n'est écrit nulle part, ses composants le sont.
+      // Même contrôle que dans checkOffer — cf. le commentaire y figurant.
+      verdict = { status: "OK", expected, pricesOnPage: item.priceParts.map((p) => Number(p).toFixed(2)), source: "somme-des-composants" };
+    } else if (item.__cat === "travel") {
+      // L'onglet Voyage ne se vérifie PAS avec cet instrument, et le dire est
+      // plus honnête que de produire 280 ÉCART par jour dont aucun n'est vrai.
+      // Deux raisons structurelles, cumulées : une même URL fournisseur porte
+      // 7 à 9 forfaits (donc aucune attribution 1-vs-1 possible), et les pages
+      // sont à onglets — Airalo n'affiche « Standard » ou « Unlimited » qu'un à
+      // la fois. Un scan qui ne clique pas lit forcément un sous-ensemble.
+      // L'instrument de référence, lui, existe et clique : les six
+      // scripts/collect-<fournisseur>.mjs, dont la sortie alimente travelData
+      // (cf. VOYAGE-ESIM.md § 8). Le 19.08.2026, ils ont été rejoués sur les
+      // 757 forfaits : zéro différence, alors que le scan criait 280 écarts.
+      // Ce que le scan garde donc à sa charge, c'est la FRAÎCHEUR de cette
+      // collecte, pas le prix — cf. section « Voyage » du rapport.
+      verdict = { status: "NON_COMPARABLE", expected, pricesOnPage: (snap.pricesOnPage || []).slice(0, 8), raison: "onglet Voyage : URL partagée par plusieurs forfaits et page à onglets — vérifié par scripts/collect-<fournisseur>.mjs, pas par ce scan" };
+    } else if (!snap.pricesOnPage?.length && !snap.pricesHtml?.length && !snap.pricesLottie?.length) {
       // Aucun prix extractible sur la page. Ce n'est PAS un écart : un écart
       // suppose qu'on a lu un autre prix (c'est le contrat écrit dans
       // audit-lib.mjs — « prix stocké absent de la page MAIS d'autres prix
@@ -319,7 +351,7 @@ for (const item of subset) {
   const keywords = snap.text ? detectSuspiciousKeywords(snap.text) : [];
   verdict.keywords = keywords;
   const ms = Date.now() - t0;
-  const icon = { OK: "✅", ÉCART: "⚠️", URL_MORTE: "❌", PAGE_VIDE: "📭", TIMEOUT: "⏱", ERREUR: "💥", NON_VÉRIFIABLE: "ℹ️", SKIP_NO_URL: "⏭" }[verdict.status] || "?";
+  const icon = { OK: "✅", ÉCART: "⚠️", URL_MORTE: "❌", PAGE_VIDE: "📭", TIMEOUT: "⏱", ERREUR: "💥", NON_VÉRIFIABLE: "ℹ️", NON_COMPARABLE: "🧭", SKIP_NO_URL: "⏭" }[verdict.status] || "?";
   const kwFlag = keywords.length ? ` [kw:${keywords.length}]` : "";
   console.log(`${icon} ${verdict.status}${kwFlag} (${ms}ms)`);
   results.push({ item, verdict, ms });
@@ -328,16 +360,21 @@ for (const item of subset) {
 await hardCloseBrowser(browser);
 
 // === Agrégation par verdict ===
-const counts = { OK: 0, ÉCART: 0, URL_MORTE: 0, PAGE_VIDE: 0, TIMEOUT: 0, ERREUR: 0, NON_VÉRIFIABLE: 0 };
+const counts = { OK: 0, ÉCART: 0, URL_MORTE: 0, PAGE_VIDE: 0, TIMEOUT: 0, ERREUR: 0, NON_VÉRIFIABLE: 0, NON_COMPARABLE: 0 };
 for (const r of results) counts[r.verdict.status] = (counts[r.verdict.status] || 0) + 1;
 const withKeywords = results.filter(r => r.verdict.keywords?.length > 0);
 const flagged = results.filter(r =>
+  // Le Voyage sort du signalement : son verdict dit déjà qu'il relève d'un
+  // autre instrument, et le laisser rentrer par la porte des mots-clés
+  // marketing (« illimité », « à vie »…) rétablirait exactement le bruit qu'on
+  // vient d'enlever.
+  r.verdict.status !== "NON_COMPARABLE" && (
   r.verdict.status === "ÉCART" ||
   r.verdict.status === "URL_MORTE" ||
   r.verdict.status === "PAGE_VIDE" ||
   r.verdict.status === "TIMEOUT" ||
   r.verdict.status === "ERREUR" ||
-  (r.verdict.keywords?.length > 0)
+  (r.verdict.keywords?.length > 0))
 );
 // Règle 9 : « un statut non concluant n'est PAS une vérification ». Ces offres
 // ont un prix stocké que le scan n'a pas réussi à lire — elles ne sont ni
@@ -366,7 +403,24 @@ const overdue = daysSinceFullPass === null || daysSinceFullPass >= DAYS_BEFORE_F
 // Les non concluants comptent dans le trigger : reclasser un faux ÉCART en
 // « prix inconnu » ne doit pas rendre le catalogue « stable » par magie. Une
 // offre illisible reste une offre à vérifier à la main.
-const triggerManual = flagged.length > 0 || inconclusive.length > 0 || overdue;
+// === Fraîcheur des collectes Voyage ===
+// Le scan ne compare pas les prix Voyage (cf. verdict NON_COMPARABLE), donc
+// il ne peut pas non plus les certifier. Ce qu'il PEUT surveiller, c'est
+// l'âge de la collecte qui, elle, fait autorité. Sans ce garde-fou, sortir
+// le Voyage du bruit reviendrait à le sortir de la surveillance.
+const VOYAGE_COLLECTE_MAX_AGE_DAYS = 3;
+const nonComparable = results.filter(r => r.verdict.status === "NON_COMPARABLE");
+let voyageAgeJours = null;
+try {
+  const fichiers = fs.readdirSync("data").filter(n => /^voyage-.*.json$/.test(n));
+  if (fichiers.length) {
+    const plusVieux = Math.min(...fichiers.map(n => fs.statSync(path.join("data", n)).mtimeMs));
+    voyageAgeJours = Math.floor((Date.now() - plusVieux) / 86400000);
+  }
+} catch {}
+const voyagePerime = nonComparable.length > 0 && voyageAgeJours !== null && voyageAgeJours > VOYAGE_COLLECTE_MAX_AGE_DAYS;
+
+const triggerManual = flagged.length > 0 || inconclusive.length > 0 || overdue || voyagePerime;
 
 // === Rapport markdown ===
 const lines = [];
@@ -394,7 +448,12 @@ lines.push(`>   entrée « à partir de… »).`);
 lines.push(``);
 lines.push(`- **Total offres auditées** : ${results.length}${LIMIT ? ` (limité, catalogue total = ${pool.length})` : ""}`);
 lines.push(`- **URLs uniques chargées** : ${urlCache.size}`);
+const parRepli = results.filter(r => r.verdict.source);
+const detailReplis = [...new Set(parRepli.map(r => r.verdict.source))]
+  .map(src => `${src}=${parRepli.filter(r => r.verdict.source === src).length}`)
+  .join(", ");
 lines.push(`- **Verdicts** : ${Object.entries(counts).filter(([, v]) => v > 0).map(([k, v]) => `${k}=${v}`).join(", ")}`);
+if (parRepli.length) lines.push(`- **OK obtenus par repli** : ${parRepli.length} (${detailReplis}) — prix non restitué au texte de la page, lu autrement (cf. audit-lib.mjs)`);
 lines.push(`- **Mots-clés suspects** : ${withKeywords.length} offre(s)`);
 lines.push(`- **Dernière passe complète manuelle** : ${state.lastFullPassDate || "(jamais)"}${daysSinceFullPass !== null ? ` (il y a ${daysSinceFullPass} j)` : ""}`);
 lines.push("");
@@ -406,6 +465,7 @@ if (triggerManual) {
   const reasons = [];
   if (flagged.length > 0) reasons.push(`${flagged.length} offre(s) flaguée(s) (écart/illisible/mots-clés)`);
   if (inconclusive.length > 0) reasons.push(`${inconclusive.length} offre(s) non concluante(s) (prix illisible — règle 9)`);
+  if (voyagePerime) reasons.push(`collectes Voyage vieilles de ${voyageAgeJours} j (seuil : ${VOYAGE_COLLECTE_MAX_AGE_DAYS} j) — relancer les collecteurs`);
   if (overdue) reasons.push(daysSinceFullPass === null
     ? `aucune passe complète manuelle enregistrée à ce jour`
     : `${daysSinceFullPass}j depuis dernière passe complète (seuil : ${DAYS_BEFORE_FORCED_FULL_PASS}j)`);
@@ -417,6 +477,26 @@ if (triggerManual) {
   lines.push("node scripts/_audit-catalog.mjs --mark-full-pass");
   lines.push("```");
   lines.push("pour remettre le compteur à zéro.");
+  lines.push("");
+}
+
+// Section Voyage : ce que le scan ne peut pas juger, et qui le juge à sa place.
+if (nonComparable.length) {
+  lines.push(`### VOYAGE — non comparable par ce scan (${nonComparable.length})`);
+  lines.push("");
+  lines.push(`> Ces offres partagent leur URL avec 7 à 9 autres forfaits, sur des pages`);
+  lines.push(`> à onglets qui n'en rendent qu'un à la fois. Un scan qui ne clique pas lit`);
+  lines.push(`> forcément un sous-ensemble : ses écarts seraient faux à presque tous les`);
+  lines.push(`> coups (280 le 19.08.2026, aucun réel). **Ce ne sont donc PAS des écarts,`);
+  lines.push(`> et ce ne sont pas non plus des vérifications.**`);
+  lines.push(`>`);
+  lines.push(`> L'instrument qui fait autorité ici est le collecteur, qui clique les`);
+  lines.push(`> onglets : \`scripts/collect-<fournisseur>.mjs\` → \`data/voyage-*.json\` →`);
+  lines.push(`> \`build-travel-data.mjs --inject\` (cf. VOYAGE-ESIM.md § 8).`);
+  lines.push("");
+  lines.push(voyageAgeJours === null
+    ? `- **Âge des collectes** : inconnu (aucun \`data/voyage-*.json\`)`
+    : `- **Âge des collectes** : ${voyageAgeJours} j${voyagePerime ? ` ⚠️ au-delà du seuil de ${VOYAGE_COLLECTE_MAX_AGE_DAYS} j — relancer` : ` (frais)`}`);
   lines.push("");
 }
 

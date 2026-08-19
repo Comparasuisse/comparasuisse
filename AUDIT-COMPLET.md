@@ -47,6 +47,23 @@ défaut : 07:00, rattrapage si PC éteint). À chaque run il :
 2. Charge chaque URL via Playwright headless (Chrome local).
 3. Extrait les prix visibles avec la même regex que `audit-random.mjs`
    (les fragments sont recollés — voir `scripts/lib/audit-lib.mjs`).
+
+   Quatre lectures se succèdent, chacune n'étant tentée que si la précédente a
+   échoué : `innerText` → **HTML rendu** → **animations Lottie** →
+   **composants déclarés** (`priceParts`). Un `PRE_CLICK_RECIPES` peut en
+   outre déplier un onglet ou un tableau avant lecture. Le rapport dit par
+   quelle voie chaque OK a été obtenu (ligne « OK obtenus par repli »).
+
+   ⚠️ **Piège d'architecture, corrigé le 19.08.2026.** Le scan ne charge
+   chaque URL qu'une fois (`getUrlSnapshot`) avec `price: null`, puis compare
+   hors ligne toutes les offres qui partagent cette URL. Or les replis de
+   `checkOffer` ne se déclenchent qu'**après** un échec de comparaison — que
+   ce chemin-là fait plus tard. Résultat : deux mécanismes livrés la veille
+   étaient invisibles ici, et le scan du matin rendait encore ÉCART sur
+   Galaxus et « prix inconnu » sur TeleKing. Le snapshot demande désormais ses
+   lectures de repli via `collectFallbacks: true`. **Toute nouvelle capacité
+   ajoutée à `checkOffer` doit être vérifiée sur CE chemin**, pas seulement
+   offre par offre : c'est lui qui tourne tous les matins.
 4. Compare le prix stocké au prix trouvé sur la page.
 5. **Flague explicitement** quatre types de cas ambigus :
    - **Prix inextractable** → `PAGE_VIDE` ou `NON_VÉRIFIABLE`
@@ -158,35 +175,53 @@ pwsh -File scripts\install-daily-audit-task.ps1 -Uninstall
   une nouvelle `const NAME = …` référencée dans les data arrays qui n'est
   pas dans `HELPER_CONST_NAMES` de `audit-lib.mjs`. L'ajouter là.
 
-### 6 bis. Les 13 flags structurels récurrents (état au 12.08.2026)
+### 6 bis. Les flags structurels récurrents (état au 19.08.2026 : il en reste 3)
 
-Après la passe exhaustive du 12.08.2026, le scan quotidien sort
-`OK=202, ÉCART=11, URL_MORTE=2`. **Les treize cas flagués ont tous été
-vérifiés à la main ce jour-là et sont tous corrects.** Ils reviendront
-pourtant identiques demain matin, parce que leur cause est structurelle.
+Ce tableau a longtemps compté **13 lignes** : treize cas vérifiés à la main,
+tous corrects, et qui revenaient identiques chaque matin parce que leur cause
+était structurelle. Le 19.08.2026, dix d'entre eux ont été supprimés — non pas
+classés, **supprimés** : l'outil sait désormais lire ce qu'il ne lisait pas.
 
-| Cas | Pourquoi le scan échoue | Comment vérifier |
+| Cas | Pourquoi le scan échouait | Ce qui l'a résolu |
 |---|---|---|
-| Wingo Red Swiss / Red / Red Pro | page produit affiche « Abo actuellement indisponible », sans prix | `expand-probe.mjs` sur `/fr/mobile`, cliquer « Afficher tous les produits » |
-| Wingo Internet Smart / Pro / Ultra | prix repliés derrière « Tous les abos Internet » | idem sur `/fr/internet` |
-| Salt Swiss XXL / Travel Max | HTTP 429 sur salt.ch, y compris depuis Playwright | navigateur réel (browser MCP) |
-| Mucho Swiss (+ sa promo) | seul 49.90 est écrit ; le prix remisé n'est nulle part en texte | badge « -70% » et « économisez CHF 420 par an » : 49.90 − 35 = 14.90 |
-| Green Internet Home | 25.00 vit dans un widget que `extractPrices` ne lit pas | `audit-probe.mjs`, lire le widget `promotiontimer` |
-| Teleboy Internet 1 Gbit/s + TV | 56.80 n'est le prix de personne : c'est 44.90 + 11.90 | vérifier les deux composants séparément |
-| Sunrise Swiss Travel | SPA : le scan capte 220.00 avant le rendu des cards | `audit-probe.mjs` trouve « dès 29.90 » |
+| Wingo Internet Smart / Pro / Ultra | prix repliés derrière « Afficher tous les produits » | recette de pré-clic (`PRE_CLICK_RECIPES`), avec repli en clic JS quand Playwright juge l'élément non actionnable |
+| Mucho Swiss (+ sa promo) | « CHF 14.90 » précédé de « réseau mobile N°1 » : le « 1 » captait le CHF et masquait le vrai prix | `PRICE_RE` regarde le marqueur suivant sans le consommer |
+| Green Internet Home | 25.00 absent de `innerText` | repli sur le HTML rendu |
+| Teleboy Internet 1 Gbit/s + TV | 56.80 n'est le prix de personne : c'est 44.90 + 11.90 | champ `priceParts` — le scan vérifie les composants |
+| Sunrise Swiss Travel | SPA : le scan lisait avant le rendu des cards | seconde lecture après 4 s avant de conclure `PAGE_VIDE` |
+| Salt (2 à 4 plans selon les jours) | HTTP 429 à la volée | rien à corriger : le 429 est temporaire, une revérification suffit |
+| Galaxus mobile / internet (5) | prix dessinés en animation Lottie | `readLottieNumbers` — l'animation nomme son nombre |
+| TeleKing (3) | `innerText` bloqué sur le bandeau cookies | repli sur le HTML rendu |
+| Mtel (5) | DOM Angular, prix hors `innerText` | repli sur le HTML rendu |
 
-**Ne PAS les mettre en whitelist NON_VÉRIFIABLE.** La tentation est forte —
-treize flags quotidiens qu'on sait faux entraînent à survoler le rapport. Mais
+**Ce qui reste — et qui est un vrai signal, pas du bruit :**
+
+| Cas | Pourquoi | Comment vérifier |
+|---|---|---|
+| Wingo Red Swiss / Red / Red Pro | la page produit affiche « Abo actuellement indisponible », sans prix ni bouton de commande | ouvrir la page : tant qu'elle dit indisponible, le flag est mérité — nos trois entrées portent `WINGO_RED_UNAVAILABLE_WARNING` |
+
+**Ne PAS mettre ces cas en whitelist NON_VÉRIFIABLE.** La tentation est forte —
+des flags quotidiens qu'on sait faux entraînent à survoler le rapport. Mais
 c'est exactement le mécanisme qui a laissé Salt Travel Max périmé dix jours :
 un cas classé « faux positif connu » cesse d'être lu, et le jour où le prix
-change vraiment, personne ne le voit. La whitelist n'est légitime que quand la
-page ne peut structurellement **jamais** livrer son prix — les prix dessinés
-en typographie de Galaxus, par exemple. Ici, le prix existe et reste
-vérifiable : c'est le scan qui n'y accède pas, pas l'information qui manque.
+change vraiment, personne ne le voit.
 
-Le bon usage de ce tableau : à chaque passe, retrouver ces treize lignes dans
-le rapport, appliquer la méthode indiquée, et **s'alarmer de tout flag qui ne
-figure pas ici** — c'est celui-là qui mérite l'attention.
+La leçon du 19.08 est plus forte encore : **ces treize « faux positifs
+structurels » n'étaient pas structurels du tout.** Neuf lignes sur treize
+tenaient à des limites de l'outil, pas des pages. Devant un flag récurrent, la
+bonne question n'est pas « comment le classer » mais « qu'est-ce que mon
+lecteur ne sait pas encore lire ».
+
+**Deux verdicts existent pour dire « je ne sais pas », et ils ne disent pas la
+même chose :**
+
+- `NON_VÉRIFIABLE` — pas de prix numérique chez nous, ou aucun prix lisible sur
+  la page. Règle 9 : ce n'est **pas** une vérification.
+- `NON_COMPARABLE` — l'offre relève d'un **autre instrument**, nommé dans le
+  rapport. Aujourd'hui : tout l'onglet Voyage, dont les pages fournisseurs
+  portent 7 à 9 forfaits derrière des onglets. Le scan n'y compare rien, mais
+  il surveille l'**âge des collectes** (seuil 3 j) et déclenche un audit si
+  elles vieillissent. Un angle mort surveillé n'est plus un angle mort.
 
 ### 7. Garde-fous de robustesse (post-incident 03.08.2026)
 
