@@ -32,6 +32,31 @@ Le script **`scripts/_audit-catalog.mjs`** est planifié par le Task Scheduler
 Windows (voir **`scripts/install-daily-audit-task.ps1`** pour l'installer,
 défaut : 07:00, rattrapage si PC éteint). À chaque run il :
 
+0. **Contrôle prioritaire des deadlines promo** (ajouté le 19.08.2026, avant
+   tout chargement de page). Toute offre dont la fenêtre `from`/`to` est
+   close est listée en tête du rapport et déclenche l'audit à elle seule. Un
+   préavis liste aussi les fenêtres qui se ferment sous 48 h.
+
+   Pourquoi en premier, et pourquoi seul ce contrôle suffit à déclencher : une
+   deadline dépassée est le **seul défaut que le visiteur voit de ses propres
+   yeux**. La carte affiche « ⏱ Probablement expirée le … — vérifie sur le
+   site », c'est-à-dire un aveu d'ignorance signé. Un prix faux, lui, est
+   invisible. Le 19.08.2026, quinze promos portaient ce bandeau, l'une depuis
+   sept jours — et **les quinze étaient valables**, simplement reconduites à
+   une date que personne n'était allé relire (GoMo et Post Mobile au 24.08,
+   Mucho au 24.08 11:59, Salt au 24.08, Sky Europe+ au 31.08, spusu au 27.08).
+
+   Le contrôle ne charge aucune page : il compare nos propres dates à l'heure
+   courante, avec la même fonction `endOfDayLocal` que l'affichage — donc sans
+   jamais signaler une expiration que le visiteur ne verrait pas. Il tourne
+   aussi en `--dry-run` (`node scripts/_audit-catalog.mjs --dry-run`, réponse
+   immédiate) et survit à un plantage de navigateur à la 200e URL.
+
+   **Règle : aucune promo ne doit porter ce bandeau plus de 24 h.** Le scan
+   tournant chaque matin, toute deadline franchie dans la nuit est signalée le
+   lendemain. Deux issues, tranchées en ouvrant la page de l'opérateur — promo
+   terminée : retirer `promo`, `beforePrice`, `promoNote` et la fenêtre, et
+   revenir au prix catalogue ; promo reconduite : mettre `to` à jour.
 1. Parcourt **toutes les offres** du catalogue qui ont une `url` (696 offres,
    311 URLs uniques au 17.08.2026). La liste des catégories est **dérivée de
    `loadData()`**, jamais codée en dur : toute catégorie ajoutée au catalogue

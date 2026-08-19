@@ -30,7 +30,7 @@
 import { chromium } from "playwright-core";
 import fs from "node:fs";
 import path from "node:path";
-import { loadData, checkOffer, detectSuspiciousKeywords } from "./lib/audit-lib.mjs";
+import { loadData, checkOffer, detectSuspiciousKeywords, promosExpirees, promosQuiExpirentBientot, endOfDayLocal } from "./lib/audit-lib.mjs";
 
 const CHROME_PATH =
   process.env.CHROME_PATH ||
@@ -195,6 +195,33 @@ for (const cat of CATS) {
 // une seule requête HTTP par URL — les résultats sont ensuite ventilés.
 const uniqueUrls = [...new Set(pool.map(o => o.url))];
 console.log(`▶ Audit daily : ${pool.length} offres (${uniqueUrls.length} URLs uniques) sur ${CATS.join("+")}`);
+
+// === Contrôle prioritaire : deadlines promo dépassées ===
+// Il ne coûte RIEN — aucune page à charger, tout est dans nos données — et il
+// répond à la question la plus urgente du matin : « affiche-t-on en ce moment
+// un bandeau "probablement expirée" à un visiteur ? ». Placé avant Playwright,
+// il s'exécute donc aussi en --dry-run, et il n'est jamais victime d'un
+// plantage de navigateur à la 200e URL.
+//
+// Pourquoi c'est prioritaire : une deadline dépassée est le seul cas où notre
+// page affiche d'elle-même un aveu d'incertitude au visiteur. Un prix faux est
+// invisible ; un bandeau « probablement expirée » se voit, et se voit d'autant
+// plus qu'il traîne. Le 19.08.2026, quinze promos le portaient, certaines
+// depuis sept jours — et TOUTES étaient en réalité valables, simplement
+// reconduites à une date que personne n'était allé relire.
+const promosPerimees = promosExpirees(pool);
+const promosBientot = promosQuiExpirentBientot(pool);
+if (promosPerimees.length) {
+  console.log(`\n⏱ ${promosPerimees.length} promo(s) avec deadline DÉPASSÉE — bandeau « probablement expirée » visible :`);
+  for (const p of promosPerimees) {
+    console.log(`   [${p.joursDepuis} j] ${p.operator ? p.operator + " — " : ""}${p.name} (fin ${p.to}) → ${p.url}`);
+  }
+} else {
+  console.log("⏱ Aucune deadline promo dépassée.");
+}
+if (promosBientot.length) {
+  console.log(`⏳ ${promosBientot.length} promo(s) expirent dans moins de 48 h.`);
+}
 
 if (DRY) {
   console.log("(dry-run — pas de Playwright, exit)");
@@ -420,7 +447,7 @@ try {
 } catch {}
 const voyagePerime = nonComparable.length > 0 && voyageAgeJours !== null && voyageAgeJours > VOYAGE_COLLECTE_MAX_AGE_DAYS;
 
-const triggerManual = flagged.length > 0 || inconclusive.length > 0 || overdue || voyagePerime;
+const triggerManual = flagged.length > 0 || inconclusive.length > 0 || overdue || voyagePerime || promosPerimees.length > 0;
 
 // === Rapport markdown ===
 const lines = [];
@@ -465,6 +492,7 @@ if (triggerManual) {
   const reasons = [];
   if (flagged.length > 0) reasons.push(`${flagged.length} offre(s) flaguée(s) (écart/illisible/mots-clés)`);
   if (inconclusive.length > 0) reasons.push(`${inconclusive.length} offre(s) non concluante(s) (prix illisible — règle 9)`);
+  if (promosPerimees.length) reasons.push(`${promosPerimees.length} promo(s) affichent « probablement expirée » — à revérifier en priorité`);
   if (voyagePerime) reasons.push(`collectes Voyage vieilles de ${voyageAgeJours} j (seuil : ${VOYAGE_COLLECTE_MAX_AGE_DAYS} j) — relancer les collecteurs`);
   if (overdue) reasons.push(daysSinceFullPass === null
     ? `aucune passe complète manuelle enregistrée à ce jour`
@@ -477,6 +505,40 @@ if (triggerManual) {
   lines.push("node scripts/_audit-catalog.mjs --mark-full-pass");
   lines.push("```");
   lines.push("pour remettre le compteur à zéro.");
+  lines.push("");
+}
+
+// Section deadlines : en tête, parce que c'est le seul défaut que le visiteur
+// voit de ses propres yeux sur le site.
+if (promosPerimees.length) {
+  lines.push(`### ⏱ DEADLINES PROMO DÉPASSÉES (${promosPerimees.length}) — À TRAITER EN PREMIER`);
+  lines.push("");
+  lines.push(`> Ces offres affichent **en ce moment** un bandeau « ⏱ Probablement expirée`);
+  lines.push(`> le … — vérifie sur le site » sur comparasuisse.ch. Deux issues possibles,`);
+  lines.push(`> et une seule se tranche en ouvrant la page de l'opérateur :`);
+  lines.push(`>`);
+  lines.push(`> - la promo est **terminée** → retirer \`promo\`, \`beforePrice\`,`);
+  lines.push(`>   \`promoNote\` et la fenêtre \`from\`/\`to\`, et revenir au prix catalogue ;`);
+  lines.push(`> - la promo est **reconduite** → mettre à jour \`to\` avec la nouvelle date.`);
+  lines.push(`>`);
+  lines.push(`> Aucune ne doit rester ici plus de 24 h : le bandeau dit au visiteur que`);
+  lines.push(`> nous ne savons pas, et c'est le seul endroit du site qui l'avoue.`);
+  lines.push("");
+  for (const p of promosPerimees) {
+    lines.push(`- **[${p.joursDepuis} j] ${p.operator ? p.operator + " — " : ""}${p.name}** — fin annoncée \`${p.to}\``);
+    lines.push(`  - URL : ${p.url}`);
+    if (typeof p.price === "number") lines.push(`  - Prix promo affiché chez nous : CHF ${p.price.toFixed(2)}`);
+  }
+  lines.push("");
+}
+if (promosBientot.length) {
+  lines.push(`### ⏳ Fenêtres promo qui se ferment sous 48 h (${promosBientot.length})`);
+  lines.push("");
+  lines.push(`> Préavis, pas alerte : les revérifier maintenant évite le bandeau demain.`);
+  lines.push("");
+  for (const p of promosBientot) {
+    lines.push(`- **${p.operator ? p.operator + " — " : ""}${p.name}** — fin \`${p.to}\` → ${p.url}`);
+  }
   lines.push("");
 }
 

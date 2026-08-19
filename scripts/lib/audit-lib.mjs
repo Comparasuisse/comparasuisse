@@ -476,6 +476,55 @@ export function loadData() {
   };
 }
 
+// === Fenêtres promo : la même lecture des dates que l'affichage ===
+// index.html décide d'afficher « ⏱ Probablement expirée » avec endOfDayLocal :
+// une promo « jusqu'au 17.08 » vaut jusqu'au 17.08 à 23:59:59, et une date
+// portant une heure (« 2026-08-24T11:59:59 », compte à rebours Mucho) vaut à
+// la seconde près. Le scan doit lire ces dates EXACTEMENT comme la page, sinon
+// il signalerait des expirations que le visiteur ne voit pas, ou l'inverse.
+// Duplication assumée et documentée : index.html est un fichier statique sans
+// build, il ne peut pas importer ce module.
+export function endOfDayLocal(s) {
+  if (s.includes("T")) {
+    const [datePart, timePart] = s.split("T");
+    const [y, m, d] = datePart.split("-").map(Number);
+    const [hh, mm, ss] = timePart.split(":").map(Number);
+    return new Date(y, m - 1, d, hh || 0, mm || 0, ss || 0, 0);
+  }
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d, 23, 59, 59, 999);
+}
+
+// Offres dont la fenêtre promo est CLOSE : le visiteur voit déjà le bandeau
+// « Probablement expirée ». Chacune est soit une promo réellement terminée
+// (il faut retirer le badge et revenir au prix catalogue), soit — bien plus
+// souvent — une promo reconduite dont nous n'avons pas vu la nouvelle date.
+// Le 19.08.2026, les quinze offres concernées étaient dans le second cas :
+// quinze prix promotionnels toujours affichés, et jusqu'à sept jours de
+// bandeau « expirée » à tort sur des offres parfaitement valables.
+export function promosExpirees(offres, maintenant = new Date()) {
+  return offres
+    .filter((o) => o.from && o.to && maintenant > endOfDayLocal(o.to))
+    .map((o) => ({
+      ...o,
+      joursDepuis: Math.floor((maintenant - endOfDayLocal(o.to)) / 86400000),
+    }))
+    .sort((a, b) => b.joursDepuis - a.joursDepuis);
+}
+
+// Fenêtres qui se ferment dans les prochaines 48 h : pas une alerte, un
+// préavis. Elles deviendront des bandeaux « expirée » au prochain run si
+// personne ne les revérifie d'ici là.
+export function promosQuiExpirentBientot(offres, heures = 48, maintenant = new Date()) {
+  return offres
+    .filter((o) => {
+      if (!o.from || !o.to) return false;
+      const fin = endOfDayLocal(o.to);
+      return fin > maintenant && fin - maintenant <= heures * 3600000;
+    })
+    .sort((a, b) => endOfDayLocal(a.to) - endOfDayLocal(b.to));
+}
+
 // === Vérification live d'une offre via Playwright ===
 // Retourne un objet { status, ...détails } :
 //   - OK              : prix stocké trouvé sur la page
