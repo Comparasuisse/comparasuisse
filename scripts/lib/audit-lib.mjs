@@ -375,12 +375,17 @@ export async function readRenderedHtmlPrices(page) {
 // On garde tout de même la lecture performance en complément, pour les
 // appelants qui n'écoutent pas les requêtes.
 export async function readLottieNumbers(page, urlsObservees = []) {
-  for (let essai = 0; essai < 2; essai++) {
-    const trouve = await lireNombresLottie(page, urlsObservees);
-    if (trouve.length) return trouve;
-    if (essai === 0) await page.waitForTimeout(1500).catch(() => {});
-  }
-  return [];
+  const premier = await lireNombresLottie(page, urlsObservees);
+  if (premier.nombres.length) return premier.nombres;
+  // Seconde tentative UNIQUEMENT si la page annonce des nombres dans son DOM
+  // sans que la ressource correspondante soit encore arrivée. Attendre sur une
+  // page qui n'a aucun Lottie, c'était payer 1,5 s sur chacune des ~390 URLs
+  // du catalogue pour un cas qui n'en concerne que deux (bourde introduite et
+  // corrigée le 19.08.2026, après un run alourdi de plusieurs minutes).
+  if (!premier.dom.size) return [];
+  await page.waitForTimeout(1500).catch(() => {});
+  const second = await lireNombresLottie(page, urlsObservees);
+  return second.nombres;
 }
 
 async function lireNombresLottie(page, urlsObservees = []) {
@@ -397,7 +402,7 @@ async function lireNombresLottie(page, urlsObservees = []) {
       return { dom, res };
     })
     .catch(() => null);
-  if (!tokens) return [];
+  if (!tokens) return { nombres: [], dom: new Set() };
   const nombres = (str) => {
     // Le tiret bas fait partie des caractères de mot : sans cette normalisation,
     // "data-19_neu.json" ne livre pas son 19, faute de frontière de mot après le
@@ -417,7 +422,10 @@ async function lireNombresLottie(page, urlsObservees = []) {
   };
   const dom = nombres(tokens.dom);
   const res = nombres(tokens.res + " " + urlsObservees.filter((u) => /lottie/i.test(u)).join(" "));
-  return [...dom].filter((n) => res.has(n)).sort((a, b) => parseFloat(a) - parseFloat(b));
+  return {
+    nombres: [...dom].filter((n) => res.has(n)).sort((a, b) => parseFloat(a) - parseFloat(b)),
+    dom,
+  };
 }
 
 // === Chargement des données depuis index.html ===
@@ -557,7 +565,16 @@ export async function checkOffer(ctx, item, opts = {}) {
   const recette = preClickRecipeFor(item.url);
   const hardTimeout = (opts.hardTimeout || 20000) + (recette ? 12000 : 0);
 
-  const page = await ctx.newPage();
+  // ctx.newPage() est la seule étape qui s'exécutait HORS de toute borne de
+  // temps : le Promise.race du hardTimeout n'est armé qu'après. Sur un contexte
+  // saturé, Playwright peut ne jamais rendre la main ici — c'est ce qui a figé
+  // le run du 19.08.2026 pendant 39 minutes sur une seule offre, sans qu'aucun
+  // garde-fou ne se déclenche (le watchdog global, lui, est à 3 h).
+  const page = await Promise.race([
+    ctx.newPage(),
+    new Promise((resolve) => setTimeout(() => resolve(null), 15000)),
+  ]);
+  if (!page) return { status: "ERREUR", error: "ctx.newPage() n'a pas rendu la main en 15 s (contexte Playwright saturé)" };
   // Trace des ressources d'animation demandées par la page. Écoutée dès la
   // création, donc complète et insensible au plafond du tampon performance.
   const requetesLottie = [];
@@ -621,6 +638,18 @@ export async function checkOffer(ctx, item, opts = {}) {
       // encore ouverte, à charge pour l'appelant de ne s'en servir qu'en
       // dernier recours — l'ordre de préséance reste celui du chemin par offre.
       if (opts.collectFallbacks) {
+        // Les replis coûtent cher (page.content() sur des pages à 1 Mo, plus
+        // une évaluation DOM) et n'ont d'intérêt que si la lecture normale a
+        // manqué quelque chose. L'appelant nous dit quels prix il cherchera
+        // pour cette URL : si le texte les contient déjà tous, on ne paie rien.
+        // Sans ce filtre, le scan payait les deux replis sur les ~390 URLs du
+        // catalogue au lieu de la poignée qui en a besoin — et c'est ce
+        // surcoût qui a fait dérailler le run du 19.08.2026.
+        const attendus = Array.isArray(opts.expectedPrices) ? opts.expectedPrices : null;
+        const toutTrouve = attendus && attendus.length > 0 && attendus.every((p) => pricesOnPage.includes(p));
+        if (toutTrouve) {
+          return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, text };
+        }
         const pricesHtml = await readRenderedHtmlPrices(page);
         const pricesLottie = await readLottieNumbers(page, requetesLottie);
         return { status: "NON_VÉRIFIABLE", raison: "prix inclus/à partir de", pricesOnPage, pricesHtml, pricesLottie, text };

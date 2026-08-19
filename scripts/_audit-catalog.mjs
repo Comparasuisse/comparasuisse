@@ -275,6 +275,17 @@ let { br: browser, c: ctx } = await launchBrowser();
 // la page qu'une fois. Économie de temps significative sur les gros opérateurs.
 const urlCache = new Map(); // url → { text, pricesOnPage, httpStatus, ... }
 
+// Prix attendus par URL : permet à checkOffer de ne payer ses lectures de
+// repli que lorsque la lecture normale n'a pas déjà tout trouvé.
+const prixAttendusParUrl = new Map();
+for (const item of pool) {
+  if (typeof item.price !== "number" || item.price <= 0) continue;
+  const liste = prixAttendusParUrl.get(item.url) || [];
+  const val = item.price.toFixed(2);
+  if (!liste.includes(val)) liste.push(val);
+  prixAttendusParUrl.set(item.url, liste);
+}
+
 async function getUrlSnapshot(url) {
   if (urlCache.has(url)) return urlCache.get(url);
   // fabrique un "item stub" avec url + price=null pour forcer NON_VÉRIFIABLE
@@ -285,7 +296,11 @@ async function getUrlSnapshot(url) {
   // audit-lib.mjs, qui ne se déclenchent qu'après un échec de comparaison —
   // comparaison que ce chemin fait hors ligne, plus tard. Cf. commentaire dans
   // checkOffer.
-  const snap = await checkOffer(ctx, { url, price: null }, { waitAfter: 1500, collectFallbacks: true });
+  const snap = await checkOffer(ctx, { url, price: null }, {
+    waitAfter: 1500,
+    collectFallbacks: true,
+    expectedPrices: prixAttendusParUrl.get(url) || [],
+  });
   urlCache.set(url, snap);
   return snap;
 }
