@@ -52,16 +52,35 @@ const LOCK_PATH = "scripts/daily-audit.lock";
 // Promise.race interne ne libère le processus (le hard timeout logiciel
 // a bien fired mais le browser.close() final a hangé indéfiniment).
 // Relevé à 180 min le 17.08.2026 : le périmètre est passé de 193 à 311 URLs
-// uniques (ajout de travel/prepaid/dataOnly au scan). Mesuré sur le run du
-// 17.08 : ~10 s par offre à URL distincte, soit ~2 h pour le catalogue complet.
-// À 30 comme à 60 min, le watchdog coupait un run parfaitement sain aux deux
-// tiers — et comme les catégories sont parcourues dans l'ordre de loadData(),
-// c'est précisément travel/prepaid/dataOnly, en fin de liste, qui sautaient.
-// Un watchdog qui tronque un run sain rétablit exactement l'angle mort qu'on
-// venait de corriger, en pire : le rapport se termine normalement, sans rien
-// signaler. Cette borne est là pour les hangs pathologiques (incident yallo du
-// 07.08, 25 h bloqué), pas pour plafonner une durée légitime.
-const MAX_TOTAL_RUN_TIME_MS = 180 * 60 * 1000;
+// uniques (ajout de travel/prepaid/dataOnly au scan).
+//
+// Historique du seuil, et pourquoi il redescend le 21.08.2026 :
+//   30 min  → coupait des runs sains aux deux tiers. Comme les catégories sont
+//             parcourues dans l'ordre de loadData(), c'est toujours la fin de
+//             liste — travel/prepaid/dataOnly — qui sautait, et le rapport se
+//             terminait normalement sans signaler l'amputation. Un watchdog qui
+//             tronque un run sain rétablit l'angle mort qu'on venait de
+//             corriger, en pire : silencieusement.
+//   180 min → réaction à ce problème, mais surdimensionnée : un vrai blocage
+//             pouvait tourner trois heures avant d'être coupé.
+//   60 min  → valeur actuelle, choisie sur MESURE et non sur intuition.
+//
+// Ce que disent les mesures (catalogue de 1058 offres, 390 URLs uniques) :
+//   17.08 : 23 min · 18.08 : 30 min · 19.08 : 57 min (avant l'allègement des
+//   replis) · 21.08 : **33 min**, run complet chronométré après correction.
+// Le budget est donc à peu près au double du temps réel : assez pour absorber
+// un réseau lent ou une poignée de pages capricieuses, sans jamais laisser
+// traîner un run mort.
+//
+// Deux choses rendent cette baisse sûre, qui n'existaient pas avant :
+//   1. le budget se compte en temps ÉVEILLÉ (cf. superviseur plus bas). Les
+//      minutes de veille moderne — nombreuses sur cette machine — ne le
+//      consomment plus. C'est ce qui interdisait de baisser le plafond : il
+//      mesurait du sommeil autant que du travail.
+//   2. ce plafond n'est plus le mécanisme qui attrape les blocages. Le
+//      watchdog de progression (MAX_STALL_MS) tue un run figé en 6 minutes,
+//      là où le plafond, par nature, attendait la fin du budget.
+const MAX_TOTAL_RUN_TIME_MS = 60 * 60 * 1000;
 // Watchdog de PROGRESSION, ajouté le 19.08.2026. Le plafond ci-dessus borne la
 // durée TOTALE ; il ne dit rien d'un run vivant mais figé. Le 19.08, un run est
 // resté 39 minutes sur une seule offre : sous les 3 h, donc invisible pour le
@@ -97,6 +116,16 @@ const MAX_RUNS_KEPT_IN_LOG = 7;
 // etc.) ne doit pas se voir marcher dessus par un nouveau run. Cf. incident
 // 03.08.2026 : plusieurs runs empilés sur le même daily-audit-log.md car les
 // runs précédents hanguaient jusqu'à 82 min sans jamais terminer.
+// Vrai tant que CE process est propriétaire du fichier de lock. Sans ce
+// drapeau, releaseLock() s'exécutait au exit de n'importe quel process — y
+// compris celui qui vient de REFUSER de démarrer parce que le lock était pris.
+// Autrement dit : la deuxième instance supprimait le verrou de la première en
+// partant, et la troisième pouvait alors démarrer en parallèle. Le mécanisme
+// anti-empilement se désarmait tout seul à la première collision.
+// Constaté le 21.08.2026 : un run manuel refusé (exit 75) a effacé le lock du
+// run planifié en cours, qui a continué sans protection.
+let lockOwned = false;
+
 function acquireLock() {
   if (fs.existsSync(LOCK_PATH)) {
     let staleLock = false;
@@ -106,11 +135,20 @@ function acquireLock() {
       // process existe, throw sinon.
       try { process.kill(raw.pid, 0); }
       catch { staleLock = true; }
-      // Sécurité : un lock de plus de 90 min est forcément mort (ExecutionTimeLimit
-      // Task Scheduler = 1h, donc au-delà on est en zombie).
-      if (!staleLock && raw.startedAt) {
+      // L'ÂGE ne suffit plus à déclarer un lock mort. La règle « plus de 90 min
+      // = zombie » datait d'un catalogue de 300 offres ; un run complet en
+      // demande aujourd'hui près d'une heure, et davantage si la machine passe
+      // en veille au milieu. Un run sain se faisait donc doubler par le suivant,
+      // ce qui empile deux Chrome et sature le contexte — précisément la panne
+      // que le lock existe pour empêcher.
+      // Un PID vivant fait désormais autorité : le run est protégé tant qu'il
+      // respire. Ce n'est sûr que parce que le superviseur le tue lui-même s'il
+      // se fige (exit 125) ou s'il dépasse son budget éveillé (exit 124) — donc
+      // un PID vivant ne peut plus rester vivant indéfiniment.
+      // L'âge ne sert plus que de garde-fou quand le PID est inexploitable.
+      if (!staleLock && !raw.pid && raw.startedAt) {
         const ageMs = Date.now() - new Date(raw.startedAt).getTime();
-        if (ageMs > 90 * 60 * 1000) staleLock = true;
+        if (ageMs > 4 * 60 * 60 * 1000) staleLock = true;
       }
       if (!staleLock) {
         console.error(`⛔ Un run est déjà en cours (PID ${raw.pid} depuis ${raw.startedAt}). Exit.`);
@@ -123,8 +161,18 @@ function acquireLock() {
     try { fs.unlinkSync(LOCK_PATH); } catch {}
   }
   fs.writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }));
+  lockOwned = true;
 }
 function releaseLock() {
+  if (!lockOwned) return;
+  // Double sécurité : on relit le contenu avant de supprimer. Si le fichier
+  // porte un autre PID, c'est qu'un run plus récent l'a repris (par exemple
+  // après que le nôtre a été jugé zombie) — le lui retirer ferait exactement
+  // le dégât qu'on cherche à éviter.
+  try {
+    const raw = JSON.parse(fs.readFileSync(LOCK_PATH, "utf8"));
+    if (raw.pid !== process.pid) return;
+  } catch { /* lock absent ou illisible : la tentative de suppression ci-dessous est sans risque */ }
   try { fs.unlinkSync(LOCK_PATH); } catch {}
 }
 process.on("exit", releaseLock);
@@ -164,43 +212,79 @@ const DRY = flag("dry-run");
 // passer sans lock (inventaire seul).
 if (!DRY) acquireLock();
 
-// === Watchdog processus ===
-// Ce setTimeout tourne indépendamment de la boucle event Node : si tout le
-// reste hangue (page.goto qui ne rend jamais la main, browser.close() qui
-// bloque sur un contexte saturé, socket TCP mort qui n'est jamais fermé
-// côté Chrome), ce timer fait sortir le processus manu militari.
-// process.exit(124) = code Unix "command exited due to timeout" — le
-// script cron peut le distinguer d'un exit propre (0) ou d'une erreur (1).
-if (!DRY) {
-  const watchdog = setTimeout(() => {
-    console.error(`\n⏰⏰⏰ WATCHDOG : run > ${MAX_TOTAL_RUN_TIME_MS/1000}s, kill forcé du processus.`);
-    // Libère le lock file explicitement avant d'exit — process.on('exit') ne
-    // s'exécute pas toujours quand le processus est tué violemment.
-    try { fs.unlinkSync(LOCK_PATH); } catch {}
-    process.exit(124);
-  }, MAX_TOTAL_RUN_TIME_MS);
-  // .unref() : ne bloque pas la sortie propre du processus quand le script
-  // finit normalement avant le timeout (sinon Node attendrait 30 min).
-  watchdog.unref();
+// === Superviseur du run : temps ÉVEILLÉ, pas temps écoulé ===
+// Un seul battement de 30 s remplace les deux watchdogs à setTimeout. Motif,
+// découvert le 21.08.2026 en cherchant pourquoi deux runs avaient « gelé » :
+// **cette machine est en veille moderne (Modern Standby) une bonne partie du
+// temps.** Journal système à l'appui — événements Kernel-Power 507 « le système
+// quitte le mode de veille moderne » à 13:24, 14:19, 14:34, 14:54 et 16:37 le
+// 19.08, puis plus rien jusqu'au 21.08 à 02:34. Les runs n'étaient pas bloqués :
+// ils dormaient. Une offre a même été journalisée « TIMEOUT (6140146ms) », soit
+// 102 minutes, alors que son hard timeout est de 20 s — le compteur mesurait du
+// sommeil, pas du travail.
+//
+// Conséquence de méthode : un watchdog à setTimeout ne peut PAS faire la
+// différence entre un run bloqué et un run endormi, puisque ses propres timers
+// ne tournent pas non plus pendant la veille. Il ne se réveille qu'au retour de
+// la machine, constate un temps énorme, et tue un run parfaitement sain. C'est
+// exactement ce qui s'est produit : le plafond de 180 min a coupé au réveil.
+//
+// D'où ce superviseur. Il bat toutes les 30 s et regarde SON PROPRE retard :
+//   - un battement à l'heure = le process est planifié normalement → ce temps
+//     compte, et l'absence de progression pendant ce temps est suspecte ;
+//   - un battement très en retard = personne ne nous a exécutés → la machine
+//     dormait → ce temps ne compte pour rien et ne reproche rien au run.
+// Les deux plafonds portent donc sur du temps éveillé, seule mesure qui parle
+// du travail réellement effectué.
+const TICK_MS = 30 * 1000;
+let tempsEveilleMs = 0;
+let sommeilCumuleMs = 0;
+let ticksSansProgres = 0;
+let progresDepuisTick = true;
+let dernierTick = Date.now();
+
+function touchProgress() {
+  progresDepuisTick = true;
 }
 
-// Armé ici, rearmé après chaque offre par touchProgress(). Si aucune offre ne
-// se termine pendant MAX_STALL_MS, le run est figé : on le tue.
-// exit 125 (distinct du 124 du plafond global) pour que le log dise LEQUEL des
-// deux garde-fous a parlé.
-let stallTimer = null;
-function touchProgress() {
-  if (DRY) return;
-  if (stallTimer) clearTimeout(stallTimer);
-  stallTimer = setTimeout(() => {
-    console.error(`\n⏰ WATCHDOG PROGRESSION : aucune offre terminée depuis ${MAX_STALL_MS / 60000} min — run figé, kill forcé.`);
-    console.error("   (cause typique : contexte Playwright saturé ; cf. commentaire de MAX_STALL_MS)");
-    try { fs.unlinkSync(LOCK_PATH); } catch {}
-    process.exit(125);
-  }, MAX_STALL_MS);
-  stallTimer.unref();
+function tuer(code, message) {
+  console.error(`\n${message}`);
+  console.error(`   temps éveillé : ${Math.round(tempsEveilleMs / 60000)} min · veille cumulée : ${Math.round(sommeilCumuleMs / 60000)} min`);
+  // Libère le lock explicitement : process.on('exit') ne s'exécute pas toujours.
+  releaseLock();
+  process.exit(code);
 }
-touchProgress();
+
+if (!DRY) {
+  const superviseur = setInterval(() => {
+    const maintenant = Date.now();
+    const ecoule = maintenant - dernierTick;
+    dernierTick = maintenant;
+
+    // Battement en retard de plus du triple : le process n'a pas été planifié.
+    // C'est de la veille (ou une suspension), pas du travail.
+    if (ecoule > TICK_MS * 3) {
+      sommeilCumuleMs += ecoule;
+      ticksSansProgres = 0;
+      progresDepuisTick = true;
+      console.warn(`  ⏸ reprise après ${Math.round(ecoule / 60000)} min d'inactivité système (veille) — non décomptées du budget.`);
+      return;
+    }
+
+    tempsEveilleMs += ecoule;
+    ticksSansProgres = progresDepuisTick ? 0 : ticksSansProgres + 1;
+    progresDepuisTick = false;
+
+    if (ticksSansProgres * TICK_MS >= MAX_STALL_MS) {
+      tuer(125, `⏰ WATCHDOG PROGRESSION : aucune offre terminée depuis ${MAX_STALL_MS / 60000} min de fonctionnement réel — run figé.`);
+    }
+    if (tempsEveilleMs >= MAX_TOTAL_RUN_TIME_MS) {
+      tuer(124, `⏰⏰⏰ WATCHDOG : ${Math.round(MAX_TOTAL_RUN_TIME_MS / 60000)} min de temps éveillé dépassées, kill forcé.`);
+    }
+  }, TICK_MS);
+  // .unref() : ne retient pas le process quand le run se termine normalement.
+  superviseur.unref();
+}
 
 // === Chargement des offres ===
 const data = loadData();
@@ -431,7 +515,6 @@ for (const item of subset) {
   results.push({ item, verdict, ms });
   touchProgress();
 }
-if (stallTimer) clearTimeout(stallTimer);
 
 await hardCloseBrowser(browser);
 
@@ -705,6 +788,7 @@ state.runs = state.runs.slice(0, 30); // 30 derniers runs
 saveState(state);
 
 console.log("");
+console.log(`   Durée : ${Math.round(tempsEveilleMs / 60000)} min de temps éveillé${sommeilCumuleMs > 0 ? ` (+ ${Math.round(sommeilCumuleMs / 60000)} min de veille système, hors budget)` : ""}`);
 console.log(`✅ Rapport écrit dans ${LOG_PATH}`);
 console.log(`   Résumé : ${Object.entries(counts).filter(([, v]) => v > 0).map(([k, v]) => `${k}=${v}`).join(", ")}`);
 console.log(`   Mots-clés suspects : ${withKeywords.length}`);
