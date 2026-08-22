@@ -108,6 +108,7 @@ function blocTableau(nom) {
 const DECLARATIONS = [...html.matchAll(/^const ([A-Z][A-Z0-9_]{1,})\s*=\s*[^\n;]+;$/gm)]
   .map((m) => ({ nom: m[1], decl: m[0] }));
 
+const FICHIERS_CATALOGUE = new Set();
 const BLOCS = {};
 const URLS_CATALOGUE = {};
 const COMPTES = {};
@@ -128,7 +129,22 @@ for (const [tab, nom] of Object.entries(CATALOGUE_TABLEAUX)) {
     fs.writeFileSync(path.join(DOSSIER_CATALOGUE, fichier), contenu);
   }
   URLS_CATALOGUE[tab] = `/${DOSSIER_CATALOGUE}/${fichier}`;
+  FICHIERS_CATALOGUE.add(fichier);
   COMPTES[tab] = chargerTableau(nom).length;
+}
+
+// Ménage : les noms portent une empreinte, donc chaque changement de prix crée
+// un fichier de plus et laisse le précédent derrière lui. Sur Netlify le
+// problème n'existe pas — chaque build part d'un clone neuf — mais en local le
+// dossier accumule, et un déploiement fait depuis un poste publierait des
+// catalogues périmés à côté des bons. On retire ce qui n'appartient pas au
+// build courant.
+if (!CHECK && fs.existsSync(DOSSIER_CATALOGUE)) {
+  for (const nom of fs.readdirSync(DOSSIER_CATALOGUE)) {
+    if (!/^catalogue-.*\.js$/.test(nom) || FICHIERS_CATALOGUE.has(nom)) continue;
+    fs.rmSync(path.join(DOSSIER_CATALOGUE, nom));
+    console.log(`   ⌫ ${nom} (empreinte périmée)`);
+  }
 }
 
 // Catégories servies d'emblée à chaque page. Le reste se charge à l'ouverture
@@ -170,7 +186,7 @@ function catalogueDeLaPage(corps, tab) {
     // Ailleurs que dans sa propre déclaration et dans les tableaux ? on la garde.
     const total = (corps.match(motif) || []).length;
     if (total > 1) continue;
-    corps = corps.replace(d.decl + "\n", "").replace(d.decl, "");
+    corps = corps.replace(d.decl + "\r\n", "").replace(d.decl + "\n", "").replace(d.decl, "");
   }
 
   const balises = immediates.map((c) => `<script src="${URLS_CATALOGUE[c]}"></script>`).join("\n");
@@ -190,8 +206,14 @@ function catalogueDeLaPage(corps, tab) {
     "<script>" + vides + "window.CATALOGUE_URLS=" + JSON.stringify(URLS_CATALOGUE) +
     ";window.CATALOGUE_COUNTS=" + JSON.stringify(COMPTES) + ";</script>";
 
-  const ancre = corps.indexOf("<script>\n// Notes d'avertissement partagées");
-  if (ancre === -1) throw new Error("script principal introuvable — le catalogue ne peut pas être placé avant lui");
+  // Repère du script principal, insensible aux fins de ligne : git checkout
+  // restitue index.html en CRLF sur Windows (core.autocrlf), et une ancre écrite
+  // en \n n'y correspond plus. Netlify, sous Linux, n'a jamais vu le problème —
+  // c'est le genre de fragilité qui ne casse qu'en local et fait douter du build
+  // de production sans raison.
+  const trouve = corps.match(/<script>\r?\n\/\/ Notes d'avertissement partagées/);
+  if (!trouve) throw new Error("script principal introuvable — le catalogue ne peut pas être placé avant lui");
+  const ancre = trouve.index;
   return corps.slice(0, ancre) + config + "\n" + balises + "\n" + corps.slice(ancre);
 }
 
