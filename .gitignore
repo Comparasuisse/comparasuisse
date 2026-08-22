@@ -27,6 +27,12 @@ scripts/daily-audit.lock
 # Logs générés par les scripts de vérification (full-run-verify.log, etc.)
 scripts/*.log
 
+# Catalogue découpé par catégorie — généré au déploiement par
+# scripts/build-route-pages.mjs, au même titre que les pages de route. Le nom
+# porte une empreinte du contenu, donc chaque passe d'audit en produirait de
+# nouveaux fichiers : les commiter remplirait le dépôt de doublons horodatés.
+data/catalogue-*.js
+
 # Prérendu par route — généré au déploiement par scripts/build-route-pages.mjs
 # (cf. netlify.toml). Non commité : ~8.7 Mo de copies d'index.html qui seraient
 # réécrites à chaque passe d'audit, avec le risque de servir des prix périmés

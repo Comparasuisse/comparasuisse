@@ -1,0 +1,17 @@
+# En-têtes Netlify.
+#
+# Les fichiers de catalogue portent une empreinte du contenu dans leur nom
+# (catalogue-mobile.<empreinte>.js) : leur URL change dès qu'un prix change, et
+# jamais autrement. Ils peuvent donc être mis en cache indéfiniment — c'est ce
+# qui donne son intérêt au découpage, puisqu'un visiteur qui passe de /mobile/ à
+# /tv/ ne retélécharge que la catégorie qu'il n'a pas encore vue.
+#
+# Sans URL immuable, ce cache serait dangereux : un prix corrigé mettrait un an
+# à atteindre les visiteurs. Avec, il est simplement gratuit.
+/data/catalogue-*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Les pages, elles, changent à chaque passe d'audit sans changer d'URL : elles
+# doivent être revalidées à chaque visite.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

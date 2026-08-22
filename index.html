@@ -652,13 +652,41 @@
 <!-- Analytics : Umami Cloud (UE — Francfort), sans cookies, sans IP stockée — cf. mentions-legales.html §5 -->
 <script defer src="https://cloud.umami.is/script.js" data-website-id="e448c846-2d3a-48f7-8218-34e6b665c382"></script>
 
-<!-- Google tag (gtag.js) — Google Ads conversion tracking (AW-18345847104), indépendant de Umami -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18345847104"></script>
+<!-- Google tag (gtag.js) — suivi de conversion Google Ads (AW-18345847104),
+     indépendant de Umami.
+
+     CHARGÉ À LA PREMIÈRE INTERACTION, plus au chargement de la page. Mesuré le
+     22.08.2026 : la bibliothèque coûtait 234 ms de fil principal sur CHAQUE
+     page — plus que tout le reste des tiers réunis — avant que le visiteur
+     n'ait rien fait. Or elle ne sert qu'à une chose, enregistrer le clic sur
+     « Voir l'offre → », qui suppose par définition une interaction.
+
+     La file dataLayer est ouverte tout de suite : gtag() peut être appelée
+     avant que la bibliothèque n'arrive, les événements sont rejoués à son
+     chargement. Aucune conversion n'est perdue, elles sont seulement envoyées
+     un instant plus tard. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'AW-18345847104');
+  (function(){
+    var charge = false;
+    function chargerGtag(){
+      if (charge) return;
+      charge = true;
+      var el = document.createElement("script");
+      el.async = true;
+      el.src = "https://www.googletagmanager.com/gtag/js?id=AW-18345847104";
+      document.head.appendChild(el);
+    }
+    ["pointerdown","keydown","touchstart","scroll"].forEach(function(ev){
+      window.addEventListener(ev, chargerGtag, { once: true, passive: true });
+    });
+    // Filet : au bout de 10 s sans la moindre interaction, on charge quand même,
+    // pour que la mesure d'audience d'une page lue sans être touchée existe.
+    setTimeout(chargerGtag, 10000);
+  })();
 </script>
 <!-- Google Ads conversion action pour clics "Voir l'offre →" (target=_blank).
      Appelée en onclick sans argument URL : l'ancre gère l'ouverture dans un nouvel onglet
@@ -4566,8 +4594,31 @@ function covChangeCouche(id){
   covMajAvertissementZoom();
 }
 
+// Charge Leaflet à la demande. Le générateur ne laisse ses balises que sur
+// /couverture-reseau/, la seule page qui montre une carte ; ailleurs, la
+// bibliothèque et sa feuille de style n'arrivent que si le visiteur ouvre
+// l'onglet. Empreintes SRI reprises telles quelles.
+let covLeafletDemande = false;
+function covChargerLeaflet(){
+  if (covLeafletDemande) return;
+  covLeafletDemande = true;
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+  css.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+  css.crossOrigin = "anonymous";
+  document.head.appendChild(css);
+  const js = document.createElement("script");
+  js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+  js.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+  js.crossOrigin = "anonymous";
+  js.onload = () => covCarteInit();
+  document.head.appendChild(js);
+}
+
 function covCarteInit(){
-  if (covCarte || typeof L === "undefined") return;
+  if (covCarte) return;
+  if (typeof L === "undefined") { covChargerLeaflet(); return; }
   covCarte = L.map("coverage-map", {
     center: [46.80, 8.23], zoom: 8, minZoom: 7, maxZoom: 19, scrollWheelZoom: true,
   });
@@ -4721,6 +4772,15 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
     const target = tab.dataset.tab;
+    // La catégorie peut ne pas être encore chargée (cf. « Catalogue par
+    // catégorie »). On bascule l'affichage tout de suite — la grille est vide
+    // une fraction de seconde — et le rendu suit dès l'arrivée du fichier.
+    // Via window : une activation programmatique d'onglet peut survenir AVANT
+    // que le bloc « Catalogue par catégorie » ne se soit exécuté (arrivée sur une
+    // route, ouverture forcée de l'onglet combo). Appeler la fonction par son nom
+    // lèverait alors une erreur de zone morte temporelle ; par window, elle est
+    // simplement absente, et le rendu initial du bloc s'en charge.
+    if (window.assurerCategorie) window.assurerCategorie(target);
     document.getElementById("mobile-controls").classList.toggle("hidden", target!=="mobile");
     document.getElementById("mobile-count").classList.toggle("hidden", target!=="mobile");
     document.getElementById("mobile-grid").classList.toggle("hidden", target!=="mobile");
@@ -4824,14 +4884,104 @@ const TODAY = new Date();
 TODAY.setHours(0, 0, 0, 0);
 
 buildPromoByUrl();
-refreshMobile();
-refreshPrepaid();
-refreshInternet();
-refreshDataOnly();
-refreshCombo();
-refreshPromo();
-refreshTV();
-refreshTravel();
+// === Catalogue par catégorie =================================================
+// Les huit tableaux d'offres pesaient 632 Ko des 774 Ko de JavaScript de cette
+// page — 82 % — et chaque page les portait tous alors qu'elle n'en affiche
+// qu'un. Le générateur les sort désormais dans un fichier par catégorie,
+// horodaté par empreinte et mis en cache pour toute la visite, et n'injecte
+// dans chaque page que celui dont elle a besoin.
+//
+// Ici, on ne suppose donc plus qu'une catégorie est présente : on la demande.
+// Dans index.html tel qu'il est versionné, les tableaux sont encore déclarés
+// plus haut et tout ce mécanisme se contente de constater qu'il n'a rien à
+// faire — c'est ce qui permet de continuer à éditer et auditer un seul fichier.
+
+// Drapeau en var, seul type que la zone morte temporelle épargne : une
+// fonction déclarée est hissée sur window dès l'analyse, donc assurerCategorie
+// est appelable AVANT que les const ci-dessous n'existent — c'est ce que fait
+// ongletDepuisURL() en activant l'onglet de la route. Tant que ce drapeau est
+// faux, la fonction ne touche à rien ; le rendu initial juste en dessous s'en
+// charge.
+var catalogueAmorce = false;
+
+const TABLEAUX = {
+  mobile: "mobileData", prepaid: "prepaidData", internet: "internetData",
+  dataonly: "dataOnlyData", tv: "tvData", combo: "comboData",
+  promo: "promoData", travel: "travelData",
+};
+const RENDUS = {
+  mobile: () => refreshMobile(), prepaid: () => refreshPrepaid(),
+  internet: () => refreshInternet(), dataonly: () => refreshDataOnly(),
+  tv: () => refreshTV(), combo: () => refreshCombo(),
+  promo: () => refreshPromo(), travel: () => refreshTravel(),
+};
+// URL par catégorie, injectée par le générateur. Vide ici : rien à charger.
+// Minuscule volontaire : audit-lib.mjs auto-découvre les « const ALL_CAPS = … ; »
+// d'une seule ligne pour les préfixer à son évaluation des tableaux, et une
+// référence à window y ferait échouer tout le chargement des données hors
+// navigateur (donc le scan quotidien et la mini-QA).
+const catalogueUrls = window.CATALOGUE_URLS || {};
+
+// Toute référence à un tableau absent doit trouver un tableau vide plutôt
+// qu'une ReferenceError : les fonctions de rendu, de comptage et de
+// comparaison balaient parfois plusieurs catégories d'un coup.
+for (const nom of Object.values(TABLEAUX)) {
+  if (typeof window[nom] === "undefined") window[nom] = [];
+}
+
+const categoriePresente = (tab) => (window[TABLEAUX[tab]] || []).length > 0 || !catalogueUrls[tab];
+const enCours = {};
+
+// Charge une catégorie et la rend, une seule fois. Rendue par un <script>
+// classique et non par fetch+JSON : le code de la page lit ces tableaux de
+// façon synchrone d'un bout à l'autre, et une balise script les lui livre
+// exactement comme avant, sans réécrire trois mille lignes en asynchrone.
+function assurerCategorie(tab) {
+  if (!catalogueAmorce) return Promise.resolve();
+  if (categoriePresente(tab)) return Promise.resolve();
+  if (enCours[tab]) return enCours[tab];
+  enCours[tab] = new Promise((resolve) => {
+    const el = document.createElement("script");
+    el.src = catalogueUrls[tab];
+    el.onload = () => { try { RENDUS[tab] && RENDUS[tab](); } catch (e) { console.error("rendu " + tab, e); } resolve(); };
+    el.onerror = () => { console.error("catalogue " + tab + " indisponible"); resolve(); };
+    document.head.appendChild(el);
+  });
+  return enCours[tab];
+}
+window.assurerCategorie = assurerCategorie;
+
+catalogueAmorce = true;
+
+// Rendus initiaux : uniquement ce que la page porte déjà. Les autres seront
+// rendus à l'ouverture de leur onglet.
+for (const tab of Object.keys(RENDUS)) {
+  if (categoriePresente(tab)) RENDUS[tab]();
+}
+
+// Préchargement du reste, une fois la page tranquille : au clic sur un autre
+// onglet, le fichier est déjà là et l'affichage reste immédiat.
+//
+// <link rel="prefetch"> et NON un <script> : la première version injectait les
+// huit catégories en balises script, ce qui les faisait aussi ÉVALUER et RENDRE
+// — les mille offres du catalogue reconstruites en arrière-plan, c'est-à-dire
+// tout le travail qu'on venait de retirer du chargement, réintroduit trois
+// secondes plus tard. Mesuré : le Total Blocking Time passait de 131 à 346 ms
+// sur /tv/, de 97 à 451 ms sur /voyage/, alors même que le LCP s'améliorait.
+// Un prefetch descend le fichier dans le cache sans l'exécuter : coût
+// processeur nul, et la balise script du clic le retrouve déjà présent.
+const prechargerReste = () => {
+  for (const tab of Object.keys(catalogueUrls)) {
+    if (categoriePresente(tab)) continue;
+    const l = document.createElement("link");
+    l.rel = "prefetch";
+    l.as = "script";
+    l.href = catalogueUrls[tab];
+    document.head.appendChild(l);
+  }
+};
+if (typeof requestIdleCallback === "function") requestIdleCallback(prechargerReste, { timeout: 4000 });
+else setTimeout(prechargerReste, 2500);
 cmpUpdateBadge();
 renderCompareView();
 

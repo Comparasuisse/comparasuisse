@@ -132,3 +132,42 @@ CHROME_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" \
   --only-categories=performance --output=json --output-path=lh-tv.json \
   --chrome-flags="--headless=new --no-sandbox" --quiet
 ```
+
+## Mesure locale « après », 22.08.2026
+
+Même commande, même machine, après externalisation du catalogue par catégorie,
+report de gtag à la première interaction et retrait de Leaflet des dix pages
+qui n'ont pas de carte.
+
+| | /tv/ avant → après | /voyage/ avant → après |
+|---|---|---|
+| Score performance | 45 → **63** | 42 → **55** |
+| First Contentful Paint | 6 758 → **3 524 ms** (−48 %) | 7 089 → **4 574 ms** (−35 %) |
+| Largest Contentful Paint | 8 779 → **3 555 ms** (−60 %) | 8 846 → **4 874 ms** (−45 %) |
+| Total Blocking Time | 131 → **0 ms** | 97 → **84 ms** |
+| Travail du fil principal | 2 310 → **932 ms** (−60 %) | 2 212 → **1 364 ms** (−38 %) |
+| Script de la page | 574 → **191 ms** (−67 %) | 429 → **96 ms** (−78 %) |
+
+Poids HTML par page : de 850–940 Ko à **223–308 Ko**.
+
+### Le piège du préchargement, qu'il vaut mieux avoir noté
+
+La première version préchargeait les autres catégories en injectant des balises
+`<script>`. Elles étaient donc **évaluées et rendues** — les mille offres du
+catalogue reconstruites en arrière-plan trois secondes après l'affichage,
+c'est-à-dire exactement le travail qu'on venait de retirer du chargement,
+réintroduit plus tard. Le LCP s'améliorait déjà, mais le Total Blocking Time
+passait de 131 à **346 ms** sur /tv/ et de 97 à **451 ms** sur /voyage/.
+
+Remplacé par `<link rel="prefetch" as="script">`, qui descend le fichier dans
+le cache **sans l'exécuter** : coût processeur nul, et la balise `<script>` du
+clic le retrouve déjà présent. TBT retombé à 0 sur /tv/.
+
+La leçon vaut au-delà de ce cas : déplacer du travail n'est pas le supprimer,
+et une mesure qui ne regarde que le LCP ne le voit pas.
+
+### Ce qui reste
+
+/voyage/ garde 709 forfaits à rendre à l'arrivée : c'est la seule page dont le
+fil principal reste au-dessus de la seconde. Le découpage par destination
+(`/voyage/esim-thailande/` etc.) est ce qui le réglera — lot architecture.

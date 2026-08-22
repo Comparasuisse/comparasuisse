@@ -43,6 +43,7 @@
 
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 
 const SITE = "https://comparasuisse.ch";
 const SOURCE = "index.html";
@@ -67,6 +68,132 @@ function extraire(nom, motif) {
 }
 const TAB_ROUTES = extraire("TAB_ROUTES", /const TAB_ROUTES = (\{[^\n]*\});/);
 const TAB_META = extraire("TAB_META", /const TAB_META = (\{[\s\S]*?\n\});/);
+
+// --- Le catalogue, sorti du HTML --------------------------------------------
+// 632 des 774 Ko de JavaScript de la page sont des tableaux d'offres — 82 % —
+// et chaque page les portait tous alors qu'elle n'en affiche qu'un. Ils sortent
+// donc dans un fichier par catégorie, et chaque page ne reçoit que le sien.
+//
+// Fichiers .js déclarant `var <nom>Data = […]`, et non .json chargés en fetch :
+// les trois mille lignes de rendu lisent ces tableaux de façon synchrone d'un
+// bout à l'autre. Une balise <script> les leur livre exactement comme avant,
+// là où du JSON aurait imposé de tout réécrire en asynchrone — pour le même
+// gain de cache, puisque c'est l'URL séparée et immuable qui le produit, pas
+// le format.
+//
+// Le nom porte une empreinte du contenu : l'URL change quand les prix changent,
+// jamais autrement. C'est ce qui autorise le Cache-Control d'un an posé dans
+// _headers — sans URL immuable, le cache partagé entre pages ne vaudrait rien.
+const DOSSIER_CATALOGUE = "data";
+const CATALOGUE_TABLEAUX = {
+  mobile: "mobileData", prepaid: "prepaidData", internet: "internetData",
+  dataonly: "dataOnlyData", tv: "tvData", combo: "comboData",
+  promo: "promoData", travel: "travelData",
+};
+
+// Bloc source de chaque tableau, tel qu'il apparaît dans index.html.
+function blocTableau(nom) {
+  const m = html.match(new RegExp(`const ${nom} = \\[[\\s\\S]*?\\n\\];`));
+  if (!m) throw new Error(`tableau ${nom} introuvable dans ${SOURCE}`);
+  return m[0];
+}
+
+// Les tableaux citent des constantes déclarées plus haut dans le script :
+// avertissements Wingo, mention K-SYS, liste des chaînes yallo. Sorties du HTML
+// sans elles, ils lèveraient une ReferenceError avant même que la page ne
+// s'affiche. Elles doivent donc voyager avec — mais seulement celles qui ne
+// servent qu'aux données : une constante utilisée aussi par la logique doit
+// rester où elle est, sinon on la déclarerait deux fois (var global d'un côté,
+// const de l'autre) et la page ne se chargerait plus du tout.
+const DECLARATIONS = [...html.matchAll(/^const ([A-Z][A-Z0-9_]{1,})\s*=\s*[^\n;]+;$/gm)]
+  .map((m) => ({ nom: m[1], decl: m[0] }));
+
+const BLOCS = {};
+const URLS_CATALOGUE = {};
+const COMPTES = {};
+for (const [tab, nom] of Object.entries(CATALOGUE_TABLEAUX)) {
+  const bloc = blocTableau(nom);
+  BLOCS[tab] = bloc;
+  // `var` et non `const` : le fichier est chargé en script classique, et une
+  // seconde exécution (préchargement puis clic) ne doit pas jeter.
+  const accompagnantes = DECLARATIONS.filter((d) => new RegExp(`\\b${d.nom}\\b`).test(bloc));
+  const contenu =
+    accompagnantes.map((d) => d.decl.replace(/^const /, "var ")).join("\n") +
+    (accompagnantes.length ? "\n" : "") +
+    bloc.replace(/^const /, "var ") + "\n";
+  const empreinte = crypto.createHash("sha256").update(contenu).digest("hex").slice(0, 10);
+  const fichier = `catalogue-${tab}.${empreinte}.js`;
+  if (!CHECK) {
+    fs.mkdirSync(DOSSIER_CATALOGUE, { recursive: true });
+    fs.writeFileSync(path.join(DOSSIER_CATALOGUE, fichier), contenu);
+  }
+  URLS_CATALOGUE[tab] = `/${DOSSIER_CATALOGUE}/${fichier}`;
+  COMPTES[tab] = chargerTableau(nom).length;
+}
+
+// Catégories servies d'emblée à chaque page. Le reste se charge à l'ouverture
+// de son onglet, et se précharge dès que la page est au repos.
+//   - une page de catégorie reçoit la sienne ;
+//   - l'accueil ouvre sur l'onglet Mobile, donc reçoit mobile ;
+//   - /couverture-reseau/ n'affiche aucune offre : elle ne reçoit rien ;
+//   - /comparateur/ compare quatre offres d'UNE catégorie à la fois, mais
+//     laquelle dépend de ce que le visiteur a sélectionné ailleurs. Faute de
+//     pouvoir le deviner, elle les reçoit toutes — en fichiers externes, donc
+//     déjà en cache si le visiteur vient d'une page de catégorie. Mettre la
+//     catégorie dans l'URL (/comparateur/mobile/…) supprimerait ce cas, mais
+//     la sélection ne survit pas à un rechargement (aucun stockage local) :
+//     ces huit URL seraient vides pour qui y arrive directement. À reprendre
+//     avec la persistance de la sélection, pas avant.
+const CATEGORIES_IMMEDIATES = {
+  home: ["mobile"], mobile: ["mobile"], prepaid: ["prepaid"], internet: ["internet"],
+  dataonly: ["dataonly"], tv: ["tv"], combo: ["combo"], promo: ["promo"],
+  travel: ["travel"], coverage: [], compare: Object.keys(CATALOGUE_TABLEAUX),
+};
+
+function catalogueDeLaPage(corps, tab) {
+  const immediates = CATEGORIES_IMMEDIATES[tab];
+  if (!immediates) throw new Error(`CATEGORIES_IMMEDIATES ne décrit pas « ${tab} »`);
+
+  // Les tableaux quittent le script inline, tous sans exception : ceux dont la
+  // page a besoin lui reviennent par balise, avant lui.
+  for (const bloc of Object.values(BLOCS)) corps = corps.replace(bloc, "");
+
+  // Et avec eux les constantes qui ne servaient qu'à eux : elles sont désormais
+  // déclarées en tête des fichiers de catalogue. Les laisser ici les
+  // redéclarerait — `var` d'un côté, `const` de l'autre — et la page entière
+  // cesserait de se charger sur une erreur de syntaxe.
+  const tousLesBlocs = Object.values(BLOCS).join("\n");
+  for (const d of DECLARATIONS) {
+    const motif = new RegExp(`\\b${d.nom}\\b`, "g");
+    const dansDonnees = (tousLesBlocs.match(motif) || []).length;
+    if (!dansDonnees) continue;
+    // Ailleurs que dans sa propre déclaration et dans les tableaux ? on la garde.
+    const total = (corps.match(motif) || []).length;
+    if (total > 1) continue;
+    corps = corps.replace(d.decl + "\n", "").replace(d.decl, "");
+  }
+
+  const balises = immediates.map((c) => `<script src="${URLS_CATALOGUE[c]}"></script>`).join("\n");
+  // Les comptes sont injectés plutôt que calculés après chargement : les
+  // compteurs d'onglets sont peints avec la page, et leur largeur ne bouge
+  // plus ensuite. Remplir après coup aurait décalé la barre d'onglets une fois
+  // la page affichée — du décalage cumulé, dans le lot même qui répare le LCP.
+  // Les tableaux non chargés d'emblée sont déclarés VIDES ici, avant tout le
+  // reste. Sans ça, la moindre référence au niveau du script principal — et il y
+  // en a, la table des catégories comparables balaie les huit tableaux — lève
+  // une ReferenceError et la page entière s'arrête avant d'avoir rien affiché.
+  const vides = Object.keys(CATALOGUE_TABLEAUX)
+    .filter((c) => !immediates.includes(c))
+    .map((c) => "window." + CATALOGUE_TABLEAUX[c] + "=[];")
+    .join("");
+  const config =
+    "<script>" + vides + "window.CATALOGUE_URLS=" + JSON.stringify(URLS_CATALOGUE) +
+    ";window.CATALOGUE_COUNTS=" + JSON.stringify(COMPTES) + ";</script>";
+
+  const ancre = corps.indexOf("<script>\n// Notes d'avertissement partagées");
+  if (ancre === -1) throw new Error("script principal introuvable — le catalogue ne peut pas être placé avant lui");
+  return corps.slice(0, ancre) + config + "\n" + balises + "\n" + corps.slice(ancre);
+}
 
 // --- Le catalogue, lu dans index.html ---------------------------------------
 // Même technique que scripts/lib/audit-lib.mjs : les tableaux sont du JS inline,
@@ -307,6 +434,8 @@ function corpsPour(tab) {
   if (!/<h1>[\s\S]*?<\/h1>/.test(corps)) throw new Error("<h1> introuvable dans le corps");
   corps = corps.replace(/<h1>[\s\S]*?<\/h1>/, `<h1>${echapper(h1)}</h1>`);
 
+  corps = catalogueDeLaPage(corps, tab);
+
   // FAQ : on ne garde que les questions de cette page.
   const miennes = QUESTIONS.filter((q) => q.page === tab);
   for (const q of QUESTIONS) {
@@ -441,6 +570,20 @@ function graphePour(tete, tab) {
 // --- Réécriture des balises du <head> ---------------------------------------
 // Strictement bornée au <head> : le corps contient des gabarits JS avec des
 // <title> SVG (les sparklines) qu'un remplacement global corromprait.
+// Leaflet ne reste que sur la page qui montre une carte. Ailleurs, ses balises
+// partent : la bibliothèque n'arrive que si le visiteur ouvre l'onglet
+// Couverture (cf. covChargerLeaflet dans index.html). Dix pages sur onze
+// cessent de télécharger et d'analyser une dépendance qu'elles n'utilisent pas.
+const BALISES_LEAFLET = [
+  /<link rel="preconnect" href="https:\/\/wmts\.geo\.admin\.ch">\n/,
+  /<link rel="stylesheet" href="https:\/\/unpkg\.com\/leaflet[\s\S]*?>\n/,
+  /<script defer src="https:\/\/unpkg\.com\/leaflet[\s\S]*?<\/script>\n/,
+];
+function sansLeaflet(tete) {
+  for (const motif of BALISES_LEAFLET) tete = tete.replace(motif, "");
+  return tete;
+}
+
 function tetePour(tab, route) {
   const meta = TAB_META[tab];
   if (!meta) throw new Error(`TAB_META ne décrit pas l'onglet « ${tab} ».`);
@@ -460,7 +603,9 @@ function tetePour(tab, route) {
   remplacer(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${url}">`, "og:url");
   remplacer(/<meta name="twitter:title" content="[^"]*">/, `<meta name="twitter:title" content="${echapper(titre)}">`, "twitter:title");
   remplacer(/<meta name="twitter:description" content="[^"]*">/, `<meta name="twitter:description" content="${echapper(desc)}">`, "twitter:description");
-  return t;
+  // La carte n'existe que sur /couverture-reseau/ ; ailleurs, Leaflet se charge
+  // à la demande.
+  return tab === "coverage" ? t : sansLeaflet(t);
 }
 
 function pagePour(tab, route) {
