@@ -12,4 +12,18 @@
 # Les fichiers réellement présents (sitemap.xml, robots.txt, mentions-legales.html,
 # favicon, img/, data/…) sont servis en priorité par Netlify : cette règle ne
 # s'applique qu'aux chemins qui ne correspondent à aucun fichier.
+# Mentions légales — une seule URL fait foi : /mentions-legales.html
+#
+# Deux doublons existaient, tous deux en 200 :
+#   /mentions-legales              → servi par le catch-all ci-dessous, donc
+#                                    la page d'accueil sous une URL de plus.
+#   /<route>/mentions-legales.html → même chose, une fois par route, parce que
+#                                    le lien du pied de page était relatif.
+# Le lien est passé en absolu dans index.html ; ces deux règles ferment les
+# URL déjà connues de Google. Le « ! » force la redirection même si un fichier
+# pourrait répondre, et l'ordre compte : tout ce qui suit /* n'est jamais lu.
+/mentions-legales            /mentions-legales.html  301!
+/*/mentions-legales.html     /mentions-legales.html  301!
+/*/mentions-legales          /mentions-legales.html  301!
+
 /*  /index.html  200
