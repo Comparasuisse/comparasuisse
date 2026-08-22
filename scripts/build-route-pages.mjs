@@ -99,6 +99,22 @@ const FAQ_TITRE = {
   coverage: "Questions fréquentes sur la couverture réseau",
 };
 
+// Libellé court de chaque page dans le fil d'Ariane. Volontairement plus
+// courts que les <h1> : un fil d'Ariane se lit d'un coup d'œil, il nomme la
+// rubrique, il ne la décrit pas.
+const FIL_LABEL = {
+  mobile:   "Mobile",
+  prepaid:  "Mobile prépayé",
+  internet: "Internet",
+  dataonly: "SIM Data only",
+  tv:       "TV",
+  combo:    "Internet + TV",
+  promo:    "Promotions",
+  travel:   "Voyage",
+  coverage: "Couverture réseau",
+  compare:  "Comparaison",
+};
+
 const routes = Object.entries(TAB_ROUTES);
 if (!routes.length) throw new Error("TAB_ROUTES est vide.");
 
@@ -195,40 +211,100 @@ function corpsPour(tab) {
   return corps;
 }
 
-// --- Réécriture du nœud FAQPage ---------------------------------------------
-// Le @graph existant est modifié, jamais doublé : deux FAQPage sur une page
-// s'annulent. Quand la page n'a aucune question, le nœud disparaît du graphe —
-// un FAQPage vide est une erreur de balisage, pas une page sans FAQ.
-function graphePour(tete, tab) {
-  const miennes = QUESTIONS.filter((q) => q.page === tab);
-  const debut = tete.indexOf('      "@type": "FAQPage",');
-  if (debut === -1) throw new Error("nœud FAQPage introuvable dans le <head>");
-  const ouvrant = tete.lastIndexOf("{", debut);
-  const fermant = tete.indexOf("\n    }", debut);
-  if (ouvrant === -1 || fermant === -1) throw new Error("nœud FAQPage mal délimité");
-  const finNoeud = fermant + "\n    }".length;
-
-  if (!miennes.length) {
-    // Retire aussi la virgule qui précède, sinon le JSON devient invalide.
-    const avant = tete.slice(0, ouvrant).replace(/,\s*$/, "");
-    return avant + tete.slice(finNoeud).replace(/^\s*,/, "");
-  }
-  const noeud = {
-    "@type": "FAQPage",
-    "@id": `${SITE}/${TAB_ROUTES[tab] ? TAB_ROUTES[tab] + "/" : ""}#faq`,
-    mainEntity: miennes.map((q) => ({
-      "@type": "Question",
-      name: q.titre,
-      acceptedAnswer: { "@type": "Answer", text: q.reponse },
-    })),
-  };
-  const json = JSON.stringify(noeud, null, 2)
-    .split("\n")
-    .map((l, i) => (i === 0 ? l : "    " + l))
-    .join("\n");
-  return tete.slice(0, ouvrant) + json + tete.slice(finNoeud);
+// --- Réécriture du JSON-LD ---------------------------------------------------
+// Le bloc est parsé, modifié comme une structure, puis réécrit. La version
+// précédente découpait le texte à la main autour du nœud FAQPage : ça marchait,
+// mais chaque nœud supplémentaire aurait ajouté une découpe fragile de plus.
+//
+// Règle constante : on MODIFIE le @graph existant, on n'ajoute jamais un second
+// bloc à côté. Deux FAQPage — ou deux Organization — sur une même page
+// s'annulent mutuellement.
+function grapheJson(tete) {
+  const ouvrant = tete.indexOf('<script type="application/ld+json">');
+  if (ouvrant === -1) throw new Error("bloc JSON-LD introuvable dans le <head>");
+  const debut = tete.indexOf(">", ouvrant) + 1;
+  const fin = tete.indexOf("</script>", debut);
+  if (fin === -1) throw new Error("bloc JSON-LD non refermé");
+  return { avant: tete.slice(0, debut), json: JSON.parse(tete.slice(debut, fin)), apres: tete.slice(fin) };
 }
 
+function graphePour(tete, tab) {
+  const { avant, json, apres } = grapheJson(tete);
+  const graphe = json["@graph"];
+  const route = TAB_ROUTES[tab];
+  const urlPage = route ? `${SITE}/${route}/` : `${SITE}/`;
+
+  // --- FAQPage : les questions de cette page, et rien d'autre ----------------
+  // Note du 22.08.2026 : Google a retiré les résultats enrichis FAQ le
+  // 07.05.2026, puis leur support dans l'outil de test en juin. Ce balisage ne
+  // produit donc plus d'affichage enrichi. On le garde tout de même — il reste
+  // une description exacte du contenu, lisible par d'autres consommateurs que
+  // Google — mais ce ne sont plus lui qui porte l'enjeu : les ancres HTML et le
+  // sommaire, eux, servent toujours à quelque chose.
+  const iFaq = graphe.findIndex((n) => n["@type"] === "FAQPage");
+  const miennes = QUESTIONS.filter((q) => q.page === tab);
+  if (iFaq !== -1) {
+    if (!miennes.length) {
+      graphe.splice(iFaq, 1);
+    } else {
+      graphe[iFaq] = {
+        "@type": "FAQPage",
+        "@id": `${urlPage}#faq`,
+        mainEntity: miennes.map((q) => ({
+          "@type": "Question",
+          name: q.titre,
+          acceptedAnswer: { "@type": "Answer", text: q.reponse },
+        })),
+      };
+    }
+  }
+
+  // --- Organization : point de contact ---------------------------------------
+  // sameAs n'est PAS déclaré : il n'existe aujourd'hui aucun profil officiel
+  // (ni réseau social, ni page tierce) vers lequel pointer. Un sameAs inventé
+  // ou pointant sur soi-même n'apporte rien et fragilise le reste du graphe.
+  const org = graphe.find((n) => n["@type"] === "Organization");
+  if (org && !org.contactPoint) {
+    org.contactPoint = {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: "contact@comparasuisse.ch",
+      areaServed: "CH",
+      availableLanguage: ["fr"],
+    };
+  }
+
+  // --- WebSite ---------------------------------------------------------------
+  // potentialAction/SearchAction n'est PAS déclaré non plus : il exige une URL
+  // de recherche qui retourne des résultats filtrés, et /comparateur/?q= n'en
+  // est pas une — le paramètre n'est lu nulle part dans le code (aucun
+  // URLSearchParams, aucun location.search au 22.08.2026). Déclarer une action
+  // que le site ne sait pas exécuter, c'est décrire un site qui n'existe pas.
+
+  // --- BreadcrumbList : une page = un chemin ---------------------------------
+  // Absent jusqu'ici. Sur l'accueil, on n'en met pas : un fil d'Ariane d'un
+  // seul maillon ne dit rien à personne.
+  if (route) {
+    const label = FIL_LABEL[tab];
+    if (!label) throw new Error(`FIL_LABEL ne décrit pas l'onglet « ${tab} »`);
+    if (!graphe.some((n) => n["@type"] === "BreadcrumbList")) {
+      graphe.push({
+        "@type": "BreadcrumbList",
+        "@id": `${urlPage}#fil`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Accueil", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: label, item: urlPage },
+        ],
+      });
+    }
+  }
+
+  return avant + JSON.stringify(json, null, 2) + apres;
+}
+
+// --- Réécriture des balises du <head> ---------------------------------------
+// Strictement bornée au <head> : le corps contient des gabarits JS avec des
+// <title> SVG (les sparklines) qu'un remplacement global corromprait.
 function tetePour(tab, route) {
   const meta = TAB_META[tab];
   if (!meta) throw new Error(`TAB_META ne décrit pas l'onglet « ${tab} ».`);
