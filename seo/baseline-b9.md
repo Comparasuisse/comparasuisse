@@ -1,0 +1,98 @@
+# B9 — mesure de référence, avant externalisation du catalogue
+
+Relevé **le 22.08.2026 sur la production**, avant le push du lot SEO. Après ce
+push, cette mesure n'est plus reproductible : les pages servies auront changé.
+D'où ce fichier, qui la fige.
+
+## Production, telle que servie
+
+```
+880 Ko de HTML décodé par page, identique sur les 11
+  dont 783 Ko de JS inline (89 %)
+       34 Ko de CSS inline
+       16 Ko de JSON-LD
+~143 Ko sur le fil (compression 6.2×)
+DOM interactive   662 ms
+DOM complete     1902 ms
+23 requêtes
+Total des 11 pages : 9.7 Mo
+```
+
+Le poids réseau n'est pas le problème : 143 Ko compressés, c'est ordinaire.
+Le problème est que ces 783 Ko de JavaScript sont **inline**, ce qui a trois
+conséquences qu'aucune compression ne corrige :
+
+1. **Re-parsés à chaque navigation interne.** Le navigateur ne peut pas
+   réutiliser le travail d'analyse d'une page à l'autre, puisque le code arrive
+   à chaque fois dans un nouveau document.
+2. **Aucune mise en cache possible entre les pages.** Un fichier `.js` ou
+   `.json` séparé serait téléchargé une fois pour toute la visite ; inline, il
+   repart avec chaque page.
+3. **Chaque page transporte le catalogue entier** alors qu'elle n'en affiche
+   qu'une catégorie.
+
+## Composition réelle du JS inline
+
+Relevée localement sur `index.html` le 22.08.2026 (`scratchpad/poids.mjs`).
+C'est le chiffre qui décide de la suite : si les 774 Ko étaient de la logique,
+il n'y aurait rien à externaliser.
+
+```
+index.html           900 Ko
+  JS inline          774 Ko
+  JSON-LD             16 Ko
+  CSS inline          34 Ko
+
+dont, dans le JS inline :
+  travelData         247 Ko
+  tvData             129 Ko
+  mobileData         102 Ko
+  comboData           46 Ko
+  internetData        39 Ko
+  promoData           32 Ko
+  prepaidData         19 Ko
+  dataOnlyData        18 Ko
+  ------------------------
+  données            632 Ko  = 82 % du JS inline
+  logique            142 Ko  = 18 %
+```
+
+**82 % du JavaScript de ce site est un catalogue, pas du code.**
+
+## Ce que porterait chaque page après découpage par catégorie
+
+```
+/mobile/              102 Ko   (au lieu de 632)
+/prepaid/              19 Ko
+/internet/             39 Ko
+/dataonly/             18 Ko
+/tv/                  129 Ko
+/combo/                46 Ko
+/promotions/           32 Ko
+/voyage/              247 Ko
+/couverture-reseau/     0 Ko
+/comparateur/         632 Ko   ← seul cas qui a besoin de tout
+```
+
+`/comparateur/` compare des offres de n'importe quelle catégorie : c'est la
+seule page dont le besoin ne se réduit pas par découpage. Elle peut en revanche
+charger à la demande les seules catégories réellement sélectionnées.
+
+## Méthode de mesure pour l'après
+
+`npx lighthouse` en local, pas PageSpeed Insights : PSI prend plusieurs minutes
+par page et **il n'existe aucune donnée CrUX sur ce domaine** — le trafic est
+trop faible pour que Google en publie. Les chiffres de terrain n'existent donc
+pas ; seule la mesure en laboratoire est disponible, et elle suffit pour
+comparer un avant et un après sur la même machine.
+
+Ce qu'il faut regarder, dans l'ordre :
+
+- **Total Blocking Time** et **temps de script** — c'est là que se voit le
+  parse de 632 Ko de données ;
+- **LCP** ;
+- **DOM interactive**, comparable au 662 ms ci-dessus.
+
+Ne pas comparer les valeurs locales aux valeurs de production ci-dessus : pas
+de latence réseau, pas de compression identique. La comparaison qui vaut est
+locale avant / locale après.
