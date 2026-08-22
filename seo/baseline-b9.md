@@ -96,3 +96,39 @@ Ce qu'il faut regarder, dans l'ordre :
 Ne pas comparer les valeurs locales aux valeurs de production ci-dessus : pas
 de latence réseau, pas de compression identique. La comparaison qui vaut est
 locale avant / locale après.
+
+## Mesure locale « avant », 22.08.2026
+
+`npx lighthouse` sur le site servi par `node scripts/serve-local.mjs 8899`,
+profil mobile par défaut (ralentissement CPU 4×), Chrome local. À rejouer à
+l'identique après le découpage — c'est la seule comparaison qui vaut, les
+valeurs locales n'étant pas comparables à celles de la production.
+
+| | /tv/ | /voyage/ |
+|---|---|---|
+| Score performance | 45 | 42 |
+| First Contentful Paint | 6 758 ms | 7 089 ms |
+| Largest Contentful Paint | 8 779 ms | 8 846 ms |
+| Total Blocking Time | 131 ms | 97 ms |
+| Travail du fil principal | 2 310 ms | 2 212 ms |
+| **Script de la page : évaluation** | **376 ms** | **315 ms** |
+| **Script de la page : parse** | **198 ms** | **115 ms** |
+
+Les deux dernières lignes sont la cible du chantier : **574 ms de CPU sur /tv/,
+430 ms sur /voyage/**, dépensés à analyser puis évaluer un catalogue dont la
+page n'affiche qu'une catégorie. À titre de comparaison sur la même page, gtag
+coûte 234 ms et Leaflet 26 ms.
+
+Le FCP à 6,7 s sur une machine de bureau, avec un serveur qui répond en 1 ms,
+dit la même chose autrement : rien ne s'affiche tant que ce bloc n'est pas
+analysé.
+
+Commandes exactes, pour rejouer :
+
+```bash
+node scripts/serve-local.mjs 8899 &
+CHROME_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" \
+  npx --yes lighthouse http://localhost:8899/tv/ \
+  --only-categories=performance --output=json --output-path=lh-tv.json \
+  --chrome-flags="--headless=new --no-sandbox" --quiet
+```
