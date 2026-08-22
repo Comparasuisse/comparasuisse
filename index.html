@@ -1783,7 +1783,14 @@ const internetData = [
 // Ajouter un champ optionnel `affiliateUrl` à un item pour activer le tracking Awin.
 // Si absent, on retombe sur `url` (lien direct opérateur, non rémunéré).
 function offerUrl(item){ return item.affiliateUrl || item.url; }
-function offerRel(item){ return item.affiliateUrl ? "sponsored noopener" : "noopener"; }
+// Les 305 liens « Voir → » pointent vers des pages commerciales d'opérateurs.
+// Ce sont des liens que nous plaçons pour le visiteur, pas des recommandations
+// éditoriales transmissibles : ils partent donc en nofollow. Un lien affilié,
+// lui, porte « sponsored », qui est le terme exact quand une rémunération est
+// en jeu — Google le traite comme nofollow, et l'ajouter en plus serait
+// redondant. Le jour où un lien Awin ou alao devient actif, il suffit que
+// l'offre porte affiliateUrl : le rel suit tout seul.
+function offerRel(item){ return item.affiliateUrl ? "sponsored noopener" : "nofollow noopener"; }
 function affiliatePill(item){
   return item.affiliateUrl ? '<span class="roaming-pill affiliate" title="Lien affilié : nous touchons une commission si tu souscris via ce lien, sans impact sur ton prix.">🤝 Partenaire</span>' : '';
 }
@@ -2432,14 +2439,33 @@ function renderPromoCard(p){
   </div>`;
 }
 
+// Une fenêtre promo close, c'est le bandeau « ⏱ Probablement expirée » sur la
+// carte. Avertir ne suffit pas : l'onglet Promotions est une SÉLECTION — il
+// promet ce qui est en cours. Y laisser une offre échue, c'est proposer au
+// visiteur quelque chose qu'on sait ne plus être disponible.
+//
+// Elles sont donc écartées de la liste, et leur nombre est dit plutôt que tu.
+// Rien n'est effacé : le scan quotidien les signale dès le lendemain de
+// l'échéance (cf. AUDIT-COMPLET.md § 1), et elles reviennent d'elles-mêmes si
+// l'opérateur reconduit sa promo — ce qui, sur quinze cas relevés le 19.08,
+// s'est produit quatorze fois.
+function promoEchue(p){
+  return !!(p && p.from && p.to && new Date() > endOfDayLocal(p.to));
+}
+
 function refreshPromo(){
   const selectedNets = [...document.querySelectorAll('#promo-network input:checked')].map(i => i.dataset.net);
   const selectedCats = [...document.querySelectorAll('#promo-category input:checked')].map(i => i.dataset.cat);
-  const filtered = promoData.filter(p => selectedNets.includes(p.network) && selectedCats.includes(p.category));
-  document.querySelector("#promo-count span").textContent = filtered.length + " / " + promoData.length + " promotion(s)";
+  const correspondantes = promoData.filter(p => selectedNets.includes(p.network) && selectedCats.includes(p.category));
+  const echues = correspondantes.filter(promoEchue);
+  const filtered = correspondantes.filter(p => !promoEchue(p));
+  const actives = promoData.filter(p => !promoEchue(p)).length;
+  document.querySelector("#promo-count span").textContent =
+    filtered.length + " / " + actives + " promotion(s)" +
+    (echues.length ? " · " + echues.length + " échue(s) masquée(s)" : "");
   document.getElementById("promo-grid").innerHTML = filtered.length
     ? filtered.map(renderPromoCard).join("")
-    : '<div class="empty">Aucune promotion ne correspond à ces critères.</div>';
+    : '<div class="empty">Aucune promotion en cours ne correspond à ces critères.</div>';
 }
 
 function resetPromo(){

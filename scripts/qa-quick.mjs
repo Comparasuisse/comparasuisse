@@ -118,6 +118,20 @@ const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août"
   else ok(`prix cités en prose : ${uniq.length} affirmations, toutes conformes au catalogue`);
 }
 
+// Même lecture des échéances que l'affichage : une date sans heure vaut
+// jusqu'à 23:59:59, une date avec heure vaut à la seconde. Dupliqué depuis
+// index.html, qui est un fichier statique sans build et ne peut rien exporter.
+function finDeJournee(t) {
+  if (String(t).includes("T")) {
+    const [d, h] = String(t).split("T");
+    const [y, m, j] = d.split("-").map(Number);
+    const [hh, mm, ss] = h.split(":").map(Number);
+    return new Date(y, m - 1, j, hh || 0, mm || 0, ss || 0, 0);
+  }
+  const [y, m, j] = String(t).split("-").map(Number);
+  return new Date(y, m - 1, j, 23, 59, 59, 999);
+}
+
 // ── 5 & 6. Navigateur
 const data = await loadData();
 const expected = {
@@ -127,7 +141,11 @@ const expected = {
   dataonly: data.dataOnly.length,
   tv: data.tv.length,
   combo: data.combo.length,
-  promo: data.promo.length,
+  // L'onglet Promotions écarte les promotions échues (cf. promoEchue dans
+  // index.html) : une fenêtre close n'a rien à faire dans une liste qui promet
+  // ce qui est en cours. Le compteur attendu est donc celui des promos
+  // actives, et l'écart avec data.promo.length dit combien sont échues.
+  promo: data.promo.filter((p) => !(p.from && p.to && new Date() > finDeJournee(p.to))).length,
   travel: data.travel.length,
 };
 
