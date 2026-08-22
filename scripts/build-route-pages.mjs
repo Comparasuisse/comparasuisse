@@ -139,6 +139,16 @@ function elementDeListe(item, position) {
   return { "@type": "ListItem", position, item: offre };
 }
 
+// Plafond du balisage ItemList, et CRITÈRE de la coupe : les offres sont triées
+// par PRIX MENSUEL CROISSANT, puis on garde les 150 premières. Le critère est
+// écrit ici parce qu'il doit rester stable : trancher dans l'ordre du tableau
+// ferait dériver la coupure au premier ajout d'offre, et deux générations
+// successives ne baliseraient plus le même ensemble sans que personne ne l'ait
+// décidé. Trié par prix, l'ensemble balisé ne change que si les prix changent.
+//
+// Pourquoi 150 : au-delà, le poids l'emporte sur le bénéfice. Baliser les 709
+// forfaits Voyage ajoutait 320 Ko à une page qui en pèse 891, pour des éléments
+// qui ne produisent aucun résultat enrichi — Offer seul n'en génère pas.
 const MAX_ITEMLIST = 150;
 
 const ITEMLIST_NOM = {
