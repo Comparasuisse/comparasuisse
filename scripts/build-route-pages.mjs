@@ -68,6 +68,118 @@ function extraire(nom, motif) {
 const TAB_ROUTES = extraire("TAB_ROUTES", /const TAB_ROUTES = (\{[^\n]*\});/);
 const TAB_META = extraire("TAB_META", /const TAB_META = (\{[\s\S]*?\n\});/);
 
+// --- Le catalogue, lu dans index.html ---------------------------------------
+// Même technique que scripts/lib/audit-lib.mjs : les tableaux sont du JS inline,
+// on les évalue. Les constantes ALL_CAPS déclarées avant eux (avertissements
+// Wingo, listes de chaînes…) sont auto-découvertes et préfixées, sinon
+// l'évaluation échoue sur une référence manquante.
+function chargerTableau(nom) {
+  const prefixe = (html.match(/^const ([A-Z][A-Z0-9_]{1,})\s*=\s*[^\n;]+;/gm) || []).join("\n");
+  const m = html.match(new RegExp(`const ${nom} = \\[([\\s\\S]*?)\\n\\];`));
+  if (!m) return [];
+  return new Function(`${prefixe}\nreturn [${m[1]}\n];`)();
+}
+
+// Onglet → tableau de données. coverage et compare n'ont pas de catalogue
+// propre : l'un affiche une carte, l'autre compare des offres déjà listées
+// ailleurs. Ils n'auront donc pas d'ItemList, et c'est correct — un ItemList
+// vide serait un balisage qui décrit une liste qui n'existe pas.
+const CATALOGUE = {
+  mobile:   chargerTableau("mobileData"),
+  prepaid:  chargerTableau("prepaidData"),
+  internet: chargerTableau("internetData"),
+  dataonly: chargerTableau("dataOnlyData"),
+  tv:       chargerTableau("tvData"),
+  combo:    chargerTableau("comboData"),
+  promo:    chargerTableau("promoData"),
+  travel:   chargerTableau("travelData"),
+};
+
+// Nom du vendeur : les entrées TV/combo/promo portent `operator`, les autres
+// commencent par la marque. Repris tel quel du builder client qu'il remplace.
+const marqueDepuisNom = (nom) => {
+  const premier = String(nom || "").split(/[ (]/)[0];
+  return premier.charAt(0).toUpperCase() + premier.slice(1);
+};
+
+// Une offre du catalogue → un élément de liste.
+//
+// Le type est `Offer`, pas `Product` comme le faisait l'injection côté client.
+// Ce n'est pas un détail de vocabulaire : `Product` faisait classer chaque
+// ligne en « extrait de produit » ET en « fiche de marchand », deux familles
+// dont Google attend des champs qu'un comparateur ne peut pas fournir
+// honnêtement — frais de port, politique de retour, note et avis. Nous ne
+// vendons rien, nous listons ce que d'autres vendent. `Offer` décrit
+// exactement ça, et fait disparaître ces exigences au lieu d'y répondre par
+// des valeurs inventées.
+//
+// L'image disparaît aussi, et c'est un soulagement mesuré : `brandImage()`
+// fabriquait une URL /img/brand-<marque>.svg pour chaque offre, alors que 14
+// fichiers seulement existent. 168 des 307 éléments (55 %) pointaient donc
+// vers un fichier absent — une image irrécupérable par élément, sur plus d'un
+// élément sur deux.
+function elementDeListe(item, position) {
+  const offre = {
+    "@type": "Offer",
+    name: item.name,
+    price: item.price.toFixed(2),
+    priceCurrency: item.currency || "CHF",
+    availability: "https://schema.org/InStock",
+    url: item.url,
+    seller: { "@type": "Organization", name: item.operator || marqueDepuisNom(item.name) },
+  };
+  // priceValidUntil n'est posé QUE là où une échéance existe vraiment : la
+  // fenêtre promo de l'offre. Pas de date inventée sur un prix catalogue, qui
+  // n'expire pas.
+  if (item.to) offre.priceValidUntil = String(item.to).slice(0, 10);
+  // Pas de description : Google n'affiche pas celle d'un élément d'ItemList,
+  // et les 500 caractères de details par offre pesaient 348 Ko sur la seule page
+  // Voyage, dont le catalogue compte 709 forfaits. Le détail reste dans le
+  // corps de la page, là où il sert à quelqu'un.
+  return { "@type": "ListItem", position, item: offre };
+}
+
+const MAX_ITEMLIST = 150;
+
+const ITEMLIST_NOM = {
+  mobile:   "Abonnements mobiles en Suisse",
+  prepaid:  "Cartes prépayées mobiles en Suisse",
+  internet: "Abonnements internet en Suisse",
+  dataonly: "Cartes SIM data only en Suisse",
+  tv:       "Abonnements TV en Suisse",
+  combo:    "Offres combinées Internet + TV en Suisse",
+  promo:    "Promotions télécom en cours en Suisse",
+  travel:   "eSIM de voyage et forfaits roaming",
+  home:     "Abonnements mobile, internet et TV en Suisse",
+};
+
+function itemListPour(tab) {
+  // L'accueil liste ce que listait l'injection client : tout sauf le voyage et
+  // les promotions, qui ont leurs propres pages.
+  const source = tab === "home"
+    ? [...CATALOGUE.mobile, ...CATALOGUE.internet, ...CATALOGUE.tv, ...CATALOGUE.combo, ...CATALOGUE.prepaid, ...CATALOGUE.dataonly]
+    : CATALOGUE[tab];
+  if (!source || !source.length) return null;
+  const offres = source
+    .filter((o) => typeof o.price === "number" && o.price > 0 && o.url)
+    .sort((a, b) => a.price - b.price);
+  if (!offres.length) return null;
+  // Plafond. Le catalogue Voyage compte 709 forfaits : les baliser tous ajoutait
+  // 320 Ko à une page qui en pèse déjà 891, pour une liste que Google affiche au
+  // mieux en carrousel. Les 150 moins chers sont ceux qu'on vient chercher, et
+  //  décrit la liste effectivement publiée dans le balisage —
+  // pas la taille du catalogue, qui est dans le corps de la page.
+  const publiees = offres.slice(0, MAX_ITEMLIST);
+  return {
+    "@type": "ItemList",
+    "@id": `${tab === "home" ? SITE + "/" : SITE + "/" + TAB_ROUTES[tab] + "/"}#offres`,
+    name: ITEMLIST_NOM[tab] || "Offres télécom en Suisse",
+    numberOfItems: publiees.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: publiees.map((o, i) => elementDeListe(o, i + 1)),
+  };
+}
+
 // --- Un <h1> par page --------------------------------------------------------
 // Aligné sur les <title> déjà en place, sans les répéter mot pour mot : le
 // titre est écrit pour la SERP, le h1 pour la personne qui vient d'arriver.
@@ -297,6 +409,20 @@ function graphePour(tete, tab) {
         ],
       });
     }
+  }
+
+  // --- ItemList : les offres de CETTE page ----------------------------------
+  // Auparavant injecté côté client, en un seul exemplaire de 305 éléments
+  // identique sur les onze pages. Servi au build et découpé par catégorie, il
+  // décrit ce que la page montre vraiment, et Googlebot n'a plus besoin de
+  // rendre le JS pour le voir.
+  const liste = itemListPour(tab);
+  const iListe = graphe.findIndex((n) => n["@type"] === "ItemList");
+  if (liste) {
+    if (iListe === -1) graphe.push(liste);
+    else graphe[iListe] = liste;
+  } else if (iListe !== -1) {
+    graphe.splice(iListe, 1);
   }
 
   return avant + JSON.stringify(json, null, 2) + apres;

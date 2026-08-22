@@ -5018,82 +5018,24 @@ document.querySelectorAll('#combo-connection-type input').forEach(i => i.addEven
 ["combo-replay","combo-recording","combo-speed","combo-speed-max"].forEach(id => document.getElementById(id).addEventListener("input", refreshCombo));
 document.querySelectorAll('#promo-network input, #promo-category input').forEach(i => i.addEventListener("change", refreshPromo));
 
-function brandFromName(name){
-  const first = name.split(/[ (]/)[0];
-  return first.charAt(0).toUpperCase() + first.slice(1);
-}
-function brandImage(name){
-  const slug = brandFromName(name).toLowerCase();
-  return "https://comparasuisse.ch/img/brand-" + slug + ".svg";
-}
-
-function buildStructuredData(){
-  let pos = 0;
-  // Nom d'opérateur pour le seller — TV/combo entries use `operator:`, mobile/internet use `name:` prefix
-  const sellerName = (item) => item.operator || brandFromName(item.name);
-  // Description enrichie : pour TV/combo, on préfixe le nombre de chaînes pour être explicite aux crawlers/IA
-  const buildDesc = (item, category) => {
-    let desc = "";
-    if ((category === "TelevisionService" || category === "TelecommunicationsBundle") && (item.channels || item.replayDays)) {
-      const parts = [];
-      if (item.channels) parts.push(item.channels + " chaînes TV");
-      if (item.replayDays) parts.push("replay " + item.replayDays + " jours");
-      if (item.recordingHours) parts.push(item.recordingHours + "h d'enregistrement");
-      if (parts.length) desc = parts.join(", ") + " — ";
-    }
-    desc += (item.details || "").replace(/<[^>]+>/g, "");
-    return desc.slice(0, 500);
-  };
-  const listItem = (item, category, opts) => {
-    opts = opts || {};
-    const price = typeof item.price === "number" ? item.price : null;
-    const offer = {
-      "@type": "Offer",
-      "priceCurrency": "CHF",
-      "availability": "https://schema.org/InStock",
-      "url": item.url,
-      "seller": { "@type": "Organization", "name": sellerName(item) }
-    };
-    if (price !== null) offer.price = price.toFixed(2);
-    return {
-      "@type": "ListItem",
-      "position": ++pos,
-      "item": {
-        "@type": "Product",
-        "name": item.name,
-        "category": category,
-        "brand": { "@type": "Brand", "name": sellerName(item) },
-        "description": buildDesc(item, category),
-        "image": brandImage(item.name),
-        "offers": offer
-      }
-    };
-  };
-
-  const items = []
-    .concat(mobileData.map(i => listItem(i, "MobilePhoneService")))
-    .concat(internetData.map(i => listItem(i, "InternetService")))
-    .concat(tvData.map(i => listItem(i, "TelevisionService")))
-    .concat(comboData.filter(i => typeof i.price === "number").map(i => listItem(i, "TelecommunicationsBundle")))
-    .concat(prepaidData.filter(i => typeof i.price === "number" && i.price > 0).map(i => listItem(i, "PrepaidMobilePhoneService")))
-    .concat(dataOnlyData.map(i => listItem(i, "MobileDataService")));
-
-  const ld = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Abonnements mobile, internet et TV en Suisse",
-    "description": "Catalogue complet des offres mobile, internet fixe, TV, prépayé, SIM data et combos Internet+TV des opérateurs suisses. Prix vérifiés sur les sites officiels, triés par prix mensuel croissant.",
-    "numberOfItems": items.length,
-    "itemListOrder": "https://schema.org/ItemListOrderAscending",
-    "itemListElement": items
-  };
-
-  const script = document.createElement("script");
-  script.type = "application/ld+json";
-  script.textContent = JSON.stringify(ld);
-  document.head.appendChild(script);
-}
-buildStructuredData();
+// Le JSON-LD ItemList était construit ici, puis injecté dans le <head> au
+// chargement. Il est désormais produit au build, page par page, par
+// scripts/build-route-pages.mjs — et c'est mieux à trois titres :
+//
+//   - il ne dépendait que du rendu JS. Googlebot le rend (612 éléments
+//     détectés à l'exploration en direct du 22.08.2026), mais c'était une
+//     dépendance et un délai de crawl pour rien ;
+//   - il était IDENTIQUE sur les onze pages : 305 offres toutes catégories
+//     confondues, y compris sur /tv/ ou /voyage/ qui n'en montrent qu'une
+//     partie. Chaque page décrit maintenant ce qu'elle affiche ;
+//   - il typait chaque ligne en Product, ce qui faisait classer le site en
+//     « fiches de marchand » — une famille dont Google attend frais de port,
+//     politique de retour et avis clients. Nous ne vendons rien. Le type est
+//     passé à Offer, qui décrit exactement ce qu'on publie.
+//
+// brandImage() est partie avec : elle fabriquait /img/brand-<marque>.svg pour
+// chaque offre alors que quatorze fichiers existent, soit 168 éléments sur 307
+// pointant vers une image absente.
 </script>
 
 <section id="faq" class="wrap" style="margin-top:48px;">
